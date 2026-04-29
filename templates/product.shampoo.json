@@ -1,6 +1,22 @@
 {
   "sections": {
-    "main": { "type": "postcard-pdp-shampoo", "settings": {} },
+    "main": {
+      "type": "postcard-pdp-shampoo",
+      "settings": {},
+      "blocks": {
+        "ribbon": { "type": "ribbon", "settings": {} },
+        "title": { "type": "title", "settings": {} },
+        "description": { "type": "description", "settings": {} },
+        "rating": { "type": "rating", "settings": {} },
+        "sizes": { "type": "sizes", "settings": {} },
+        "purchase_options": { "type": "purchase_options", "settings": {} },
+        "qty_and_cta": { "type": "qty_and_cta", "settings": {} },
+        "refill_link": { "type": "refill_link", "settings": {} },
+        "stock": { "type": "stock_indicator", "settings": {} },
+        "trust_circles": { "type": "trust_circles", "settings": {} }
+      },
+      "block_order": ["ribbon", "title", "description", "rating", "sizes", "purchase_options", "qty_and_cta", "refill_link", "stock", "trust_circles"]
+    },
     "verse_band": {
       "type": "postcard-pdp-verse-band",
       "settings": { "quote": "Smells like roses. Behaves like proper shampoo.", "fallback_family": "Velvety Rose Wood · Refillable" }

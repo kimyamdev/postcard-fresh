@@ -8,6 +8,8 @@
   assign world_color = world_color | default: '#8E4F5C'
   assign world_theme_class = world_theme_class | default: 'world-hotel-lobby'
   assign world_name = world_name | default: 'Smoked Roses'
+  assign ribbon_subline = 'Refillable Shampoo'
+  assign current = product.selected_or_first_available_variant
 -%}
 
 <div class="{{ world_theme_class }}" style="--world-color: {{ world_color }};">
@@ -21,12 +23,23 @@
   <section class="pc-pdp-main">
     <div class="container pc-pdp-main__inner">
       {% render 'pdp-gallery', product: product, world_color: world_color, stamp_text: '40<br>WASHES<br>SG' %}
-      {% render 'pdp-buy-box',
-        product: product,
-        world_color: world_color,
-        ribbon_subline: 'Refillable Shampoo',
-        demo_sizes: 'Bottle 300ml,Refill 500ml,Refill 1L',
-        demo_active_index: 2 %}
+
+      <aside class="pc-pdp-buy" x-data='{
+        variantId: "{{ current.id }}",
+        qty: 1,
+        mode: "once",
+        cadence: "60d",
+        subOpen: false,
+        prices: { {%- for v in product.variants -%}"{{ v.id }}": "{{ v.price | money }}"{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%} }
+      }'>
+        <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data" class="pc-pdp-buy__form">
+          <input type="hidden" name="form_type" value="product">
+          <input type="hidden" name="utf8" value="&#x2713;">
+          {%- for block in section.blocks -%}
+            {% render 'pdp-buy-block', block: block, product: product, world_color: world_color, world_name: world_name, ribbon_subline: ribbon_subline, current: current %}
+          {%- endfor -%}
+        </form>
+      </aside>
     </div>
   </section>
 
@@ -36,6 +49,51 @@
 {
   "name": "Shampoo PDP",
   "settings": [],
-  "presets": [{ "name": "Shampoo PDP" }]
+  "blocks": [
+    { "type": "ribbon", "name": "Eyebrow ribbon", "limit": 1, "settings": [
+      { "type": "text", "id": "subline_override", "label": "Subline override (per-template)" }
+    ] },
+    { "type": "title", "name": "Title", "limit": 1, "settings": [] },
+    { "type": "description", "name": "Description", "limit": 1, "settings": [
+      { "type": "number", "id": "word_limit", "label": "Word limit", "default": 30 }
+    ] },
+    { "type": "rating", "name": "Stars + reviews", "limit": 1, "settings": [] },
+    { "type": "sizes", "name": "Size variants", "limit": 1, "settings": [
+      { "type": "text", "id": "label", "label": "Label", "default": "Size" },
+      { "type": "text", "id": "demo_sizes", "label": "Demo sizes (CSV, single-variant fallback)", "default": "Bottle 300ml,Refill 500ml,Refill 1L" },
+      { "type": "number", "id": "demo_active_index", "label": "Active demo size (1-based)", "default": 2 }
+    ] },
+    { "type": "purchase_options", "name": "Purchase options", "limit": 1, "settings": [
+      { "type": "text", "id": "label", "label": "Label", "default": "Purchase options" },
+      { "type": "text", "id": "once_label", "label": "One-time label", "default": "One-time purchase" }
+    ] },
+    { "type": "qty_and_cta", "name": "Quantity + Add to bag", "limit": 1, "settings": [
+      { "type": "text", "id": "cta_text", "label": "CTA text", "default": "Add to bag" },
+      { "type": "text", "id": "sold_out_text", "label": "Sold-out text", "default": "Sold out" }
+    ] },
+    { "type": "refill_link", "name": "Refill link", "limit": 1, "settings": [
+      { "type": "text", "id": "text", "label": "Text", "default": "Or refill in store →" },
+      { "type": "text", "id": "link", "label": "Link", "default": "/pages/refill" },
+      { "type": "checkbox", "id": "always_show", "label": "Show even if not refillable", "default": false }
+    ] },
+    { "type": "stock_indicator", "name": "Stock indicator", "limit": 1, "settings": [
+      { "type": "text", "id": "text", "label": "Text", "default": "• In stock · Ships in 1-2 days" }
+    ] },
+    { "type": "trust_circles", "name": "Trust circles", "limit": 1, "settings": [
+      { "type": "text", "id": "label_1", "label": "Label 1", "default": "Made in SG" },
+      { "type": "text", "id": "label_2", "label": "Label 2 (refillable, conditional)", "default": "Sulphate-free" },
+      { "type": "text", "id": "label_3", "label": "Label 3", "default": "Silicone-free" },
+      { "type": "text", "id": "label_4", "label": "Label 4", "default": "Cruelty-free" },
+      { "type": "checkbox", "id": "always_show_refillable", "label": "Always show refillable", "default": true }
+    ] }
+  ],
+  "presets": [{
+    "name": "Shampoo PDP",
+    "blocks": [
+      { "type": "ribbon" }, { "type": "title" }, { "type": "description" }, { "type": "rating" },
+      { "type": "sizes" }, { "type": "purchase_options" }, { "type": "qty_and_cta" },
+      { "type": "refill_link" }, { "type": "stock_indicator" }, { "type": "trust_circles" }
+    ]
+  }]
 }
 {% endschema %}
