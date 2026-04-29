@@ -1,0 +1,52 @@
+<section class="section pc-ps">
+  <div class="container">
+    <div class="pc-ps__head">
+      <span class="pc-ps__pill">{{ section.settings.eyebrow }}</span>
+      <h2 class="h-display pc-ps__title">{{ section.settings.title }}</h2>
+    </div>
+    <div class="pc-ps__grid">
+      {%- for block in section.blocks -%}
+        <div class="stamp-frame stamp-side pc-ps__card" {{ block.shopify_attributes }}>
+          <div class="h-display pc-ps__number">{{ block.settings.number }}</div>
+          <div class="eyebrow pc-ps__sub">{{ block.settings.sub }}</div>
+          <p class="pc-ps__body">{{ block.settings.body }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.tagline != blank -%}
+      <p class="h-typewriter pc-ps__tagline">{{ section.settings.tagline }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Performance stats",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Pill text", "default": "The performance brief" },
+    { "type": "text", "id": "title", "label": "Title", "default": "How it performs." },
+    { "type": "textarea", "id": "tagline", "label": "Tagline below grid" }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        { "type": "text", "id": "number", "label": "Big number" },
+        { "type": "text", "id": "sub", "label": "Sub-line" },
+        { "type": "textarea", "id": "body", "label": "Body" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Performance stats",
+      "blocks": [
+        { "type": "stat", "settings": { "number": "24h", "sub": "odour-free wear", "body": "Tested on 28 people through Singapore heat, gym sessions and a wedding banquet. Zero re-application needed." } },
+        { "type": "stat", "settings": { "number": "0%", "sub": "aluminium · baking soda", "body": "Magnesium hydroxide does the job instead. Pits stay calm, fabric stays clean, sweat still cools you." } },
+        { "type": "stat", "settings": { "number": "97%", "sub": "said \"no white marks\"", "body": "Tapioca + arrowroot replace cornstarch. Glides clear on a black t-shirt. Doesn't flake." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

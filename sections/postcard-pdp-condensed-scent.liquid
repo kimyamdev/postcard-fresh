@@ -1,0 +1,42 @@
+{%- liquid
+  assign world = product.metafields.postcard.world.value
+  if world
+    assign world_name = world.name.value
+    assign world_family = world.family.value
+    assign world_color = world.accent_color.value
+  endif
+  assign world_name = world_name | default: section.settings.fallback_name
+  assign world_family = world_family | default: section.settings.fallback_family
+  assign world_color = world_color | default: '#E8C36A'
+-%}
+<section class="section pc-cs">
+  <div class="container">
+    <div class="pc-cs__inner">
+      <div class="pc-cs__stamp">
+        {% render 'stamp', name: world_name, family: world_family, color: world_color, size: 'md' %}
+      </div>
+      <div class="pc-cs__copy">
+        <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+        <h3 class="h-display pc-cs__title">{{ section.settings.title }}</h3>
+        <p class="pc-cs__body">{{ section.settings.body }}</p>
+      </div>
+      <a class="btn btn--small pc-cs__cta" href="{{ section.settings.cta_link }}">{{ section.settings.cta_text }}</a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Condensed scent",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "It smells like" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Hotel Lobby — but small." },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "A whisper of bergamot, vanilla and earl grey — sized down for a deodorant so it never clashes with your fragrance on top. Fades clean in 30 minutes." },
+    { "type": "text", "id": "cta_text", "label": "CTA text", "default": "Smell the full scent →" },
+    { "type": "text", "id": "cta_link", "label": "CTA link", "default": "/products/hotel-lobby-anywhere-fragrance" },
+    { "type": "text", "id": "fallback_name", "label": "Fallback world name", "default": "Hotel Lobby" },
+    { "type": "text", "id": "fallback_family", "label": "Fallback world family", "default": "Hesperidic Gourmand" }
+  ],
+  "presets": [{ "name": "Condensed scent" }]
+}
+{% endschema %}

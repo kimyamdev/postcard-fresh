@@ -1,0 +1,142 @@
+{
+  "sections": {
+    "main": { "type": "postcard-pdp-deo", "settings": {} },
+    "verse_band": {
+      "type": "postcard-pdp-verse-band",
+      "settings": { "quote": "No aluminium. No baking soda. No regrets after spin class.", "fallback_family": "24h Aluminium-free" }
+    },
+    "perform_stats": {
+      "type": "postcard-pdp-perform-stats",
+      "settings": {
+        "eyebrow": "The performance brief",
+        "title": "How it performs.",
+        "tagline": "A deodorant that smells like our Hotel Lobby — and works like the doorman never blinks."
+      },
+      "blocks": {
+        "p1": { "type": "stat", "settings": { "number": "24h", "sub": "odour-free wear", "body": "Tested on 28 people through Singapore heat, gym sessions and a wedding banquet. Zero re-application needed." } },
+        "p2": { "type": "stat", "settings": { "number": "0%", "sub": "aluminium · baking soda", "body": "Magnesium hydroxide does the job instead. Pits stay calm, fabric stays clean, sweat still cools you." } },
+        "p3": { "type": "stat", "settings": { "number": "97%", "sub": "said \"no white marks\"", "body": "Tapioca + arrowroot replace cornstarch. Glides clear on a black t-shirt. Doesn't flake." } }
+      },
+      "block_order": ["p1", "p2", "p3"]
+    },
+    "wear_diary": {
+      "type": "postcard-pdp-wear-diary",
+      "settings": {
+        "eyebrow": "One-day wear test",
+        "title": "What 24 hours actually look like.",
+        "footnote": "Real-life diary, May 2026 · Singapore · 32°C average"
+      },
+      "blocks": {
+        "d1": { "type": "moment", "settings": { "time": "07:00", "heading": "Apply", "body": "One twist, two glides per pit. Dressed in 5 seconds.", "chip_color": "#FFB233" } },
+        "d2": { "type": "moment", "settings": { "time": "12:00", "heading": "Lunch hour", "body": "Walked from City Hall to Telok Ayer. 32°C, 80% humidity. Still calm.", "chip_color": "#E8C36A" } },
+        "d3": { "type": "moment", "settings": { "time": "18:00", "heading": "Spin class", "body": "45 min, drenched. Showered. No re-apply.", "chip_color": "#9CC4D6" } },
+        "d4": { "type": "moment", "settings": { "time": "23:00", "heading": "Out for dinner", "body": "Same shirt as lunch. Still polite.", "chip_color": "#C7A8D6" } }
+      },
+      "block_order": ["d1", "d2", "d3", "d4"]
+    },
+    "actives_grid": {
+      "type": "postcard-pdp-actives-grid",
+      "settings": {
+        "eyebrow": "What's actually in it",
+        "title": "Four actives. No filler.",
+        "lede": "We're skipping the scent-notes section here — that's on the fragrance PDP. This is the chemistry: the things that block, the things that calm, and why we picked them.",
+        "warning_label": "What you won't find",
+        "warning_list": "Aluminium chlorohydrate · Baking soda · Triclosan · Parabens · Phthalates · Synthetic dye · Talc"
+      }
+    },
+    "fit_row": {
+      "type": "postcard-pdp-fit-row",
+      "settings": { "title": "Will it suit your pits?" },
+      "blocks": {
+        "f1": { "type": "fit", "settings": { "label": "Sensitive", "fit": "yes", "indicator": "✓ great fit", "note": "Magnesium not bicarb — no sting" } },
+        "f2": { "type": "fit", "settings": { "label": "Just shaved", "fit": "yes", "indicator": "✓ great fit", "note": "Calendula calms within 20 min" } },
+        "f3": { "type": "fit", "settings": { "label": "Heavy sweater", "fit": "yes", "indicator": "✓ great fit", "note": "24h with no re-apply" } },
+        "f4": { "type": "fit", "settings": { "label": "Pregnant / breastfeeding", "fit": "yes", "indicator": "✓ great fit", "note": "Aluminium-free, EO-safe" } },
+        "f5": { "type": "fit", "settings": { "label": "Eczema-prone", "fit": "no", "indicator": "— patch test first", "note": "Patch test 24h first" } }
+      },
+      "block_order": ["f1", "f2", "f3", "f4", "f5"]
+    },
+    "condensed_scent": {
+      "type": "postcard-pdp-condensed-scent",
+      "settings": {
+        "eyebrow": "It smells like",
+        "title": "Hotel Lobby — but small.",
+        "body": "A whisper of bergamot, vanilla and earl grey — sized down for a deodorant so it never clashes with your fragrance on top. Fades clean in 30 minutes.",
+        "cta_text": "Smell the full scent →",
+        "cta_link": "/products/hotel-lobby-anywhere-fragrance"
+      }
+    },
+    "how_to_use": {
+      "type": "postcard-pdp-how-to-use",
+      "settings": { "title": "How to use." },
+      "blocks": {
+        "s1": { "type": "step", "settings": { "heading": "Twist up", "body": "Two clicks, no more. The stick rises about 5mm." } },
+        "s2": { "type": "step", "settings": { "heading": "Two glides per pit", "body": "Don't over-apply. The actives need air to breathe." } },
+        "s3": { "type": "step", "settings": { "heading": "Wait 60 seconds", "body": "Let it set before dressing. No transfer to dark fabric." } }
+      },
+      "block_order": ["s1", "s2", "s3"]
+    },
+    "refill_banner": {
+      "type": "postcard-pdp-refill-banner",
+      "settings": {
+        "eyebrow": "Refill, repeat, rejoice",
+        "headline": "Bring this stick back.",
+        "body": "Empty stick? Drop it at our Orchard flagship for a fresh insert. Same case, less waste, save 20%.",
+        "primary_text": "See the refill list →",
+        "primary_link": "/pages/refill",
+        "secondary_text": "Or shop the matching refill SKU →"
+      }
+    },
+    "trust": {
+      "type": "postcard-pdp-trust-circles",
+      "settings": {},
+      "blocks": {
+        "t1": { "type": "circle", "settings": { "short": "MADE<br>IN", "label": "Made in Singapore" } },
+        "t2": { "type": "circle", "settings": { "short": "ALUMINUM<br>FREE", "label": "Aluminum-free" } },
+        "t3": { "type": "circle", "settings": { "short": "VEGAN", "label": "Vegan" } },
+        "t4": { "type": "circle", "settings": { "short": "CRUELTY<br>FREE", "label": "Cruelty-free" } },
+        "t5": { "type": "circle", "settings": { "short": "PREGNANCY<br>SAFE", "label": "Pregnancy-safe" } },
+        "t6": { "type": "circle", "settings": { "short": "REFILL<br>ABLE", "label": "Refillable" } }
+      },
+      "block_order": ["t1", "t2", "t3", "t4", "t5", "t6"]
+    },
+    "pairs_with": {
+      "type": "postcard-pdp-pairs-with",
+      "settings": {},
+      "blocks": {
+        "p1": { "type": "item", "settings": { "name": "Hotel Lobby Anywhere Fragrance", "price": "$42" } },
+        "p2": { "type": "item", "settings": { "name": "Hotel Lobby Hand & Body Wash", "price": "$24" } },
+        "p3": { "type": "item", "settings": { "name": "Clear Skies Roll-On Deodorant", "price": "$24" } }
+      },
+      "block_order": ["p1", "p2", "p3"]
+    },
+    "reviews": { "type": "postcard-pdp-reviews-section", "settings": {} },
+    "faq": {
+      "type": "postcard-pdp-faq-section",
+      "settings": { "title": "Questions?" },
+      "blocks": {
+        "q1": { "type": "faq", "settings": { "q": "Will I sweat? It's not an antiperspirant, right?", "a": "Correct — this is a deodorant, not an antiperspirant. You'll still sweat (your body needs to). You just won't smell. Most heavy sweaters tell us they sweat *less* after 2 weeks because the pit microbiome calms down." } },
+        "q2": { "type": "faq", "settings": { "q": "Do I need a \"detox period\" coming off aluminium?", "a": "Sometimes. The first 7–14 days you may smell more as your sweat glands re-open. Push through. By week 3 most people are cleaner-smelling than ever." } },
+        "q3": { "type": "faq", "settings": { "q": "Full ingredients (INCI)", "a": "Caprylic/Capric Triglyceride, Magnesium Hydroxide, Tapioca Starch, Cera Alba (Beeswax), Maranta Arundinacea (Arrowroot) Root Powder, Saccharomyces Ferment, Calendula Officinalis Extract, Allantoin, Tocopherol, Parfum (Hotel Lobby accord), Limonene, Linalool. IFRA compliant." } },
+        "q4": { "type": "faq", "settings": { "q": "Is the stick recyclable?", "a": "Yes. Pop the cap, twist out the empty insert, drop the cardboard tube in paper recycling. Bring the cap to Orchard and we'll re-use it." } },
+        "q5": { "type": "faq", "settings": { "q": "Why no baking soda?", "a": "Baking soda raises pit pH too aggressively and gives a lot of people contact rashes — especially after shaving. Magnesium hydroxide does the same job at a kinder pH." } }
+      },
+      "block_order": ["q1", "q2", "q3", "q4", "q5"]
+    }
+  },
+  "order": [
+    "main",
+    "verse_band",
+    "perform_stats",
+    "wear_diary",
+    "actives_grid",
+    "fit_row",
+    "condensed_scent",
+    "how_to_use",
+    "refill_banner",
+    "trust",
+    "pairs_with",
+    "reviews",
+    "faq"
+  ]
+}

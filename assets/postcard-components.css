@@ -1364,3 +1364,145 @@ a.pc-product-card { cursor: pointer; }
   .pc-gc__grid { grid-template-columns: repeat(2, 1fr); }
   .pc-gc__title { font-size: 36px; }
 }
+
+/* === PDP Performance stats === */
+.pc-ps__head { text-align: center; margin-bottom: 40px; }
+.pc-ps__pill {
+  display: inline-block;
+  padding: 8px 18px;
+  border: 1.5px solid var(--color-ink);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: var(--color-bg-warm);
+}
+.pc-ps__title { font-size: 56px; margin-top: 16px; }
+.pc-ps__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.pc-ps__card { padding: 32px; text-align: center; background: var(--color-bg-card); }
+.pc-ps__number {
+  font-size: 88px;
+  color: var(--color-yellow);
+  -webkit-text-stroke: 1.2px var(--color-ink);
+  line-height: 1;
+}
+.pc-ps__sub { margin-top: 12px; }
+.pc-ps__body { margin-top: 14px; font-size: 13px; opacity: 0.78; line-height: 1.55; }
+.pc-ps__tagline {
+  text-align: center;
+  font-size: 22px;
+  margin-top: 40px;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0.78;
+}
+
+/* === PDP Wear diary (dark) === */
+.pc-wd { background: var(--color-ink); color: var(--color-bg); padding: 96px 0; }
+.pc-wd__head { margin-bottom: 40px; }
+.pc-wd__eyebrow { color: var(--color-yellow); }
+.pc-wd__title { font-size: 56px; margin-top: 8px; color: var(--color-bg); }
+.pc-wd__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1.5px solid var(--color-bg);
+}
+.pc-wd__cell {
+  padding: 28px;
+  border-right: 1.5px solid var(--color-bg);
+  background: rgba(248, 246, 237, 0.04);
+  position: relative;
+}
+.pc-wd__cell:last-child { border-right: none; }
+.pc-wd__chip {
+  width: 24px;
+  height: 30px;
+  border: 1.5px solid var(--color-bg);
+  margin-bottom: 16px;
+}
+.pc-wd__time { font-size: 36px; color: var(--color-yellow); }
+.pc-wd__heading { margin-top: 6px; color: var(--color-bg); }
+.pc-wd__body { margin-top: 14px; font-size: 14px; line-height: 1.55; opacity: 0.85; }
+.pc-wd__footnote {
+  text-align: center;
+  margin-top: 32px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+/* === PDP Actives grid === */
+.pc-ag__head { margin-bottom: 40px; }
+.pc-ag__title { font-size: 56px; margin-top: 8px; }
+.pc-ag__lede { margin-top: 14px; font-size: 16px; max-width: 640px; opacity: 0.78; line-height: 1.6; }
+.pc-ag__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.pc-ag__card {
+  background: var(--color-bg-card);
+  padding: 28px;
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 24px;
+  align-items: flex-start;
+}
+.pc-ag__icon {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  background: var(--color-bg-warm);
+  border: 2px solid var(--color-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+.pc-ag__name { font-size: 24px; margin-top: 6px; }
+.pc-ag__story { margin-top: 10px; font-size: 14px; line-height: 1.6; }
+
+.pc-ag__warning {
+  margin-top: 32px;
+  padding: 24px;
+  background: var(--color-yellow);
+  border: 1.5px solid var(--color-ink);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 24px;
+  align-items: center;
+}
+.pc-ag__warning-pm { width: 78px; height: 78px; font-size: 9px; }
+.pc-ag__warning-list {
+  margin-top: 6px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.06em;
+}
+.pc-ag__warning-cta { white-space: nowrap; }
+
+/* === PDP Condensed scent === */
+.pc-cs__inner {
+  background: var(--color-bg-card);
+  border: 1.5px solid var(--color-ink);
+  padding: 32px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 32px;
+  align-items: center;
+}
+.pc-cs__title { font-size: 32px; margin-top: 6px; }
+.pc-cs__body { margin-top: 10px; font-size: 15px; line-height: 1.6; max-width: 540px; }
+
+@media (max-width: 800px) {
+  .pc-ps__grid { grid-template-columns: 1fr; }
+  .pc-ps__title { font-size: 36px; }
+  .pc-wd__grid { grid-template-columns: 1fr; }
+  .pc-wd__cell { border-right: none; border-bottom: 1.5px solid var(--color-bg); }
+  .pc-wd__cell:last-child { border-bottom: none; }
+  .pc-wd__title { font-size: 36px; }
+  .pc-ag__grid { grid-template-columns: 1fr; }
+  .pc-ag__title { font-size: 36px; }
+  .pc-ag__warning { grid-template-columns: 1fr; }
+  .pc-cs__inner { grid-template-columns: 1fr; gap: 16px; }
+}

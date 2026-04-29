@@ -1,0 +1,55 @@
+<section class="section pc-wd">
+  <div class="container">
+    <div class="pc-wd__head">
+      <div class="eyebrow pc-wd__eyebrow">{{ section.settings.eyebrow }}</div>
+      <h2 class="h-display pc-wd__title">{{ section.settings.title }}</h2>
+    </div>
+    <div class="pc-wd__grid">
+      {%- for block in section.blocks -%}
+        <div class="pc-wd__cell" {{ block.shopify_attributes }}>
+          <div class="pc-wd__chip" style="background: {{ block.settings.chip_color }};"></div>
+          <div class="h-display pc-wd__time">{{ block.settings.time }}</div>
+          <div class="eyebrow pc-wd__heading">{{ block.settings.heading }}</div>
+          <p class="pc-wd__body">{{ block.settings.body }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.footnote != blank -%}
+      <p class="pc-wd__footnote">{{ section.settings.footnote }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Wear diary",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "One-day wear test" },
+    { "type": "text", "id": "title", "label": "Title", "default": "What 24 hours actually look like." },
+    { "type": "text", "id": "footnote", "label": "Footnote", "default": "Real-life diary, May 2026 · Singapore · 32°C average" }
+  ],
+  "blocks": [
+    {
+      "type": "moment",
+      "name": "Diary moment",
+      "settings": [
+        { "type": "text", "id": "time", "label": "Time" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "textarea", "id": "body", "label": "Body" },
+        { "type": "text", "id": "chip_color", "label": "Chip color (hex)", "default": "#FFB233" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Wear diary",
+      "blocks": [
+        { "type": "moment", "settings": { "time": "07:00", "heading": "Apply", "body": "One twist, two glides per pit. Dressed in 5 seconds.", "chip_color": "#FFB233" } },
+        { "type": "moment", "settings": { "time": "12:00", "heading": "Lunch hour", "body": "Walked from City Hall to Telok Ayer. 32°C, 80% humidity. Still calm.", "chip_color": "#E8C36A" } },
+        { "type": "moment", "settings": { "time": "18:00", "heading": "Spin class", "body": "45 min, drenched. Showered. No re-apply.", "chip_color": "#9CC4D6" } },
+        { "type": "moment", "settings": { "time": "23:00", "heading": "Out for dinner", "body": "Same shirt as lunch. Still polite.", "chip_color": "#C7A8D6" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
