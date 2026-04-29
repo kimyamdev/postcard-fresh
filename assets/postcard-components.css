@@ -394,6 +394,100 @@ a.pc-product-card { cursor: pointer; }
   opacity: 0.85;
 }
 
+/* === Home: hero === */
+.pc-hero {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  min-height: 720px;
+  border-bottom: 1.5px solid var(--color-line);
+}
+.pc-hero__visual {
+  position: relative;
+  min-height: 600px;
+  font-size: 14px;
+}
+.pc-hero__visual-text { text-align: center; max-width: 320px; }
+.pc-hero__visual-eyebrow { font-size: 11px; opacity: 0.55; margin-bottom: 12px; letter-spacing: 0.16em; text-transform: uppercase; font-family: var(--font-display); }
+.pc-hero__visual-tag { font-size: 13px; opacity: 0.7; }
+.pc-hero__postmark-wrap { position: absolute; top: 32px; left: 32px; }
+.pc-hero__copy { background: var(--color-bg); padding: 64px 56px; display: flex; flex-direction: column; justify-content: center; }
+.pc-hero__headline { font-size: clamp(56px, 7vw, 96px); }
+.pc-hero__body { margin-top: 24px; font-size: 18px; line-height: 1.55; max-width: 420px; }
+.pc-hero__ctas { margin-top: 36px; display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.pc-hero__sig { margin-top: 48px; font-size: 32px; transform: rotate(-3deg); opacity: 0.7; }
+
+/* === Home: worlds quick grid === */
+.pc-worlds-quick { padding: 64px 0 48px; border-bottom: 1.5px solid var(--color-line-soft); }
+.pc-worlds-quick__head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; gap: 16px; flex-wrap: wrap; }
+.pc-worlds-quick__title { font-size: 40px; margin-top: 8px; }
+.pc-worlds-quick__grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 14px; }
+.pc-worlds-quick__cell { text-align: center; color: inherit; text-decoration: none; }
+.pc-worlds-quick__more {
+  border: 1.5px dashed var(--color-ink);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 12px;
+  line-height: 1.3;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* === Home: bestsellers === */
+.pc-bestsellers__intro { margin-bottom: 40px; max-width: 720px; }
+.pc-bestsellers__title { font-size: 56px; margin-top: 8px; }
+.pc-bestsellers__lede { margin-top: 12px; font-size: 17px; opacity: 0.78; }
+.pc-bestsellers__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.pc-bestsellers__more { margin-top: 32px; }
+
+/* === Home: world of the month === */
+.pc-wotm { background: linear-gradient(180deg, #F2EAD0 0%, var(--color-bg) 100%); padding: 96px 0; }
+.pc-wotm__inner { display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; align-items: center; }
+.pc-wotm__stamp-wrap { position: relative; display: flex; justify-content: center; }
+.pc-wotm__postmark-overlay { position: absolute; top: 0; right: 24px; transform: rotate(12deg); }
+.pc-wotm__title { font-size: 64px; margin-top: 8px; }
+.pc-wotm__family-line { font-family: var(--font-display); margin-top: 12px; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.7; }
+.pc-wotm__body { margin-top: 24px; font-size: 17px; line-height: 1.65; max-width: 540px; }
+.pc-wotm__formats { margin-top: 32px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.pc-wotm__format { border: 1px solid var(--color-line); padding: 12px; font-family: var(--font-display); font-size: 12px; line-height: 1.3; }
+.pc-wotm__format-img { aspect-ratio: 1/1; margin-bottom: 10px; }
+.pc-wotm__cta { margin-top: 32px; }
+
+/* === Home: refill trio === */
+.pc-refill__intro { text-align: center; margin-bottom: 56px; }
+.pc-refill__title { font-size: 64px; margin-top: 8px; }
+.pc-refill__lede { margin: 12px auto 0; font-size: 17px; max-width: 600px; opacity: 0.78; }
+.pc-refill__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.pc-refill__card { background: var(--color-bg-card); padding: 28px; }
+.pc-refill__card-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+.pc-refill__num { font-size: 36px; opacity: 0.3; }
+.pc-refill__panel { aspect-ratio: 5/3; margin-bottom: 16px; }
+.pc-refill__step-h { font-size: 22px; }
+.pc-refill__step-p { margin-top: 8px; font-size: 14px; opacity: 0.78; }
+.pc-refill__ctas { margin-top: 40px; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+
+/* === Home: brand belief === */
+.pc-belief { background: var(--color-bg-warm); }
+.pc-belief__inner { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.pc-belief__photo { aspect-ratio: 4/5; }
+.pc-belief__title { font-size: 64px; margin-top: 8px; }
+.pc-belief__p { margin-top: 24px; font-size: 17px; line-height: 1.65; }
+.pc-belief__p + .pc-belief__p { margin-top: 16px; }
+.pc-belief__cta { margin-top: 28px; }
+
+/* === Worlds index page === */
+.pc-worlds-hero { padding: 80px 0; text-align: center; background: var(--color-bg-warm); }
+.pc-worlds-hero__title { font-size: clamp(56px, 8vw, 96px); margin-top: 12px; }
+.pc-worlds-hero__lede { margin-top: 16px; font-size: 18px; opacity: 0.8; }
+.pc-worlds-index__core { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-bottom: 64px; }
+.pc-worlds-index__card { display: flex; gap: 20px; padding: 24px; border: 1.5px solid var(--color-ink); background: var(--color-bg-card); color: inherit; text-decoration: none; }
+.pc-worlds-index__card-name { font-size: 24px; margin-top: 6px; }
+.pc-worlds-index__card-tag { font-size: 13px; opacity: 0.78; margin-top: 8px; }
+.pc-worlds-index__minor { display: grid; grid-template-columns: repeat(8, 1fr); gap: 14px; justify-items: center; }
+
 /* === Mobile === */
 @media (max-width: 800px) {
   .pc-nav { display: none; }
@@ -401,4 +495,16 @@ a.pc-product-card { cursor: pointer; }
   .pc-footer__grid { grid-template-columns: 1fr; gap: 32px; }
   .pc-pdp-reviews__grid { grid-template-columns: 1fr; }
   .pc-footer__bottom { flex-direction: column; align-items: flex-start; }
+  .pc-hero { grid-template-columns: 1fr; min-height: auto; }
+  .pc-hero__visual { min-height: 400px; }
+  .pc-hero__copy { padding: 40px 24px; }
+  .pc-worlds-quick__grid { grid-template-columns: repeat(3, 1fr); }
+  .pc-bestsellers__grid { grid-template-columns: 1fr; }
+  .pc-bestsellers__title { font-size: 40px; }
+  .pc-wotm__inner { grid-template-columns: 1fr; gap: 32px; }
+  .pc-wotm__formats { grid-template-columns: repeat(2, 1fr); }
+  .pc-refill__grid { grid-template-columns: 1fr; }
+  .pc-belief__inner { grid-template-columns: 1fr; gap: 32px; }
+  .pc-worlds-index__core { grid-template-columns: 1fr; }
+  .pc-worlds-index__minor { grid-template-columns: repeat(3, 1fr); }
 }

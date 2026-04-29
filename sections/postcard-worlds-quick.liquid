@@ -1,0 +1,43 @@
+<section class="pc-worlds-quick">
+  <div class="container">
+    <div class="pc-worlds-quick__head">
+      <div>
+        <div class="eyebrow">Six destinations</div>
+        <h2 class="h-display pc-worlds-quick__title">Pick a world.</h2>
+      </div>
+      <a class="tlink" href="/pages/worlds">See all 22 worlds &rarr;</a>
+    </div>
+    <div class="pc-worlds-quick__grid">
+      <a class="pc-worlds-quick__cell" href="/pages/hotel-lobby">
+        {% render 'stamp', name: 'Hotel Lobby', family: 'Hesperidic Gourmand', color: '#E8C36A', size: 'md' %}
+      </a>
+      <a class="pc-worlds-quick__cell" href="/pages/moon-bloom">
+        {% render 'stamp', name: 'Moon Bloom', family: 'White Floral', color: '#5C6688', size: 'md' %}
+      </a>
+      <a class="pc-worlds-quick__cell" href="/pages/coconut-beach">
+        {% render 'stamp', name: 'Coconut Beach', family: 'Tropical Fruity Gourmand', color: '#E8B796', size: 'md' %}
+      </a>
+      <a class="pc-worlds-quick__cell" href="/pages/wild-flowers">
+        {% render 'stamp', name: 'Wild Flowers', family: 'Aromatic Foug&egrave;re', color: '#C7A8D6', size: 'md' %}
+      </a>
+      <a class="pc-worlds-quick__cell" href="/pages/bath-house">
+        {% render 'stamp', name: 'Bath House', family: 'Woody Oriental', color: '#B07A4E', size: 'md' %}
+      </a>
+      <a class="pc-worlds-quick__cell" href="/pages/woodland-retreat">
+        {% render 'stamp', name: 'Woodland Retreat', family: 'Aromatic Herbal', color: '#6E7F58', size: 'md' %}
+      </a>
+      <a class="pc-worlds-quick__cell" href="/pages/icy-peaks">
+        {% render 'stamp', name: 'Icy Peaks', family: 'Fresh Aromatic', color: '#9CC4D6', size: 'md' %}
+      </a>
+      <a class="pc-worlds-quick__more" href="/pages/worlds">+16 more<br>worlds &rarr;</a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Postcard Worlds Quick",
+  "settings": [],
+  "presets": [{ "name": "Postcard Worlds Quick" }]
+}
+{% endschema %}
