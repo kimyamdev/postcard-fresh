@@ -1177,3 +1177,97 @@ a.pc-product-card { cursor: pointer; }
   .pc-pdp-gallery__thumbs { flex-direction: row; overflow-x: auto; }
   .pc-pdp-buy__cadence { padding-left: 20px; }
 }
+
+/* === PDP How to use (prototype-spec 110px ink postmarks) === */
+.pc-hu__step {
+  text-align: center;
+  padding: 32px 20px;
+  border: 1.5px solid var(--color-ink);
+  background: var(--color-bg-card);
+  position: relative;
+}
+.pc-hu__pm {
+  margin: 0 auto 20px;
+  width: 110px;
+  height: 110px;
+  border-width: 2.5px;
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.pc-hu__pm-eyebrow { font-family: var(--font-display); font-size: 9px; letter-spacing: 0.18em; opacity: 0.85; }
+.pc-hu__pm-num { font-size: 44px; line-height: 1; margin-top: 2px; }
+.pc-hu__step-h { font-size: 22px; }
+.pc-hu__step-p { margin-top: 10px; font-size: 13px; line-height: 1.55; opacity: 0.78; font-family: var(--font-body); }
+
+/* === PDP Refill banner === */
+.pc-rb {
+  background: var(--color-yellow);
+  border-top: 1.5px solid var(--color-ink);
+  border-bottom: 1.5px solid var(--color-ink);
+  padding: 56px 0;
+}
+.pc-rb__inner { display: grid; grid-template-columns: 2fr 1fr; gap: 48px; align-items: center; }
+.pc-rb__title { font-size: 48px; margin-top: 8px; }
+.pc-rb__body { margin-top: 12px; font-size: 17px; max-width: 560px; }
+.pc-rb__ctas { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+
+/* === PDP Scent notes === */
+.pc-sn__head { text-align: center; margin-bottom: 40px; }
+.pc-sn__pill {
+  display: inline-block;
+  padding: 8px 18px;
+  border: 1.5px solid var(--color-ink);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.pc-sn__title { font-size: 48px; margin-top: 16px; }
+.pc-sn__grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.pc-sn__card {
+  padding: 20px;
+  text-align: center;
+  background: var(--color-bg-card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.pc-sn__icon {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  background: var(--world-tint);
+  border: 1.5px solid var(--color-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+.pc-sn__name {
+  font-size: 16px;
+  line-height: 1.15;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pc-sn__sub { margin-top: 6px; font-size: 11px; opacity: 0.7; font-style: italic; }
+.pc-sn__tagline {
+  text-align: center;
+  margin-top: 32px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  opacity: 0.75;
+}
+
+@media (max-width: 800px) {
+  .pc-rb__inner { grid-template-columns: 1fr; }
+  .pc-sn__grid { grid-template-columns: repeat(2, 1fr); }
+  .pc-hu__pm { width: 88px; height: 88px; }
+  .pc-hu__pm-num { font-size: 36px; }
+}

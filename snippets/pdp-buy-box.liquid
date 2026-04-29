@@ -1,0 +1,141 @@
+{%- liquid
+  assign world = product.metafields.postcard.world.value
+  if world
+    assign world_name = world.name.value
+    assign world_color_default = world.accent_color.value
+  endif
+  assign world_color = world_color | default: world_color_default | default: '#5C6688'
+  assign world_name = world_name | default: 'Postcard'
+  assign refillable = product.metafields.custom.refillable.value | default: false
+  assign current = product.selected_or_first_available_variant
+  assign discount_pct = discount_pct | default: 10
+  assign sub_price = current.price | times: 0.9 | round
+  assign ribbon_subline = ribbon_subline | default: 'Hand & Body Wash'
+  assign demo_sizes_str = demo_sizes | default: 'Bottle 300ml,Refill 500ml,Refill 1L'
+  assign demo_sizes_arr = demo_sizes_str | split: ','
+  assign demo_active_index = demo_active_index | default: 2
+  assign refill_link = refill_link | default: '/pages/refill'
+  assign refill_link_text = refill_link_text | default: 'Or refill in store →'
+-%}
+<aside class="pc-pdp-buy" x-data='{
+  variantId: "{{ current.id }}",
+  qty: 1,
+  mode: "once",
+  cadence: "60d",
+  subOpen: false,
+  prices: { {%- for v in product.variants -%}"{{ v.id }}": "{{ v.price | money }}"{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%} }
+}'>
+  <div class="pc-pdp-buy__ribbon">
+    <span class="pc-pdp-buy__chip" style="background: {{ world_color }};"></span>
+    <span class="eyebrow">{{ world_name }} &middot; {{ ribbon_subline }}</span>
+  </div>
+
+  <h1 class="h-typewriter pc-pdp-buy__title">{{ product.title }}</h1>
+
+  {%- if product.description != blank -%}
+    <p class="pc-pdp-buy__sub">{{ product.description | strip_html | truncatewords: 30 }}</p>
+  {%- endif -%}
+
+  <div class="pc-pdp-buy__rating">
+    <span class="pc-pdp-buy__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+    <span class="pc-pdp-buy__rating-text">4.9 &middot; 327 reviews</span>
+  </div>
+
+  <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data" class="pc-pdp-buy__form">
+    <input type="hidden" name="form_type" value="product">
+    <input type="hidden" name="utf8" value="&#x2713;">
+
+    <div class="pc-pdp-buy__option">
+      <div class="eyebrow pc-pdp-buy__option-label">Size</div>
+      <div class="pc-pdp-buy__sizes">
+        {%- if product.has_only_default_variant -%}
+          <input type="hidden" name="id" value="{{ current.id }}">
+          {%- for label in demo_sizes_arr -%}
+            <span class="pc-pdp-buy__size{% if forloop.index == demo_active_index %} pc-pdp-buy__size--active{% endif %}">{{ label }}</span>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for v in product.variants -%}
+            <label class="pc-pdp-buy__size-radio">
+              <input type="radio" name="id" value="{{ v.id }}" {% if v == current %}checked{% endif %} @change="variantId = $event.target.value">
+              <span class="pc-pdp-buy__size">{{ v.title }}</span>
+            </label>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="pc-pdp-buy__option">
+      <div class="eyebrow pc-pdp-buy__option-label">Purchase options</div>
+      <div class="pc-pdp-buy__po-box">
+        <label class="pc-pdp-buy__po" :class="{ 'pc-pdp-buy__po--active': mode === 'once' }" @click="mode = 'once'">
+          <span class="pc-pdp-buy__po-radio"><span class="pc-pdp-buy__po-dot" x-show="mode === 'once'"></span></span>
+          <input type="radio" name="purchase_mode" value="once" x-model="mode" class="pc-pdp-buy__po-input">
+          <span class="pc-pdp-buy__po-label">One-time purchase</span>
+          <span class="pc-pdp-buy__po-price" x-text="prices[variantId]">{{ current.price | money }}</span>
+        </label>
+        <label class="pc-pdp-buy__po" :class="{ 'pc-pdp-buy__po--active': mode === 'sub' }" @click="mode = 'sub'">
+          <span class="pc-pdp-buy__po-radio"><span class="pc-pdp-buy__po-dot" x-show="mode === 'sub'"></span></span>
+          <input type="radio" name="purchase_mode" value="sub" x-model="mode" class="pc-pdp-buy__po-input">
+          <span class="pc-pdp-buy__po-label">Subscribe &amp; save {{ discount_pct }}%</span>
+          <span class="pc-pdp-buy__po-price">{{ sub_price | money }}</span>
+        </label>
+        <div x-show="mode === 'sub'" x-cloak class="pc-pdp-buy__cadence">
+          <div class="eyebrow pc-pdp-buy__cadence-label">Deliver every</div>
+          <div class="pc-pdp-buy__cadence-pills">
+            <button type="button" class="pc-pdp-buy__cadence-pill" :class="{ 'pc-pdp-buy__cadence-pill--active': cadence === '30d' }" @click.prevent="cadence = '30d'">30 days</button>
+            <button type="button" class="pc-pdp-buy__cadence-pill" :class="{ 'pc-pdp-buy__cadence-pill--active': cadence === '60d' }" @click.prevent="cadence = '60d'">60 days &middot; most popular</button>
+            <button type="button" class="pc-pdp-buy__cadence-pill" :class="{ 'pc-pdp-buy__cadence-pill--active': cadence === '90d' }" @click.prevent="cadence = '90d'">90 days</button>
+          </div>
+          <p class="pc-pdp-buy__cadence-note">Skip, swap world, or cancel anytime &mdash; no postcards held hostage.</p>
+        </div>
+      </div>
+      <button type="button" class="pc-pdp-buy__about" @click="subOpen = !subOpen">
+        <span class="pc-pdp-buy__about-arrow" :class="{ 'pc-pdp-buy__about-arrow--open': subOpen }">&#9662;</span>
+        About subscriptions
+      </button>
+      <div x-show="subOpen" x-cloak class="pc-pdp-buy__about-info">
+        Always {{ discount_pct }}% off. Free shipping over S$60. Skip a delivery, swap to a different world, or cancel from your account in two clicks. Your second order earns you a free Discovery Set in any world you haven&rsquo;t tried yet.
+      </div>
+    </div>
+
+    <div class="pc-pdp-buy__qty-row">
+      <div class="pc-pdp-buy__qty">
+        <button type="button" class="pc-pdp-buy__qty-btn" @click="if(qty>1)qty--">&minus;</button>
+        <input type="number" name="quantity" min="1" :value="qty" x-model="qty" class="pc-pdp-buy__qty-input">
+        <button type="button" class="pc-pdp-buy__qty-btn" @click="qty++">+</button>
+      </div>
+      <button type="submit" class="btn pc-pdp-buy__cta"{% unless current.available %} disabled{% endunless %}>
+        {%- if current.available -%}
+          Add to bag &middot; <span x-text="prices[variantId]">{{ current.price | money }}</span>
+        {%- else -%}
+          Sold out
+        {%- endif -%}
+      </button>
+    </div>
+
+    <a class="tlink pc-pdp-buy__refill-link" href="{{ refill_link }}">{{ refill_link_text }}</a>
+
+    {%- if current.available -%}
+      <div class="pc-pdp-buy__stock">&bull; In stock &middot; Ships in 1-2 days</div>
+    {%- endif -%}
+  </form>
+
+  <div class="pc-pdp-buy__trust">
+    <div class="pc-pdp-buy__trust-item">
+      <span class="pc-pdp-buy__trust-disc"></span>
+      <span class="pc-pdp-buy__trust-label">Made in SG</span>
+    </div>
+    <div class="pc-pdp-buy__trust-item">
+      <span class="pc-pdp-buy__trust-disc"></span>
+      <span class="pc-pdp-buy__trust-label">Refillable</span>
+    </div>
+    <div class="pc-pdp-buy__trust-item">
+      <span class="pc-pdp-buy__trust-disc"></span>
+      <span class="pc-pdp-buy__trust-label">Cruelty-free</span>
+    </div>
+    <div class="pc-pdp-buy__trust-item">
+      <span class="pc-pdp-buy__trust-disc"></span>
+      <span class="pc-pdp-buy__trust-label">Vegan</span>
+    </div>
+  </div>
+</aside>

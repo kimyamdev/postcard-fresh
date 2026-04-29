@@ -1,12 +1,17 @@
 <section class="section section--tight pc-hu">
   <div class="container">
-    <h2 class="h-display pc-hu__title">How to use.</h2>
+    <h2 class="h-display pc-hu__title">{{ section.settings.title }}</h2>
     <div class="pc-hu__grid">
       {%- for block in section.blocks -%}
         <div class="pc-hu__step" {{ block.shopify_attributes }}>
-          <span class="postmark pc-hu__pm"><div>{{ forloop.index }}</div></span>
-          <div class="h-display pc-hu__step-h">{{ block.settings.heading }}</div>
-          <p class="pc-hu__step-p">{{ block.settings.body }}</p>
+          <span class="postmark postmark--ink pc-hu__pm">
+            <div class="pc-hu__pm-eyebrow">STEP</div>
+            <div class="h-display pc-hu__pm-num">0{{ forloop.index }}</div>
+          </span>
+          <div class="h-display pc-hu__step-h">{{ block.settings.heading }}.</div>
+          {%- if block.settings.body != blank -%}
+            <p class="pc-hu__step-p">{{ block.settings.body }}</p>
+          {%- endif -%}
         </div>
       {%- endfor -%}
     </div>
@@ -16,7 +21,9 @@
 {% schema %}
 {
   "name": "How to use",
-  "settings": [],
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "How to use." }
+  ],
   "blocks": [
     {
       "type": "step",

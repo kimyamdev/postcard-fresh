@@ -1,0 +1,36 @@
+{%- liquid
+  assign world = product.metafields.postcard.world.value
+  if world
+    assign world_color_default = world.accent_color.value
+  endif
+  assign world_color = world_color | default: world_color_default | default: '#E8C36A'
+  assign stamp_text = stamp_text | default: 'POSTCARD<br>SG'
+-%}
+<div class="pc-pdp-gallery">
+  <div class="pc-pdp-gallery__layout">
+    <div class="pc-pdp-gallery__thumbs">
+      {%- for i in (1..5) -%}
+        {%- assign media_idx = i | minus: 1 -%}
+        {%- assign m = product.media[media_idx] -%}
+        <div class="ph ph--world pc-pdp-gallery__thumb" style="--world-color: {{ world_color }};">
+          {%- if m -%}
+            {{ m | image_url: width: 200 | image_tag: alt: '', class: 'pc-pdp-gallery__thumb-img' }}
+          {%- else -%}
+            <span>img {{ i }}</span>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+    <div class="ph ph--world pc-pdp-gallery__main" style="--world-color: {{ world_color }};">
+      {%- if product.featured_image -%}
+        {%- assign main_alt = product.featured_image.alt | default: product.title -%}
+        {{ product.featured_image | image_url: width: 1200 | image_tag: alt: main_alt, class: 'pc-pdp-gallery__img' }}
+      {%- else -%}
+        <span>product &middot; in its world</span>
+      {%- endif -%}
+      <div class="pc-pdp-gallery__pm-overlay">
+        <span class="postmark pc-pdp-gallery__pm"><div>{{ stamp_text }}</div></span>
+      </div>
+    </div>
+  </div>
+</div>

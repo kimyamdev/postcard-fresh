@@ -1,0 +1,29 @@
+<section class="pc-rb">
+  <div class="container pc-rb__inner">
+    <div>
+      <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+      <h2 class="h-display pc-rb__title">{{ section.settings.headline }}</h2>
+      <p class="pc-rb__body">{{ section.settings.body }}</p>
+    </div>
+    <div class="pc-rb__ctas">
+      <a class="btn btn--ink" href="{{ section.settings.primary_link }}">{{ section.settings.primary_text }}</a>
+      <a class="tlink" href="{{ section.settings.secondary_link }}">{{ section.settings.secondary_text }}</a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Refill banner",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Refill, repeat, rejoice" },
+    { "type": "text", "id": "headline", "label": "Headline", "default": "Bring this bottle back." },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "Top it up at our Orchard flagship. Less waste, same scent. Save 20% per refill." },
+    { "type": "text", "id": "primary_text", "label": "Primary CTA", "default": "See the refill list →" },
+    { "type": "text", "id": "primary_link", "label": "Primary link", "default": "/pages/refill" },
+    { "type": "text", "id": "secondary_text", "label": "Secondary CTA", "default": "Or shop the matching refill SKU →" },
+    { "type": "text", "id": "secondary_link", "label": "Secondary link", "default": "#" }
+  ],
+  "presets": [{ "name": "Refill banner" }]
+}
+{% endschema %}

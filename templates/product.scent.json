@@ -1,0 +1,85 @@
+{
+  "sections": {
+    "main": { "type": "postcard-pdp-scent", "settings": {} },
+    "verse_band": {
+      "type": "postcard-pdp-verse-band",
+      "settings": { "quote": "Polished. Refined. Endlessly elegant.", "fallback_family": "Anywhere Fragrance" }
+    },
+    "scent_notes": {
+      "type": "postcard-pdp-scent-notes",
+      "settings": {
+        "family": "Hesperidic Gourmand",
+        "title": "What it smells like.",
+        "tagline": "Smells like… a sunlit lobby with polished brass and warm pastries."
+      }
+    },
+    "ingredients": {
+      "type": "postcard-pdp-ingredients",
+      "settings": { "eyebrow": "Three things, beautifully sourced", "title": "Key ingredients." },
+      "blocks": {
+        "i1": { "type": "ingredient", "settings": { "name": "Sicilian Bergamot", "role": "Cold-pressed in Calabria · 4-month harvest", "story": "Lifts the whole composition. The brightness you smell first.", "image_caption": "sicilian bergamot · macro" } },
+        "i2": { "type": "ingredient", "settings": { "name": "Madagascar Vanilla", "role": "Ethically sourced, hand-pollinated", "story": "Carries the warm, gourmand finish. Not a candle vanilla — a tea-cup one.", "image_caption": "madagascar vanilla · macro" } },
+        "i3": { "type": "ingredient", "settings": { "name": "Earl Grey Accord", "role": "In-house tincture, steeped over 6 weeks", "story": "The hotel-lounge moment. Creamy, slightly tannic, beautifully odd.", "image_caption": "earl grey accord · macro" } }
+      },
+      "block_order": ["i1", "i2", "i3"]
+    },
+    "how_to_use": {
+      "type": "postcard-pdp-how-to-use",
+      "settings": { "title": "How to use." },
+      "blocks": {
+        "s1": { "type": "step", "settings": { "heading": "Spritz on linens", "body": "A pillow, a scarf, the inside of a jacket. It blooms over hours." } },
+        "s2": { "type": "step", "settings": { "heading": "On clothes", "body": "Hold the bottle a hand-span away. Two pumps, no more." } },
+        "s3": { "type": "step", "settings": { "heading": "In the room", "body": "One spray as you walk in. Like switching on a lamp." } }
+      },
+      "block_order": ["s1", "s2", "s3"]
+    },
+    "refill_banner": {
+      "type": "postcard-pdp-refill-banner",
+      "settings": {
+        "eyebrow": "Refill, repeat, rejoice",
+        "headline": "Bring this bottle back.",
+        "body": "Top it up at our Orchard flagship. Less waste, same scent. Save 20% per refill.",
+        "primary_text": "See the refill list →",
+        "primary_link": "/pages/refill",
+        "secondary_text": "Or shop the matching refill SKU →"
+      }
+    },
+    "trust": {
+      "type": "postcard-pdp-trust-circles",
+      "settings": {},
+      "blocks": {
+        "t1": { "type": "circle", "settings": { "short": "MADE<br>IN", "label": "Made in Singapore" } },
+        "t2": { "type": "circle", "settings": { "short": "ALUMINUM<br>FREE", "label": "Aluminum-free" } },
+        "t3": { "type": "circle", "settings": { "short": "VEGAN", "label": "Vegan" } },
+        "t4": { "type": "circle", "settings": { "short": "CRUELTY<br>FREE", "label": "Cruelty-free" } },
+        "t5": { "type": "circle", "settings": { "short": "PREGNANCY<br>SAFE", "label": "Pregnancy-safe" } },
+        "t6": { "type": "circle", "settings": { "short": "REFILL<br>ABLE", "label": "Refillable" } }
+      },
+      "block_order": ["t1", "t2", "t3", "t4", "t5", "t6"]
+    },
+    "pairs_with": {
+      "type": "postcard-pdp-pairs-with",
+      "settings": {},
+      "blocks": {
+        "p1": { "type": "item", "settings": { "name": "Hand & Body Wash", "price": "$32" } },
+        "p2": { "type": "item", "settings": { "name": "Deodorant Spray", "price": "$26" } },
+        "p3": { "type": "item", "settings": { "name": "Reed Diffuser", "price": "$48" } }
+      },
+      "block_order": ["p1", "p2", "p3"]
+    },
+    "reviews": { "type": "postcard-pdp-reviews-section", "settings": {} },
+    "faq": { "type": "postcard-pdp-faq-section", "settings": {} }
+  },
+  "order": [
+    "main",
+    "verse_band",
+    "scent_notes",
+    "ingredients",
+    "how_to_use",
+    "refill_banner",
+    "trust",
+    "pairs_with",
+    "reviews",
+    "faq"
+  ]
+}
