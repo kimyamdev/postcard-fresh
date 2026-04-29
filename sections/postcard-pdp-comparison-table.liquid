@@ -1,0 +1,96 @@
+{%- liquid
+  assign world_color = product.metafields.postcard.world.value.accent_color.value | default: '#8E4F5C'
+-%}
+<section class="section pc-ct" style="--world-color: {{ world_color }};">
+  <div class="container">
+    <div class="pc-ct__head">
+      <span class="pc-ct__pill" style="background: {{ world_color }}22;">{{ section.settings.eyebrow }}</span>
+      <h2 class="h-display pc-ct__title">{{ section.settings.title }}</h2>
+      {%- if section.settings.lede != blank -%}
+        <p class="pc-ct__lede">{{ section.settings.lede }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="pc-ct__table">
+      <div class="pc-ct__head-row">
+        <div class="pc-ct__head-cell pc-ct__head-cell--trait">Trait</div>
+        <div class="pc-ct__head-cell">
+          <div class="pc-ct__chip" style="background: {{ section.settings.col_a_chip | default: world_color }};"></div>
+          <div>
+            <div class="h-display pc-ct__col-title">{{ section.settings.col_a_title }}</div>
+            <div class="pc-ct__col-sub">{{ section.settings.col_a_sub }}</div>
+          </div>
+        </div>
+        <div class="pc-ct__head-cell">
+          <div class="pc-ct__chip" style="background: {{ section.settings.col_b_chip }};"></div>
+          <div>
+            <div class="h-display pc-ct__col-title">{{ section.settings.col_b_title }}</div>
+            <div class="pc-ct__col-sub">{{ section.settings.col_b_sub }}</div>
+          </div>
+        </div>
+      </div>
+      {%- for block in section.blocks -%}
+        {%- assign mod = forloop.index | modulo: 2 -%}
+        <div class="pc-ct__row{% if mod == 0 %} pc-ct__row--alt{% endif %}" {{ block.shopify_attributes }}>
+          <div class="pc-ct__cell pc-ct__cell--trait">{{ block.settings.trait }}</div>
+          <div class="pc-ct__cell">{{ block.settings.col_a }}</div>
+          <div class="pc-ct__cell pc-ct__cell--alt">{{ block.settings.col_b }}</div>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.cta_text != blank -%}
+      <div class="pc-ct__ctas">
+        <a class="tlink" href="{{ section.settings.cta_link | default: '#' }}">{{ section.settings.cta_text }}</a>
+        <span class="pc-ct__sep">&middot;</span>
+        <a class="tlink" href="{{ section.settings.cta2_link | default: '#' }}">{{ section.settings.cta2_text }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Comparison table",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Pill text", "default": "Liquid vs bar — pick your path" },
+    { "type": "text", "id": "title", "label": "Title", "default": "The shampoo question." },
+    { "type": "textarea", "id": "lede", "label": "Lede", "default": "We make both. Both are refillable, both work. They suit different lives. The honest table:" },
+    { "type": "text", "id": "col_a_title", "label": "Column A title", "default": "This bottle" },
+    { "type": "text", "id": "col_a_sub", "label": "Column A subtitle", "default": "Smoked Roses · liquid" },
+    { "type": "text", "id": "col_a_chip", "label": "Column A chip color (defaults to world)" },
+    { "type": "text", "id": "col_b_title", "label": "Column B title", "default": "The bar" },
+    { "type": "text", "id": "col_b_sub", "label": "Column B subtitle", "default": "Java Jungle · solid" },
+    { "type": "text", "id": "col_b_chip", "label": "Column B chip color", "default": "#6E8B5C" },
+    { "type": "text", "id": "cta_text", "label": "CTA 1 text", "default": "Read the bar's case →" },
+    { "type": "text", "id": "cta_link", "label": "CTA 1 link", "default": "/products/java-jungle-shampoo-bar" },
+    { "type": "text", "id": "cta2_text", "label": "CTA 2 text", "default": "Try a Discovery duo (one of each) →" },
+    { "type": "text", "id": "cta2_link", "label": "CTA 2 link", "default": "#" }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Row",
+      "settings": [
+        { "type": "text", "id": "trait", "label": "Trait" },
+        { "type": "text", "id": "col_a", "label": "Column A" },
+        { "type": "text", "id": "col_b", "label": "Column B" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Comparison table",
+      "blocks": [
+        { "type": "row", "settings": { "trait": "Lather", "col_a": "Generous · familiar", "col_b": "Quieter · builds in palms" } },
+        { "type": "row", "settings": { "trait": "Best for", "col_a": "Long, thick or coloured hair", "col_b": "Short, fine, or travel" } },
+        { "type": "row", "settings": { "trait": "Cost per wash", "col_a": "S$0.18", "col_b": "S$0.23" } },
+        { "type": "row", "settings": { "trait": "Plastic per wash", "col_a": "0g (refilled)", "col_b": "0g" } },
+        { "type": "row", "settings": { "trait": "Travel", "col_a": "Liquid limit applies", "col_b": "Carry-on legal" } },
+        { "type": "row", "settings": { "trait": "Adjustment period", "col_a": "None", "col_b": "3-5 washes" } },
+        { "type": "row", "settings": { "trait": "Refill flow", "col_a": "Bottle + pouch", "col_b": "One bar at a time" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,46 @@
+{%- liquid
+  assign world_color = product.metafields.postcard.world.value.accent_color.value | default: '#8E4F5C'
+-%}
+<section class="section section--tight pc-pwm" style="--world-color: {{ world_color }};{% if section.settings.warm_bg %} background: var(--color-bg-warm);{% endif %}">
+  <div class="container">
+    <div class="pc-pwm__grid">
+      {%- for block in section.blocks -%}
+        <div class="pc-pwm__card" {{ block.shopify_attributes }}>
+          <div class="h-display pc-pwm__num" style="color: {{ world_color }};">{{ block.settings.number }}</div>
+          <div class="eyebrow pc-pwm__sub">{{ block.settings.sub }}</div>
+          <p class="pc-pwm__body">{{ block.settings.body }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Per-wash maths",
+  "settings": [
+    { "type": "checkbox", "id": "warm_bg", "label": "Warm background", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        { "type": "text", "id": "number", "label": "Number" },
+        { "type": "text", "id": "sub", "label": "Sub-line" },
+        { "type": "textarea", "id": "body", "label": "Body" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Per-wash maths",
+      "blocks": [
+        { "type": "stat", "settings": { "number": "S$0.18", "sub": "per wash", "body": "Refill maths. Cheaper than your morning kopi." } },
+        { "type": "stat", "settings": { "number": "40", "sub": "washes per bottle", "body": "At one pump, twice a week. Heavy users get ~25." } },
+        { "type": "stat", "settings": { "number": "80%", "sub": "less plastic", "body": "Per litre vs single-use bottle. Pouches are aluminium and recyclable." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

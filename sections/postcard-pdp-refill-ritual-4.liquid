@@ -1,0 +1,49 @@
+<section class="section pc-rr4">
+  <div class="container">
+    <div class="pc-rr4__head">
+      <div class="eyebrow pc-rr4__eyebrow">{{ section.settings.eyebrow }}</div>
+      <h2 class="h-display pc-rr4__title">{{ section.settings.title }}</h2>
+    </div>
+    <div class="pc-rr4__grid">
+      {%- for block in section.blocks -%}
+        <div class="pc-rr4__cell" {{ block.shopify_attributes }}>
+          <div class="h-display pc-rr4__num">{{ block.settings.num }}</div>
+          <h3 class="h-typewriter pc-rr4__heading">{{ block.settings.heading }}</h3>
+          <p class="pc-rr4__body">{{ block.settings.body }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Refill ritual 4",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The refill ritual" },
+    { "type": "text", "id": "title", "label": "Title", "default": "How you refill." }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "text", "id": "num", "label": "Number (e.g. 01)" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "textarea", "id": "body", "label": "Body" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Refill ritual 4",
+      "blocks": [
+        { "type": "step", "settings": { "num": "01", "heading": "Bring it back", "body": "Bottle empty? In to our Orchard flagship. Or order a pouch online." } },
+        { "type": "step", "settings": { "num": "02", "heading": "We weigh, wash, refill", "body": "Watch the pour at the counter. 4 minutes door-to-door." } },
+        { "type": "step", "settings": { "num": "03", "heading": "Pay 60% less", "body": "S$22 for 300ml refill. Save S$10 every time. The bottle works forever." } },
+        { "type": "step", "settings": { "num": "04", "heading": "Earn 50 coins", "body": "Per refill returned. Stacks toward your next discovery set." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

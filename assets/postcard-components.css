@@ -1690,3 +1690,196 @@ a.pc-product-card { cursor: pointer; }
   .pc-sx__inner { grid-template-columns: 1fr; }
   .pc-sx__title { font-size: 32px; }
 }
+
+/* === PDP Comparison table === */
+.pc-ct__head { text-align: center; margin-bottom: 48px; }
+.pc-ct__pill {
+  display: inline-block;
+  padding: 8px 18px;
+  border: 1.5px solid var(--color-ink);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.pc-ct__title { font-size: 56px; margin-top: 16px; }
+.pc-ct__lede { margin: 14px auto 0; font-size: 17px; opacity: 0.78; max-width: 680px; line-height: 1.6; }
+
+.pc-ct__table {
+  border: 1.5px solid var(--color-ink);
+  background: var(--color-bg-card);
+  overflow: hidden;
+}
+.pc-ct__head-row {
+  display: grid;
+  grid-template-columns: 2fr 1.3fr 1.3fr;
+  background: var(--color-ink);
+  color: var(--color-bg);
+}
+.pc-ct__head-cell {
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pc-ct__head-cell--trait {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.pc-ct__head-cell:not(.pc-ct__head-cell--trait) {
+  border-left: 1px solid rgba(248, 246, 237, 0.2);
+}
+.pc-ct__chip {
+  width: 18px; height: 24px;
+  border: 1.5px solid var(--color-bg);
+}
+.pc-ct__col-title { font-size: 17px; }
+.pc-ct__col-sub { font-family: var(--font-display); font-size: 9px; opacity: 0.7; }
+
+.pc-ct__row {
+  display: grid;
+  grid-template-columns: 2fr 1.3fr 1.3fr;
+  border-top: 1px solid var(--color-line);
+}
+.pc-ct__row--alt { background: var(--color-bg-warm); }
+.pc-ct__cell {
+  padding: 16px 24px;
+  font-size: 14px;
+  border-left: 1px solid var(--color-line);
+}
+.pc-ct__cell:first-child { border-left: none; }
+.pc-ct__cell--trait {
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+.pc-ct__cell--alt { opacity: 0.85; }
+
+.pc-ct__ctas {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 24px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.pc-ct__sep { opacity: 0.4; }
+
+/* === PDP Refill ritual 4 === */
+.pc-rr4 { background: var(--color-ink); color: var(--color-bg); padding: 96px 0; }
+.pc-rr4__head { margin-bottom: 40px; }
+.pc-rr4__eyebrow { color: var(--color-yellow); }
+.pc-rr4__title { font-size: 56px; margin-top: 8px; color: var(--color-bg); }
+.pc-rr4__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1.5px solid var(--color-bg);
+}
+.pc-rr4__cell {
+  padding: 28px;
+  border-right: 1.5px solid var(--color-bg);
+  background: rgba(248, 246, 237, 0.04);
+}
+.pc-rr4__cell:last-child { border-right: none; }
+.pc-rr4__num { font-size: 56px; color: var(--color-yellow); line-height: 1; }
+.pc-rr4__heading { font-size: 22px; margin-top: 14px; color: var(--color-bg); }
+.pc-rr4__body { margin-top: 12px; font-size: 13px; line-height: 1.55; opacity: 0.85; }
+
+/* === PDP Wash flow === */
+.pc-wf__head { margin-bottom: 32px; }
+.pc-wf__title { font-size: 48px; margin-top: 8px; }
+.pc-wf__row {
+  display: flex;
+  align-items: stretch;
+  border: 1.5px solid var(--color-ink);
+  background: var(--color-bg-card);
+}
+.pc-wf__card {
+  flex: 1;
+  padding: 24px;
+  position: relative;
+  min-width: 0;
+}
+.pc-wf__pill {
+  position: absolute;
+  top: -12px;
+  left: 16px;
+  padding: 4px 10px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1.5px solid var(--color-ink);
+}
+.pc-wf__heading { font-size: 24px; margin-top: 16px; }
+.pc-wf__body { margin-top: 10px; font-size: 12px; line-height: 1.55; opacity: 0.78; }
+.pc-wf__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  opacity: 0.4;
+  border-left: 1px solid var(--color-line);
+  border-right: 1px solid var(--color-line);
+}
+
+.pc-wf__promise {
+  margin-top: 24px;
+  padding: 20px;
+  background: var(--color-yellow);
+  border: 1.5px solid var(--color-ink);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.pc-wf__promise-pm {
+  width: 64px;
+  height: 64px;
+  font-size: 9px;
+  flex: 0 0 auto;
+}
+.pc-wf__promise-copy p { margin-top: 4px; font-size: 14px; }
+
+/* === PDP Per-wash maths === */
+.pc-pwm__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.pc-pwm__card {
+  padding: 24px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-line);
+}
+.pc-pwm__num { font-size: 64px; line-height: 1; }
+.pc-pwm__sub { margin-top: 8px; }
+.pc-pwm__body { margin-top: 8px; font-size: 13px; opacity: 0.78; line-height: 1.55; }
+
+@media (max-width: 800px) {
+  .pc-ct__head-row,
+  .pc-ct__row { grid-template-columns: 1fr; }
+  .pc-ct__head-cell:not(.pc-ct__head-cell--trait),
+  .pc-ct__cell { border-left: none; border-top: 1px solid var(--color-line); }
+  .pc-ct__title { font-size: 36px; }
+  .pc-rr4__grid { grid-template-columns: 1fr; }
+  .pc-rr4__cell { border-right: none; border-bottom: 1.5px solid var(--color-bg); }
+  .pc-rr4__cell:last-child { border-bottom: none; }
+  .pc-rr4__title { font-size: 36px; }
+  .pc-wf__row { flex-direction: column; }
+  .pc-wf__card { border-bottom: 1px solid var(--color-line); }
+  .pc-wf__card:last-child { border-bottom: none; }
+  .pc-wf__arrow {
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid var(--color-line);
+    border-bottom: 1px solid var(--color-line);
+    transform: rotate(90deg);
+    padding: 4px 0;
+  }
+  .pc-wf__title { font-size: 36px; }
+  .pc-pwm__grid { grid-template-columns: 1fr; }
+}

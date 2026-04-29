@@ -1,0 +1,41 @@
+{%- liquid
+  assign world = product.metafields.postcard.world.value
+  if world
+    assign world_color = world.accent_color.value
+    assign world_theme_class = world.theme_class.value
+    assign world_name = world.name.value
+  endif
+  assign world_color = world_color | default: '#8E4F5C'
+  assign world_theme_class = world_theme_class | default: 'world-hotel-lobby'
+  assign world_name = world_name | default: 'Smoked Roses'
+-%}
+
+<div class="{{ world_theme_class }}" style="--world-color: {{ world_color }};">
+
+  <div class="pc-breadcrumb">
+    <div class="container pc-breadcrumb__inner">
+      Home / Hair / Shampoo / <span class="pc-breadcrumb__current">{{ product.title }}</span>
+    </div>
+  </div>
+
+  <section class="pc-pdp-main">
+    <div class="container pc-pdp-main__inner">
+      {% render 'pdp-gallery', product: product, world_color: world_color, stamp_text: '40<br>WASHES<br>SG' %}
+      {% render 'pdp-buy-box',
+        product: product,
+        world_color: world_color,
+        ribbon_subline: 'Refillable Shampoo',
+        demo_sizes: 'Bottle 300ml,Refill 500ml,Refill 1L',
+        demo_active_index: 2 %}
+    </div>
+  </section>
+
+</div>
+
+{% schema %}
+{
+  "name": "Shampoo PDP",
+  "settings": [],
+  "presets": [{ "name": "Shampoo PDP" }]
+}
+{% endschema %}

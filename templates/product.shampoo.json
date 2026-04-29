@@ -1,0 +1,161 @@
+{
+  "sections": {
+    "main": { "type": "postcard-pdp-shampoo", "settings": {} },
+    "verse_band": {
+      "type": "postcard-pdp-verse-band",
+      "settings": { "quote": "Smells like roses. Behaves like proper shampoo.", "fallback_family": "Velvety Rose Wood · Refillable" }
+    },
+    "comparison_table": {
+      "type": "postcard-pdp-comparison-table",
+      "settings": {
+        "eyebrow": "Liquid vs bar — pick your path",
+        "title": "The shampoo question.",
+        "lede": "We make both. Both are refillable, both work. They suit different lives. The honest table:",
+        "col_a_title": "This bottle",
+        "col_a_sub": "Smoked Roses · liquid",
+        "col_b_title": "The bar",
+        "col_b_sub": "Java Jungle · solid",
+        "col_b_chip": "#6E8B5C",
+        "cta_text": "Read the bar's case →",
+        "cta_link": "/products/java-jungle-shampoo-bar",
+        "cta2_text": "Try a Discovery duo (one of each) →"
+      },
+      "blocks": {
+        "r1": { "type": "row", "settings": { "trait": "Lather", "col_a": "Generous · familiar", "col_b": "Quieter · builds in palms" } },
+        "r2": { "type": "row", "settings": { "trait": "Best for", "col_a": "Long, thick or coloured hair", "col_b": "Short, fine, or travel" } },
+        "r3": { "type": "row", "settings": { "trait": "Cost per wash", "col_a": "S$0.18", "col_b": "S$0.23" } },
+        "r4": { "type": "row", "settings": { "trait": "Plastic per wash", "col_a": "0g (refilled)", "col_b": "0g" } },
+        "r5": { "type": "row", "settings": { "trait": "Travel", "col_a": "Liquid limit applies", "col_b": "Carry-on legal" } },
+        "r6": { "type": "row", "settings": { "trait": "Adjustment period", "col_a": "None", "col_b": "3-5 washes" } },
+        "r7": { "type": "row", "settings": { "trait": "Refill flow", "col_a": "Bottle + pouch", "col_b": "One bar at a time" } }
+      },
+      "block_order": ["r1", "r2", "r3", "r4", "r5", "r6", "r7"]
+    },
+    "fit_cards": {
+      "type": "postcard-pdp-fit-cards",
+      "settings": { "eyebrow": "Liquid lather has its own physics", "title": "Will it suit your hair?", "warm_bg": true },
+      "blocks": {
+        "f1": { "type": "fit", "settings": { "label": "Long & thick", "fit": "yes", "note": "Built for this. One pump for fine hair, two for thick. Lather will go further than your last bottle." } },
+        "f2": { "type": "fit", "settings": { "label": "Curly / coily", "fit": "yes", "note": "Co-wash on alternate days; this on the third. Low-poo, high glide." } },
+        "f3": { "type": "fit", "settings": { "label": "Colour-treated", "fit": "yes", "note": "Sulphate-free. Won't strip pigment within 6+ weeks of colour. Salon-tested." } },
+        "f4": { "type": "fit", "settings": { "label": "Fine & oily roots", "fit": "yes", "note": "Lather at the scalp, rinse before mid-lengths. Don't condition the roots." } },
+        "f5": { "type": "fit", "settings": { "label": "Dandruff-prone", "fit": "maybe", "note": "Works between flare-ups. For active scalp, alternate with our Clear Skies tonic." } },
+        "f6": { "type": "fit", "settings": { "label": "Bleached or chemically treated", "fit": "yes", "note": "Low pH, conditioning agents protect the cuticle. Pair with the deep treatment." } }
+      },
+      "block_order": ["f1", "f2", "f3", "f4", "f5", "f6"]
+    },
+    "hero_ingredient": {
+      "type": "postcard-pdp-hero-ingredient",
+      "settings": {
+        "eyebrow": "Hero ingredient",
+        "quote": "A rose, but standing too close to a bonfire.",
+        "body": "We distil Bulgarian damask roses in spring, then age the distillate in oak barrels for eight weeks. The wood lends phenolic depth — the kind of \"smoke\" your nose registers without flames. Wash your hair with this, and you carry a 200-year-old French perfumery technique into the office.",
+        "image_caption": "damask rose · oak barrel"
+      }
+    },
+    "ingredients": {
+      "type": "postcard-pdp-ingredients",
+      "settings": { "eyebrow": "Three things, beautifully sourced", "title": "Key ingredients." },
+      "blocks": {
+        "i1": { "type": "ingredient", "settings": { "name": "Damask Rose Distillate", "role": "The smoke and the bloom", "story": "Steam-distilled from Bulgarian damask rose, then aged 8 weeks in oak. The \"smoked\" comes from the wood — phenolic compounds give the rose a velvety, slightly burnt edge.", "image_caption": "damask rose · macro" } },
+        "i2": { "type": "ingredient", "settings": { "name": "Sodium Cocoyl Isethionate", "role": "The lather, gentle but generous", "story": "A coconut-derived sulphate-free cleanser. Foams properly, rinses cleaner than bars, won't strip dyed hair. The reason this shampoo doesn't feel like a compromise.", "image_caption": "SCI · macro" } },
+        "i3": { "type": "ingredient", "settings": { "name": "Argan Oil + Panthenol", "role": "The slip", "story": "Argan smooths the cuticle while you wash; panthenol (vitamin B5) penetrates the strand for next-day softness. No silicone build-up to clarify.", "image_caption": "argan + panthenol · macro" } }
+      },
+      "block_order": ["i1", "i2", "i3"]
+    },
+    "refill_ritual_4": {
+      "type": "postcard-pdp-refill-ritual-4",
+      "settings": {
+        "eyebrow": "The refill ritual",
+        "title": "How you refill."
+      },
+      "blocks": {
+        "s1": { "type": "step", "settings": { "num": "01", "heading": "Bring it back", "body": "Bottle empty? In to our Orchard flagship. Or order a pouch online." } },
+        "s2": { "type": "step", "settings": { "num": "02", "heading": "We weigh, wash, refill", "body": "Watch the pour at the counter. 4 minutes door-to-door." } },
+        "s3": { "type": "step", "settings": { "num": "03", "heading": "Pay 60% less", "body": "S$22 for 300ml refill. Save S$10 every time. The bottle works forever." } },
+        "s4": { "type": "step", "settings": { "num": "04", "heading": "Earn 50 coins", "body": "Per refill returned. Stacks toward your next discovery set." } }
+      },
+      "block_order": ["s1", "s2", "s3", "s4"]
+    },
+    "wash_flow": {
+      "type": "postcard-pdp-wash-flow",
+      "settings": {
+        "eyebrow": "A wash from start to drain",
+        "title": "The rose ritual.",
+        "promise_seal": "NO<br>· BUILD ·<br>UP",
+        "promise_label": "Silicone-free promise",
+        "promise_text": "No clarifying needed, ever. The slip comes from argan and panthenol, not cyclomethicone — so nothing accumulates on the strand."
+      },
+      "blocks": {
+        "w1": { "type": "step", "settings": { "time": "15s", "heading": "Drench", "body": "Soak hair until water-heavy. The shampoo doesn't lather without it." } },
+        "w2": { "type": "step", "settings": { "time": "—", "heading": "Pump", "body": "One full pump for shoulder-length, two for longer. Less, not more." } },
+        "w3": { "type": "step", "settings": { "time": "45s", "heading": "Lather scalp", "body": "Massage the roots only. Mid-lengths get the runoff. Caffeine + smoke do the work." } },
+        "w4": { "type": "step", "settings": { "time": "30s", "heading": "Rinse", "body": "Lukewarm. Let the suds run through the lengths on their way out." } },
+        "w5": { "type": "step", "settings": { "time": "—", "heading": "Repeat?", "body": "Wash 1 only on a normal day. Wash 2 if you've oiled or it's post-gym." } }
+      },
+      "block_order": ["w1", "w2", "w3", "w4", "w5"]
+    },
+    "per_wash_maths": {
+      "type": "postcard-pdp-per-wash-maths",
+      "settings": { "warm_bg": true },
+      "blocks": {
+        "p1": { "type": "stat", "settings": { "number": "S$0.18", "sub": "per wash", "body": "Refill maths. Cheaper than your morning kopi." } },
+        "p2": { "type": "stat", "settings": { "number": "40", "sub": "washes per bottle", "body": "At one pump, twice a week. Heavy users get ~25." } },
+        "p3": { "type": "stat", "settings": { "number": "80%", "sub": "less plastic", "body": "Per litre vs single-use bottle. Pouches are aluminium and recyclable." } }
+      },
+      "block_order": ["p1", "p2", "p3"]
+    },
+    "trust": {
+      "type": "postcard-pdp-trust-circles",
+      "settings": {},
+      "blocks": {
+        "t1": { "type": "circle", "settings": { "short": "MADE<br>IN", "label": "Made in Singapore" } },
+        "t2": { "type": "circle", "settings": { "short": "SULPHATE<br>FREE", "label": "Sulphate-free" } },
+        "t3": { "type": "circle", "settings": { "short": "SILICONE<br>FREE", "label": "Silicone-free" } },
+        "t4": { "type": "circle", "settings": { "short": "VEGAN", "label": "Vegan" } },
+        "t5": { "type": "circle", "settings": { "short": "CRUELTY<br>FREE", "label": "Cruelty-free" } },
+        "t6": { "type": "circle", "settings": { "short": "REFILL<br>ABLE", "label": "Refillable" } }
+      },
+      "block_order": ["t1", "t2", "t3", "t4", "t5", "t6"]
+    },
+    "pairs_with": {
+      "type": "postcard-pdp-pairs-with",
+      "settings": {},
+      "blocks": {
+        "p1": { "type": "item", "settings": { "name": "Smoked Roses Conditioner", "price": "$32" } },
+        "p2": { "type": "item", "settings": { "name": "Smoked Roses Hair Mist", "price": "$36" } },
+        "p3": { "type": "item", "settings": { "name": "Java Jungle Shampoo Bar", "price": "$18" } }
+      },
+      "block_order": ["p1", "p2", "p3"]
+    },
+    "reviews": { "type": "postcard-pdp-reviews-section", "settings": {} },
+    "faq": {
+      "type": "postcard-pdp-faq-section",
+      "settings": { "title": "Questions?" },
+      "blocks": {
+        "q1": { "type": "faq", "settings": { "q": "How is this different from the Java Jungle bar?", "a": "See the comparison table above. Short version: liquid for thick / coloured / long hair, bar for short / travel / minimalist routines. Both refill, both work, neither is \"better.\"" } },
+        "q2": { "type": "faq", "settings": { "q": "Will it work on bleached hair?", "a": "Yes — sulphate-free, low pH (4.8), no harsh actives. Salon-tested post-bleach. Expect noticeably softer day-three hair." } },
+        "q3": { "type": "faq", "settings": { "q": "Is it really silicone-free?", "a": "Yes. The slip you feel is argan oil + panthenol penetrating the strand, not silicone coating it. Means no clarifying, ever." } },
+        "q4": { "type": "faq", "settings": { "q": "How often should I wash?", "a": "Most heads do well on every-other-day. Daily if you sweat or oil; every-third-day if your hair is fine and dry. Listen to your scalp." } },
+        "q5": { "type": "faq", "settings": { "q": "Full ingredients (INCI)", "a": "Aqua, Sodium Cocoyl Isethionate, Cocamidopropyl Betaine, Glycerin, Sodium Lauroyl Methyl Isethionate, Argania Spinosa (Argan) Kernel Oil, Panthenol, Rosa Damascena (Damask Rose) Distillate (oak-aged), Hydrolyzed Quinoa Protein, Citric Acid, Sodium Benzoate, Potassium Sorbate, Tocopherol, Parfum (Smoked Roses accord), Limonene, Linalool, Geraniol. Sulphate-free, silicone-free, palm-oil-free." } },
+        "q6": { "type": "faq", "settings": { "q": "Can I buy a refill without owning the bottle yet?", "a": "Sure. The 500ml pouch comes with a free pump head — just decant into any clean bottle you have. Or grab the bottle next time." } }
+      },
+      "block_order": ["q1", "q2", "q3", "q4", "q5", "q6"]
+    }
+  },
+  "order": [
+    "main",
+    "verse_band",
+    "comparison_table",
+    "fit_cards",
+    "hero_ingredient",
+    "ingredients",
+    "refill_ritual_4",
+    "wash_flow",
+    "per_wash_maths",
+    "trust",
+    "pairs_with",
+    "reviews",
+    "faq"
+  ]
+}

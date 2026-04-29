@@ -1,0 +1,69 @@
+{%- liquid
+  assign world_color = product.metafields.postcard.world.value.accent_color.value | default: '#8E4F5C'
+-%}
+<section class="section pc-wf" style="--world-color: {{ world_color }};">
+  <div class="container">
+    <div class="pc-wf__head">
+      <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+      <h2 class="h-display pc-wf__title">{{ section.settings.title }}</h2>
+    </div>
+    <div class="pc-wf__row">
+      {%- for block in section.blocks -%}
+        <div class="pc-wf__card" {{ block.shopify_attributes }}>
+          <span class="pc-wf__pill" style="background: {{ world_color }}; color: var(--color-bg);">{{ block.settings.time }}</span>
+          <div class="h-display pc-wf__heading">{{ block.settings.heading }}</div>
+          <p class="pc-wf__body">{{ block.settings.body }}</p>
+        </div>
+        {%- unless forloop.last -%}
+          <div class="pc-wf__arrow">&rarr;</div>
+        {%- endunless -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.promise_text != blank -%}
+      <div class="pc-wf__promise">
+        <span class="postmark postmark--ink pc-wf__promise-pm"><div>{{ section.settings.promise_seal }}</div></span>
+        <div class="pc-wf__promise-copy">
+          <div class="eyebrow">{{ section.settings.promise_label }}</div>
+          <p>{{ section.settings.promise_text }}</p>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Wash flow",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "A wash from start to drain" },
+    { "type": "text", "id": "title", "label": "Title", "default": "The rose ritual." },
+    { "type": "text", "id": "promise_seal", "label": "Promise seal text", "default": "NO<br>· BUILD ·<br>UP" },
+    { "type": "text", "id": "promise_label", "label": "Promise label", "default": "Silicone-free promise" },
+    { "type": "textarea", "id": "promise_text", "label": "Promise text", "default": "No clarifying needed, ever. The slip comes from argan and panthenol, not cyclomethicone — so nothing accumulates on the strand." }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Wash step",
+      "settings": [
+        { "type": "text", "id": "time", "label": "Time pill (e.g. 15s, —)" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "textarea", "id": "body", "label": "Body" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Wash flow",
+      "blocks": [
+        { "type": "step", "settings": { "time": "15s", "heading": "Drench", "body": "Soak hair until water-heavy. The shampoo doesn't lather without it." } },
+        { "type": "step", "settings": { "time": "—", "heading": "Pump", "body": "One full pump for shoulder-length, two for longer. Less, not more." } },
+        { "type": "step", "settings": { "time": "45s", "heading": "Lather scalp", "body": "Massage the roots only. Mid-lengths get the runoff." } },
+        { "type": "step", "settings": { "time": "30s", "heading": "Rinse", "body": "Lukewarm. Let the suds run through the lengths on their way out." } },
+        { "type": "step", "settings": { "time": "—", "heading": "Repeat?", "body": "Wash 1 only on a normal day. Wash 2 if you've oiled or it's post-gym." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
