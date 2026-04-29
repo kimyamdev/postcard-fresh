@@ -6,26 +6,47 @@
   assign world_color = world_color | default: world_color_default | default: '#E8C36A'
   assign mf_stamp = product.metafields.pdp.gallery_stamp.value
   assign stamp_text = mf_stamp | default: stamp_text | default: 'POSTCARD<br>SG'
+  assign first_media = product.media.first
+  assign first_alt = first_media.alt | default: product.title | escape
 -%}
-<div class="pc-pdp-gallery">
+<div class="pc-pdp-gallery" x-data='{
+  currentIndex: 0,
+  media: [
+    {%- for m in product.media limit: 5 -%}
+      { src: {{ m | image_url: width: 1200 | json }}, alt: {{ m.alt | default: product.title | json }} }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ]
+}'>
   <div class="pc-pdp-gallery__layout">
     <div class="pc-pdp-gallery__thumbs">
       {%- for i in (1..5) -%}
         {%- assign media_idx = i | minus: 1 -%}
         {%- assign m = product.media[media_idx] -%}
-        <div class="ph ph--world pc-pdp-gallery__thumb" style="--world-color: {{ world_color }};">
-          {%- if m -%}
+        {%- if m -%}
+          <button type="button"
+            class="ph ph--world pc-pdp-gallery__thumb pc-pdp-gallery__thumb--btn"
+            style="--world-color: {{ world_color }};"
+            @click.prevent="currentIndex = {{ media_idx }}"
+            :class="{ 'pc-pdp-gallery__thumb--active': currentIndex === {{ media_idx }} }"
+            :aria-current="currentIndex === {{ media_idx }} ? 'true' : 'false'"
+            aria-label="View image {{ i }}">
             {{ m | image_url: width: 200 | image_tag: alt: '', class: 'pc-pdp-gallery__thumb-img' }}
-          {%- else -%}
+          </button>
+        {%- else -%}
+          <div class="ph ph--world pc-pdp-gallery__thumb pc-pdp-gallery__thumb--empty" style="--world-color: {{ world_color }};">
             <span>img {{ i }}</span>
-          {%- endif -%}
-        </div>
+          </div>
+        {%- endif -%}
       {%- endfor -%}
     </div>
     <div class="ph ph--world pc-pdp-gallery__main" style="--world-color: {{ world_color }};">
-      {%- if product.featured_image -%}
-        {%- assign main_alt = product.featured_image.alt | default: product.title -%}
-        {{ product.featured_image | image_url: width: 1200 | image_tag: alt: main_alt, class: 'pc-pdp-gallery__img' }}
+      {%- if first_media -%}
+        <img
+          :src="media[currentIndex] && media[currentIndex].src"
+          :alt="media[currentIndex] && media[currentIndex].alt"
+          src="{{ first_media | image_url: width: 1200 }}"
+          alt="{{ first_alt }}"
+          class="pc-pdp-gallery__img">
       {%- else -%}
         <span>product &middot; in its world</span>
       {%- endif -%}
