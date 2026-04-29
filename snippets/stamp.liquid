@@ -1,0 +1,44 @@
+{%- liquid
+  assign size = size | default: 'md'
+  assign color = color | default: '#E8C36A'
+  if size == 'lg'
+    assign w = 140
+    assign h = 180
+  elsif size == 'sm'
+    assign w = 84
+    assign h = 108
+  else
+    assign w = 110
+    assign h = 140
+  endif
+  assign words = name | split: ' '
+  assign initials = ''
+  for word in words limit: 2
+    assign first_letter = word | slice: 0, 1 | upcase
+    assign initials = initials | append: first_letter
+  endfor
+-%}
+{%- if href -%}
+<a class="pc-stamp pc-stamp--{{ size }}" href="{{ href }}">
+{%- else -%}
+<div class="pc-stamp pc-stamp--{{ size }}">
+{%- endif -%}
+  <div class="stamp-frame stamp-side pc-stamp__frame" style="width: {{ w }}px; height: {{ h }}px; background: linear-gradient(160deg, {{ color }}33, {{ color }}66);">
+    <div class="pc-stamp__inner">
+      <div class="pc-stamp__monogram" style="background: {{ color }};">
+        <span class="pc-stamp__monogram-letters">{{ initials }}</span>
+      </div>
+      <div class="pc-stamp__name">{{ name }}</div>
+      {%- if family != blank and size != 'sm' -%}
+        <div class="pc-stamp__family">{{ family }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+  {%- if label != blank -%}
+    <div class="pc-stamp__label">{{ label }}</div>
+  {%- endif -%}
+{%- if href -%}
+</a>
+{%- else -%}
+</div>
+{%- endif -%}

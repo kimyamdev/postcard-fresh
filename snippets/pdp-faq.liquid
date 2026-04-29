@@ -1,0 +1,23 @@
+{%- liquid
+  assign heading = heading | default: 'Questions?'
+-%}
+<section class="section section--tight">
+  <div class="container">
+    <h2 class="h-display pc-pdp-faq__title">{{ heading }}</h2>
+    <div class="pc-pdp-faq__list">
+      {%- if faqs -%}
+        {%- for faq in faqs -%}
+          <details class="pc-pdp-faq__item"{% if forloop.first %} open{% endif %}>
+            <summary class="pc-pdp-faq__q">{{ faq.q }}</summary>
+            <p class="pc-pdp-faq__a">{{ faq.a }}</p>
+          </details>
+        {%- endfor -%}
+      {%- else -%}
+        <details class="pc-pdp-faq__item">
+          <summary class="pc-pdp-faq__q">No FAQs configured yet.</summary>
+          <p class="pc-pdp-faq__a">Pass a <code>faqs</code> array (each item with <code>q</code> and <code>a</code>) when rendering this snippet.</p>
+        </details>
+      {%- endif -%}
+    </div>
+  </div>
+</section>

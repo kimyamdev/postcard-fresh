@@ -1,0 +1,11 @@
+{%- liquid
+  assign text = text | default: 'POSTCARD<br>SG'
+  assign variant = variant | default: 'default'
+  assign cls = 'postmark'
+  if variant == 'yellow'
+    assign cls = 'postmark postmark--yellow'
+  elsif variant == 'ink'
+    assign cls = 'postmark postmark--ink'
+  endif
+-%}
+<span class="{{ cls }}">{{ text }}</span>

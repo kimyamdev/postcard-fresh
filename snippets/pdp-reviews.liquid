@@ -1,0 +1,42 @@
+{%- liquid
+  assign score = score | default: '4.9'
+  assign count = count | default: '327'
+-%}
+<section class="section pc-pdp-reviews">
+  <div class="container">
+    <div class="pc-pdp-reviews__grid">
+      <div>
+        <div class="h-display pc-pdp-reviews__score">{{ score }}</div>
+        <div class="pc-pdp-reviews__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="pc-pdp-reviews__count">Based on {{ count }} reviews</div>
+        <div class="pc-pdp-reviews__incentive">
+          <div class="pc-pdp-reviews__incentive-title">Earn 20 coins per review</div>
+          <div class="pc-pdp-reviews__incentive-sub">+10 with a photo &middot; +15 with a video</div>
+        </div>
+      </div>
+      <div class="pc-pdp-reviews__list">
+        <article class="pc-pdp-review">
+          <div class="pc-pdp-review__head">
+            <div class="pc-pdp-review__who">Mei L. &middot; <span class="pc-pdp-review__who-tag">Singapore</span></div>
+            <div class="pc-pdp-review__rating">5 / 5</div>
+          </div>
+          <p class="pc-pdp-review__body">Honestly the best one I&rsquo;ve tried. Friends keep asking what I&rsquo;m wearing &mdash; and one bought it after one whiff.</p>
+        </article>
+        <article class="pc-pdp-review">
+          <div class="pc-pdp-review__head">
+            <div class="pc-pdp-review__who">Aaron &middot; <span class="pc-pdp-review__who-tag">Verified buyer</span></div>
+            <div class="pc-pdp-review__rating">5 / 5</div>
+          </div>
+          <p class="pc-pdp-review__body">Refilled mine last week. Same quality, less waste, the staff threw in a coffee.</p>
+        </article>
+        <article class="pc-pdp-review">
+          <div class="pc-pdp-review__head">
+            <div class="pc-pdp-review__who">Priya &middot; <span class="pc-pdp-review__who-tag">Verified buyer</span></div>
+            <div class="pc-pdp-review__rating">5 / 5</div>
+          </div>
+          <p class="pc-pdp-review__body">Light enough for office, warm enough for evening. My new daily.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,49 @@
+{%- liquid
+  if product
+    assign card_name = product.title
+    assign card_url = product.url
+    assign card_price = product.price | money
+    if product.metafields.custom.world.value
+      assign world_obj = product.metafields.custom.world.value
+      assign card_world = world_obj.name
+      assign card_world_color = world_obj.accent_color
+    endif
+  endif
+
+  assign card_name = name | default: card_name
+  assign card_url = href | default: card_url | default: '#'
+  assign card_price = price | default: card_price
+  assign card_world = world | default: card_world | default: ''
+  assign card_world_color = world_color | default: card_world_color | default: '#E8C36A'
+  assign card_badge = badge
+
+  assign world_words = card_world | split: ' '
+  assign world_initials = ''
+  for word in world_words limit: 2
+    assign first_letter = word | slice: 0, 1 | upcase
+    assign world_initials = world_initials | append: first_letter
+  endfor
+-%}
+<a class="pc-product-card" href="{{ card_url }}">
+  <div class="ph ph--world pc-product-card__media" style="--world-color: {{ card_world_color }};">
+    {%- if product.featured_image -%}
+      {{ product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: product.featured_image.alt | escape, class: 'pc-product-card__img' }}
+    {%- else -%}
+      <span style="opacity: 0.55;">product · {{ card_world }}</span>
+    {%- endif -%}
+    {%- if card_badge != blank -%}
+      <div class="pc-product-card__badge">{{ card_badge }}</div>
+    {%- endif -%}
+    {%- if card_world != blank -%}
+      <div class="pc-product-card__chip" style="background: {{ card_world_color }};">{{ world_initials }}</div>
+    {%- endif -%}
+  </div>
+  <div>
+    <div class="pc-product-card__world">{{ card_world }}</div>
+    <h3 class="pc-product-card__name">{{ card_name }}</h3>
+    <div class="pc-product-card__row">
+      <span class="pc-product-card__price">{{ card_price }}</span>
+      <span class="tlink">Add &rarr;</span>
+    </div>
+  </div>
+</a>
