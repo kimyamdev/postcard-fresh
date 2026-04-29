@@ -1,0 +1,113 @@
+{
+  "sections": {
+    "main": { "type": "postcard-pdp-gift", "settings": {} },
+    "verse_band": {
+      "type": "postcard-pdp-verse-band",
+      "settings": { "quote": "A whole world, packed for travel.", "fallback_family": "Hesperidic Gourmand" }
+    },
+    "gift_contents": {
+      "type": "postcard-pdp-gift-contents",
+      "settings": {
+        "savings_line": "4 pieces · $94 retail · save $16",
+        "title": "Inside this gift.",
+        "tagline": "All wrapped in our signature postcard kraft, with a printed scent story."
+      },
+      "blocks": {
+        "g1": { "type": "item", "settings": { "name": "Hand & Body Wash", "size": "50ml", "value": "24" } },
+        "g2": { "type": "item", "settings": { "name": "Anywhere Fragrance", "size": "30ml", "value": "32" } },
+        "g3": { "type": "item", "settings": { "name": "Reed Diffuser", "size": "mini", "value": "26" } },
+        "g4": { "type": "item", "settings": { "name": "Deodorant Stick", "size": "mini", "value": "12" } }
+      },
+      "block_order": ["g1", "g2", "g3", "g4"]
+    },
+    "wrap_hero": {
+      "type": "postcard-pdp-hero-ingredient",
+      "settings": {
+        "eyebrow": "The wrap",
+        "quote": "The wrap is half the gift.",
+        "body": "Hand-stamped kraft sleeve. Real postal twine. A printed postcard with your message hand-typed by us — not an inkjet. Wrapped at our Joo Chiat counter, never automated.",
+        "image_caption": "wrap detail · postcard, twine, stamp"
+      }
+    },
+    "personalise": {
+      "type": "postcard-pdp-ingredients",
+      "settings": { "eyebrow": "Three things, made for you", "title": "Personalise it." },
+      "blocks": {
+        "p1": { "type": "ingredient", "settings": { "name": "Free gift message", "role": "Up to 80 chars · live preview", "story": "Handwritten on a postcard. Type your message, watch it appear on the actual postcard before checkout.", "image_caption": "free gift message" } },
+        "p2": { "type": "ingredient", "settings": { "name": "Choose your stamp", "role": "Pick from all 22 worlds", "story": "Which world's stamp graces the box? Hotel Lobby is default — swap it for the recipient's favourite.", "image_caption": "choose your stamp" } },
+        "p3": { "type": "ingredient", "settings": { "name": "Send direct", "role": "Separate billing & shipping", "story": "They get the postcard. You get the receipt. No price stickers, ever.", "image_caption": "send direct" } }
+      },
+      "block_order": ["p1", "p2", "p3"]
+    },
+    "how_to_use": {
+      "type": "postcard-pdp-how-to-use",
+      "settings": { "title": "How it works." },
+      "blocks": {
+        "s1": { "type": "step", "settings": { "heading": "Choose the world", "body": "Pick from all 22 stamps. Hotel Lobby is our default." } },
+        "s2": { "type": "step", "settings": { "heading": "Add a message", "body": "Hand-typed onto a real postcard, up to 80 characters." } },
+        "s3": { "type": "step", "settings": { "heading": "We post it", "body": "Same-day pickup at Orchard, or 1–2 day SG delivery to their door." } }
+      },
+      "block_order": ["s1", "s2", "s3"]
+    },
+    "corporate_banner": {
+      "type": "postcard-pdp-refill-banner",
+      "settings": {
+        "eyebrow": "Sending a lot of postcards?",
+        "headline": "20+ units? Talk corporate.",
+        "body": "Logo printing, custom curation, hotel-amenity quantities. We reply in 2 working days.",
+        "primary_text": "Start an enquiry →",
+        "primary_link": "/pages/corporate",
+        "secondary_text": "Download one-pager (PDF)",
+        "secondary_link": "#"
+      }
+    },
+    "trust": {
+      "type": "postcard-pdp-trust-circles",
+      "settings": {},
+      "blocks": {
+        "t1": { "type": "circle", "settings": { "short": "MADE<br>IN", "label": "Made in Singapore" } },
+        "t2": { "type": "circle", "settings": { "short": "ALUMINUM<br>FREE", "label": "Aluminum-free" } },
+        "t3": { "type": "circle", "settings": { "short": "VEGAN", "label": "Vegan" } },
+        "t4": { "type": "circle", "settings": { "short": "CRUELTY<br>FREE", "label": "Cruelty-free" } },
+        "t5": { "type": "circle", "settings": { "short": "PREGNANCY<br>SAFE", "label": "Pregnancy-safe" } },
+        "t6": { "type": "circle", "settings": { "short": "REFILL<br>ABLE", "label": "Refillable" } }
+      },
+      "block_order": ["t1", "t2", "t3", "t4", "t5", "t6"]
+    },
+    "pairs_with": {
+      "type": "postcard-pdp-pairs-with",
+      "settings": {},
+      "blocks": {
+        "p1": { "type": "item", "settings": { "name": "Hotel Lobby Discovery Set", "price": "$38" } },
+        "p2": { "type": "item", "settings": { "name": "Hotel Lobby Bath Ritual Box", "price": "$92" } },
+        "p3": { "type": "item", "settings": { "name": "Hotel Lobby Anywhere Fragrance", "price": "$42" } }
+      },
+      "block_order": ["p1", "p2", "p3"]
+    },
+    "reviews": { "type": "postcard-pdp-reviews-section", "settings": {} },
+    "faq": {
+      "type": "postcard-pdp-faq-section",
+      "settings": { "title": "Questions?" },
+      "blocks": {
+        "q1": { "type": "faq", "settings": { "q": "When will it arrive?", "a": "Same-day pickup at our Orchard flagship if ordered before 2pm. SG delivery 1–2 days. International 5–10 days." } },
+        "q2": { "type": "faq", "settings": { "q": "Can I send it to a different address?", "a": "Yes — separate billing and shipping addresses. The recipient never sees the price." } },
+        "q3": { "type": "faq", "settings": { "q": "Can I customise the contents?", "a": "Lavish ($30 add-on) lets you swap up to 2 items. For full custom, see corporate gifting." } },
+        "q4": { "type": "faq", "settings": { "q": "What if they don't like the scent?", "a": "We offer free exchange within 30 days. They keep the postcard." } }
+      },
+      "block_order": ["q1", "q2", "q3", "q4"]
+    }
+  },
+  "order": [
+    "main",
+    "verse_band",
+    "gift_contents",
+    "wrap_hero",
+    "personalise",
+    "how_to_use",
+    "corporate_banner",
+    "trust",
+    "pairs_with",
+    "reviews",
+    "faq"
+  ]
+}

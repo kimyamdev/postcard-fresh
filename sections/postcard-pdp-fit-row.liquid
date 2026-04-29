@@ -1,0 +1,71 @@
+{%- liquid
+  assign world_color = product.metafields.postcard.world.value.accent_color.value | default: '#9CC4D6'
+  assign block_count = section.blocks.size
+-%}
+<section class="section section--tight pc-fr" style="--world-color: {{ world_color }};">
+  <div class="container">
+    {%- if section.settings.eyebrow != blank -%}<div class="eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
+    <h2 class="h-display pc-fr__title">{{ section.settings.title }}</h2>
+    <div class="pc-fr__grid pc-fr__grid--{{ block_count }}">
+      {%- for block in section.blocks -%}
+        {%- assign fit = block.settings.fit | default: 'yes' -%}
+        {%- if fit == 'yes' -%}
+          {%- assign chip_color = block.settings.color | default: world_color -%}
+          {%- assign indicator_text = block.settings.indicator | default: '✓ great fit' -%}
+        {%- elsif fit == 'maybe' -%}
+          {%- assign chip_color = '#E8C36A' -%}
+          {%- assign indicator_text = block.settings.indicator | default: '~ works with conditions' -%}
+        {%- else -%}
+          {%- assign chip_color = '#C4C5CE' -%}
+          {%- assign indicator_text = block.settings.indicator | default: '— patch test first' -%}
+        {%- endif -%}
+        <div class="pc-fr__item pc-fr__item--{{ fit }}" {{ block.shopify_attributes }}>
+          {% render 'stamp', name: block.settings.label, color: chip_color, size: 'sm' %}
+          <div class="pc-fr__indicator">{{ indicator_text }}</div>
+          {%- if block.settings.note != blank -%}
+            <div class="pc-fr__note">{{ block.settings.note }}</div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Fit row",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Will it suit your skin?" }
+  ],
+  "blocks": [
+    {
+      "type": "fit",
+      "name": "Fit item",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "select", "id": "fit", "label": "Fit", "options": [
+          { "value": "yes", "label": "Yes" },
+          { "value": "maybe", "label": "Maybe" },
+          { "value": "no", "label": "No" }
+        ], "default": "yes" },
+        { "type": "text", "id": "color", "label": "Stamp color (optional override)" },
+        { "type": "text", "id": "indicator", "label": "Indicator text (optional)" },
+        { "type": "text", "id": "note", "label": "Italic note (optional)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fit row",
+      "blocks": [
+        { "type": "fit", "settings": { "label": "Dry", "fit": "yes" } },
+        { "type": "fit", "settings": { "label": "Combination", "fit": "yes" } },
+        { "type": "fit", "settings": { "label": "Sensitive", "fit": "yes" } },
+        { "type": "fit", "settings": { "label": "Dehydrated", "fit": "yes" } },
+        { "type": "fit", "settings": { "label": "Very oily", "fit": "no", "indicator": "— ok, but lighter formula recommended" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -50,7 +50,18 @@
       "block_order": ["p1", "p2", "p3"]
     },
     "reviews": { "type": "postcard-pdp-reviews-section", "settings": {} },
-    "faq": { "type": "postcard-pdp-faq-section", "settings": {} }
+    "faq": {
+      "type": "postcard-pdp-faq-section",
+      "settings": { "title": "Questions?" },
+      "blocks": {
+        "q1": { "type": "faq", "settings": { "q": "Can I refill an old Postcard bottle from years ago?", "a": "Yes — any age, any world. Even if the label has faded. Bring it in, we wash and refill." } },
+        "q2": { "type": "faq", "settings": { "q": "What if I want to switch worlds in the same bottle?", "a": "Bring it in empty. We rinse with citric acid, dry, and refill with whatever world you fancy. No charge for the rinse." } },
+        "q3": { "type": "faq", "settings": { "q": "Is the pump replaceable?", "a": "Yes — S$4 for a fresh brass pump if yours stops. Drop in any time, swap on the spot." } },
+        "q4": { "type": "faq", "settings": { "q": "Is it safe for sensitive skin?", "a": "Yes — coco glucoside is one of the gentlest cleansers in cosmetics. Patch test if you are reactive to florals (the tuberose absolute is potent)." } },
+        "q5": { "type": "faq", "settings": { "q": "What about the empty refill pouch?", "a": "Drop it in any postbox with the prepaid label, we sterilise and reuse. Or recycle the aluminium yourself." } }
+      },
+      "block_order": ["q1", "q2", "q3", "q4", "q5"]
+    }
   },
   "order": [
     "main",

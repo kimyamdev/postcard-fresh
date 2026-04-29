@@ -1,0 +1,124 @@
+{
+  "sections": {
+    "main": { "type": "postcard-pdp-active", "settings": {} },
+    "verse_band": {
+      "type": "postcard-pdp-verse-band",
+      "settings": { "quote": "Three depths of hydration. One bottle of glow.", "fallback_family": "Active skincare" }
+    },
+    "benefits_stats": {
+      "type": "postcard-pdp-benefits-stats",
+      "settings": {
+        "eyebrow": "Active hydration",
+        "title": "What it does.",
+        "tagline": "A 1.5%-hyaluronic top-up your skin will write home about."
+      },
+      "blocks": {
+        "b1": { "type": "stat", "settings": { "heading": "Plumps", "metric": "+47% surface volume", "body": "In 7 days. Independently tested on 32 humans." } },
+        "b2": { "type": "stat", "settings": { "heading": "Hydrates", "metric": "12-hr lasting hydration", "body": "Multi-weight HA holds 1000× its weight in water." } },
+        "b3": { "type": "stat", "settings": { "heading": "Glows", "metric": "+82% reported \"bouncier\"", "body": "Dermatologist consumer panel · 4 weeks." } }
+      },
+      "block_order": ["b1", "b2", "b3"]
+    },
+    "hero_ingredient": {
+      "type": "postcard-pdp-hero-ingredient",
+      "settings": {
+        "eyebrow": "Hero ingredient",
+        "quote": "Three molecular weights of hyaluronic acid, working at three depths.",
+        "body": "Surface plumping you can see. Mid-skin hydration that lasts 12 hours. Deep-layer support that builds over time. One serum, three jobs, no stickiness.",
+        "image_caption": "HA molecule · macro"
+      }
+    },
+    "ingredients": {
+      "type": "postcard-pdp-ingredients",
+      "settings": { "eyebrow": "Three things, beautifully sourced", "title": "Key ingredients." },
+      "blocks": {
+        "i1": { "type": "ingredient", "settings": { "name": "Multi-weight Hyaluronic", "role": "Bio-fermented · Korea, 4 molecular weights", "story": "The headline act. Surface plump + mid-skin lock-in + deep-layer support, all in one.", "image_caption": "multi-weight hyaluronic · macro" } },
+        "i2": { "type": "ingredient", "settings": { "name": "Niacinamide 4%", "role": "Vitamin B3 derivative · pharmaceutical grade", "story": "Brightens, evens tone, reinforces the skin barrier. The quiet hero.", "image_caption": "niacinamide · macro" } },
+        "i3": { "type": "ingredient", "settings": { "name": "Centella Asiatica", "role": "Wild-grown · Madagascar tincture", "story": "Calms redness and post-acne marks. The reason sensitive skins love this serum.", "image_caption": "centella asiatica · macro" } }
+      },
+      "block_order": ["i1", "i2", "i3"]
+    },
+    "fit_row": {
+      "type": "postcard-pdp-fit-row",
+      "settings": { "title": "Will it suit your skin?" },
+      "blocks": {
+        "f1": { "type": "fit", "settings": { "label": "Dry", "fit": "yes" } },
+        "f2": { "type": "fit", "settings": { "label": "Combination", "fit": "yes" } },
+        "f3": { "type": "fit", "settings": { "label": "Sensitive", "fit": "yes" } },
+        "f4": { "type": "fit", "settings": { "label": "Dehydrated", "fit": "yes" } },
+        "f5": { "type": "fit", "settings": { "label": "Very oily", "fit": "no", "indicator": "— ok, but lighter formula recommended" } }
+      },
+      "block_order": ["f1", "f2", "f3", "f4", "f5"]
+    },
+    "how_to_use": {
+      "type": "postcard-pdp-how-to-use",
+      "settings": { "title": "How to use." },
+      "blocks": {
+        "s1": { "type": "step", "settings": { "heading": "Cleanse", "body": "Pat skin damp — don't towel dry. The serum locks better onto wet skin." } },
+        "s2": { "type": "step", "settings": { "heading": "3–5 drops", "body": "Press into face & neck. Don't rub — the HA needs a moment to drink in." } },
+        "s3": { "type": "step", "settings": { "heading": "Lock & layer", "body": "Seal with moisturiser. Use AM and PM, before SPF in the morning." } }
+      },
+      "block_order": ["s1", "s2", "s3"]
+    },
+    "refill_banner": {
+      "type": "postcard-pdp-refill-banner",
+      "settings": {
+        "eyebrow": "Refill, repeat, rejoice",
+        "headline": "Bring this bottle back.",
+        "body": "Top up your serum at our Orchard flagship. Less waste, same hydration. Save 20% per refill.",
+        "primary_text": "See the refill list →",
+        "primary_link": "/pages/refill",
+        "secondary_text": "Or shop the matching refill SKU →"
+      }
+    },
+    "trust": {
+      "type": "postcard-pdp-trust-circles",
+      "settings": {},
+      "blocks": {
+        "t1": { "type": "circle", "settings": { "short": "MADE<br>IN", "label": "Made in Singapore" } },
+        "t2": { "type": "circle", "settings": { "short": "ALUMINUM<br>FREE", "label": "Aluminum-free" } },
+        "t3": { "type": "circle", "settings": { "short": "VEGAN", "label": "Vegan" } },
+        "t4": { "type": "circle", "settings": { "short": "CRUELTY<br>FREE", "label": "Cruelty-free" } },
+        "t5": { "type": "circle", "settings": { "short": "PREGNANCY<br>SAFE", "label": "Pregnancy-safe" } },
+        "t6": { "type": "circle", "settings": { "short": "REFILL<br>ABLE", "label": "Refillable" } }
+      },
+      "block_order": ["t1", "t2", "t3", "t4", "t5", "t6"]
+    },
+    "pairs_with": {
+      "type": "postcard-pdp-pairs-with",
+      "settings": {},
+      "blocks": {
+        "p1": { "type": "item", "settings": { "name": "Bakuchiol Bay Night Oil", "price": "$56" } },
+        "p2": { "type": "item", "settings": { "name": "Clear Skies Gentle Cleanser", "price": "$32" } },
+        "p3": { "type": "item", "settings": { "name": "Sunlit Terrace SPF 50", "price": "$38" } }
+      },
+      "block_order": ["p1", "p2", "p3"]
+    },
+    "reviews": { "type": "postcard-pdp-reviews-section", "settings": {} },
+    "faq": {
+      "type": "postcard-pdp-faq-section",
+      "settings": { "title": "Questions?" },
+      "blocks": {
+        "q1": { "type": "faq", "settings": { "q": "Full ingredients list (INCI)", "a": "Aqua, Sodium Hyaluronate (4 molecular weights), Glycerin, Niacinamide, Pentylene Glycol, Panthenol, Centella Asiatica Extract, Allantoin, Sodium PCA, Hydroxyethylcellulose, Phenoxyethanol, Ethylhexylglycerin, Citric Acid." } },
+        "q2": { "type": "faq", "settings": { "q": "Free from / Pregnancy-safe?", "a": "Free from fragrance, alcohol, essential oils, parabens, sulphates and silicones. Pregnancy and breastfeeding safe." } },
+        "q3": { "type": "faq", "settings": { "q": "Can I layer it with retinol?", "a": "Yes — apply this serum first on damp skin, let it sink in, then apply your retinol on top." } },
+        "q4": { "type": "faq", "settings": { "q": "How long will one bottle last?", "a": "Most customers finish a 30ml bottle in 2 months at AM + PM use." } }
+      },
+      "block_order": ["q1", "q2", "q3", "q4"]
+    }
+  },
+  "order": [
+    "main",
+    "verse_band",
+    "benefits_stats",
+    "hero_ingredient",
+    "ingredients",
+    "fit_row",
+    "how_to_use",
+    "refill_banner",
+    "trust",
+    "pairs_with",
+    "reviews",
+    "faq"
+  ]
+}

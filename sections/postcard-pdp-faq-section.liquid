@@ -1,27 +1,21 @@
+{%- assign title = section.settings.title | default: 'Questions?' -%}
 <section class="section section--tight">
   <div class="container">
-    <h2 class="h-display pc-pdp-faq__title">Questions?</h2>
+    <h2 class="h-display pc-pdp-faq__title">{{ title }}</h2>
     <div class="pc-pdp-faq__list">
-      <details class="pc-pdp-faq__item" open>
-        <summary class="pc-pdp-faq__q">Can I refill an old Postcard bottle from years ago?</summary>
-        <p class="pc-pdp-faq__a">Yes &mdash; any age, any world. Even if the label has faded. Bring it in, we wash and refill.</p>
-      </details>
-      <details class="pc-pdp-faq__item">
-        <summary class="pc-pdp-faq__q">What if I want to switch worlds in the same bottle?</summary>
-        <p class="pc-pdp-faq__a">Bring it in empty. We rinse with citric acid, dry, and refill with whatever world you fancy. No charge for the rinse.</p>
-      </details>
-      <details class="pc-pdp-faq__item">
-        <summary class="pc-pdp-faq__q">Is the pump replaceable?</summary>
-        <p class="pc-pdp-faq__a">Yes &mdash; S$4 for a fresh brass pump if yours stops. Drop in any time, swap on the spot.</p>
-      </details>
-      <details class="pc-pdp-faq__item">
-        <summary class="pc-pdp-faq__q">Is it safe for sensitive skin?</summary>
-        <p class="pc-pdp-faq__a">Yes &mdash; coco glucoside is one of the gentlest cleansers in cosmetics. Patch test if you are reactive to florals.</p>
-      </details>
-      <details class="pc-pdp-faq__item">
-        <summary class="pc-pdp-faq__q">What about the empty refill pouch?</summary>
-        <p class="pc-pdp-faq__a">Drop it in any postbox with the prepaid label, we sterilise and reuse. Or recycle the aluminium yourself.</p>
-      </details>
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          <details class="pc-pdp-faq__item"{% if forloop.first %} open{% endif %} {{ block.shopify_attributes }}>
+            <summary class="pc-pdp-faq__q">{{ block.settings.q }}</summary>
+            <p class="pc-pdp-faq__a">{{ block.settings.a }}</p>
+          </details>
+        {%- endfor -%}
+      {%- else -%}
+        <details class="pc-pdp-faq__item">
+          <summary class="pc-pdp-faq__q">No FAQs configured.</summary>
+          <p class="pc-pdp-faq__a">Add FAQ blocks to this section in the editor.</p>
+        </details>
+      {%- endif -%}
     </div>
   </div>
 </section>
@@ -29,7 +23,26 @@
 {% schema %}
 {
   "name": "PDP FAQ",
-  "settings": [],
-  "presets": [{ "name": "PDP FAQ" }]
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Questions?" }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ item",
+      "settings": [
+        { "type": "text", "id": "q", "label": "Question" },
+        { "type": "textarea", "id": "a", "label": "Answer" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP FAQ",
+      "blocks": [
+        { "type": "faq", "settings": { "q": "Can I refill an old Postcard bottle from years ago?", "a": "Yes — any age, any world. Even if the label has faded. Bring it in, we wash and refill." } }
+      ]
+    }
+  ]
 }
 {% endschema %}

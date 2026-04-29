@@ -68,7 +68,18 @@
       "block_order": ["p1", "p2", "p3"]
     },
     "reviews": { "type": "postcard-pdp-reviews-section", "settings": {} },
-    "faq": { "type": "postcard-pdp-faq-section", "settings": {} }
+    "faq": {
+      "type": "postcard-pdp-faq-section",
+      "settings": { "title": "Questions?" },
+      "blocks": {
+        "q1": { "type": "faq", "settings": { "q": "Where can I spray it?", "a": "On skin, on linens, in the room, on a scarf, on the inside of your jacket. Not in your eyes." } },
+        "q2": { "type": "faq", "settings": { "q": "How long does the scent last?", "a": "4–6 hours on skin, 8–10 on fabric. It softens beautifully — never fades to nothing." } },
+        "q3": { "type": "faq", "settings": { "q": "Will I smell like a hotel? In a good way?", "a": "In an excellent way. Bright bergamot, soft vanilla, never sweet. Reads polished, not perfumed." } },
+        "q4": { "type": "faq", "settings": { "q": "Full ingredients (INCI)", "a": "Alcohol Denat., Aqua, Parfum (Bergamot, Orange Blossom, Earl Grey accord, Vanilla, Apricot, White Musk), Limonene, Linalool, Citral. IFRA compliant." } },
+        "q5": { "type": "faq", "settings": { "q": "Is it pregnancy safe?", "a": "Yes — no essential oils above safe thresholds. Always check with your doctor for your specific pregnancy." } }
+      },
+      "block_order": ["q1", "q2", "q3", "q4", "q5"]
+    }
   },
   "order": [
     "main",

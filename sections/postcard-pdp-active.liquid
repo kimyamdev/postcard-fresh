@@ -1,0 +1,41 @@
+{%- liquid
+  assign world = product.metafields.postcard.world.value
+  if world
+    assign world_color = world.accent_color.value
+    assign world_theme_class = world.theme_class.value
+    assign world_family = world.family.value
+  endif
+  assign world_color = world_color | default: '#9CC4D6'
+  assign world_theme_class = world_theme_class | default: 'world-icy-peaks'
+  assign ribbon_subline = world_family | default: 'Active skincare'
+-%}
+
+<div class="{{ world_theme_class }}" style="--world-color: {{ world_color }};">
+
+  <div class="pc-breadcrumb">
+    <div class="container pc-breadcrumb__inner">
+      Home / Face / Serums / <span class="pc-breadcrumb__current">{{ product.title }}</span>
+    </div>
+  </div>
+
+  <section class="pc-pdp-main">
+    <div class="container pc-pdp-main__inner">
+      {% render 'pdp-gallery', product: product, world_color: world_color, stamp_text: 'HYDRATING<br>SERUM<br>SG' %}
+      {% render 'pdp-buy-box',
+        product: product,
+        world_color: world_color,
+        ribbon_subline: ribbon_subline,
+        demo_sizes: '15ml,30ml,Refill',
+        demo_active_index: 2 %}
+    </div>
+  </section>
+
+</div>
+
+{% schema %}
+{
+  "name": "Active PDP",
+  "settings": [],
+  "presets": [{ "name": "Active PDP" }]
+}
+{% endschema %}

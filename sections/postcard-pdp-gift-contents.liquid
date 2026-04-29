@@ -1,0 +1,62 @@
+{%- liquid
+  assign world_color = product.metafields.postcard.world.value.accent_color.value | default: '#E8C36A'
+-%}
+<section class="section pc-gc" style="--world-color: {{ world_color }};">
+  <div class="container">
+    <div class="pc-gc__head">
+      {%- if section.settings.savings_line != blank -%}
+        <span class="pc-gc__pill" style="background: var(--world-tint);">{{ section.settings.savings_line }}</span>
+      {%- endif -%}
+      <h2 class="h-display pc-gc__title">{{ section.settings.title }}</h2>
+    </div>
+    <div class="pc-gc__grid">
+      {%- for block in section.blocks -%}
+        {%- assign chip_color = block.settings.color | default: world_color -%}
+        <div class="stamp-frame stamp-side pc-gc__card" {{ block.shopify_attributes }}>
+          <div class="ph ph--world pc-gc__media" style="--world-color: {{ chip_color }};">
+            <span>{{ block.settings.name | downcase }}</span>
+          </div>
+          <div class="h-display pc-gc__name">{{ block.settings.name }}</div>
+          <div class="pc-gc__sub">{{ block.settings.size }} &middot; ${{ block.settings.value }} value</div>
+        </div>
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.tagline != blank -%}
+      <p class="pc-gc__tagline">{{ section.settings.tagline }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Gift contents",
+  "settings": [
+    { "type": "text", "id": "savings_line", "label": "Savings pill", "default": "4 pieces · $94 retail · save $16" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Inside this gift." },
+    { "type": "textarea", "id": "tagline", "label": "Tagline" }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Gift item",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Product name" },
+        { "type": "text", "id": "size", "label": "Size" },
+        { "type": "text", "id": "value", "label": "Value (without $)" },
+        { "type": "text", "id": "color", "label": "Tint color (optional)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gift contents",
+      "blocks": [
+        { "type": "item", "settings": { "name": "Hand & Body Wash", "size": "50ml", "value": "24" } },
+        { "type": "item", "settings": { "name": "Anywhere Fragrance", "size": "30ml", "value": "32" } },
+        { "type": "item", "settings": { "name": "Reed Diffuser", "size": "mini", "value": "26" } },
+        { "type": "item", "settings": { "name": "Deodorant Stick", "size": "mini", "value": "12" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

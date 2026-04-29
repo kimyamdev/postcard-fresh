@@ -1,0 +1,42 @@
+{%- liquid
+  assign world = product.metafields.postcard.world.value
+  if world
+    assign world_color = world.accent_color.value
+    assign world_theme_class = world.theme_class.value
+    assign world_name = world.name.value
+  endif
+  assign world_color = world_color | default: '#E8C36A'
+  assign world_theme_class = world_theme_class | default: 'world-hotel-lobby'
+  assign world_name = world_name | default: 'Hotel Lobby'
+  assign ribbon_subline = 'Gift Set'
+-%}
+
+<div class="{{ world_theme_class }}" style="--world-color: {{ world_color }};">
+
+  <div class="pc-breadcrumb">
+    <div class="container pc-breadcrumb__inner">
+      Home / Gifts / <span class="pc-breadcrumb__current">{{ product.title }}</span>
+    </div>
+  </div>
+
+  <section class="pc-pdp-main">
+    <div class="container pc-pdp-main__inner">
+      {% render 'pdp-gallery', product: product, world_color: world_color, stamp_text: 'GIFT<br>FROM<br>SG' %}
+      {% render 'pdp-buy-box',
+        product: product,
+        world_color: world_color,
+        ribbon_subline: ribbon_subline,
+        demo_sizes: 'Original,Lavish (+$30)',
+        demo_active_index: 1 %}
+    </div>
+  </section>
+
+</div>
+
+{% schema %}
+{
+  "name": "Gift PDP",
+  "settings": [],
+  "presets": [{ "name": "Gift PDP" }]
+}
+{% endschema %}
