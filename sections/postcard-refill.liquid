@@ -1,0 +1,167 @@
+<main>
+  <section class="pc-refill-hero">
+    <div class="ph pc-refill-hero__image"><span>refill counter &middot; steam, glass bottles, sunshine</span></div>
+    <div class="pc-refill-hero__copy">
+      <div class="eyebrow">Forever yours</div>
+      <h1 class="h-display pc-refill-hero__title">Refill, repeat, rejoice.</h1>
+      <p class="pc-refill-hero__body">Bring your bottle back. We top it up. Less waste, same scent. You save 20% per refill.</p>
+      <div class="pc-refill-hero__ctas">
+        <a class="btn" href="#refill-stores">Find a refill store &rarr;</a>
+        <a class="tlink" href="#refill-list">See what&rsquo;s refillable</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container pc-refill-story">
+      <div>
+        <div class="eyebrow">We&rsquo;re refill-first</div>
+        <h2 class="h-display pc-refill-story__title">Less landfill. More postcards.</h2>
+        <p class="pc-refill-story__p">Postcard started as a refillery in 2019 &mdash; a little corner shop in Everton Park where you brought your bottle and we filled it from a cookie jar. We&rsquo;ve grown up since, but the idea hasn&rsquo;t changed.</p>
+        <p class="pc-refill-story__p">Every refill is a bottle that doesn&rsquo;t go to landfill, a label that gets a second chapter, and a little more space in your bathroom for the things that matter.</p>
+      </div>
+      <div class="ph pc-refill-story__image"><span>refilled bottle &middot; stack of crushed empties</span></div>
+    </div>
+  </section>
+
+  <section class="section pc-refill-steps">
+    <div class="container">
+      <h2 class="h-display pc-refill-steps__title">Three steps. One coffee.</h2>
+      <div class="pc-refill-steps__grid">
+        <div class="stamp-frame stamp-side pc-refill-step">
+          <div class="pc-refill-step__head">
+            <div class="h-display pc-refill-step__num">01</div>
+            <span class="postmark postmark--yellow"><div>NO FOMO</div></span>
+          </div>
+          <div class="ph pc-refill-step__panel"><span>postcard panel 1</span></div>
+          <h3 class="h-typewriter pc-refill-step__h">Bring it back.</h3>
+          <p class="pc-refill-step__p">Empty Postcard bottle. Any size, any world.</p>
+        </div>
+        <div class="stamp-frame stamp-side pc-refill-step">
+          <div class="pc-refill-step__head">
+            <div class="h-display pc-refill-step__num">02</div>
+            <span class="postmark postmark--yellow"><div>MADE FRESH</div></span>
+          </div>
+          <div class="ph pc-refill-step__panel"><span>postcard panel 2</span></div>
+          <h3 class="h-typewriter pc-refill-step__h">We refill it.</h3>
+          <p class="pc-refill-step__p">From the beauty kitchen. Same recipe, same scent.</p>
+        </div>
+        <div class="stamp-frame stamp-side pc-refill-step">
+          <div class="pc-refill-step__head">
+            <div class="h-display pc-refill-step__num">03</div>
+            <span class="postmark postmark--yellow"><div>FOREVER<br>YOURS</div></span>
+          </div>
+          <div class="ph pc-refill-step__panel"><span>postcard panel 3</span></div>
+          <h3 class="h-typewriter pc-refill-step__h">You go again.</h3>
+          <p class="pc-refill-step__p">Clean it, label it, take it home.</p>
+        </div>
+      </div>
+      <p class="pc-refill-steps__note">Takes about 5 minutes. We&rsquo;ll throw in a coffee at the Orchard flagship.</p>
+    </div>
+  </section>
+
+  <section class="section--tight section">
+    <div class="container">
+      <div class="pc-refill-stats">
+        <div class="pc-refill-stat"><div class="h-display pc-refill-stat__n">20%</div><div class="eyebrow pc-refill-stat__t">off every refill</div></div>
+        <div class="pc-refill-stat"><div class="h-display pc-refill-stat__n">80%</div><div class="eyebrow pc-refill-stat__t">less packaging per top-up</div></div>
+        <div class="pc-refill-stat"><div class="h-display pc-refill-stat__n">0</div><div class="eyebrow pc-refill-stat__t">label waste</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="refill-list">
+    <div class="container">
+      <div class="pc-refill-cat__head">
+        <div>
+          <div class="eyebrow">The catalogue</div>
+          <h2 class="h-display pc-refill-cat__title">Every postcard you can return.</h2>
+        </div>
+        <div class="pc-refill-cat__filters">
+          <button class="pc-refill-cat__filter pc-refill-cat__filter--active" type="button">Body &amp; bath</button>
+          <button class="pc-refill-cat__filter" type="button">Hair</button>
+          <button class="pc-refill-cat__filter" type="button">Face</button>
+          <button class="pc-refill-cat__filter" type="button">Deodorant</button>
+          <button class="pc-refill-cat__filter" type="button">Home</button>
+          <button class="pc-refill-cat__filter" type="button">Other</button>
+        </div>
+      </div>
+      <div class="pc-refill-cat__grid">
+        {%- assign rw = 'Hotel Lobby|#E8C36A,Moon Bloom|#5C6688,Coconut Beach|#E8B796,Wild Flowers|#C7A8D6,Bath House|#B07A4E,Woodland Retreat|#6E7F58,Icy Peaks|#9CC4D6,Hotel Lobby|#E8C36A' | split: ',' -%}
+        {%- for entry in rw -%}
+          {%- assign p = entry | split: '|' -%}
+          {% render 'product-card', name: p[0] | append: ' Hand & Body Wash', world: p[0], world_color: p[1], price: '$26', badge: 'Refill' %}
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  <section class="section pc-refill-stores" id="refill-stores">
+    <div class="container">
+      <h2 class="h-display pc-refill-stores__title">Where to refill in Singapore.</h2>
+      <div class="pc-refill-stores__grid">
+        <div class="pc-refill-stores__flagship">
+          <span class="postmark postmark--yellow pc-refill-stores__pm"><div>FLAGSHIP<br>&middot;OPEN&middot;</div></span>
+          <div class="ph pc-refill-stores__photo"><span>Orchard storefront photo</span></div>
+          <div class="eyebrow">Our home</div>
+          <h3 class="h-display pc-refill-stores__name">Postcard Flagship &middot; Orchard</h3>
+          <div class="pc-refill-stores__details">
+            391 Orchard Road, #02&ndash;14 Ngee Ann City<br>
+            Mon&ndash;Thu 10am&ndash;9pm &middot; Fri&ndash;Sat 10am&ndash;10pm &middot; Sun 11am&ndash;8pm<br>
+            +65 6123 4567
+          </div>
+          <div class="pc-refill-stores__links">
+            <a class="tlink" href="https://maps.google.com/?q=391+Orchard+Road+Singapore">Get directions &rarr;</a>
+            <a class="tlink" href="/pages/flagship">Tour the flagship &rarr;</a>
+          </div>
+        </div>
+        <div class="pc-refill-stores__popups">
+          <div class="eyebrow">Pop-ups &amp; stockists</div>
+          <h3 class="h-display pc-refill-stores__popups-title">We pop up around Singapore.</h3>
+          <p class="pc-refill-stores__popups-body">Tiong Bahru Bakery weekends, Dempsey market days, plus rotating stockists at Tangs, Naiise, and a few independent boutiques. Sign up to find us next.</p>
+          <a class="tlink" href="#">See current pop-ups &rarr;</a>
+        </div>
+      </div>
+      <div class="pc-refill-map">
+        <svg viewBox="0 0 800 340" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="pc-refill-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M40 0H0v40" fill="none" stroke="#21202012" stroke-width="0.6"/>
+            </pattern>
+          </defs>
+          <rect width="800" height="340" fill="#DDE7DC"/>
+          <rect width="800" height="340" fill="url(#pc-refill-grid)"/>
+          <path d="M40 180 C 80 130, 160 110, 230 120 C 290 128, 330 100, 400 110 C 470 118, 520 95, 600 115 C 670 132, 740 130, 770 160 C 770 200, 740 230, 670 240 C 600 250, 540 250, 470 245 C 400 240, 330 250, 270 245 C 200 240, 120 235, 80 220 C 50 210, 30 195, 40 180 Z"
+            fill="#F8F6ED" stroke="#212020" stroke-width="1.5"/>
+          <path d="M120 180 L 700 195" stroke="#21202044" stroke-width="1" fill="none"/>
+          <path d="M200 150 L 250 240" stroke="#21202044" stroke-width="1" fill="none"/>
+          <path d="M450 130 L 480 240" stroke="#21202044" stroke-width="1" fill="none"/>
+          <g transform="translate(420, 165)">
+            <circle r="30" fill="#FFB233" stroke="#212020" stroke-width="2"/>
+            <circle r="22" fill="none" stroke="#212020" stroke-width="0.6"/>
+            <text text-anchor="middle" y="-2" font-family="Special Elite, monospace" font-size="9" fill="#212020">FLAG&#9733;</text>
+            <text text-anchor="middle" y="10" font-family="Special Elite, monospace" font-size="9" fill="#212020">SHIP</text>
+            <text x="0" y="54" text-anchor="middle" font-family="Special Elite, monospace" font-size="11" fill="#212020">Orchard</text>
+          </g>
+          <g transform="translate(680, 70) rotate(-12)">
+            <circle r="42" fill="none" stroke="#212020" stroke-width="1.5"/>
+            <circle r="36" fill="none" stroke="#212020" stroke-width="0.6"/>
+            <text text-anchor="middle" y="-4" font-family="Special Elite, monospace" font-size="9" fill="#212020">POSTCARD</text>
+            <text text-anchor="middle" y="8" font-family="Special Elite, monospace" font-size="9" fill="#212020">SINGAPORE</text>
+            <text text-anchor="middle" y="20" font-family="Special Elite, monospace" font-size="8" fill="#212020">&middot;  REFILL  &middot;</text>
+          </g>
+          <text x="40" y="34" font-family="Special Elite, monospace" font-size="13" fill="#212020" letter-spacing="2">SINGAPORE &middot; REFILL MAP</text>
+          <text x="40" y="320" font-family="Special Elite, monospace" font-size="10" fill="#21202099" letter-spacing="1.5">ONE FLAGSHIP &middot; POPUPS ROTATE &mdash; SIGN UP TO FIND US NEXT</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+</main>
+
+{% schema %}
+{
+  "name": "Refill page",
+  "settings": [],
+  "presets": [{ "name": "Refill page" }]
+}
+{% endschema %}

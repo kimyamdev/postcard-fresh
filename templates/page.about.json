@@ -1,0 +1,6 @@
+{
+  "sections": {
+    "main": { "type": "postcard-about", "settings": {} }
+  },
+  "order": ["main"]
+}

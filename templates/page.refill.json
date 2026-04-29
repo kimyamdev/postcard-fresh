@@ -1,0 +1,6 @@
+{
+  "sections": {
+    "main": { "type": "postcard-refill", "settings": {} }
+  },
+  "order": ["main"]
+}

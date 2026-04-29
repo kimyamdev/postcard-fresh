@@ -1,0 +1,77 @@
+<main>
+  <div class="pc-breadcrumb">
+    <div class="container pc-breadcrumb__inner">Home / <span class="pc-breadcrumb__current">{{ collection.title | default: 'Gifts' }}</span></div>
+  </div>
+
+  <section class="pc-collgift-hero">
+    <div class="container">
+      <div class="eyebrow">Gift-finder</div>
+      <h1 class="h-display pc-collgift-hero__title">A postcard for them.<br>Or yourself. We don&rsquo;t judge.</h1>
+    </div>
+  </section>
+
+  <section class="section--tight section">
+    <div class="container">
+      <div class="pc-collgift-occasions">
+        <a class="stamp-frame stamp-side pc-collgift-occasion" href="/collections/for-mum" style="background: #E8B796;">
+          <span class="postmark pc-collgift-occasion__pm"><div>FOR</div></span>
+          <div class="h-display pc-collgift-occasion__h">For Mum</div>
+          <div class="pc-collgift-occasion__s">Mother&rsquo;s Day picks</div>
+        </a>
+        <a class="stamp-frame stamp-side pc-collgift-occasion" href="/collections/for-couples" style="background: #C7A8D6;">
+          <span class="postmark pc-collgift-occasion__pm"><div>FOR</div></span>
+          <div class="h-display pc-collgift-occasion__h">For a couple</div>
+          <div class="pc-collgift-occasion__s">Housewarming bundles</div>
+        </a>
+        <a class="stamp-frame stamp-side pc-collgift-occasion" href="/collections/last-minute" style="background: #FFB233;">
+          <span class="postmark pc-collgift-occasion__pm"><div>LAST</div></span>
+          <div class="h-display pc-collgift-occasion__h">Last minute, big love</div>
+          <div class="pc-collgift-occasion__s">Under $50, ships today</div>
+        </a>
+        <a class="stamp-frame stamp-side pc-collgift-occasion" href="/collections/discovery" style="background: #9CC4D6;">
+          <span class="postmark pc-collgift-occasion__pm"><div>TREAT</div></span>
+          <div class="h-display pc-collgift-occasion__h">Treat yourself</div>
+          <div class="pc-collgift-occasion__s">Discovery sets</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="h-display pc-collgift-bestsent__title">Our most-sent postcards.</h2>
+      <div class="pc-collgift-bestsent__grid">
+        {%- if collection.products.size > 0 -%}
+          {%- for p in collection.products limit: 6 -%}
+            {% render 'product-card', product: p, badge: 'GIFT' %}
+          {%- endfor -%}
+        {%- else -%}
+          {%- assign w_data = 'hotel-lobby|Hotel Lobby|#E8C36A,moon-bloom|Moon Bloom|#5C6688,coconut-beach|Coconut Beach|#E8B796,wild-flowers|Wild Flowers|#C7A8D6,bath-house|Bath House|#B07A4E,woodland-retreat|Woodland Retreat|#6E7F58' | split: ',' -%}
+          {%- for entry in w_data -%}
+            {%- assign p = entry | split: '|' -%}
+            {% render 'product-card', name: 'Destination: ' | append: p[1] | append: ' Travel Gift Box', world: p[1], world_color: p[2], price: '$78', badge: 'GIFT', href: '/products/' | append: p[0] | append: '-travel-gift-box' %}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+
+  <section class="section--tight section pc-collgift-hampers">
+    <div class="container pc-collgift-hampers__inner">
+      <div>
+        <div class="eyebrow pc-collgift-hampers__eyebrow">Bigger than a postcard?</div>
+        <h2 class="h-display pc-collgift-hampers__title">Send a hamper.</h2>
+        <p class="pc-collgift-hampers__body">We do bespoke gifting for hotels, weddings and bossy bosses. Order from 20 units up.</p>
+      </div>
+      <a class="btn" href="/pages/corporate">Talk to corporate &rarr;</a>
+    </div>
+  </section>
+</main>
+
+{% schema %}
+{
+  "name": "Collection (gifts)",
+  "settings": [],
+  "presets": [{ "name": "Collection (gifts)" }]
+}
+{% endschema %}

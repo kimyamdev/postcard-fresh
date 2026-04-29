@@ -1,0 +1,6 @@
+{
+  "sections": {
+    "main": { "type": "postcard-membership", "settings": {} }
+  },
+  "order": ["main"]
+}

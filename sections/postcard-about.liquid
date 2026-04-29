@@ -1,0 +1,91 @@
+<main>
+  <section class="pc-about-hero">
+    <div class="ph pc-about-hero__image"><span>Hildra &middot; in the beauty kitchen, mid-formulation</span></div>
+    <div class="pc-about-hero__copy">
+      <div class="eyebrow">Made by humans, in Singapore.</div>
+      <h1 class="h-display pc-about-hero__title">Do more with less.</h1>
+      <p class="pc-about-hero__body">Postcard is a self-care destination, made in our beauty kitchen in Singapore. Effective natural recipes, simple ingredients, the least wasteful packaging we can manage. We&rsquo;re here to make care personal again.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container pc-about-story">
+      <div>
+        <div class="eyebrow">The beginning</div>
+        <h2 class="h-display pc-about-story__title">It started with a face that wouldn&rsquo;t behave.</h2>
+        <p class="pc-about-story__p">Hildra had eczema as a kid, acne as a teenager, then it all came back in her twenties. Pharmacy creams worked until they didn&rsquo;t. Expensive serums worked once. The cycle repeated.</p>
+        <p class="pc-about-story__p">So she started making things in her kitchen. Simple shampoo bars. A face oil with three ingredients. A deodorant that didn&rsquo;t smell like an airport. Her skin agreed. Friends asked. The cookie jar in the kitchen filled, then sold out.</p>
+        <p class="pc-about-story__p">Postcard was born in 2019 &mdash; first as a refillery in Everton Park, then as a brand built around a question: <em>what if self-care was simpler, kinder, and a little bit playful?</em></p>
+      </div>
+      <div class="ph pc-about-story__image"><span>cookie-jar refillery, 2019</span></div>
+    </div>
+  </section>
+
+  <section class="section pc-about-beliefs">
+    <div class="container">
+      <h2 class="h-display pc-about-beliefs__title">Five things we believe.</h2>
+      <div class="pc-about-beliefs__grid">
+        <div class="stamp-frame stamp-side pc-belief-card" style="background: #E8C36A;">
+          <span class="postmark pc-belief-card__pm"><div>SIMPLICITY</div></span>
+          <div class="h-display pc-belief-card__h">Simplicity</div>
+          <p class="pc-belief-card__p">Fewer steps. Fewer ingredients. More impact.</p>
+        </div>
+        <div class="stamp-frame stamp-side pc-belief-card" style="background: #9CC4D6;">
+          <span class="postmark pc-belief-card__pm"><div>SUSTAINABLE</div></span>
+          <div class="h-display pc-belief-card__h">Sustainable, not preachy</div>
+          <p class="pc-belief-card__p">Refillable. Recyclable. Optimistic.</p>
+        </div>
+        <div class="stamp-frame stamp-side pc-belief-card" style="background: #E8B796;">
+          <span class="postmark pc-belief-card__pm"><div>SENSORIAL</div></span>
+          <div class="h-display pc-belief-card__h">Sensorial transport</div>
+          <p class="pc-belief-card__p">Every product is a destination.</p>
+        </div>
+        <div class="stamp-frame stamp-side pc-belief-card" style="background: #C7A8D6;">
+          <span class="postmark pc-belief-card__pm"><div>MADE</div></span>
+          <div class="h-display pc-belief-card__h">Made by humans</div>
+          <p class="pc-belief-card__p">Mixed, poured, packed in Singapore.</p>
+        </div>
+        <div class="stamp-frame stamp-side pc-belief-card" style="background: #FFB233;">
+          <span class="postmark pc-belief-card__pm"><div>PERSONAL</div></span>
+          <div class="h-display pc-belief-card__h">Personal &amp; playful</div>
+          <p class="pc-belief-card__p">Custom blends, postcards in the post.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container--narrow pc-about-why">
+      <div class="eyebrow">Why postcards?</div>
+      <h2 class="h-typewriter pc-about-why__title">Every product is a moment of arrival.</h2>
+      <p class="pc-about-why__p">Every world a destination. Every refill a return trip. The postcard is what you send when you wish someone could feel what you&rsquo;re feeling.</p>
+      <div class="script pc-about-why__sig">life supplies, forever yours.</div>
+    </div>
+  </section>
+
+  <section class="section--tight section pc-about-worlds">
+    <div class="container">
+      <h2 class="h-display pc-about-worlds__title">22 worlds. One bathroom shelf at a time.</h2>
+      <div class="pc-about-worlds__strip">
+        {%- assign w_data = 'Hotel Lobby|Hesperidic Gourmand|#E8C36A,Moon Bloom|White Floral|#5C6688,Coconut Beach|Tropical Fruity Gourmand|#E8B796,Wild Flowers|Aromatic Foug&egrave;re|#C7A8D6,Bath House|Woody Oriental|#B07A4E,Woodland Retreat|Aromatic Herbal|#6E7F58,Icy Peaks|Fresh Aromatic|#9CC4D6' | split: ',' -%}
+        {%- for entry in w_data -%}
+          {%- assign p = entry | split: '|' -%}
+          <div class="pc-about-worlds__cell">{% render 'stamp', name: p[0], family: p[1], color: p[2], size: 'sm' %}</div>
+        {%- endfor -%}
+        {%- assign minor = 'Smoked Roses|#C7A8D6,Threads of Nonya|#9CC4D6,Forever Yours|#E8B796,Oasis Perfume Oil|#FFB233,Bakuchiol Bay|#6E7F58,Hyaluronic Heaven|#B07A4E,Rose Valley|#5C6688,Ancient Tearoom|#C7A8D6,Clear Skies|#9CC4D6,Citrus Circus|#E8B796,Coffee Spot|#FFB233,Java Jungle|#6E7F58,Hidden Garden|#B07A4E,Curl Cove|#5C6688,Sunlit Terrace|#C7A8D6' | split: ',' -%}
+        {%- for entry in minor -%}
+          {%- assign p = entry | split: '|' -%}
+          <div class="pc-about-worlds__cell">{% render 'stamp', name: p[0], color: p[1], size: 'sm' %}</div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+</main>
+
+{% schema %}
+{
+  "name": "About page",
+  "settings": [],
+  "presets": [{ "name": "About page" }]
+}
+{% endschema %}

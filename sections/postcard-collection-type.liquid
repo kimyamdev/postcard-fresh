@@ -1,0 +1,95 @@
+<main>
+  <div class="pc-breadcrumb">
+    <div class="container pc-breadcrumb__inner">Home / Shop / <span class="pc-breadcrumb__current">{{ collection.title }}</span></div>
+  </div>
+
+  <section class="pc-coll-hero">
+    <div class="container">
+      <div class="eyebrow">{{ collection.metafields.custom.tagline | default: 'For your room. Your skin. Your linens.' }}</div>
+      <h1 class="h-display pc-coll-hero__title">{{ collection.metafields.custom.headline | default: collection.title }}</h1>
+      {%- if collection.description != blank -%}
+        <p class="pc-coll-hero__body">{{ collection.description | strip_html | truncatewords: 35 }}</p>
+      {%- else -%}
+        <p class="pc-coll-hero__body">The hero category &mdash; 14% of everything we sell. 22 worlds, one spritz at a time.</p>
+      {%- endif -%}
+    </div>
+  </section>
+
+  {%- if collection.products.size >= 3 -%}
+    <section class="section--tight section">
+      <div class="container">
+        <div class="eyebrow">Top 3 in this category</div>
+        <h2 class="h-display pc-coll-top__title">The crowd-pleasers.</h2>
+        <div class="pc-coll-top__grid">
+          {%- for p in collection.products limit: 3 -%}
+            {% render 'product-card', product: p, badge: 'Top' | append: ' ' | append: forloop.index %}
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  <section class="section">
+    <div class="container pc-coll-grid">
+      <aside class="pc-coll-filters">
+        <div class="pc-coll-filter-group">
+          <div class="eyebrow pc-coll-filter-group__title">World</div>
+          {%- assign worlds_csv = 'Hotel Lobby,Moon Bloom,Coconut Beach,Wild Flowers,Bath House' | split: ',' -%}
+          {%- for w in worlds_csv -%}
+            <label class="pc-coll-filter-row"><input type="checkbox" /> {{ w }}</label>
+          {%- endfor -%}
+          <a class="tlink pc-coll-filter-more" href="#">+ 17 more</a>
+        </div>
+        <div class="pc-coll-filter-group">
+          <div class="eyebrow pc-coll-filter-group__title">Format</div>
+          <label class="pc-coll-filter-row"><input type="checkbox" /> 100ml</label>
+          <label class="pc-coll-filter-row"><input type="checkbox" /> 30ml</label>
+          <label class="pc-coll-filter-row"><input type="checkbox" /> Refill</label>
+        </div>
+        <div class="pc-coll-filter-group">
+          <div class="eyebrow pc-coll-filter-group__title">Refillable</div>
+          <label class="pc-coll-filter-row"><input type="checkbox" /> Yes</label>
+          <label class="pc-coll-filter-row"><input type="checkbox" /> No</label>
+        </div>
+        <div class="pc-coll-filter-group pc-coll-filter-group--last">
+          <div class="eyebrow pc-coll-filter-group__title">Price</div>
+          <label class="pc-coll-filter-row"><input type="checkbox" /> Under $30</label>
+          <label class="pc-coll-filter-row"><input type="checkbox" /> $30&ndash;$50</label>
+          <label class="pc-coll-filter-row"><input type="checkbox" /> $50+</label>
+        </div>
+      </aside>
+
+      <div>
+        <div class="pc-coll-grid__bar">
+          <div class="pc-coll-grid__count">Showing {{ collection.products_count }} postcards</div>
+          <select class="pc-coll-grid__sort">
+            <option>Bestselling</option>
+            <option>Price: low to high</option>
+            <option>Price: high to low</option>
+            <option>Newest</option>
+          </select>
+        </div>
+        <div class="pc-coll-grid__products">
+          {%- for p in collection.products -%}
+            {% render 'product-card', product: p %}
+          {%- else -%}
+            {%- for i in (1..6) -%}
+              <div class="ph ph--world pc-coll-grid__placeholder" style="aspect-ratio: 4/5;"><span>product {{ i }}</span></div>
+            {%- endfor -%}
+          {%- endfor -%}
+        </div>
+        {%- if paginate -%}
+          {{ paginate | default_pagination }}
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+</main>
+
+{% schema %}
+{
+  "name": "Collection (by-type)",
+  "settings": [],
+  "presets": [{ "name": "Collection (by-type)" }]
+}
+{% endschema %}

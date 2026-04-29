@@ -1,0 +1,6 @@
+{
+  "sections": {
+    "main": { "type": "postcard-collection-type", "settings": {} }
+  },
+  "order": ["main"]
+}
