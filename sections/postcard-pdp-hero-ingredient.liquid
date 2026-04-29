@@ -1,0 +1,26 @@
+{%- liquid
+  assign world_color = product.metafields.postcard.world.value.accent_color.value | default: '#E8C36A'
+-%}
+<section class="section">
+  <div class="container pc-hi__inner">
+    <div class="ph ph--world pc-hi__image" style="--world-color: {{ world_color }};"><span>{{ section.settings.image_caption }}</span></div>
+    <div>
+      <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+      <h2 class="h-typewriter pc-hi__quote">&ldquo;{{ section.settings.quote }}&rdquo;</h2>
+      <p class="pc-hi__body">{{ section.settings.body }}</p>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero ingredient",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Hero ingredient" },
+    { "type": "text", "id": "quote", "label": "Quote", "default": "A wash that smells like a garden after midnight." },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "Tuberose blooms after dark — that's not romance, it's biology. We harvest at midnight when the volatile oils peak, then enfleurage them in coconut fat for six weeks. The smell that lingers on your skin after a shower is the same as a Grasse garden at 1am." },
+    { "type": "text", "id": "image_caption", "label": "Image caption", "default": "tuberose · macro at midnight" }
+  ],
+  "presets": [{ "name": "Hero ingredient" }]
+}
+{% endschema %}

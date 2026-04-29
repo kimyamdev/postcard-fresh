@@ -1,0 +1,74 @@
+{%- liquid
+  assign world_color = product.metafields.postcard.world.value.accent_color.value | default: '#5C6688'
+-%}
+<section class="section pc-bz">
+  <div class="container">
+    <div class="pc-bz__head">
+      <div class="eyebrow">Where this wash earns its place</div>
+      <h2 class="h-display pc-bz__title">Use it on:</h2>
+    </div>
+    <div class="pc-bz__grid">
+      <div class="pc-bz__svg-wrap">
+        <svg viewBox="0 0 360 380" width="360" height="380" class="pc-bz__svg" xmlns="http://www.w3.org/2000/svg">
+          <g fill="rgba(33,32,32,0.06)" stroke="#212020" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="110" cy="44" r="24"/>
+            <path d="M 86 70 Q 110 76 134 70 L 142 96 L 168 124 L 162 184 L 144 188 L 144 250 Q 144 280 134 308 L 124 350 L 110 354 L 96 350 L 86 308 Q 76 280 76 250 L 76 188 L 58 184 L 52 124 L 78 96 Z"/>
+          </g>
+          <circle cx="38" cy="194" r="9" fill="{{ world_color }}" stroke="#212020" stroke-width="1.5"/>
+          <circle cx="182" cy="194" r="9" fill="{{ world_color }}" stroke="#212020" stroke-width="1.5"/>
+          <line x1="191" y1="194" x2="216" y2="194" stroke="#212020" stroke-width="1" stroke-dasharray="2 2"/>
+          <text x="220" y="198" font-family="Special Elite, monospace" font-size="12" fill="#212020">Hands &middot; daily</text>
+          <circle cx="144" cy="160" r="9" fill="{{ world_color }}" stroke="#212020" stroke-width="1.5"/>
+          <line x1="153" y1="160" x2="216" y2="160" stroke="#212020" stroke-width="1" stroke-dasharray="2 2"/>
+          <text x="220" y="164" font-family="Special Elite, monospace" font-size="12" fill="#212020">Body &middot; daily</text>
+          <circle cx="135" cy="290" r="9" fill="{{ world_color }}" stroke="#212020" stroke-width="1.5"/>
+          <line x1="144" y1="290" x2="216" y2="290" stroke="#212020" stroke-width="1" stroke-dasharray="2 2"/>
+          <text x="220" y="294" font-family="Special Elite, monospace" font-size="12" fill="#212020">Legs &middot; post-shave</text>
+          <circle cx="134" cy="44" r="11" fill="#FFB233" stroke="#212020" stroke-width="1.5"/>
+          <line x1="129" y1="39" x2="139" y2="49" stroke="#212020" stroke-width="1.5"/>
+          <line x1="139" y1="39" x2="129" y2="49" stroke="#212020" stroke-width="1.5"/>
+          <line x1="145" y1="44" x2="216" y2="44" stroke="#212020" stroke-width="1" stroke-dasharray="2 2"/>
+          <text x="220" y="48" font-family="Special Elite, monospace" font-size="12" fill="#212020">Face &middot; skip this</text>
+        </svg>
+      </div>
+      <div class="pc-bz__cards">
+        <div class="pc-bz__card">
+          <span class="pc-bz__mark" style="background: {{ world_color }};">&#10003;</span>
+          <div>
+            <div class="h-display pc-bz__zone">Hands <span class="pc-bz__zone-tag">&middot; daily, no problem</span></div>
+            <p class="pc-bz__zone-desc">At the kitchen sink, after the gym, before the meal. Coco glucoside is gentle enough for 12 washes a day.</p>
+          </div>
+        </div>
+        <div class="pc-bz__card">
+          <span class="pc-bz__mark" style="background: {{ world_color }};">&#10003;</span>
+          <div>
+            <div class="h-display pc-bz__zone">Body <span class="pc-bz__zone-tag">&middot; daily, head-to-toe</span></div>
+            <p class="pc-bz__zone-desc">Including underarms, chest, back. Glycerin builds a soft barrier as you rinse.</p>
+          </div>
+        </div>
+        <div class="pc-bz__card">
+          <span class="pc-bz__mark" style="background: {{ world_color }};">&#10003;</span>
+          <div>
+            <div class="h-display pc-bz__zone">Legs <span class="pc-bz__zone-tag">&middot; post-shave hero</span></div>
+            <p class="pc-bz__zone-desc">Calms the freshly-shaved feel. The scent finish is an added bonus.</p>
+          </div>
+        </div>
+        <div class="pc-bz__card pc-bz__card--no">
+          <span class="pc-bz__mark pc-bz__mark--no">&#215;</span>
+          <div>
+            <div class="h-display pc-bz__zone">Face <span class="pc-bz__zone-tag">&middot; use a real cleanser</span></div>
+            <p class="pc-bz__zone-desc">Body wash pH is great for body skin (5.5). Your face wants a kinder 5.0 &mdash; try our Clear Skies cleanser.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Body zones",
+  "settings": [],
+  "presets": [{ "name": "Body zones" }]
+}
+{% endschema %}

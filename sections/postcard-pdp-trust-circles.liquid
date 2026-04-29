@@ -1,0 +1,42 @@
+<section class="section--tight section pc-tc">
+  <div class="container">
+    <div class="pc-tc__grid">
+      {%- for block in section.blocks -%}
+        <div class="pc-tc__item" {{ block.shopify_attributes }}>
+          <span class="postmark pc-tc__pm"><div>{{ block.settings.short }}</div></span>
+          <span class="pc-tc__label">{{ block.settings.label }}</span>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Trust circles",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "circle",
+      "name": "Circle",
+      "settings": [
+        { "type": "text", "id": "short", "label": "Postmark text" },
+        { "type": "text", "id": "label", "label": "Label" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust circles",
+      "blocks": [
+        { "type": "circle", "settings": { "short": "MADE<br>IN", "label": "Made in Singapore" } },
+        { "type": "circle", "settings": { "short": "ALUMINUM<br>FREE", "label": "Aluminum-free" } },
+        { "type": "circle", "settings": { "short": "VEGAN", "label": "Vegan" } },
+        { "type": "circle", "settings": { "short": "CRUELTY<br>FREE", "label": "Cruelty-free" } },
+        { "type": "circle", "settings": { "short": "PREGNANCY<br>SAFE", "label": "Pregnancy-safe" } },
+        { "type": "circle", "settings": { "short": "REFILL<br>ABLE", "label": "Refillable" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

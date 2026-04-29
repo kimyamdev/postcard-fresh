@@ -2,11 +2,15 @@
   assign world = product.metafields.postcard.world.value
   if world
     assign world_name = world.name.value
+    assign world_family = world.family.value
     assign world_color = world.accent_color.value
     assign world_theme_class = world.theme_class.value
   endif
+  assign world_color = world_color | default: '#E8C36A'
   assign refillable = product.metafields.custom.refillable.value | default: false
   assign refill_pct = product.metafields.custom.refill_savings_pct.value | default: 0
+  assign subscribable = product.metafields.custom.subscribable.value | default: false
+  assign current = product.selected_or_first_available_variant
 -%}
 
 <div{% if world_theme_class %} class="{{ world_theme_class }}" style="--world-color: {{ world_color }};"{% endif %}>
@@ -23,126 +27,143 @@
       <div class="pc-pdp-gallery">
         {%- if product.featured_image -%}
           {%- assign main_alt = product.featured_image.alt | default: product.title -%}
-          <div class="pc-pdp-gallery__main">
-            {{ product.featured_image | image_url: width: 1200 | image_tag: alt: main_alt, class: 'pc-pdp-gallery__img' }}
-          </div>
           {%- if product.media.size > 1 -%}
-            <div class="pc-pdp-gallery__thumbs">
-              {%- for media in product.media limit: 4 -%}
-                <div class="pc-pdp-gallery__thumb">
-                  {{ media | image_url: width: 200 | image_tag: alt: '', class: 'pc-pdp-gallery__thumb-img' }}
-                </div>
-              {%- endfor -%}
+            <div class="pc-pdp-gallery__layout">
+              <div class="pc-pdp-gallery__thumbs pc-pdp-gallery__thumbs--col">
+                {%- for media in product.media limit: 5 -%}
+                  <div class="pc-pdp-gallery__thumb">
+                    {{ media | image_url: width: 200 | image_tag: alt: '', class: 'pc-pdp-gallery__thumb-img' }}
+                  </div>
+                {%- endfor -%}
+              </div>
+              <div class="pc-pdp-gallery__main">
+                {{ product.featured_image | image_url: width: 1200 | image_tag: alt: main_alt, class: 'pc-pdp-gallery__img' }}
+              </div>
+            </div>
+          {%- else -%}
+            <div class="pc-pdp-gallery__main">
+              {{ product.featured_image | image_url: width: 1200 | image_tag: alt: main_alt, class: 'pc-pdp-gallery__img' }}
             </div>
           {%- endif -%}
         {%- else -%}
-          <div class="ph ph--world pc-pdp-gallery__placeholder" {% if world_color %}style="--world-color: {{ world_color }};"{% endif %}>
+          <div class="ph ph--world pc-pdp-gallery__placeholder" style="--world-color: {{ world_color }};">
             <span>{{ product.title }}</span>
           </div>
         {%- endif -%}
       </div>
 
-      <div class="pc-pdp-buy">
+      <div class="pc-pdp-buy" x-data='{ variantId: "{{ current.id }}", qty: 1, prices: {
+        {%- for v in product.variants -%}"{{ v.id }}": "{{ v.price | money }}"{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}
+      } }'>
         {%- if world_name -%}
           <div class="pc-pdp-buy__ribbon">
             <span class="pc-pdp-buy__chip" style="background: {{ world_color }};"></span>
-            <span class="eyebrow">{{ world_name }} &middot; Hand &amp; Body Wash</span>
+            <span class="eyebrow">{{ world_name }} &middot; {{ product.product_type | default: 'Hand &amp; Body Wash' }}</span>
           </div>
         {%- endif -%}
+
         <h1 class="h-typewriter pc-pdp-buy__title">{{ product.title }}</h1>
+
         {%- if product.description != blank -%}
-          <div class="pc-pdp-buy__sub">{{ product.description }}</div>
+          <p class="pc-pdp-buy__sub">{{ product.description | strip_html | truncatewords: 30 }}</p>
         {%- endif -%}
+
+        <div class="pc-pdp-buy__rating">
+          <span class="pc-pdp-buy__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span class="pc-pdp-buy__rating-text">4.9 &middot; 327 reviews</span>
+        </div>
 
         <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data" class="pc-pdp-buy__form">
           <input type="hidden" name="form_type" value="product">
           <input type="hidden" name="utf8" value="&#x2713;">
 
           {%- if product.has_only_default_variant == false -%}
-            {%- for option in product.options_with_values -%}
-              <div class="pc-pdp-buy__option">
-                <div class="eyebrow pc-pdp-buy__option-label">{{ option.name }}</div>
-                <div class="pc-pdp-buy__option-values">
-                  {%- for value in option.values -%}
-                    <label class="pc-pdp-buy__variant">
-                      <input type="radio" name="options[{{ option.name }}]" value="{{ value | escape }}"{% if option.selected_value == value %} checked{% endif %}>
-                      <span>{{ value }}</span>
-                    </label>
-                  {%- endfor -%}
-                </div>
+            <div class="pc-pdp-buy__option">
+              <div class="eyebrow pc-pdp-buy__option-label">Size</div>
+              <div class="pc-pdp-buy__option-values">
+                {%- for v in product.variants -%}
+                  <label class="pc-pdp-buy__variant">
+                    <input type="radio" name="id" value="{{ v.id }}" {% if v == current %}checked{% endif %} @change="variantId = $event.target.value">
+                    <span>{{ v.title }}</span>
+                  </label>
+                {%- endfor -%}
               </div>
-            {%- endfor -%}
+            </div>
+          {%- else -%}
+            <input type="hidden" name="id" value="{{ current.id }}">
           {%- endif -%}
 
-          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          {%- if subscribable and product.selling_plan_groups.size > 0 -%}
+            <div class="pc-pdp-buy__option">
+              <div class="eyebrow pc-pdp-buy__option-label">Purchase options</div>
+              <div class="pc-pdp-buy__purchase-opts">
+                <label class="pc-pdp-buy__purchase-opt">
+                  <input type="radio" name="selling_plan" value="" checked>
+                  <span class="pc-pdp-buy__purchase-opt-label">One-time purchase</span>
+                  <span class="pc-pdp-buy__purchase-opt-price" x-text="prices[variantId]">{{ current.price | money }}</span>
+                </label>
+                {%- for group in product.selling_plan_groups -%}
+                  {%- for plan in group.selling_plans -%}
+                    <label class="pc-pdp-buy__purchase-opt">
+                      <input type="radio" name="selling_plan" value="{{ plan.id }}">
+                      <span class="pc-pdp-buy__purchase-opt-label">{{ plan.name }}</span>
+                      <span class="pc-pdp-buy__purchase-opt-price">&mdash;</span>
+                    </label>
+                  {%- endfor -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
 
-          <div class="pc-pdp-buy__price-row">
-            <span class="h-display pc-pdp-buy__price">{{ product.price | money }}</span>
-            {%- if product.compare_at_price > product.price -%}
-              <span class="pc-pdp-buy__compare">{{ product.compare_at_price | money }}</span>
-            {%- endif -%}
+          <div class="pc-pdp-buy__qty-row">
+            <div class="pc-pdp-buy__qty">
+              <button type="button" class="pc-pdp-buy__qty-btn" @click="if(qty>1)qty--">&minus;</button>
+              <input type="number" name="quantity" min="1" :value="qty" x-model="qty" class="pc-pdp-buy__qty-input">
+              <button type="button" class="pc-pdp-buy__qty-btn" @click="qty++">+</button>
+            </div>
+            <button type="submit" class="btn pc-pdp-buy__cta"{% unless current.available %} disabled{% endunless %}>
+              {%- if current.available -%}
+                Add to bag &middot; <span x-text="prices[variantId]">{{ current.price | money }}</span>
+              {%- else -%}
+                Sold out
+              {%- endif -%}
+            </button>
           </div>
 
-          <button type="submit" class="btn pc-pdp-buy__cta"{% unless product.selected_or_first_available_variant.available %} disabled{% endunless %}>
-            {%- if product.selected_or_first_available_variant.available -%}
-              Add to bag &rarr;
-            {%- else -%}
-              Sold out
-            {%- endif -%}
-          </button>
+          {%- if refillable -%}
+            <a class="tlink pc-pdp-buy__refill-link" href="/pages/refill">Or refill in store &rarr;</a>
+          {%- endif -%}
+
+          {%- if current.available -%}
+            <div class="pc-pdp-buy__stock">&bull; In stock &middot; Ships in 1-2 days</div>
+          {%- endif -%}
         </form>
 
-        {%- if refillable -%}
-          <div class="pc-pdp-buy__refill-note">
-            <span class="postmark postmark--yellow"><div>REFILL<br>{{ refill_pct }}%<br>OFF</div></span>
-            <p>Bring this bottle back to our Orchard flagship and refill for life. Save {{ refill_pct }}% per visit.</p>
+        <div class="pc-pdp-buy__trust">
+          <div class="pc-pdp-buy__trust-item">
+            <span class="postmark pc-pdp-buy__trust-pm"><div>MADE<br>IN</div></span>
+            <span class="pc-pdp-buy__trust-label">Made in SG</span>
           </div>
-        {%- endif -%}
+          {%- if refillable -%}
+            <div class="pc-pdp-buy__trust-item">
+              <span class="postmark pc-pdp-buy__trust-pm"><div>REFILL<br>ABLE</div></span>
+              <span class="pc-pdp-buy__trust-label">Refillable</span>
+            </div>
+          {%- endif -%}
+          <div class="pc-pdp-buy__trust-item">
+            <span class="postmark pc-pdp-buy__trust-pm"><div>CRUELTY<br>FREE</div></span>
+            <span class="pc-pdp-buy__trust-label">Cruelty-free</span>
+          </div>
+          <div class="pc-pdp-buy__trust-item">
+            <span class="postmark pc-pdp-buy__trust-pm"><div>VEGAN</div></span>
+            <span class="pc-pdp-buy__trust-label">Vegan</span>
+          </div>
+        </div>
+
       </div>
 
     </div>
   </section>
-
-  {%- if refillable -%}
-    <section class="section pc-pdp-refill">
-      <div class="container">
-        <div class="pc-pdp-refill__head">
-          <span class="pc-pdp-refill__pill">The maths</span>
-          <h2 class="h-display pc-pdp-refill__title">One bottle. Many lives.</h2>
-          <p class="pc-pdp-refill__lede">The bottle is hardware &mdash; heavy glass, brass pump, hand-stamped label. You buy it once. After that, you only ever pay for the soap inside.</p>
-        </div>
-
-        <div class="pc-pdp-refill__split">
-          <div class="pc-pdp-refill__panel">
-            <span class="postmark postmark--ink pc-pdp-refill__pm"><div>BUY<br>&middot; ONCE &middot;<br>FOR LIFE</div></span>
-            <div class="eyebrow">The hardware</div>
-            <h3 class="h-typewriter pc-pdp-refill__panel-title">The bottle</h3>
-            <div class="h-display pc-pdp-refill__price">{{ product.price | money }}</div>
-            <div class="eyebrow">One time</div>
-            <ul class="pc-pdp-refill__list">
-              <li>Heavy glass &middot; won&rsquo;t age</li>
-              <li>Brass pump, replaceable</li>
-              <li>Lifetime guarantee</li>
-              <li>Hand-stamped at Orchard</li>
-            </ul>
-          </div>
-          <div class="pc-pdp-refill__panel pc-pdp-refill__panel--warm">
-            <span class="postmark postmark--yellow pc-pdp-refill__pm"><div>REFILL<br>&middot; FOR &middot;<br>EVER</div></span>
-            <div class="eyebrow">The consumable</div>
-            <h3 class="h-typewriter pc-pdp-refill__panel-title">The refill</h3>
-            <div class="h-display pc-pdp-refill__price" style="color: {{ world_color | default: 'var(--color-ink)' }};">{{ refill_pct }}% off</div>
-            <div class="eyebrow">Per refill</div>
-            <ul class="pc-pdp-refill__list">
-              <li>90% less plastic per litre</li>
-              <li>In-store: pour into bottle, no pouch needed</li>
-              <li>By post: returnable aluminium pouch</li>
-              <li>Or 1L pouch for even more</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-  {%- endif -%}
 
 </div>
 

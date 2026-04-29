@@ -1,0 +1,53 @@
+<section class="section pc-ki">
+  <div class="container">
+    <div class="pc-ki__head">
+      <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+      <h2 class="h-display pc-ki__title">{{ section.settings.title }}</h2>
+    </div>
+    <div class="pc-ki__list">
+      {%- for block in section.blocks -%}
+        {%- assign rev = forloop.index | modulo: 2 -%}
+        <div class="pc-ki__row{% if rev == 0 %} pc-ki__row--reverse{% endif %}" {{ block.shopify_attributes }}>
+          <div class="ph pc-ki__image"><span>{{ block.settings.image_caption }}</span></div>
+          <div class="pc-ki__copy">
+            <div class="eyebrow">{{ block.settings.role }}</div>
+            <h3 class="h-typewriter pc-ki__name">{{ block.settings.name }}</h3>
+            <p class="pc-ki__story">{{ block.settings.story }}</p>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Key ingredients",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Three things, beautifully sourced" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Key ingredients." }
+  ],
+  "blocks": [
+    {
+      "type": "ingredient",
+      "name": "Ingredient",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name" },
+        { "type": "text", "id": "role", "label": "Role" },
+        { "type": "textarea", "id": "story", "label": "Story" },
+        { "type": "text", "id": "image_caption", "label": "Image caption" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Key ingredients",
+      "blocks": [
+        { "type": "ingredient", "settings": { "name": "Tuberose Absolute", "role": "The bloom in the dark", "story": "Hand-picked at midnight in southern France when the flower opens. We use 2.4kg of petals per kg of absolute — the reason your skin smells like a garden after.", "image_caption": "tuberose absolute · macro" } },
+        { "type": "ingredient", "settings": { "name": "Glycerin from Beetroot", "role": "The kindness", "story": "Plant-derived humectant pulls water into the skin while you wash. Why this body wash leaves you softer than you started, even in Singapore aircon.", "image_caption": "glycerin from beetroot · macro" } },
+        { "type": "ingredient", "settings": { "name": "Coco Glucoside", "role": "The clean, the gentle kind", "story": "Sugar + coconut, full stop. Lifts dirt without stripping the skin barrier. Mild enough for daily use on every body zone we say yes to.", "image_caption": "coco glucoside · macro" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

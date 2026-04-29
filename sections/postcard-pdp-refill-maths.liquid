@@ -1,0 +1,70 @@
+{%- liquid
+  assign world_color = product.metafields.postcard.world.value.accent_color.value | default: '#E8C36A'
+  assign refill_pct = product.metafields.custom.refill_savings_pct.value | default: 30
+  assign current_price = product.selected_or_first_available_variant.price | money
+-%}
+<section class="section pc-rm" style="--world-color: {{ world_color }};">
+  <div class="container">
+    <div class="pc-rm__head">
+      <span class="pc-rm__pill" style="background: {{ world_color }}22;">The maths</span>
+      <h2 class="h-display pc-rm__title">One bottle. Many lives.</h2>
+      <p class="pc-rm__lede">The bottle is hardware &mdash; heavy glass, brass pump, hand-stamped label. You buy it once. After that, you only ever pay for the soap inside.</p>
+    </div>
+
+    <div class="pc-rm__split">
+      <div class="pc-rm__panel">
+        <span class="postmark postmark--ink pc-rm__pm"><div>BUY<br>&middot; ONCE &middot;<br>FOR LIFE</div></span>
+        <div class="eyebrow">The hardware</div>
+        <h3 class="h-typewriter pc-rm__panel-title">The bottle</h3>
+        <div class="h-display pc-rm__price">{{ current_price }}</div>
+        <div class="eyebrow">One time</div>
+        <ul class="pc-rm__list">
+          <li>Heavy glass &middot; won&rsquo;t age</li>
+          <li>Brass pump, replaceable</li>
+          <li>Lifetime guarantee</li>
+          <li>Hand-stamped at Orchard</li>
+        </ul>
+      </div>
+      <div class="pc-rm__panel pc-rm__panel--warm">
+        <span class="postmark postmark--yellow pc-rm__pm"><div>REFILL<br>&middot; FOR &middot;<br>EVER</div></span>
+        <div class="eyebrow">The consumable</div>
+        <h3 class="h-typewriter pc-rm__panel-title">The refill</h3>
+        <div class="h-display pc-rm__price" style="color: {{ world_color }};">{{ refill_pct }}% off</div>
+        <div class="eyebrow">Per refill</div>
+        <ul class="pc-rm__list">
+          <li>90% less plastic per litre</li>
+          <li>In-store: pour into bottle, no pouch needed</li>
+          <li>By post: returnable aluminium pouch</li>
+          <li>Or 1L pouch &mdash; saves more</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pc-rm__year-head">Three years on, the maths</div>
+    <div class="pc-rm__year-grid">
+      <div class="pc-rm__year-card">
+        <div class="eyebrow">Year 1</div>
+        <div class="h-display pc-rm__year-price">S$82</div>
+        <p class="pc-rm__year-note">1 bottle + 3 refills &middot; saves S$56 vs new bottles</p>
+      </div>
+      <div class="pc-rm__year-card">
+        <div class="eyebrow">Year 2</div>
+        <div class="h-display pc-rm__year-price">S$54</div>
+        <p class="pc-rm__year-note">3 refills &middot; same bottle &middot; saves S$74</p>
+      </div>
+      <div class="pc-rm__year-card">
+        <div class="eyebrow">Year 3</div>
+        <div class="h-display pc-rm__year-price">S$54</div>
+        <p class="pc-rm__year-note">3 refills &middot; same bottle &middot; 1.4kg less plastic</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Refill maths",
+  "settings": [],
+  "presets": [{ "name": "Refill maths" }]
+}
+{% endschema %}

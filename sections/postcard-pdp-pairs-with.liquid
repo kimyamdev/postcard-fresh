@@ -1,0 +1,48 @@
+{%- liquid
+  assign world = product.metafields.postcard.world.value
+  assign world_name = world.name.value | default: 'this world'
+  assign world_color = world.accent_color.value | default: '#E8C36A'
+-%}
+<section class="section pc-pw">
+  <div class="container">
+    <h2 class="h-display pc-pw__title">Other postcards from {{ world_name }}.</h2>
+    <div class="pc-pw__grid">
+      {%- for block in section.blocks -%}
+        {% render 'product-card',
+          name: block.settings.name,
+          world: world_name,
+          world_color: world_color,
+          price: block.settings.price,
+          href: block.settings.href %}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Pairs with",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Pair item",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Product name" },
+        { "type": "text", "id": "price", "label": "Price (e.g. $32)" },
+        { "type": "url", "id": "href", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pairs with",
+      "blocks": [
+        { "type": "item", "settings": { "name": "Body Lotion", "price": "$32" } },
+        { "type": "item", "settings": { "name": "Anywhere Fragrance", "price": "$42" } },
+        { "type": "item", "settings": { "name": "Reed Diffuser", "price": "$48" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

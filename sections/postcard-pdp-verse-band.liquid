@@ -1,0 +1,33 @@
+{%- liquid
+  assign world = product.metafields.postcard.world.value
+  if world
+    assign world_name = world.name.value
+    assign world_family = world.family.value
+    assign world_color = world.accent_color.value
+  endif
+  assign world_color = world_color | default: '#E8C36A'
+  assign refillable = product.metafields.custom.refillable.value | default: false
+  assign stamp_family = world_family | default: section.settings.fallback_family
+  if refillable
+    assign stamp_family = stamp_family | append: ' &middot; Refillable'
+  endif
+-%}
+<section class="pc-vb">
+  <div class="container pc-vb__inner">
+    <div class="pc-vb__stamp">
+      {% render 'stamp', name: world_name | default: 'Postcard', family: stamp_family, color: world_color, size: 'sm' %}
+    </div>
+    <p class="h-typewriter pc-vb__quote">&ldquo;{{ section.settings.quote }}&rdquo;</p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Verse band",
+  "settings": [
+    { "type": "text", "id": "quote", "label": "Quote", "default": "Buy the bottle once. Refill it for life." },
+    { "type": "text", "id": "fallback_family", "label": "Fallback family (when no world)", "default": "Hand & Body Wash" }
+  ],
+  "presets": [{ "name": "Verse band" }]
+}
+{% endschema %}
