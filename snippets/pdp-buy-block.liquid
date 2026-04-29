@@ -78,9 +78,33 @@
   </div>
 
 {%- when 'purchase_options' -%}
-  {%- assign sub_price = current.price | times: 0.9 | round -%}
+  {%- liquid
+    assign first_group = product.selling_plan_groups.first
+    assign has_plans = false
+    if first_group and first_group.selling_plans.size > 0
+      assign has_plans = true
+    endif
+    assign sp_discount_pct = 0
+    assign sub_label = block.settings.subscribe_label | default: 'Subscribe & save'
+    if has_plans
+      assign first_plan = first_group.selling_plans.first
+      assign first_adj = first_plan.price_adjustments.first
+      if first_adj.value_type == 'percentage'
+        assign sp_discount_pct = first_adj.value
+      endif
+      if sp_discount_pct > 0
+        assign sub_label = sub_label | append: ' ' | append: sp_discount_pct | append: '%'
+      endif
+      assign cadence_eyebrow = first_group.options.first | default: 'Deliver every'
+    endif
+  -%}
   <div class="pc-pdp-buy__option" {{ block.shopify_attributes }}>
     <div class="eyebrow pc-pdp-buy__option-label">{{ block.settings.label | default: 'Purchase options' }}</div>
+
+    {%- if has_plans -%}
+      <input type="hidden" name="selling_plan" :value="mode === 'sub' ? cadence : ''">
+    {%- endif -%}
+
     <div class="pc-pdp-buy__po-box">
       <label class="pc-pdp-buy__po" :class="{ 'pc-pdp-buy__po--active': mode === 'once' }" @click="mode = 'once'">
         <span class="pc-pdp-buy__po-radio"><span class="pc-pdp-buy__po-dot" x-show="mode === 'once'"></span></span>
@@ -88,29 +112,51 @@
         <span class="pc-pdp-buy__po-label">{{ block.settings.once_label | default: 'One-time purchase' }}</span>
         <span class="pc-pdp-buy__po-price" x-text="prices[variantId]">{{ current.price | money }}</span>
       </label>
-      <label class="pc-pdp-buy__po" :class="{ 'pc-pdp-buy__po--active': mode === 'sub' }" @click="mode = 'sub'">
-        <span class="pc-pdp-buy__po-radio"><span class="pc-pdp-buy__po-dot" x-show="mode === 'sub'"></span></span>
-        <input type="radio" name="purchase_mode" value="sub" x-model="mode" class="pc-pdp-buy__po-input">
-        <span class="pc-pdp-buy__po-label">Subscribe &amp; save {{ discount_pct }}%</span>
-        <span class="pc-pdp-buy__po-price">{{ sub_price | money }}</span>
-      </label>
-      <div x-show="mode === 'sub'" x-cloak class="pc-pdp-buy__cadence">
-        <div class="eyebrow pc-pdp-buy__cadence-label">Deliver every</div>
-        <div class="pc-pdp-buy__cadence-pills">
-          <button type="button" class="pc-pdp-buy__cadence-pill" :class="{ 'pc-pdp-buy__cadence-pill--active': cadence === '30d' }" @click.prevent="cadence = '30d'">30 days</button>
-          <button type="button" class="pc-pdp-buy__cadence-pill" :class="{ 'pc-pdp-buy__cadence-pill--active': cadence === '60d' }" @click.prevent="cadence = '60d'">60 days &middot; most popular</button>
-          <button type="button" class="pc-pdp-buy__cadence-pill" :class="{ 'pc-pdp-buy__cadence-pill--active': cadence === '90d' }" @click.prevent="cadence = '90d'">90 days</button>
+
+      {%- if has_plans -%}
+        <label class="pc-pdp-buy__po" :class="{ 'pc-pdp-buy__po--active': mode === 'sub' }" @click="mode = 'sub'">
+          <span class="pc-pdp-buy__po-radio"><span class="pc-pdp-buy__po-dot" x-show="mode === 'sub'"></span></span>
+          <input type="radio" name="purchase_mode" value="sub" x-model="mode" class="pc-pdp-buy__po-input">
+          <span class="pc-pdp-buy__po-label">{{ sub_label }}</span>
+          <span class="pc-pdp-buy__po-price" x-text="(window.PCSubPrices && window.PCSubPrices[variantId] && window.PCSubPrices[variantId][cadence]) || ''"></span>
+        </label>
+        <div x-show="mode === 'sub'" x-cloak class="pc-pdp-buy__cadence">
+          <div class="eyebrow pc-pdp-buy__cadence-label">{{ cadence_eyebrow }}</div>
+          <div class="pc-pdp-buy__cadence-pills">
+            {%- for plan in first_group.selling_plans -%}
+              {%- assign plan_label = plan.options.first.value | default: plan.name -%}
+              <button type="button" class="pc-pdp-buy__cadence-pill" :class="{ 'pc-pdp-buy__cadence-pill--active': cadence === '{{ plan.id }}' }" @click.prevent="cadence = '{{ plan.id }}'">{{ plan_label }}</button>
+            {%- endfor -%}
+          </div>
+          <p class="pc-pdp-buy__cadence-note">{{ block.settings.cadence_note | default: 'Skip, swap world, or cancel anytime — no postcards held hostage.' }}</p>
         </div>
-        <p class="pc-pdp-buy__cadence-note">Skip, swap world, or cancel anytime &mdash; no postcards held hostage.</p>
+      {%- endif -%}
+    </div>
+
+    {%- if has_plans -%}
+      <button type="button" class="pc-pdp-buy__about" @click="subOpen = !subOpen">
+        <span class="pc-pdp-buy__about-arrow" :class="{ 'pc-pdp-buy__about-arrow--open': subOpen }">&#9662;</span>
+        {{ block.settings.about_label | default: 'About subscriptions' }}
+      </button>
+      <div x-show="subOpen" x-cloak class="pc-pdp-buy__about-info">
+        {%- if block.settings.about_body != blank -%}
+          {{ block.settings.about_body }}
+        {%- else -%}
+          Always {{ sp_discount_pct }}% off. Free shipping over S$60. Skip a delivery, swap to a different world, or cancel from your account in two clicks. Manage everything from your account in two clicks.
+        {%- endif -%}
       </div>
-    </div>
-    <button type="button" class="pc-pdp-buy__about" @click="subOpen = !subOpen">
-      <span class="pc-pdp-buy__about-arrow" :class="{ 'pc-pdp-buy__about-arrow--open': subOpen }">&#9662;</span>
-      About subscriptions
-    </button>
-    <div x-show="subOpen" x-cloak class="pc-pdp-buy__about-info">
-      Always {{ discount_pct }}% off. Free shipping over S$60. Skip a delivery, swap to a different world, or cancel from your account in two clicks. Your second order earns you a free Discovery Set in any world you haven&rsquo;t tried yet.
-    </div>
+
+      <script>
+        window.PCSubPrices = window.PCSubPrices || {};
+        {%- for v in product.variants -%}
+          window.PCSubPrices["{{ v.id }}"] = {
+            {%- for alloc in v.selling_plan_allocations -%}
+              "{{ alloc.selling_plan.id }}": "{{ alloc.price | money }}"{%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+          };
+        {%- endfor -%}
+      </script>
+    {%- endif -%}
   </div>
 
 {%- when 'qty_and_cta' -%}

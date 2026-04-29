@@ -10,6 +10,11 @@
   assign world_name = world_name | default: 'Postcard'
   assign ribbon_subline = world_family | default: 'Hand & Body Wash'
   assign current = product.selected_or_first_available_variant
+  assign default_plan_id = ''
+  assign first_sp_group = product.selling_plan_groups.first
+  if first_sp_group and first_sp_group.selling_plans.size > 0
+    assign default_plan_id = first_sp_group.selling_plans.first.id
+  endif
 -%}
 
 <div{% if world_theme_class %} class="{{ world_theme_class }}" style="--world-color: {{ world_color }};"{% endif %}>
@@ -28,7 +33,7 @@
         variantId: "{{ current.id }}",
         qty: 1,
         mode: "once",
-        cadence: "60d",
+        cadence: "{{ default_plan_id }}",
         subOpen: false,
         prices: { {%- for v in product.variants -%}"{{ v.id }}": "{{ v.price | money }}"{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%} }
       }'>
@@ -65,7 +70,11 @@
     ] },
     { "type": "purchase_options", "name": "Purchase options", "limit": 1, "settings": [
       { "type": "text", "id": "label", "label": "Label", "default": "Purchase options" },
-      { "type": "text", "id": "once_label", "label": "One-time label", "default": "One-time purchase" }
+      { "type": "text", "id": "once_label", "label": "One-time label", "default": "One-time purchase" },
+      { "type": "text", "id": "subscribe_label", "label": "Subscribe label (auto-suffixed with discount %)", "default": "Subscribe & save" },
+      { "type": "text", "id": "cadence_note", "label": "Cadence note", "default": "Skip, swap world, or cancel anytime — no postcards held hostage." },
+      { "type": "text", "id": "about_label", "label": "About-subscriptions toggle", "default": "About subscriptions" },
+      { "type": "textarea", "id": "about_body", "label": "About-subscriptions body" }
     ] },
     { "type": "qty_and_cta", "name": "Quantity + Add to bag", "limit": 1, "settings": [
       { "type": "text", "id": "cta_text", "label": "CTA text", "default": "Add to bag" },
