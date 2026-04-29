@@ -1,0 +1,166 @@
+{%- liquid
+  assign world = page.metafields.custom.world.value
+  if world
+    assign world_name = world.name.value
+    assign world_family = world.family.value
+    assign world_tagline = world.tagline.value
+    assign world_color = world.accent_color.value
+    assign world_theme_class = world.theme_class.value
+    assign world_slug = world.slug.value
+  endif
+-%}
+
+{%- if world -%}
+<div class="{{ world_theme_class }}" style="--world-color: {{ world_color }}; --world-tint: {{ world_color }}1f;">
+
+  <div class="pc-breadcrumb">
+    <div class="container pc-breadcrumb__inner">Home / Worlds / <span class="pc-breadcrumb__current">{{ world_name }}</span></div>
+  </div>
+
+  <section class="pc-world-hero">
+    <div class="container pc-world-hero__inner">
+      <div class="pc-world-hero__stamp">
+        {% render 'stamp', name: world_name, family: world_family, color: world_color, size: 'lg' %}
+      </div>
+      <div>
+        <div class="eyebrow">{{ world_family }}</div>
+        <h1 class="h-typewriter pc-world-hero__title">{{ world_name }}.</h1>
+        <p class="pc-world-hero__lede">{{ world_tagline }}</p>
+        <div class="script pc-world-hero__sig">greetings from the {{ world_name | downcase }}.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="container">
+      <div class="pc-scent__head">
+        <div class="eyebrow">How it&rsquo;s built</div>
+        <h2 class="h-display pc-scent__title">The scent breakdown.</h2>
+      </div>
+      <div class="pc-scent__table">
+        <div class="pc-scent__row">
+          <div class="h-display pc-scent__layer">Top</div>
+          <div class="pc-scent__notes">{%- if world.notes_top.value != blank -%}{{ world.notes_top.value | join: ', ' }}{%- else -%}Bergamot, Orange Blossom{%- endif -%}</div>
+          <div class="pc-scent__desc">The bright doorway moment.</div>
+        </div>
+        <div class="pc-scent__row">
+          <div class="h-display pc-scent__layer">Heart</div>
+          <div class="pc-scent__notes">{%- if world.notes_heart.value != blank -%}{{ world.notes_heart.value | join: ', ' }}{%- else -%}Earl Grey Tea, Apricot{%- endif -%}</div>
+          <div class="pc-scent__desc">Warm tea steam, soft fruit.</div>
+        </div>
+        <div class="pc-scent__row">
+          <div class="h-display pc-scent__layer">Base</div>
+          <div class="pc-scent__notes">{%- if world.notes_base.value != blank -%}{{ world.notes_base.value | join: ', ' }}{%- else -%}Vanilla, White Musk{%- endif -%}</div>
+          <div class="pc-scent__desc">The settled, skin-like finish.</div>
+        </div>
+        <div class="pc-scent__row pc-scent__row--last">
+          <div class="h-display pc-scent__layer">Character</div>
+          <div class="pc-scent__notes">Unisex &middot; Year-round</div>
+          <div class="pc-scent__desc">Reads polite, leans cosy in cooler weather.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pc-world-quote">
+    <div class="container--narrow pc-world-quote__inner">
+      <span class="postmark pc-world-quote__pm"><div>WEAR<br>NOTES</div></span>
+      <p class="h-typewriter pc-world-quote__text">
+        &ldquo;Bright then cozy. Reads as unisex but leans slightly feminine. Year-round, but especially welcoming in cooler weather.&rdquo;
+      </p>
+    </div>
+  </section>
+
+  <section class="section pc-world-rituals">
+    <div class="container">
+      <div class="pc-ritual">
+        <div class="pc-ritual__head">
+          <h2 class="h-display pc-ritual__title">On your skin.</h2>
+          <a class="tlink" href="/collections/{{ world_slug }}-skin">View all &rarr;</a>
+        </div>
+        <div class="pc-ritual__grid">
+          {% render 'product-card', name: world_name | append: ' Hand & Body Wash', world: world_name, world_color: world_color, price: '$32', badge: 'Refillable', href: '/products/' | append: world_slug | append: '-hand-and-body-wash' %}
+          {% render 'product-card', name: world_name | append: ' Body Oil', world: world_name, world_color: world_color, price: '$38', href: '/products/' | append: world_slug | append: '-body-oil' %}
+          {% render 'product-card', name: world_name | append: ' Hand Cream', world: world_name, world_color: world_color, price: '$24', href: '/products/' | append: world_slug | append: '-hand-cream' %}
+          {% render 'product-card', name: world_name | append: ' Deodorant Spray', world: world_name, world_color: world_color, price: '$26', href: '/products/' | append: world_slug | append: '-deodorant-spray' %}
+        </div>
+      </div>
+
+      <div class="pc-ritual">
+        <div class="pc-ritual__head">
+          <h2 class="h-display pc-ritual__title">In the room.</h2>
+          <a class="tlink" href="/collections/{{ world_slug }}-room">View all &rarr;</a>
+        </div>
+        <div class="pc-ritual__grid">
+          {% render 'product-card', name: world_name | append: ' Anywhere Fragrance', world: world_name, world_color: world_color, price: '$42' %}
+          {% render 'product-card', name: world_name | append: ' Reed Diffuser', world: world_name, world_color: world_color, price: '$48' %}
+          {% render 'product-card', name: world_name | append: ' Reed Diffuser Refill', world: world_name, world_color: world_color, price: '$28', badge: 'Refill' %}
+          {% render 'product-card', name: world_name | append: ' Travel Mist', world: world_name, world_color: world_color, price: '$22' %}
+        </div>
+      </div>
+
+      <div class="pc-ritual">
+        <div class="pc-ritual__head">
+          <h2 class="h-display pc-ritual__title">Travel-size.</h2>
+          <a class="tlink" href="/collections/{{ world_slug }}-travel">View all &rarr;</a>
+        </div>
+        <div class="pc-ritual__grid">
+          {% render 'product-card', name: 'Mini ' | append: world_name | append: ' Anywhere Fragrance', world: world_name, world_color: world_color, price: '$18' %}
+          {% render 'product-card', name: 'Mini ' | append: world_name | append: ' Body Wash', world: world_name, world_color: world_color, price: '$14' %}
+          {% render 'product-card', name: 'Mini ' | append: world_name | append: ' Hand Cream', world: world_name, world_color: world_color, price: '$12' %}
+          {% render 'product-card', name: 'Mini ' | append: world_name | append: ' Deodorant', world: world_name, world_color: world_color, price: '$10' %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section--tight section pc-world-neighbours">
+    <div class="container">
+      <div class="eyebrow">If you love {{ world_name }}</div>
+      <h2 class="h-display pc-world-neighbours__title">&hellip;send yourself a postcard from:</h2>
+      <div class="pc-neighbours">
+        {%- assign neighbours = 'moon-bloom|Moon Bloom|White Floral|#5C6688|Quiet jasmine, the night air, a window left open.~~coconut-beach|Coconut Beach|Tropical Fruity Gourmand|#E8B796|Sunscreen, salt skin, a coconut split open on the sand.~~wild-flowers|Wild Flowers|Aromatic Foug&egrave;re|#C7A8D6|A meadow walk after light rain.~~bath-house|Bath House|Woody Oriental|#B07A4E|Cedar steam, warm tile, the slow exhale.' | split: '~~' -%}
+        {%- assign shown = 0 -%}
+        {%- for entry in neighbours -%}
+          {%- if shown >= 3 -%}{%- break -%}{%- endif -%}
+          {%- assign p = entry | split: '|' -%}
+          {%- if p[0] != world_slug -%}
+            <a class="pc-neighbour" href="/pages/{{ p[0] }}">
+              {% render 'stamp', name: p[1], family: p[2], color: p[3], size: 'sm' %}
+              <div>
+                <div class="eyebrow">{{ p[2] }}</div>
+                <h3 class="h-display pc-neighbour__name">{{ p[1] }}</h3>
+                <p class="pc-neighbour__tag">{{ p[4] }}</p>
+              </div>
+            </a>
+            {%- assign shown = shown | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  <section class="pc-world-refill">
+    <div class="container pc-world-refill__inner">
+      <h3 class="h-display pc-world-refill__title">Refill your {{ world_name }} in store.</h3>
+      <a class="btn btn--ink" href="/pages/flagship">Visit our Orchard flagship &rarr;</a>
+    </div>
+  </section>
+
+</div>
+{%- else -%}
+<section class="section">
+  <div class="container">
+    <div class="eyebrow">Missing world</div>
+    <p>This page isn&rsquo;t linked to a world metaobject yet. In admin, edit this page and set the &ldquo;World&rdquo; metafield.</p>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "World page",
+  "settings": [],
+  "presets": [{ "name": "World page" }]
+}
+{% endschema %}

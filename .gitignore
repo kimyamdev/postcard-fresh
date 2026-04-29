@@ -8,3 +8,8 @@
 ehthumbs.db
 Thumbs.db
 .shopify
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example

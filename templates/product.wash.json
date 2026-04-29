@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "main": {
+      "type": "postcard-pdp-wash",
+      "settings": {}
+    },
+    "reviews": {
+      "type": "postcard-pdp-reviews-section",
+      "settings": {}
+    },
+    "faq": {
+      "type": "postcard-pdp-faq-section",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "reviews",
+    "faq"
+  ]
+}

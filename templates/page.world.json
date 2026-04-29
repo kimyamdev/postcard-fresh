@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "world": {
+      "type": "postcard-world",
+      "settings": {}
+    }
+  },
+  "order": [
+    "world"
+  ]
+}

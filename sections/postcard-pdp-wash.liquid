@@ -1,0 +1,154 @@
+{%- liquid
+  assign world = product.metafields.postcard.world.value
+  if world
+    assign world_name = world.name.value
+    assign world_color = world.accent_color.value
+    assign world_theme_class = world.theme_class.value
+  endif
+  assign refillable = product.metafields.custom.refillable.value | default: false
+  assign refill_pct = product.metafields.custom.refill_savings_pct.value | default: 0
+-%}
+
+<div{% if world_theme_class %} class="{{ world_theme_class }}" style="--world-color: {{ world_color }};"{% endif %}>
+
+  <div class="pc-breadcrumb">
+    <div class="container pc-breadcrumb__inner">
+      Home / Body / Wash / <span class="pc-breadcrumb__current">{{ product.title }}</span>
+    </div>
+  </div>
+
+  <section class="pc-pdp-main">
+    <div class="container pc-pdp-main__inner">
+
+      <div class="pc-pdp-gallery">
+        {%- if product.featured_image -%}
+          <div class="pc-pdp-gallery__main">
+            {{ product.featured_image | image_url: width: 1200 | image_tag: alt: product.featured_image.alt | escape, class: 'pc-pdp-gallery__img' }}
+          </div>
+          {%- if product.media.size > 1 -%}
+            <div class="pc-pdp-gallery__thumbs">
+              {%- for media in product.media limit: 4 -%}
+                <div class="pc-pdp-gallery__thumb">
+                  {{ media | image_url: width: 200 | image_tag: alt: '', class: 'pc-pdp-gallery__thumb-img' }}
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        {%- else -%}
+          <div class="ph ph--world pc-pdp-gallery__placeholder" {% if world_color %}style="--world-color: {{ world_color }};"{% endif %}>
+            <span>{{ product.title }}</span>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="pc-pdp-buy">
+        {%- if world_name -%}
+          <div class="pc-pdp-buy__ribbon">
+            <span class="pc-pdp-buy__chip" style="background: {{ world_color }};"></span>
+            <span class="eyebrow">{{ world_name }} &middot; Hand &amp; Body Wash</span>
+          </div>
+        {%- endif -%}
+        <h1 class="h-typewriter pc-pdp-buy__title">{{ product.title }}</h1>
+        {%- if product.description != blank -%}
+          <div class="pc-pdp-buy__sub">{{ product.description }}</div>
+        {%- endif -%}
+
+        <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data" class="pc-pdp-buy__form">
+          <input type="hidden" name="form_type" value="product">
+          <input type="hidden" name="utf8" value="&#x2713;">
+
+          {%- if product.has_only_default_variant == false -%}
+            {%- for option in product.options_with_values -%}
+              <div class="pc-pdp-buy__option">
+                <div class="eyebrow pc-pdp-buy__option-label">{{ option.name }}</div>
+                <div class="pc-pdp-buy__option-values">
+                  {%- for value in option.values -%}
+                    <label class="pc-pdp-buy__variant">
+                      <input type="radio" name="options[{{ option.name }}]" value="{{ value | escape }}"{% if option.selected_value == value %} checked{% endif %}>
+                      <span>{{ value }}</span>
+                    </label>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+          <div class="pc-pdp-buy__price-row">
+            <span class="h-display pc-pdp-buy__price">{{ product.price | money }}</span>
+            {%- if product.compare_at_price > product.price -%}
+              <span class="pc-pdp-buy__compare">{{ product.compare_at_price | money }}</span>
+            {%- endif -%}
+          </div>
+
+          <button type="submit" class="btn pc-pdp-buy__cta"{% unless product.selected_or_first_available_variant.available %} disabled{% endunless %}>
+            {%- if product.selected_or_first_available_variant.available -%}
+              Add to bag &rarr;
+            {%- else -%}
+              Sold out
+            {%- endif -%}
+          </button>
+        </form>
+
+        {%- if refillable -%}
+          <div class="pc-pdp-buy__refill-note">
+            <span class="postmark postmark--yellow"><div>REFILL<br>{{ refill_pct }}%<br>OFF</div></span>
+            <p>Bring this bottle back to our Orchard flagship and refill for life. Save {{ refill_pct }}% per visit.</p>
+          </div>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </section>
+
+  {%- if refillable -%}
+    <section class="section pc-pdp-refill">
+      <div class="container">
+        <div class="pc-pdp-refill__head">
+          <span class="pc-pdp-refill__pill">The maths</span>
+          <h2 class="h-display pc-pdp-refill__title">One bottle. Many lives.</h2>
+          <p class="pc-pdp-refill__lede">The bottle is hardware &mdash; heavy glass, brass pump, hand-stamped label. You buy it once. After that, you only ever pay for the soap inside.</p>
+        </div>
+
+        <div class="pc-pdp-refill__split">
+          <div class="pc-pdp-refill__panel">
+            <span class="postmark postmark--ink pc-pdp-refill__pm"><div>BUY<br>&middot; ONCE &middot;<br>FOR LIFE</div></span>
+            <div class="eyebrow">The hardware</div>
+            <h3 class="h-typewriter pc-pdp-refill__panel-title">The bottle</h3>
+            <div class="h-display pc-pdp-refill__price">{{ product.price | money }}</div>
+            <div class="eyebrow">One time</div>
+            <ul class="pc-pdp-refill__list">
+              <li>Heavy glass &middot; won&rsquo;t age</li>
+              <li>Brass pump, replaceable</li>
+              <li>Lifetime guarantee</li>
+              <li>Hand-stamped at Orchard</li>
+            </ul>
+          </div>
+          <div class="pc-pdp-refill__panel pc-pdp-refill__panel--warm">
+            <span class="postmark postmark--yellow pc-pdp-refill__pm"><div>REFILL<br>&middot; FOR &middot;<br>EVER</div></span>
+            <div class="eyebrow">The consumable</div>
+            <h3 class="h-typewriter pc-pdp-refill__panel-title">The refill</h3>
+            <div class="h-display pc-pdp-refill__price" style="color: {{ world_color | default: 'var(--color-ink)' }};">{{ refill_pct }}% off</div>
+            <div class="eyebrow">Per refill</div>
+            <ul class="pc-pdp-refill__list">
+              <li>90% less plastic per litre</li>
+              <li>In-store: pour into bottle, no pouch needed</li>
+              <li>By post: returnable aluminium pouch</li>
+              <li>Or 1L pouch for even more</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+</div>
+
+{% schema %}
+{
+  "name": "Wash PDP",
+  "settings": [],
+  "presets": [{ "name": "Wash PDP" }]
+}
+{% endschema %}
