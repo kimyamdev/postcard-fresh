@@ -1,9 +1,437 @@
-{% render 'pdp-reviews' %}
+{%- liquid
+  assign label = section.settings.label | default: 'Dispatches · Field notes from the pit'
+  assign heading = section.settings.heading | default: 'Mail from our pen-pals.'
+  assign bg_color = section.settings.bg_color | default: '#fdecea'
+-%}
+
+{%- style -%}
+  #pc-stamped-{{ section.id }} {
+    padding: 96px 48px;
+    border-top: 1px solid var(--color-ink);
+    background: {{ bg_color }};
+    overflow: visible;
+  }
+  #pc-stamped-{{ section.id }} .pc-stamped-inner {
+    max-width: 1280px; margin: 0 auto;
+    padding-inline: 60px;
+    box-sizing: border-box;
+  }
+  @media (max-width: 640px) {
+    #pc-stamped-{{ section.id }} { padding: 64px 12px; }
+    #pc-stamped-{{ section.id }} .pc-stamped-inner { padding-inline: 8px; }
+  }
+  #pc-stamped-{{ section.id }} .pc-section-head {
+    margin-bottom: 56px;
+  }
+  #pc-stamped-{{ section.id }} .pc-section-label {
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    opacity: 0.6;
+    margin-bottom: 12px;
+  }
+  #pc-stamped-{{ section.id }} .pc-section-title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(28px, 4vw, 44px);
+    color: var(--color-ink);
+    margin: 0;
+  }
+
+  /* Force Stamped wrappers full-width */
+  #pc-stamped-{{ section.id }} #stamped-main-widget,
+  #pc-stamped-{{ section.id }} #stamped-main-widget [class*="stamped-"] {
+    max-width: none !important;
+    box-sizing: border-box !important;
+  }
+  #pc-stamped-{{ section.id }} #stamped-main-widget,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-container,
+  #pc-stamped-{{ section.id }} #stamped-main-widget #stamped-reviews-widget,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-tab-container,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-tab-content,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-reviews-list-wrapper,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-reviews-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+  }
+
+  /* Hide all Stamped chrome */
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-tabs,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-tab,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-tabs-list,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-tab-questions,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-tabs-tab,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-questions,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-questions-tab,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-reviews-filter,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-filter,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-search,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-search-input,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-sort,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-sort-select,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-form-input,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-header,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-summary,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-summary-actions,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-summary-actions-newreview,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-form-review,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .new-stamped-form-review,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-pagination,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-share-links,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-share,
+  #pc-stamped-{{ section.id }} #stamped-main-widget [class*="share"],
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-vote,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-options-show,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-header-title,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-variant,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-variant-title,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-options,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-option,
+  #pc-stamped-{{ section.id }} #stamped-main-widget [class*="variant"],
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-product,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-recommended,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-recommend,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-recommend-product,
+  #pc-stamped-{{ section.id }} #stamped-main-widget [class*="recommend"],
+  #pc-stamped-{{ section.id }} #stamped-main-widget [class*="thumbs"],
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-thumbs-up,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-recommend,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-verified-badge,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-verified-buyer,
+  #pc-stamped-{{ section.id }} #stamped-main-widget [class*="verified"],
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-flag,
+  #pc-stamped-{{ section.id }} #stamped-main-widget [class*="flag"],
+  #pc-stamped-{{ section.id }} #stamped-main-widget [class*="location"],
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-location,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-author-location,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-reviewer-circle,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-avatar,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-author-circle,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-author-initials,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-author-photo,
+  #pc-stamped-{{ section.id }} #stamped-main-widget [class*="author-circle"],
+  #pc-stamped-{{ section.id }} #stamped-main-widget [class*="author-initials"],
+  #pc-stamped-{{ section.id }} #stamped-main-widget .created,
+  #pc-stamped-{{ section.id }} #stamped-main-widget [class*="date"] {
+    display: none !important;
+  }
+
+  /* Reviews list grid */
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-reviews,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .new-stamped-fields,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-reviews-list,
+  #pc-stamped-{{ section.id }} #stamped-main-widget #stamped-reviews-content {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 36px !important;
+    counter-reset: pc-stamp-num;
+    width: 100% !important;
+    padding: 12px !important;
+    overflow: visible !important;
+  }
+  @media (max-width: 980px) {
+    #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-reviews,
+    #pc-stamped-{{ section.id }} #stamped-main-widget .new-stamped-fields,
+    #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-reviews-list,
+    #pc-stamped-{{ section.id }} #stamped-main-widget #stamped-reviews-content {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+  }
+  @media (max-width: 640px) {
+    #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-reviews,
+    #pc-stamped-{{ section.id }} #stamped-main-widget .new-stamped-fields,
+    #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-reviews-list,
+    #pc-stamped-{{ section.id }} #stamped-main-widget #stamped-reviews-content {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+  /* Each review → postcard */
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review {
+    counter-increment: pc-stamp-num;
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    background: var(--color-bg-card) !important;
+    border: 1.5px solid var(--color-ink) !important;
+    padding: 78px 22px 20px !important;
+    box-shadow: 4px 6px 0 rgba(0, 0, 0, 0.10) !important;
+    margin: 0 !important;
+    color: var(--color-ink) !important;
+    overflow: visible !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    min-height: 260px !important;
+    float: none !important;
+    box-sizing: border-box !important;
+    justify-self: center !important;
+    align-self: start !important;
+    margin-inline: auto !important;
+  }
+  @media (max-width: 640px) {
+    #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-height: 200px !important;
+      padding: 70px 18px 16px !important;
+      gap: 12px !important;
+    }
+  }
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-content {
+    order: 1 !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+  }
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-header { order: 2 !important; }
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review:nth-child(3n+1) { transform: rotate(-1deg); }
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review:nth-child(3n+2) { transform: rotate(0.7deg); }
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review:nth-child(3n+3) { transform: rotate(-0.4deg); }
+
+  /* "TO: POSTCARD HQ" */
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review::before {
+    content: "✉  TO: POSTCARD HQ";
+    position: absolute;
+    top: 18px; left: 22px;
+    font-family: var(--font-body); font-size: 10px;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--color-ink); opacity: 0.55;
+    white-space: nowrap;
+  }
+  /* Stamp top-right */
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review::after {
+    content: "Nº0" counter(pc-stamp-num) "\A POST";
+    white-space: pre;
+    position: absolute;
+    top: 10px; right: 14px;
+    width: 50px; height: 56px;
+    background: var(--color-blue);
+    color: var(--color-bg);
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    font-family: var(--font-body); font-size: 7.5px;
+    letter-spacing: 0.1em; line-height: 1.5;
+    border: 1px dashed rgba(255,255,255,0.5);
+    transform: rotate(6deg);
+  }
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review:nth-child(3n+2)::after {
+    background: var(--color-yellow); color: var(--color-ink);
+    border-color: rgba(0,0,0,0.2);
+  }
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review:nth-child(3n+3)::after {
+    background: var(--color-grey);
+  }
+
+  /* Header → flex row */
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-header {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 12px !important;
+    border: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Body */
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-content { margin: 0 !important; }
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-content-body {
+    font-family: var(--font-display) !important;
+    font-style: italic !important;
+    font-size: 15px !important;
+    line-height: 1.5 !important;
+    color: var(--color-ink) !important;
+    margin: 0 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 5 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+  @media (max-width: 640px) {
+    #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-content-body {
+      font-size: 14px !important;
+      -webkit-line-clamp: 4 !important;
+    }
+  }
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-content-body::before { content: '"'; }
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-content-body::after { content: '"'; }
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-content-body.is-truncated::after { content: ' [...]"'; }
+
+  /* Author byline */
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-header-byline,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .author {
+    flex: 1 1 auto !important;
+    font-family: var(--font-body) !important;
+    font-size: 11px !important;
+    letter-spacing: 0.22em !important;
+    text-transform: uppercase !important;
+    color: var(--color-ink) !important;
+    font-weight: 400 !important;
+    margin: 0 !important;
+  }
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-header-byline::before,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .author::before { content: "— "; }
+
+  /* Stars */
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-header-stars,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-starratings {
+    flex: 0 0 auto !important;
+    color: var(--color-ink) !important;
+    margin: 0 !important;
+    font-size: 9px !important;
+    letter-spacing: 0.5px !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+  }
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-fa-star,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-fa-star-half-o,
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-fa-star-o {
+    color: var(--color-ink) !important;
+    font-size: 9px !important;
+  }
+
+  /* Hide review title */
+  #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-content-title { display: none !important; }
+{%- endstyle -%}
+
+<section id="pc-stamped-{{ section.id }}" class="pc-section">
+  <div class="pc-stamped-inner">
+    {%- if heading != blank or label != blank -%}
+      <div class="pc-section-head">
+        <div>
+          {%- if label != blank -%}
+            <div class="pc-section-label">{{ label }}</div>
+          {%- endif -%}
+          {%- if heading != blank -%}
+            <h2 class="pc-section-title">{{ heading }}</h2>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div
+      id="stamped-main-widget"
+      data-product-id="{{ product.id }}"
+      data-name="{{ product.title | escape }}"
+      data-url="{{ shop.url }}{{ product.url }}"
+      data-image-url="{{ product.featured_image | image_url: width: 600 }}"
+      data-description="{{ product.description | strip_html | truncate: 240 | escape }}"
+      data-product-sku="{{ product.handle }}"
+      data-product-type="{{ product.type }}"
+    >
+      {{ product.metafields.stamped.reviews }}
+    </div>
+  </div>
+</section>
+
+<script>
+  (function() {
+    var months = ['January','February','March','April','May','June',
+      'July','August','September','October','November','December'];
+
+    function ordinal(d) {
+      if (d > 3 && d < 21) return d + 'th';
+      switch (d % 10) {
+        case 1: return d + 'st';
+        case 2: return d + 'nd';
+        case 3: return d + 'rd';
+        default: return d + 'th';
+      }
+    }
+
+    function reformatDates() {
+      var els = document.querySelectorAll('#stamped-main-widget .created');
+      els.forEach(function(el) {
+        var text = el.textContent.trim();
+        if (text.indexOf('Written on') === 0) return;
+        var parts = text.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+        if (parts) {
+          var month = parseInt(parts[1], 10);
+          var day = parseInt(parts[2], 10);
+          var year = parts[3];
+          el.textContent = 'Written on ' + months[month - 1] + ', ' + ordinal(day) + ' ' + year;
+        }
+      });
+    }
+
+    var QUOTE_RE = /^[\s"'‘’“”]+|[\s"'‘’“”]+$/g;
+    function dequoteBodies() {
+      document.querySelectorAll('#stamped-main-widget .stamped-review-content-body').forEach(function(el){
+        if (el.dataset.pcDequoted === '1') return;
+        var t = el.textContent.replace(QUOTE_RE, '').trim();
+        if (t !== el.textContent) el.textContent = t;
+        el.dataset.pcDequoted = '1';
+      });
+    }
+
+    function flagTruncated() {
+      document.querySelectorAll('#stamped-main-widget .stamped-review-content-body').forEach(function(el){
+        el.classList.remove('is-truncated');
+        if (el.scrollHeight > el.clientHeight + 1) {
+          el.classList.add('is-truncated');
+        }
+      });
+    }
+
+    var EMOJI_RE = /[\u{1F1E6}-\u{1F1FF}\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu;
+    function cleanByline() {
+      document.querySelectorAll('#stamped-main-widget .stamped-review').forEach(function(card){
+        var byline = card.querySelector('.stamped-review-header-byline, .author');
+        if (!byline || byline.dataset.pcCleaned === '1') return;
+        var loc = card.querySelector('[class*="location"], .stamped-review-location, .stamped-review-author-location');
+        var locText = loc && loc.textContent ? loc.textContent.trim() : '';
+        var nameText = byline.textContent.replace(EMOJI_RE, '').replace(/\s+/g, ' ').trim();
+        if (locText && nameText.toLowerCase().indexOf(locText.toLowerCase()) === -1) {
+          nameText = nameText.replace(/[,\s]+$/, '') + ', ' + locText;
+        }
+        byline.textContent = nameText;
+        byline.dataset.pcCleaned = '1';
+      });
+    }
+
+    var widget = document.getElementById('stamped-main-widget');
+    if (widget) {
+      var rafScheduled = false;
+      function scheduleSync(){
+        if (rafScheduled) return;
+        rafScheduled = true;
+        requestAnimationFrame(function(){
+          rafScheduled = false;
+          reformatDates();
+          cleanByline();
+          dequoteBodies();
+          flagTruncated();
+        });
+      }
+      new MutationObserver(scheduleSync).observe(widget, { childList: true, subtree: true });
+      window.addEventListener('resize', scheduleSync);
+    }
+  })();
+</script>
 
 {% schema %}
 {
   "name": "PDP Reviews",
-  "settings": [],
+  "tag": "section",
+  "settings": [
+    { "type": "text",  "id": "label",    "label": "Eyebrow label", "default": "Dispatches · Field notes from the pit" },
+    { "type": "text",  "id": "heading",  "label": "Heading",       "default": "Mail from our pen-pals." },
+    { "type": "color", "id": "bg_color", "label": "Background",    "default": "#fdecea" }
+  ],
   "presets": [{ "name": "PDP Reviews" }]
 }
 {% endschema %}

@@ -41,8 +41,16 @@
   {%- assign review_score = product.metafields.pdp.review_score.value | default: 4.9 -%}
   {%- assign review_count = product.metafields.pdp.review_count.value | default: 327 -%}
   <div class="pc-pdp-buy__rating" {{ block.shopify_attributes }}>
-    <span class="pc-pdp-buy__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-    <span class="pc-pdp-buy__rating-text">{{ review_score }} &middot; {{ review_count }} reviews</span>
+    <span
+      class="stamped-product-reviews-badge stamped-main-badge pc-pdp-buy__stamped-badge"
+      data-id="{{ product.id }}"
+      data-product-sku="{{ product.handle }}"
+      data-product-title="{{ product.title | escape }}"
+      data-product-type="{{ product.type }}"
+    >
+      <span class="pc-pdp-buy__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+      <span class="pc-pdp-buy__rating-text">{{ review_score }} &middot; {{ review_count }} reviews</span>
+    </span>
   </div>
 
 {%- when 'sizes' -%}
