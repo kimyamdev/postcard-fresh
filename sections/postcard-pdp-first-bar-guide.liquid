@@ -1,0 +1,58 @@
+<section class="section pc-fbg">
+  <div class="container">
+    <div class="pc-fbg__head">
+      <div class="eyebrow pc-fbg__eyebrow">{{ section.settings.eyebrow }}</div>
+      <h2 class="h-display pc-fbg__title">{{ section.settings.title }}</h2>
+      {%- if section.settings.lede != blank -%}
+        <p class="pc-fbg__lede">{{ section.settings.lede }}</p>
+      {%- endif -%}
+    </div>
+    <div class="pc-fbg__grid">
+      {%- for block in section.blocks -%}
+        <div class="pc-fbg__cell" {{ block.shopify_attributes }}>
+          <span class="postmark pc-fbg__pm"><div>{{ block.settings.tag | upcase }}</div></span>
+          <div class="h-display pc-fbg__heading">{{ block.settings.heading }}</div>
+          <p class="pc-fbg__body">{{ block.settings.body }}</p>
+          <div class="pc-fbg__bar">
+            <div class="pc-fbg__bar-fill" style="width: {{ block.settings.progress | default: 50 }}%;"></div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "First-bar guide",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The honest part" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Your first bar: a field guide." },
+    { "type": "textarea", "id": "lede", "label": "Lede", "default": "Switching to a bar takes 3-5 washes. Your hair has years of silicone build-up to work through. Here's what each wash actually feels like — so you don't quit on wash two." }
+  ],
+  "blocks": [
+    {
+      "type": "wash",
+      "name": "Wash step",
+      "settings": [
+        { "type": "text", "id": "tag", "label": "Postmark tag (e.g. WASH 1)" },
+        { "type": "text", "id": "heading", "label": "Heading (e.g. Hmm.)" },
+        { "type": "textarea", "id": "body", "label": "Body" },
+        { "type": "range", "id": "progress", "label": "Progress %", "min": 0, "max": 100, "step": 5, "default": 50, "unit": "%" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "First-bar guide",
+      "blocks": [
+        { "type": "wash", "settings": { "tag": "Wash 1", "heading": "Hmm.", "body": "Lather feels different. Hair may seem heavier. This is the residue your old shampoo left behind, lifting.", "progress": 35 } },
+        { "type": "wash", "settings": { "tag": "Wash 2", "heading": "Stranger.", "body": "Possibly waxier mid-lengths. Use a clarifying rinse: 1 tbsp apple cider vinegar in 250ml water.", "progress": 55 } },
+        { "type": "wash", "settings": { "tag": "Wash 3", "heading": "Wait.", "body": "Lather builds faster. Hair feels lighter at the roots. Smells better between washes.", "progress": 75 } },
+        { "type": "wash", "settings": { "tag": "Wash 4", "heading": "Oh.", "body": "Roots stay clean longer. You may go from daily to every-other-day.", "progress": 90 } },
+        { "type": "wash", "settings": { "tag": "Wash 5", "heading": "Convert.", "body": "You're here for life. Caffeine + coconut + 80 washes = no going back.", "progress": 100 } }
+      ]
+    }
+  ]
+}
+{% endschema %}

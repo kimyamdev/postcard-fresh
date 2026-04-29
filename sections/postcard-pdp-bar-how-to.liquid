@@ -1,0 +1,63 @@
+{%- liquid
+  assign world_color = product.metafields.postcard.world.value.accent_color.value | default: '#6E8B5C'
+-%}
+<section class="section section--tight pc-bh">
+  <div class="container">
+    <h2 class="h-display pc-bh__title">{{ section.settings.title }}</h2>
+    <div class="pc-bh__methods">
+      <div class="pc-bh__method">
+        <div class="pc-bh__chip" style="background: {{ world_color }};"></div>
+        <h3 class="h-display pc-bh__method-title">{{ section.settings.method_a_title }}</h3>
+        <p class="pc-bh__method-body">{{ section.settings.method_a_body }}</p>
+      </div>
+      <div class="pc-bh__method">
+        <div class="pc-bh__chip" style="background: {{ section.settings.method_b_chip_color }};"></div>
+        <h3 class="h-display pc-bh__method-title">{{ section.settings.method_b_title }}</h3>
+        <p class="pc-bh__method-body">{{ section.settings.method_b_body }}</p>
+      </div>
+    </div>
+    <div class="pc-bh__steps">
+      {%- for block in section.blocks -%}
+        <div class="pc-bh__step" {{ block.shopify_attributes }}>
+          <span class="postmark pc-bh__pm"><div>{{ forloop.index }}</div></span>
+          <div class="h-display pc-bh__step-h">{{ block.settings.heading }}</div>
+          <p class="pc-bh__step-p">{{ block.settings.body }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Bar how-to",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "How to use." },
+    { "type": "text", "id": "method_a_title", "label": "Method A title", "default": "Method A · Direct" },
+    { "type": "textarea", "id": "method_a_body", "label": "Method A body", "default": "Glide the wet bar 3-4 times along your scalp. Massage. Rinse. Best for thick or coarse hair that needs more concentrated lather." },
+    { "type": "text", "id": "method_b_title", "label": "Method B title", "default": "Method B · Lather first" },
+    { "type": "textarea", "id": "method_b_body", "label": "Method B body", "default": "Rub the bar between wet palms until foamy. Apply foam to hair. Best for fine hair, curly textures, anyone breaking in their first bar." },
+    { "type": "text", "id": "method_b_chip_color", "label": "Method B chip color", "default": "#FFB233" }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "textarea", "id": "body", "label": "Body" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bar how-to",
+      "blocks": [
+        { "type": "step", "settings": { "heading": "Soak hair fully", "body": "Bars need water to lather. Don't rush this." } },
+        { "type": "step", "settings": { "heading": "Massage 30 seconds", "body": "Caffeine works on contact. Take your time." } },
+        { "type": "step", "settings": { "heading": "Rinse, then dry the bar", "body": "Stand it on edge so water drains. Critical for bar life." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

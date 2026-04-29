@@ -1,0 +1,159 @@
+{
+  "sections": {
+    "main": { "type": "postcard-pdp-bar", "settings": {} },
+    "verse_band": {
+      "type": "postcard-pdp-verse-band",
+      "settings": { "quote": "One bar. Eighty washes. Zero plastic.", "fallback_family": "Solid hair · Caffeine bar" }
+    },
+    "format_proof": {
+      "type": "postcard-pdp-format-proof",
+      "settings": {
+        "eyebrow": "The format proof",
+        "title": "What you're swapping.",
+        "bar_label_top": "JAVA JUNGLE",
+        "bar_label_bottom": "75g · postcard sg",
+        "left_unit": "Bar",
+        "left_price": "S$18",
+        "right_unit": "250ml bottles",
+        "right_price": "S$48 of plastic",
+        "seal_text": "SAVES<br>· 500g ·<br>PLASTIC"
+      },
+      "blocks": {
+        "s1": { "type": "stat", "settings": { "number": "80", "sub": "washes per bar", "body": "Tested on shoulder-length hair, twice-weekly wash. Short hair? Closer to 100." } },
+        "s2": { "type": "stat", "settings": { "number": "0g", "sub": "plastic packaging", "body": "Wrapped in seed paper. Plant the wrapper, get a basil bush." } },
+        "s3": { "type": "stat", "settings": { "number": "100g", "sub": "airline-friendly", "body": "Carry-on legal. No 100ml liquid limit. Travels in the tin." } }
+      },
+      "block_order": ["s1", "s2", "s3"]
+    },
+    "fit_cards": {
+      "type": "postcard-pdp-fit-cards",
+      "settings": { "eyebrow": "Bars don't suit every head. Here's the honest version.", "title": "Will it suit your hair?", "warm_bg": true },
+      "blocks": {
+        "f1": { "type": "fit", "settings": { "label": "Fine / oily roots", "fit": "yes", "note": "Lifts roots beautifully. Caffeine adds visible body." } },
+        "f2": { "type": "fit", "settings": { "label": "Thick & coarse", "fit": "yes", "note": "Pair with our deep conditioner bar. Lather generously." } },
+        "f3": { "type": "fit", "settings": { "label": "Curly / coily", "fit": "yes", "note": "Lather in palms first, then to hair. Avoid scrubbing." } },
+        "f4": { "type": "fit", "settings": { "label": "Colour-treated", "fit": "yes", "note": "Sulfate-free. Won't strip pigment within 6 weeks of colour." } },
+        "f5": { "type": "fit", "settings": { "label": "Dandruff-prone", "fit": "yes", "note": "Caffeine + scalp massage helps. Try with our Clear Skies tonic." } },
+        "f6": { "type": "fit", "settings": { "label": "Very dry / damaged", "fit": "maybe", "note": "Workable, but our Bakuchiol Bay liquid serves dryness better." } }
+      },
+      "block_order": ["f1", "f2", "f3", "f4", "f5", "f6"]
+    },
+    "hero_ingredient": {
+      "type": "postcard-pdp-hero-ingredient",
+      "settings": {
+        "eyebrow": "Hero ingredient",
+        "quote": "A bar that smells like the morning before it wakes you.",
+        "body": "We cold-brew Indonesian arabica for four hours, then bind that brew straight into the bar. The caffeine stimulates the scalp; the smell — earthy, milky, faintly sweet — earns its keep in the shower.",
+        "image_caption": "arabica beans · macro"
+      }
+    },
+    "ingredients": {
+      "type": "postcard-pdp-ingredients",
+      "settings": { "eyebrow": "Three things, beautifully sourced", "title": "Key ingredients." },
+      "blocks": {
+        "i1": { "type": "ingredient", "settings": { "name": "Cold-pressed Coconut Surfactants", "role": "The lather, the kind kind", "story": "SLS-free coconut-derived cleansers. Properly foamy without stripping the scalp's natural oils. The reason wash one already feels right.", "image_caption": "coconut surfactants · macro" } },
+        "i2": { "type": "ingredient", "settings": { "name": "Brewed Arabica Caffeine", "role": "Wakes up the follicle", "story": "A 4-hour cold brew steeped into the bar. Caffeine stimulates the scalp, leaves shine, smells faintly of a Java café at dawn.", "image_caption": "arabica · macro" } },
+        "i3": { "type": "ingredient", "settings": { "name": "Cocoa Butter + Murumuru", "role": "Conditioning glide", "story": "So the bar slips through wet hair instead of catching. Tropical butters lock in shine without weighing fine hair down.", "image_caption": "cocoa butter · macro" } }
+      },
+      "block_order": ["i1", "i2", "i3"]
+    },
+    "first_bar_guide": {
+      "type": "postcard-pdp-first-bar-guide",
+      "settings": {
+        "eyebrow": "The honest part",
+        "title": "Your first bar: a field guide.",
+        "lede": "Switching to a bar takes 3-5 washes. Your hair has years of silicone build-up to work through. Here's what each wash actually feels like — so you don't quit on wash two."
+      },
+      "blocks": {
+        "w1": { "type": "wash", "settings": { "tag": "Wash 1", "heading": "Hmm.", "body": "Lather feels different. Hair may seem heavier. This is the residue your old shampoo left behind, lifting.", "progress": 35 } },
+        "w2": { "type": "wash", "settings": { "tag": "Wash 2", "heading": "Stranger.", "body": "Possibly waxier mid-lengths. Use a clarifying rinse: 1 tbsp apple cider vinegar in 250ml water.", "progress": 55 } },
+        "w3": { "type": "wash", "settings": { "tag": "Wash 3", "heading": "Wait.", "body": "Lather builds faster. Hair feels lighter at the roots. Smells better between washes.", "progress": 75 } },
+        "w4": { "type": "wash", "settings": { "tag": "Wash 4", "heading": "Oh.", "body": "Roots stay clean longer. You may go from daily to every-other-day.", "progress": 90 } },
+        "w5": { "type": "wash", "settings": { "tag": "Wash 5", "heading": "Convert.", "body": "You're here for life. Caffeine + coconut + 80 washes = no going back.", "progress": 100 } }
+      },
+      "block_order": ["w1", "w2", "w3", "w4", "w5"]
+    },
+    "bar_how_to": {
+      "type": "postcard-pdp-bar-how-to",
+      "settings": {
+        "title": "How to use.",
+        "method_a_title": "Method A · Direct",
+        "method_a_body": "Glide the wet bar 3-4 times along your scalp. Massage. Rinse. Best for thick or coarse hair that needs more concentrated lather.",
+        "method_b_title": "Method B · Lather first",
+        "method_b_body": "Rub the bar between wet palms until foamy. Apply foam to hair. Best for fine hair, curly textures, anyone breaking in their first bar.",
+        "method_b_chip_color": "#FFB233"
+      },
+      "blocks": {
+        "s1": { "type": "step", "settings": { "heading": "Soak hair fully", "body": "Bars need water to lather. Don't rush this." } },
+        "s2": { "type": "step", "settings": { "heading": "Massage 30 seconds", "body": "Caffeine works on contact. Take your time." } },
+        "s3": { "type": "step", "settings": { "heading": "Rinse, then dry the bar", "body": "Stand it on edge so water drains. Critical for bar life." } }
+      },
+      "block_order": ["s1", "s2", "s3"]
+    },
+    "storage": {
+      "type": "postcard-pdp-storage-cross-sell",
+      "settings": {
+        "image_caption": "tin · macro",
+        "eyebrow": "A bar lives twice as long if you let it dry.",
+        "title": "Add the travel tin.",
+        "body": "Aluminum, ventilated lid, hand-stamped Java Jungle. Drains the bar between washes, slips into a carry-on. Doubles your washes per bar.",
+        "primary_text": "Add tin · +S$14",
+        "primary_link": "/products/java-jungle-travel-tin",
+        "secondary_text": "Or buy the bundle (saves S$4) →",
+        "secondary_link": "/products/java-jungle-bundle"
+      }
+    },
+    "trust": {
+      "type": "postcard-pdp-trust-circles",
+      "settings": {},
+      "blocks": {
+        "t1": { "type": "circle", "settings": { "short": "MADE<br>IN", "label": "Made in Singapore" } },
+        "t2": { "type": "circle", "settings": { "short": "ZERO<br>PLASTIC", "label": "Zero plastic" } },
+        "t3": { "type": "circle", "settings": { "short": "VEGAN", "label": "Vegan" } },
+        "t4": { "type": "circle", "settings": { "short": "CRUELTY<br>FREE", "label": "Cruelty-free" } },
+        "t5": { "type": "circle", "settings": { "short": "PALM<br>FREE", "label": "Palm-oil-free" } },
+        "t6": { "type": "circle", "settings": { "short": "SULFATE<br>FREE", "label": "Sulfate-free" } }
+      },
+      "block_order": ["t1", "t2", "t3", "t4", "t5", "t6"]
+    },
+    "pairs_with": {
+      "type": "postcard-pdp-pairs-with",
+      "settings": {},
+      "blocks": {
+        "p1": { "type": "item", "settings": { "name": "Java Jungle Conditioner Bar", "price": "$18" } },
+        "p2": { "type": "item", "settings": { "name": "Java Jungle Travel Tin", "price": "$14" } },
+        "p3": { "type": "item", "settings": { "name": "Clear Skies Scalp Tonic", "price": "$28" } }
+      },
+      "block_order": ["p1", "p2", "p3"]
+    },
+    "reviews": { "type": "postcard-pdp-reviews-section", "settings": {} },
+    "faq": {
+      "type": "postcard-pdp-faq-section",
+      "settings": { "title": "Questions?" },
+      "blocks": {
+        "q1": { "type": "faq", "settings": { "q": "Will my hair go through a \"transition\"?", "a": "Yes — and it's real. Wash 1-2 may feel waxy or heavy as silicone build-up from old shampoos releases. By wash 4 most people are over the line. The Field Guide above tells you exactly what to expect." } },
+        "q2": { "type": "faq", "settings": { "q": "What if it doesn't click for me?", "a": "We offer a one-bar guarantee. Use the whole thing, hate it? Send the empty wrapper back, get a full refund or swap to a liquid Java Jungle. We mean it." } },
+        "q3": { "type": "faq", "settings": { "q": "Full ingredients (INCI)", "a": "Sodium Cocoyl Isethionate, Cocos Nucifera (Coconut) Oil, Theobroma Grandiflorum (Cupuaçu) Butter, Astrocaryum Murumuru Seed Butter, Cocos Nucifera (Coconut) Acid, Coffea Arabica Seed Extract, Caffeine, Glycerin, Hydrolyzed Quinoa Protein, Cetearyl Alcohol, Lactic Acid, Tocopherol, Parfum (Java Jungle accord), Limonene, Linalool. Sulfate-free, silicone-free, palm-oil-free." } },
+        "q4": { "type": "faq", "settings": { "q": "Is it good for colour-treated hair?", "a": "Yes. Sulfate-free formula won't strip pigment. We'd still wait 72h after a fresh colour before first use, like any shampoo." } },
+        "q5": { "type": "faq", "settings": { "q": "Why is it more expensive per gram than liquid?", "a": "It isn't — that's the trick. 75g of bar = ~500ml of equivalent liquid shampoo. The maths works out at S$0.23/wash, cheaper than most salon brands." } },
+        "q6": { "type": "faq", "settings": { "q": "Can I bring it on a plane?", "a": "Yes. Solid, under 100g, not a liquid. Pop it in the tin, pop the tin in your toiletry bag, breeze through security." } }
+      },
+      "block_order": ["q1", "q2", "q3", "q4", "q5", "q6"]
+    }
+  },
+  "order": [
+    "main",
+    "verse_band",
+    "format_proof",
+    "fit_cards",
+    "hero_ingredient",
+    "ingredients",
+    "first_bar_guide",
+    "bar_how_to",
+    "storage",
+    "trust",
+    "pairs_with",
+    "reviews",
+    "faq"
+  ]
+}

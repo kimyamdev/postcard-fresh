@@ -1,0 +1,75 @@
+{%- liquid
+  assign world_color = product.metafields.postcard.world.value.accent_color.value | default: '#6E8B5C'
+-%}
+<section class="section pc-fc" style="--world-color: {{ world_color }};{% if section.settings.warm_bg %} background: var(--color-bg-warm);{% endif %}">
+  <div class="container">
+    <div class="pc-fc__head">
+      {%- if section.settings.eyebrow != blank -%}<div class="eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
+      <h2 class="h-display pc-fc__title">{{ section.settings.title }}</h2>
+    </div>
+    <div class="pc-fc__grid">
+      {%- for block in section.blocks -%}
+        {%- assign fit = block.settings.fit | default: 'yes' -%}
+        {%- if fit == 'yes' -%}
+          {%- assign disc_color = world_color -%}
+          {%- assign mark = '✓' -%}
+          {%- assign indicator_text = '✓ great fit' -%}
+        {%- elsif fit == 'maybe' -%}
+          {%- assign disc_color = '#E8C36A' -%}
+          {%- assign mark = '~' -%}
+          {%- assign indicator_text = 'works with conditions' -%}
+        {%- else -%}
+          {%- assign disc_color = '#C4C5CE' -%}
+          {%- assign mark = '×' -%}
+          {%- assign indicator_text = '— patch test first' -%}
+        {%- endif -%}
+        <div class="pc-fc__card pc-fc__card--{{ fit }}" {{ block.shopify_attributes }}>
+          <div class="pc-fc__disc" style="background: {{ disc_color }};">{{ mark }}</div>
+          <div class="pc-fc__copy">
+            <h3 class="h-display pc-fc__label">{{ block.settings.label }}</h3>
+            <div class="pc-fc__indicator">{{ indicator_text }}</div>
+            {%- if block.settings.note != blank -%}
+              <p class="pc-fc__note">{{ block.settings.note }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Fit cards",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Bars don't suit every head. Here's the honest version." },
+    { "type": "text", "id": "title", "label": "Title", "default": "Will it suit your hair?" },
+    { "type": "checkbox", "id": "warm_bg", "label": "Warm background", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "fit",
+      "name": "Fit card",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "select", "id": "fit", "label": "Fit", "options": [
+          { "value": "yes", "label": "Yes" },
+          { "value": "maybe", "label": "Maybe" },
+          { "value": "no", "label": "No" }
+        ], "default": "yes" },
+        { "type": "textarea", "id": "note", "label": "Note (italic body)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fit cards",
+      "blocks": [
+        { "type": "fit", "settings": { "label": "Fine / oily roots", "fit": "yes", "note": "Lifts roots beautifully. Caffeine adds visible body." } },
+        { "type": "fit", "settings": { "label": "Thick & coarse", "fit": "yes", "note": "Pair with our deep conditioner bar. Lather generously." } },
+        { "type": "fit", "settings": { "label": "Curly / coily", "fit": "yes", "note": "Lather in palms first, then to hair. Avoid scrubbing." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

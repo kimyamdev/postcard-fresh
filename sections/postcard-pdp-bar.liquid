@@ -1,0 +1,42 @@
+{%- liquid
+  assign world = product.metafields.postcard.world.value
+  if world
+    assign world_color = world.accent_color.value
+    assign world_theme_class = world.theme_class.value
+    assign world_name = world.name.value
+  endif
+  assign world_color = world_color | default: '#6E8B5C'
+  assign world_theme_class = world_theme_class | default: 'world-woodland'
+  assign world_name = world_name | default: 'Java Jungle'
+-%}
+
+<div class="{{ world_theme_class }}" style="--world-color: {{ world_color }};">
+
+  <div class="pc-breadcrumb">
+    <div class="container pc-breadcrumb__inner">
+      Home / Hair / Solid bars / <span class="pc-breadcrumb__current">{{ product.title }}</span>
+    </div>
+  </div>
+
+  <section class="pc-pdp-main">
+    <div class="container pc-pdp-main__inner">
+      {% render 'pdp-gallery', product: product, world_color: world_color, stamp_text: '80<br>WASHES<br>SG' %}
+      {% render 'pdp-buy-box',
+        product: product,
+        world_color: world_color,
+        ribbon_subline: 'Solid Shampoo Bar',
+        demo_sizes: 'Single bar 75g,Twin pack,Bar + travel tin',
+        demo_active_index: 1,
+        refill_link_text: 'Or grab the travel tin →' %}
+    </div>
+  </section>
+
+</div>
+
+{% schema %}
+{
+  "name": "Bar PDP",
+  "settings": [],
+  "presets": [{ "name": "Bar PDP" }]
+}
+{% endschema %}
