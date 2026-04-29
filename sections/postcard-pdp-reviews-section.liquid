@@ -1,14 +1,14 @@
 {%- liquid
   assign label = section.settings.label | default: 'Dispatches · Field notes from the pit'
   assign heading = section.settings.heading | default: 'Mail from our pen-pals.'
-  assign bg_color = section.settings.bg_color | default: '#fdecea'
+  assign bg_color = section.settings.bg_color
 -%}
 
 {%- style -%}
   #pc-stamped-{{ section.id }} {
     padding: 96px 48px;
     border-top: 1px solid var(--color-ink);
-    background: {{ bg_color }};
+    background: {% if bg_color != blank %}{{ bg_color }}{% else %}var(--color-bg-warm){% endif %};
     overflow: visible;
   }
   #pc-stamped-{{ section.id }} .pc-stamped-inner {
@@ -123,28 +123,20 @@
     display: none !important;
   }
 
-  /* Reviews list grid */
+  /* Reviews list grid — 2 wide cards per row */
   #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-reviews,
   #pc-stamped-{{ section.id }} #stamped-main-widget .new-stamped-fields,
   #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-reviews-list,
   #pc-stamped-{{ section.id }} #stamped-main-widget #stamped-reviews-content {
     display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 36px !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 48px !important;
     counter-reset: pc-stamp-num;
     width: 100% !important;
     padding: 12px !important;
     overflow: visible !important;
   }
-  @media (max-width: 980px) {
-    #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-reviews,
-    #pc-stamped-{{ section.id }} #stamped-main-widget .new-stamped-fields,
-    #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-reviews-list,
-    #pc-stamped-{{ section.id }} #stamped-main-widget #stamped-reviews-content {
-      grid-template-columns: repeat(2, 1fr) !important;
-    }
-  }
-  @media (max-width: 640px) {
+  @media (max-width: 720px) {
     #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-reviews,
     #pc-stamped-{{ section.id }} #stamped-main-widget .new-stamped-fields,
     #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-reviews-list,
@@ -153,37 +145,37 @@
     }
   }
 
-  /* Each review → postcard */
+  /* Each review → postcard (wider, taller) */
   #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review {
     counter-increment: pc-stamp-num;
     position: relative !important;
     display: flex !important;
     flex-direction: column !important;
-    gap: 16px !important;
+    gap: 18px !important;
     background: var(--color-bg-card) !important;
     border: 1.5px solid var(--color-ink) !important;
-    padding: 78px 22px 20px !important;
+    padding: 88px 40px 28px !important;
     box-shadow: 4px 6px 0 rgba(0, 0, 0, 0.10) !important;
     margin: 0 !important;
     color: var(--color-ink) !important;
     overflow: visible !important;
-    width: auto !important;
+    width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
-    min-height: 260px !important;
+    min-height: 320px !important;
     float: none !important;
     box-sizing: border-box !important;
-    justify-self: center !important;
-    align-self: start !important;
-    margin-inline: auto !important;
+    justify-self: stretch !important;
+    align-self: stretch !important;
+    margin-inline: 0 !important;
   }
-  @media (max-width: 640px) {
+  @media (max-width: 720px) {
     #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review {
       width: 100% !important;
       max-width: 100% !important;
-      min-height: 200px !important;
-      padding: 70px 18px 16px !important;
-      gap: 12px !important;
+      min-height: 240px !important;
+      padding: 72px 22px 20px !important;
+      gap: 14px !important;
     }
   }
   #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-content {
@@ -251,20 +243,20 @@
   #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-content-body {
     font-family: var(--font-display) !important;
     font-style: italic !important;
-    font-size: 15px !important;
-    line-height: 1.5 !important;
+    font-size: 17px !important;
+    line-height: 1.55 !important;
     color: var(--color-ink) !important;
     margin: 0 !important;
     display: -webkit-box !important;
-    -webkit-line-clamp: 5 !important;
+    -webkit-line-clamp: 7 !important;
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
     position: relative !important;
   }
-  @media (max-width: 640px) {
+  @media (max-width: 720px) {
     #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-content-body {
-      font-size: 14px !important;
-      -webkit-line-clamp: 4 !important;
+      font-size: 15px !important;
+      -webkit-line-clamp: 5 !important;
     }
   }
   #pc-stamped-{{ section.id }} #stamped-main-widget .stamped-review-content-body::before { content: '"'; }

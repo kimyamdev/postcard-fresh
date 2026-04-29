@@ -38,18 +38,18 @@
   {%- endif -%}
 
 {%- when 'rating' -%}
-  {%- assign review_score = product.metafields.pdp.review_score.value | default: 4.9 -%}
-  {%- assign review_count = product.metafields.pdp.review_count.value | default: 327 -%}
-  <div class="pc-pdp-buy__rating" {{ block.shopify_attributes }}>
-    <span
-      class="stamped-product-reviews-badge stamped-main-badge pc-pdp-buy__stamped-badge"
-      data-id="{{ product.id }}"
-      data-product-sku="{{ product.handle }}"
-      data-product-title="{{ product.title | escape }}"
-      data-product-type="{{ product.type }}"
-    >
-      <span class="pc-pdp-buy__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-      <span class="pc-pdp-buy__rating-text">{{ review_score }} &middot; {{ review_count }} reviews</span>
+  {%- liquid
+    assign sp_score = product.metafields.stamped.score.value | default: product.metafields.stamped.reviews_average.value
+    assign sp_count = product.metafields.stamped.count.value | default: product.metafields.stamped.reviews_count.value
+    assign review_score = sp_score | default: product.metafields.pdp.review_score.value | default: 4.9
+    assign review_count = sp_count | default: product.metafields.pdp.review_count.value | default: 327
+  -%}
+  <div class="pc-pdp-buy__rating" data-pc-stamped-product-id="{{ product.id }}" {{ block.shopify_attributes }}>
+    <span class="pc-pdp-buy__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+    <span class="pc-pdp-buy__rating-text">
+      <span class="pc-pdp-buy__rating-score">{{ review_score }}</span>
+      &middot;
+      <span class="pc-pdp-buy__rating-count">{{ review_count }}</span> reviews
     </span>
   </div>
 
