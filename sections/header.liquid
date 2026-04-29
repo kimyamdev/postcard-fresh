@@ -118,7 +118,7 @@
   <div class="pc-utility">
     <a class="pc-utility__link" href="{{ routes.search_url }}">Search</a>
     <a class="pc-utility__link" href="{{ routes.account_url }}">Account</a>
-    <a class="pc-bag" href="{{ routes.cart_url }}">Bag &middot; {{ cart.item_count }}</a>
+    <a class="pc-bag" id="cart-icon-bubble" href="{{ routes.cart_url }}">Bag &middot; <span data-pc-cart-count>{{ cart.item_count }}</span></a>
   </div>
 </header>
 
