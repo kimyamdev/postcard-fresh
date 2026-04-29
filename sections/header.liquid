@@ -5,6 +5,10 @@
 </div>
 
 <header class="pc-header" x-data="{ shopOpen: false, worldsOpen: false }">
+  <button class="pc-mobile-hamburger" type="button" aria-label="Open menu"
+    @click="window.dispatchEvent(new CustomEvent('pc-mobile-nav:open'))">
+    <span></span><span></span><span></span>
+  </button>
   <a href="{{ routes.root_url }}" class="pc-logo">
     POSTCARD<span class="pc-logo__sg">&middot; SG</span>
   </a>

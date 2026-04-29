@@ -1,0 +1,330 @@
+{%- comment -%}
+  Postcard mobile nav drawer — left-sliding, multi-view (root/shop/worlds/
+  account/search). Listens for window event 'pc-mobile-nav:open' (dispatched
+  from the header hamburger). Visible on mobile only — kept in DOM on desktop
+  but display:none via CSS.
+{%- endcomment -%}
+
+<div
+  class="pc-mn"
+  x-data="{
+    open: false,
+    view: 'root',
+    query: '',
+    results: { products: [], collections: [], pages: [] },
+    searching: false,
+    _t: null,
+    close() { this.open = false; this.view = 'root'; this.query = ''; this.results = {products:[],collections:[],pages:[]}; },
+    setView(v) { this.view = v; },
+    runSearch(q) {
+      clearTimeout(this._t);
+      if (!q || q.length < 2) { this.results = {products:[],collections:[],pages:[]}; this.searching = false; return; }
+      this.searching = true;
+      this._t = setTimeout(async () => {
+        try {
+          const r = await fetch('/search/suggest.json?q=' + encodeURIComponent(q) + '&resources[type]=product,collection,page&resources[limit]=5');
+          const d = await r.json();
+          this.results = d.resources && d.resources.results || {products:[],collections:[],pages:[]};
+        } catch (e) { /* ignore */ } finally { this.searching = false; }
+      }, 200);
+    }
+  }"
+  @pc-mobile-nav:open.window="open = true; view = 'root'"
+  @keydown.escape.window="if (open) close()"
+  :class="{ 'pc-mn--open': open }"
+  x-cloak
+>
+  <div class="pc-mn__overlay" @click="close()"></div>
+  <aside class="pc-mn__panel" role="dialog" aria-modal="true" aria-label="Site navigation">
+
+    {%- comment -%} ============ ROOT VIEW ============ {%- endcomment -%}
+    <div x-show="view === 'root'" class="pc-mn__view">
+      <div class="pc-mn__hdr pc-mn__hdr--bg">
+        <div class="h-display pc-mn__hdr-title">POSTCARD</div>
+        <button class="pc-mn__close" @click="close()" aria-label="Close menu">&times;</button>
+      </div>
+
+      <div class="pc-mn__search-box">
+        <button class="pc-mn__search-trigger" @click="setView('search')" type="button">
+          <span>Search worlds, products, ingredients…</span>
+          <span class="pc-mn__search-icon" aria-hidden="true">&#8981;</span>
+        </button>
+      </div>
+
+      <nav class="pc-mn__list">
+        <button type="button" class="pc-mn__item" @click="setView('shop')">
+          <div>
+            <div class="h-display pc-mn__item-head">SHOP</div>
+            <div class="pc-mn__item-sub">browse by type, world, refills &rarr;</div>
+          </div>
+          <span class="pc-mn__item-arrow">&rarr;</span>
+        </button>
+        <button type="button" class="pc-mn__item" @click="setView('worlds')">
+          <div>
+            <div class="h-display pc-mn__item-head">WORLDS</div>
+            <div class="pc-mn__item-sub">all scent + skin worlds &rarr;</div>
+          </div>
+          <span class="pc-mn__item-arrow">&rarr;</span>
+        </button>
+        <a class="pc-mn__item" href="/pages/about">
+          <div>
+            <div class="h-display pc-mn__item-head">STORY</div>
+            <div class="pc-mn__item-sub">about, journal, Orchard flagship &rarr;</div>
+          </div>
+          <span class="pc-mn__item-arrow">&rarr;</span>
+        </a>
+        <a class="pc-mn__item" href="/pages/membership">
+          <div>
+            <div class="h-display pc-mn__item-head">MEMBERSHIP</div>
+            <div class="pc-mn__item-sub">earn coins, unlock perks &rarr;</div>
+          </div>
+          <span class="pc-mn__item-arrow">&rarr;</span>
+        </a>
+        <a class="pc-mn__item" href="/pages/refill">
+          <div>
+            <div class="h-display pc-mn__item-head">REFILL</div>
+            <div class="pc-mn__item-sub">come in. send back. save 30% &rarr;</div>
+          </div>
+          <span class="pc-mn__item-arrow">&rarr;</span>
+        </a>
+        <a class="pc-mn__item" href="/pages/corporate">
+          <div>
+            <div class="h-display pc-mn__item-head">CORPORATE</div>
+            <div class="pc-mn__item-sub">gifting &amp; B2B &rarr;</div>
+          </div>
+          <span class="pc-mn__item-arrow">&rarr;</span>
+        </a>
+        <button type="button" class="pc-mn__item" @click="setView('account')">
+          <div>
+            <div class="h-display pc-mn__item-head">ACCOUNT</div>
+            <div class="pc-mn__item-sub">
+              {%- if customer -%}orders, subscriptions, refill card &rarr;
+              {%- else -%}sign in &middot; join Postcard &rarr;
+              {%- endif -%}
+            </div>
+          </div>
+          <span class="pc-mn__item-arrow">&rarr;</span>
+        </button>
+      </nav>
+
+      <div class="pc-mn__ftr">
+        <div>
+          <div class="eyebrow pc-mn__ftr-hello">
+            {%- if customer -%}Hello, {{ customer.first_name | default: 'friend' }}{%- else -%}Hello, guest{%- endif -%}
+          </div>
+          <button class="tlink pc-mn__ftr-action" @click="setView('account')" type="button">
+            {%- if customer -%}MY ACCOUNT{%- else -%}SIGN IN &middot; JOIN POSTCARD{%- endif -%}
+          </button>
+        </div>
+        <a href="{{ routes.cart_url }}" class="pc-mn__ftr-bag" id="cart-icon-bubble-mobile" onclick="event.preventDefault(); document.querySelector('cart-drawer')?.open(); document.querySelector('.pc-mn').__x?.$data?.close && document.querySelector('.pc-mn').__x.$data.close();">
+          BAG &middot; <span data-pc-cart-count>{{ cart.item_count }}</span>
+        </a>
+      </div>
+    </div>
+
+    {%- comment -%} ============ SHOP VIEW ============ {%- endcomment -%}
+    <div x-show="view === 'shop'" x-cloak class="pc-mn__view">
+      <div class="pc-mn__hdr pc-mn__hdr--bg">
+        <button class="tlink pc-mn__back" @click="setView('root')" type="button">&larr; BACK</button>
+        <div class="h-display pc-mn__hdr-title pc-mn__hdr-title--right">SHOP</div>
+        <button class="pc-mn__close" @click="close()" aria-label="Close menu">&times;</button>
+      </div>
+      <div class="pc-mn__scroll">
+        <div class="pc-mn__section-eyebrow">Browse by type</div>
+        {%- assign shop_types = 'Hand &amp; body wash|/collections/body-wash,Shampoo &amp; conditioner|/collections/hair,Soap bars|/collections/bars,Deodorant|/collections/deodorants,Anywhere fragrance|/collections/anywhere-fragrance,Treatment &amp; actives|/collections/face,Gift sets|/collections/gifts' | split: ',' -%}
+        {%- for entry in shop_types -%}
+          {%- assign parts = entry | split: '|' -%}
+          <a class="pc-mn__type-row" href="{{ parts[1] }}">
+            <span class="h-typewriter pc-mn__type-name">{{ parts[0] }}</span>
+            <span class="pc-mn__type-arrow">&rarr;</span>
+          </a>
+        {%- endfor -%}
+
+        <div class="pc-mn__section-eyebrow pc-mn__section-eyebrow--gap">Quick links</div>
+        <div class="pc-mn__quick-grid">
+          <a class="pc-mn__quick-tile" href="/collections/new" style="background: #FFB233;">
+            <div class="h-typewriter pc-mn__quick-name">New &amp; limited</div>
+            <div class="pc-mn__quick-arrow">&rarr;</div>
+          </a>
+          <a class="pc-mn__quick-tile" href="/collections/bestsellers" style="background: #E8C36A;">
+            <div class="h-typewriter pc-mn__quick-name">Bestsellers</div>
+            <div class="pc-mn__quick-arrow">&rarr;</div>
+          </a>
+          <a class="pc-mn__quick-tile" href="/pages/subscriptions" style="background: #B07A4E; color: var(--color-bg);">
+            <div class="h-typewriter pc-mn__quick-name">Subscribe &amp; save</div>
+            <div class="pc-mn__quick-arrow">&rarr;</div>
+          </a>
+          <a class="pc-mn__quick-tile" href="/pages/refill" style="background: #6E8B5C; color: var(--color-bg);">
+            <div class="h-typewriter pc-mn__quick-name">Refills</div>
+            <div class="pc-mn__quick-arrow">&rarr;</div>
+          </a>
+          <a class="pc-mn__quick-tile" href="/products/postcard-gift-card" style="background: #C7A8D6;">
+            <div class="h-typewriter pc-mn__quick-name">Gift cards</div>
+            <div class="pc-mn__quick-arrow">&rarr;</div>
+          </a>
+          <a class="pc-mn__quick-tile" href="/collections/discovery-sets" style="background: #9CC4D6;">
+            <div class="h-typewriter pc-mn__quick-name">Discovery sets</div>
+            <div class="pc-mn__quick-arrow">&rarr;</div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} ============ WORLDS VIEW ============ {%- endcomment -%}
+    <div x-show="view === 'worlds'" x-cloak class="pc-mn__view">
+      {%- assign worlds = shop.metaobjects.world.values -%}
+      <div class="pc-mn__hdr pc-mn__hdr--bg">
+        <button class="tlink pc-mn__back" @click="setView('root')" type="button">&larr; BACK</button>
+        <div class="h-display pc-mn__hdr-title pc-mn__hdr-title--right">{{ worlds.size }} WORLDS</div>
+        <button class="pc-mn__close" @click="close()" aria-label="Close menu">&times;</button>
+      </div>
+      <div class="pc-mn__scroll pc-mn__worlds-wrap">
+        <div class="pc-mn__section-eyebrow pc-mn__worlds-hint">Tap a world to enter</div>
+        <div class="pc-mn__worlds-grid">
+          {%- for w in worlds -%}
+            {%- assign accent = w.accent_color.value | default: '#E8C36A' -%}
+            {%- assign slug = w.slug.value | default: w.handle -%}
+            <a class="pc-mn__world-card" href="/pages/{{ slug }}">
+              <div class="pc-mn__world-chip" style="background: {{ accent }};"></div>
+              <div class="h-typewriter pc-mn__world-name">{{ w.name.value }}</div>
+            </a>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} ============ ACCOUNT VIEW ============ {%- endcomment -%}
+    <div x-show="view === 'account'" x-cloak class="pc-mn__view">
+      {%- if customer -%}
+        <div class="pc-mn__hdr pc-mn__hdr--bg">
+          <button class="tlink pc-mn__back" @click="setView('root')" type="button">&larr; BACK</button>
+          <button class="pc-mn__close" @click="close()" aria-label="Close menu">&times;</button>
+        </div>
+        <div class="pc-mn__acct-greet">
+          <div class="eyebrow">Hello,</div>
+          <div class="h-display pc-mn__acct-name">{{ customer.first_name | default: customer.email | upcase }}</div>
+          <div class="pc-mn__acct-meta">{{ customer.orders_count }} orders &middot; {{ customer.total_spent | money }} lifetime</div>
+        </div>
+        <div class="pc-mn__scroll">
+          <a class="pc-mn__acct-row" href="{{ routes.account_url }}">
+            <div>
+              <div class="h-typewriter">MY ORDERS</div>
+              <div class="pc-mn__acct-row-sub">{{ customer.orders_count }} total</div>
+            </div>
+            <span>&rarr;</span>
+          </a>
+          <a class="pc-mn__acct-row" href="/account#subscriptions">
+            <div>
+              <div class="h-typewriter">SUBSCRIPTIONS</div>
+              <div class="pc-mn__acct-row-sub">manage cadence, skip, swap</div>
+            </div>
+            <span>&rarr;</span>
+          </a>
+          <a class="pc-mn__acct-row" href="/pages/refill">
+            <div>
+              <div class="h-typewriter">REFILL CARD</div>
+              <div class="pc-mn__acct-row-sub">find a refill station</div>
+            </div>
+            <span>&rarr;</span>
+          </a>
+          <a class="pc-mn__acct-row" href="{{ routes.account_addresses_url }}">
+            <div>
+              <div class="h-typewriter">ADDRESSES &amp; PAYMENT</div>
+              <div class="pc-mn__acct-row-sub">{{ customer.addresses_count }} saved</div>
+            </div>
+            <span>&rarr;</span>
+          </a>
+        </div>
+        <div class="pc-mn__acct-foot">
+          <a class="tlink pc-mn__acct-signout" href="{{ routes.account_logout_url }}">SIGN OUT</a>
+        </div>
+      {%- else -%}
+        <div class="pc-mn__hdr pc-mn__hdr--ink">
+          <button class="tlink pc-mn__back pc-mn__back--ink" @click="setView('root')" type="button">&larr; BACK</button>
+          <div class="h-display pc-mn__hdr-title pc-mn__hdr-title--right pc-mn__hdr-title--ink">ACCOUNT</div>
+          <button class="pc-mn__close pc-mn__close--ink" @click="close()" aria-label="Close menu">&times;</button>
+        </div>
+        <div class="pc-mn__acct-out">
+          <div class="eyebrow pc-mn__acct-out-eyebrow">Not yet a member</div>
+          <div class="h-display pc-mn__acct-out-title">JOIN<br>POSTCARD.</div>
+          <p class="pc-mn__acct-out-body">Earn coins on every order. Free birthday gift. First dibs on new worlds. Skip the queue at the Orchard flagship.</p>
+          <a class="btn pc-mn__acct-out-cta" href="{{ routes.account_register_url }}">CREATE ACCOUNT &rarr;</a>
+          <a class="btn btn--ghost pc-mn__acct-out-cta" href="{{ routes.account_login_url }}">SIGN IN</a>
+
+          <div class="pc-mn__acct-out-quick">
+            <div class="eyebrow">Quick access</div>
+            <a class="pc-mn__acct-row" href="/pages/order-tracking">
+              <span class="h-typewriter">Order tracking</span><span>&rarr;</span>
+            </a>
+            <a class="pc-mn__acct-row" href="/pages/contact">
+              <span class="h-typewriter">Help &amp; contact</span><span>&rarr;</span>
+            </a>
+            <a class="pc-mn__acct-row" href="/pages/refill">
+              <span class="h-typewriter">Find a refill station</span><span>&rarr;</span>
+            </a>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ============ SEARCH VIEW ============ {%- endcomment -%}
+    <div x-show="view === 'search'" x-cloak class="pc-mn__view">
+      <div class="pc-mn__search-bar">
+        <button class="tlink pc-mn__back" @click="setView('root'); query=''" type="button">CANCEL</button>
+        <form class="pc-mn__search-form" action="{{ routes.search_url }}" method="get" role="search">
+          <input
+            type="search"
+            name="q"
+            class="pc-mn__search-input"
+            placeholder="Search…"
+            x-model="query"
+            @input="runSearch(query)"
+            x-init="$nextTick(() => $el.focus())"
+            autocomplete="off">
+          <button type="button" class="pc-mn__search-clear" x-show="query.length > 0" @click="query=''; results={products:[],collections:[],pages:[]}" aria-label="Clear">&times;</button>
+        </form>
+      </div>
+      <div class="pc-mn__scroll">
+        <template x-if="query.length >= 2 && results.collections && results.collections.length > 0">
+          <div>
+            <div class="pc-mn__section-eyebrow">Collections</div>
+            <template x-for="c in results.collections" :key="c.id">
+              <a class="pc-mn__search-row" :href="c.url">
+                <div class="pc-mn__search-row-text">
+                  <div class="h-typewriter pc-mn__search-row-title" x-text="c.title"></div>
+                </div>
+                <span class="pc-mn__search-row-arrow">&rarr;</span>
+              </a>
+            </template>
+          </div>
+        </template>
+        <template x-if="query.length >= 2 && results.products && results.products.length > 0">
+          <div>
+            <div class="pc-mn__section-eyebrow">Products</div>
+            <template x-for="p in results.products" :key="p.id">
+              <a class="pc-mn__search-row pc-mn__search-row--product" :href="p.url">
+                <div class="pc-mn__search-row-text">
+                  <div class="h-typewriter pc-mn__search-row-title" x-text="p.title"></div>
+                </div>
+                <div class="pc-mn__search-row-price" x-text="p.price"></div>
+              </a>
+            </template>
+          </div>
+        </template>
+        <template x-if="query.length >= 2 && !searching && results.products.length === 0 && results.collections.length === 0">
+          <div class="pc-mn__search-empty">No matches yet — try a world name or product type.</div>
+        </template>
+        <template x-if="query.length < 2">
+          <div class="pc-mn__search-hint">
+            <div class="eyebrow">Popular searches</div>
+            <a href="{{ routes.search_url }}?q=hotel+lobby" class="pc-mn__search-pill">Hotel Lobby</a>
+            <a href="{{ routes.search_url }}?q=shampoo" class="pc-mn__search-pill">Shampoo</a>
+            <a href="{{ routes.search_url }}?q=refill" class="pc-mn__search-pill">Refill</a>
+            <a href="{{ routes.search_url }}?q=gift" class="pc-mn__search-pill">Gift</a>
+          </div>
+        </template>
+      </div>
+    </div>
+
+  </aside>
+</div>
