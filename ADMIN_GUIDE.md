@@ -102,12 +102,29 @@ These vary by **template type**, not per product. Edit in the theme editor (top-
 
 If you want any of these to vary per product, ask and we'll add metaobject + metafield definitions for them.
 
-## Worlds (already done)
+## Worlds + scent notes
 
-Each `world` metaobject entry should have:
-- name, slug, family, tagline, accent_color, theme_class, hero_image, notes_top, notes_heart, notes_base
+Each `world` metaobject entry has:
+- name, slug, family, tagline, accent_color, theme_class, hero_image
+- `scent_notes` — list of `scent_note` metaobject references (NEW, this is what the scent breakdown table + scent-notes 5-up grid read from)
+- notes_top / notes_heart / notes_base — *legacy* list-of-strings. Kept as a fallback when `scent_notes` is unset on a world; otherwise unused.
 
-Already populated for the 7 core worlds (Hotel Lobby, Moon Bloom, Coconut Beach, Wild Flowers, Bath House, Woodland Retreat, Icy Peaks). Add the remaining 15 in **Settings → Custom data → Metaobjects → World** when ready.
+Each `scent_note` metaobject entry has:
+- `name` (e.g. "Bergamot")
+- `subline` (italic small text under the name, e.g. "sparkling citrus")
+- `family` (Top / Heart / Base — used to group rows in the world page scent breakdown)
+- `color` (hex, used as the tint behind the icon and for the colored circle fallback)
+- `icon` (file reference — admin uploads SVG or PNG; if blank, a colored circle with the note's two-letter monogram is shown)
+- `description` (optional longer story)
+
+### How to populate
+
+1. **Settings → Custom data → Metaobjects → Scent Note** → **Add entry** for each fragrance note your worlds use. Hotel Lobby's 5 (Bergamot / Orange Blossom / Earl Grey Tea / Apricot / Vanilla) are already seeded with name + subline + family + description; admin uploads the icon files when ready.
+2. **Settings → Custom data → Metaobjects → World → [the world]** → set `scent_notes` to the ordered list of relevant scent_note entries.
+
+The scent-breakdown table on the world page groups by family automatically. The 5-up scent-notes grid on the scent PDP shows them in admin-set order.
+
+7 core worlds already exist (Hotel Lobby, Moon Bloom, Coconut Beach, Wild Flowers, Bath House, Woodland Retreat, Icy Peaks). Add the remaining 15 in **Settings → Custom data → Metaobjects → World** when ready.
 
 To create a world's storefront page: **Online Store → Pages → Add page** with handle matching the slug (e.g. `hotel-lobby`), Theme template = `world`, and set the page metafield `custom.world` to point at the right metaobject entry.
 

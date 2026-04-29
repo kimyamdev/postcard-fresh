@@ -31,6 +31,49 @@
     </div>
   </section>
 
+  {%- liquid
+    assign scent_notes = world.scent_notes.value
+    assign top_arr = ''
+    assign heart_arr = ''
+    assign base_arr = ''
+    if scent_notes
+      for n in scent_notes
+        case n.family.value
+          when 'Top'
+            if top_arr == ''
+              assign top_arr = n.name.value
+            else
+              assign top_arr = top_arr | append: ', ' | append: n.name.value
+            endif
+          when 'Heart'
+            if heart_arr == ''
+              assign heart_arr = n.name.value
+            else
+              assign heart_arr = heart_arr | append: ', ' | append: n.name.value
+            endif
+          when 'Base'
+            if base_arr == ''
+              assign base_arr = n.name.value
+            else
+              assign base_arr = base_arr | append: ', ' | append: n.name.value
+            endif
+        endcase
+      endfor
+    endif
+    if top_arr == '' and world.notes_top.value != blank
+      assign top_arr = world.notes_top.value | join: ', '
+    endif
+    if heart_arr == '' and world.notes_heart.value != blank
+      assign heart_arr = world.notes_heart.value | join: ', '
+    endif
+    if base_arr == '' and world.notes_base.value != blank
+      assign base_arr = world.notes_base.value | join: ', '
+    endif
+    assign top_arr = top_arr | default: 'Bergamot, Orange Blossom'
+    assign heart_arr = heart_arr | default: 'Earl Grey Tea, Apricot'
+    assign base_arr = base_arr | default: 'Vanilla, White Musk'
+  -%}
+
   <section class="section section--tight">
     <div class="container">
       <div class="pc-scent__head">
@@ -40,17 +83,17 @@
       <div class="pc-scent__table">
         <div class="pc-scent__row">
           <div class="h-display pc-scent__layer">Top</div>
-          <div class="pc-scent__notes">{%- if world.notes_top.value != blank -%}{{ world.notes_top.value | join: ', ' }}{%- else -%}Bergamot, Orange Blossom{%- endif -%}</div>
+          <div class="pc-scent__notes">{{ top_arr }}</div>
           <div class="pc-scent__desc">The bright doorway moment.</div>
         </div>
         <div class="pc-scent__row">
           <div class="h-display pc-scent__layer">Heart</div>
-          <div class="pc-scent__notes">{%- if world.notes_heart.value != blank -%}{{ world.notes_heart.value | join: ', ' }}{%- else -%}Earl Grey Tea, Apricot{%- endif -%}</div>
+          <div class="pc-scent__notes">{{ heart_arr }}</div>
           <div class="pc-scent__desc">Warm tea steam, soft fruit.</div>
         </div>
         <div class="pc-scent__row">
           <div class="h-display pc-scent__layer">Base</div>
-          <div class="pc-scent__notes">{%- if world.notes_base.value != blank -%}{{ world.notes_base.value | join: ', ' }}{%- else -%}Vanilla, White Musk{%- endif -%}</div>
+          <div class="pc-scent__notes">{{ base_arr }}</div>
           <div class="pc-scent__desc">The settled, skin-like finish.</div>
         </div>
         <div class="pc-scent__row pc-scent__row--last">
