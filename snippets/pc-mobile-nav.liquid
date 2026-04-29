@@ -116,7 +116,8 @@
             {%- if customer -%}MY ACCOUNT{%- else -%}SIGN IN &middot; JOIN POSTCARD{%- endif -%}
           </button>
         </div>
-        <a href="{{ routes.cart_url }}" class="pc-mn__ftr-bag" id="cart-icon-bubble-mobile" onclick="event.preventDefault(); document.querySelector('cart-drawer')?.open(); document.querySelector('.pc-mn').__x?.$data?.close && document.querySelector('.pc-mn').__x.$data.close();">
+        <a href="{{ routes.cart_url }}" class="pc-mn__ftr-bag"
+          @click.prevent="close(); document.querySelector('cart-drawer')?.open();">
           BAG &middot; <span data-pc-cart-count>{{ cart.item_count }}</span>
         </a>
       </div>
@@ -248,8 +249,8 @@
           <div class="eyebrow pc-mn__acct-out-eyebrow">Not yet a member</div>
           <div class="h-display pc-mn__acct-out-title">JOIN<br>POSTCARD.</div>
           <p class="pc-mn__acct-out-body">Earn coins on every order. Free birthday gift. First dibs on new worlds. Skip the queue at the Orchard flagship.</p>
-          <a class="btn pc-mn__acct-out-cta" href="{{ routes.account_login_url }}">CREATE ACCOUNT &rarr;</a>
-          <a class="btn btn--ghost pc-mn__acct-out-cta" href="{{ routes.account_login_url }}">SIGN IN</a>
+          <a class="btn pc-mn__acct-out-cta" href="/account">CREATE ACCOUNT &rarr;</a>
+          <a class="btn btn--ghost pc-mn__acct-out-cta" href="/account">SIGN IN</a>
 
           <div class="pc-mn__acct-out-quick">
             <div class="eyebrow">Quick access</div>
