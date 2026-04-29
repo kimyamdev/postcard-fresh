@@ -1,0 +1,212 @@
+/* Postcard — design tokens (Interim Guidelines authoritative) */
+:root {
+  --color-bg: #F8F6ED;          /* Antique White */
+  --color-bg-warm: #F2EEDD;     /* slight tint */
+  --color-ink: #212020;         /* Ink Black */
+  --color-yellow: #FFB233;      /* Vintage Yellow */
+  --color-blue: #80B1C7;        /* Dusty Blue */
+  --color-grey: #C4C5CE;        /* Sepia Grey */
+  --color-line: rgba(33, 32, 32, 0.18);
+  --color-line-soft: rgba(33, 32, 32, 0.10);
+  --color-bg-card: #FFFDF4;
+
+  /* World accents (page-level override via --world-color) */
+  --world-color: #E8C36A;       /* default Hotel Lobby */
+  --world-tint: rgba(232, 195, 106, 0.12);
+
+  --font-display: 'Special Elite', 'Courier New', monospace;
+  --font-script: 'Caveat', 'Notera 2', 'Brush Script MT', cursive;
+  --font-headline: 'Staatliches', 'Impact', 'Helvetica Neue', sans-serif;
+  --font-body: 'Inter', 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --radius-pill: 999px;
+  --radius-soft: 4px;
+  --shadow-stamp: 4px 4px 0 var(--color-ink);
+  --shadow-stamp-lg: 6px 6px 0 var(--color-ink);
+}
+
+/* World theme variants */
+.world-hotel-lobby   { --world-color: #E8C36A; --world-tint: rgba(232, 195, 106, 0.12); }
+.world-coconut-beach { --world-color: #E8B796; --world-tint: rgba(232, 183, 150, 0.14); }
+.world-bath-house    { --world-color: #B07A4E; --world-tint: rgba(176, 122, 78, 0.12); }
+.world-wild-flowers  { --world-color: #C7A8D6; --world-tint: rgba(199, 168, 214, 0.14); }
+.world-icy-peaks     { --world-color: #9CC4D6; --world-tint: rgba(156, 196, 214, 0.16); }
+.world-woodland      { --world-color: #6E7F58; --world-tint: rgba(110, 127, 88, 0.12); }
+.world-moon-bloom    { --world-color: #5C6688; --world-tint: rgba(92, 102, 136, 0.12); }
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img { max-width: 100%; display: block; }
+button { font-family: inherit; cursor: pointer; }
+a { color: inherit; }
+
+/* Type primitives */
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.78;
+}
+.h-display {
+  font-family: var(--font-headline);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+  line-height: 0.95;
+  margin: 0;
+}
+.h-typewriter {
+  font-family: var(--font-display);
+  letter-spacing: 0.01em;
+  font-weight: 400;
+  line-height: 1.15;
+  margin: 0;
+}
+.script {
+  font-family: var(--font-script);
+  font-weight: 400;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 22px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 2px solid var(--color-ink);
+  background: var(--color-yellow);
+  color: var(--color-ink);
+  text-decoration: none;
+  border-radius: 0;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  box-shadow: 3px 3px 0 var(--color-ink);
+}
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--color-ink); }
+.btn--ghost { background: transparent; }
+.btn--ink { background: var(--color-ink); color: var(--color-bg); }
+.btn--small { padding: 9px 14px; font-size: 12px; box-shadow: 2px 2px 0 var(--color-ink); }
+.btn--small:hover { box-shadow: 4px 4px 0 var(--color-ink); }
+
+.tlink {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 12px;
+  background: none;
+  border: 0;
+  border-bottom: 1.5px solid var(--color-ink);
+  padding: 4px 0;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* Stamp shape (vertical postal stamp container) */
+.stamp-frame {
+  position: relative;
+  background: var(--color-bg-card);
+  border: 1.5px solid var(--color-ink);
+  padding: 18px;
+}
+.stamp-frame::before,
+.stamp-frame::after {
+  content: '';
+  position: absolute; left: 0; right: 0; height: 10px;
+  background-image: radial-gradient(circle at 6px 5px, var(--color-bg) 4px, transparent 4.5px);
+  background-size: 12px 10px;
+  background-repeat: repeat-x;
+}
+.stamp-frame::before { top: -5px; }
+.stamp-frame::after { bottom: -5px; }
+
+.stamp-side::before,
+.stamp-side::after {
+  content: '';
+  position: absolute; top: 0; bottom: 0; width: 10px;
+  background-image: radial-gradient(circle at 5px 6px, var(--color-bg) 4px, transparent 4.5px);
+  background-size: 10px 12px;
+  background-repeat: repeat-y;
+}
+.stamp-side::before { left: -5px; }
+.stamp-side::after { right: -5px; }
+
+/* Postmark / round seal */
+.postmark {
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  border: 1.8px solid var(--color-ink);
+  border-radius: 999px;
+  width: 78px; height: 78px;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-align: center;
+  line-height: 1.1;
+  padding: 6px;
+  transform: rotate(-8deg);
+  background: transparent;
+  color: var(--color-ink);
+}
+.postmark--yellow { background: var(--color-yellow); }
+.postmark--ink { background: var(--color-ink); color: var(--color-bg); border-color: var(--color-ink); }
+
+/* Placeholder image (subtle striped) */
+.ph {
+  position: relative;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(33,32,32,0.04) 0 8px,
+      rgba(33,32,32,0.08) 8px 16px
+    ),
+    var(--color-bg-warm);
+  border: 1px solid var(--color-line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  opacity: 0.95;
+  text-align: center;
+  padding: 10px;
+  overflow: hidden;
+}
+.ph--world {
+  background:
+    radial-gradient(circle at 30% 20%, color-mix(in oklab, var(--world-color) 45%, var(--color-bg)) 0%, var(--color-bg-warm) 60%),
+    repeating-linear-gradient(135deg, rgba(33,32,32,0.04) 0 8px, rgba(33,32,32,0.08) 8px 16px);
+}
+.ph--ink { background: var(--color-ink); color: var(--color-bg); }
+.ph--yellow { background: var(--color-yellow); }
+
+/* Section spacing */
+.section { padding: 96px 0; }
+.section--tight { padding: 64px 0; }
+.container { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+.container--narrow { max-width: 880px; margin: 0 auto; padding: 0 32px; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
