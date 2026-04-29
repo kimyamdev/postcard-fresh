@@ -11,13 +11,15 @@
   if refillable
     assign stamp_family = stamp_family | append: ' &middot; Refillable'
   endif
+  assign mf_quote = product.metafields.pdp.verse_quote.value
+  assign quote = mf_quote | default: section.settings.quote
 -%}
 <section class="pc-vb">
   <div class="container pc-vb__inner">
     <div class="pc-vb__stamp">
       {% render 'stamp', name: world_name | default: 'Postcard', family: stamp_family, color: world_color, size: 'sm' %}
     </div>
-    <p class="h-typewriter pc-vb__quote">&ldquo;{{ section.settings.quote }}&rdquo;</p>
+    <p class="h-typewriter pc-vb__quote">&ldquo;{{ quote }}&rdquo;</p>
   </div>
 </section>
 

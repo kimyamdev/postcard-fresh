@@ -1,9 +1,19 @@
-{%- assign title = section.settings.title | default: 'Questions?' -%}
+{%- liquid
+  assign mf_faqs = product.metafields.pdp.faqs.value
+  assign title = section.settings.title | default: 'Questions?'
+-%}
 <section class="section section--tight">
   <div class="container">
     <h2 class="h-display pc-pdp-faq__title">{{ title }}</h2>
     <div class="pc-pdp-faq__list">
-      {%- if section.blocks.size > 0 -%}
+      {%- if mf_faqs and mf_faqs.size > 0 -%}
+        {%- for faq in mf_faqs -%}
+          <details class="pc-pdp-faq__item"{% if forloop.first %} open{% endif %}>
+            <summary class="pc-pdp-faq__q">{{ faq.question.value }}</summary>
+            <p class="pc-pdp-faq__a">{{ faq.answer.value }}</p>
+          </details>
+        {%- endfor -%}
+      {%- elsif section.blocks.size > 0 -%}
         {%- for block in section.blocks -%}
           <details class="pc-pdp-faq__item"{% if forloop.first %} open{% endif %} {{ block.shopify_attributes }}>
             <summary class="pc-pdp-faq__q">{{ block.settings.q }}</summary>
@@ -13,7 +23,7 @@
       {%- else -%}
         <details class="pc-pdp-faq__item">
           <summary class="pc-pdp-faq__q">No FAQs configured.</summary>
-          <p class="pc-pdp-faq__a">Add FAQ blocks to this section in the editor.</p>
+          <p class="pc-pdp-faq__a">Set the product&rsquo;s <code>pdp.faqs</code> metafield (list of <code>pdp_faq</code> metaobjects) or add FAQ blocks to this section.</p>
         </details>
       {%- endif -%}
     </div>
@@ -29,7 +39,7 @@
   "blocks": [
     {
       "type": "faq",
-      "name": "FAQ item",
+      "name": "FAQ item (fallback)",
       "settings": [
         { "type": "text", "id": "q", "label": "Question" },
         { "type": "textarea", "id": "a", "label": "Answer" }

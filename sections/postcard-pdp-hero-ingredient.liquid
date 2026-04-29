@@ -1,13 +1,30 @@
 {%- liquid
   assign world_color = product.metafields.postcard.world.value.accent_color.value | default: '#E8C36A'
+  assign mf_eyebrow = product.metafields.pdp.hero_eyebrow.value
+  assign mf_quote = product.metafields.pdp.hero_quote.value
+  assign mf_body = product.metafields.pdp.hero_body.value
+  assign mf_image = product.metafields.pdp.hero_image.value
+  assign mf_caption = product.metafields.pdp.hero_image_caption.value
+
+  assign eyebrow = mf_eyebrow | default: section.settings.eyebrow
+  assign quote = mf_quote | default: section.settings.quote
+  assign body = mf_body | default: section.settings.body
+  assign caption = mf_caption | default: section.settings.image_caption
 -%}
 <section class="section">
   <div class="container pc-hi__inner">
-    <div class="ph ph--world pc-hi__image" style="--world-color: {{ world_color }};"><span>{{ section.settings.image_caption }}</span></div>
+    {%- if mf_image -%}
+      {%- assign alt_text = caption | escape -%}
+      <div class="pc-hi__image-wrap">
+        {{ mf_image | image_url: width: 1200 | image_tag: alt: alt_text, class: 'pc-hi__image-real' }}
+      </div>
+    {%- else -%}
+      <div class="ph ph--world pc-hi__image" style="--world-color: {{ world_color }};"><span>{{ caption }}</span></div>
+    {%- endif -%}
     <div>
-      <div class="eyebrow">{{ section.settings.eyebrow }}</div>
-      <h2 class="h-typewriter pc-hi__quote">&ldquo;{{ section.settings.quote }}&rdquo;</h2>
-      <p class="pc-hi__body">{{ section.settings.body }}</p>
+      <div class="eyebrow">{{ eyebrow }}</div>
+      <h2 class="h-typewriter pc-hi__quote">&ldquo;{{ quote }}&rdquo;</h2>
+      <p class="pc-hi__body">{{ body }}</p>
     </div>
   </div>
 </section>
@@ -16,10 +33,10 @@
 {
   "name": "Hero ingredient",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Hero ingredient" },
-    { "type": "text", "id": "quote", "label": "Quote", "default": "A wash that smells like a garden after midnight." },
-    { "type": "textarea", "id": "body", "label": "Body", "default": "Tuberose blooms after dark — that's not romance, it's biology. We harvest at midnight when the volatile oils peak, then enfleurage them in coconut fat for six weeks. The smell that lingers on your skin after a shower is the same as a Grasse garden at 1am." },
-    { "type": "text", "id": "image_caption", "label": "Image caption", "default": "tuberose · macro at midnight" }
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow (fallback)", "default": "Hero ingredient" },
+    { "type": "text", "id": "quote", "label": "Quote (fallback)", "default": "A wash that smells like a garden after midnight." },
+    { "type": "textarea", "id": "body", "label": "Body (fallback)", "default": "Tuberose blooms after dark — that's not romance, it's biology. We harvest at midnight when the volatile oils peak, then enfleurage them in coconut fat for six weeks. The smell that lingers on your skin after a shower is the same as a Grasse garden at 1am." },
+    { "type": "text", "id": "image_caption", "label": "Image caption (fallback)", "default": "tuberose · macro at midnight" }
   ],
   "presets": [{ "name": "Hero ingredient" }]
 }

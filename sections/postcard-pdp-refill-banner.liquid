@@ -1,9 +1,17 @@
+{%- liquid
+  assign mf_eyebrow = product.metafields.pdp.refill_eyebrow.value
+  assign mf_headline = product.metafields.pdp.refill_headline.value
+  assign mf_body = product.metafields.pdp.refill_body.value
+  assign eyebrow = mf_eyebrow | default: section.settings.eyebrow
+  assign headline = mf_headline | default: section.settings.headline
+  assign body = mf_body | default: section.settings.body
+-%}
 <section class="pc-rb">
   <div class="container pc-rb__inner">
     <div>
-      <div class="eyebrow">{{ section.settings.eyebrow }}</div>
-      <h2 class="h-display pc-rb__title">{{ section.settings.headline }}</h2>
-      <p class="pc-rb__body">{{ section.settings.body }}</p>
+      <div class="eyebrow">{{ eyebrow }}</div>
+      <h2 class="h-display pc-rb__title">{{ headline }}</h2>
+      <p class="pc-rb__body">{{ body }}</p>
     </div>
     <div class="pc-rb__ctas">
       <a class="btn btn--ink" href="{{ section.settings.primary_link }}">{{ section.settings.primary_text }}</a>
@@ -16,9 +24,9 @@
 {
   "name": "Refill banner",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Refill, repeat, rejoice" },
-    { "type": "text", "id": "headline", "label": "Headline", "default": "Bring this bottle back." },
-    { "type": "textarea", "id": "body", "label": "Body", "default": "Top it up at our Orchard flagship. Less waste, same scent. Save 20% per refill." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow (fallback)", "default": "Refill, repeat, rejoice" },
+    { "type": "text", "id": "headline", "label": "Headline (fallback)", "default": "Bring this bottle back." },
+    { "type": "textarea", "id": "body", "label": "Body (fallback)", "default": "Top it up at our Orchard flagship. Less waste, same scent. Save 20% per refill." },
     { "type": "text", "id": "primary_text", "label": "Primary CTA", "default": "See the refill list →" },
     { "type": "text", "id": "primary_link", "label": "Primary link", "default": "/pages/refill" },
     { "type": "text", "id": "secondary_text", "label": "Secondary CTA", "default": "Or shop the matching refill SKU →" },

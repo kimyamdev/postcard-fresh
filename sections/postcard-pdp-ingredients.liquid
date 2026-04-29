@@ -1,3 +1,6 @@
+{%- liquid
+  assign mf_ingredients = product.metafields.pdp.ingredients.value
+-%}
 <section class="section pc-ki">
   <div class="container">
     <div class="pc-ki__head">
@@ -5,17 +8,43 @@
       <h2 class="h-display pc-ki__title">{{ section.settings.title }}</h2>
     </div>
     <div class="pc-ki__list">
-      {%- for block in section.blocks -%}
-        {%- assign rev = forloop.index | modulo: 2 -%}
-        <div class="pc-ki__row{% if rev == 0 %} pc-ki__row--reverse{% endif %}" {{ block.shopify_attributes }}>
-          <div class="ph pc-ki__image"><span>{{ block.settings.image_caption }}</span></div>
-          <div class="pc-ki__copy">
-            <div class="eyebrow">{{ block.settings.role }}</div>
-            <h3 class="h-typewriter pc-ki__name">{{ block.settings.name }}</h3>
-            <p class="pc-ki__story">{{ block.settings.story }}</p>
+      {%- if mf_ingredients and mf_ingredients.size > 0 -%}
+        {%- for ing in mf_ingredients -%}
+          {%- assign rev = forloop.index | modulo: 2 -%}
+          {%- assign ing_name = ing.name.value -%}
+          {%- assign ing_role = ing.role.value -%}
+          {%- assign ing_story = ing.story.value -%}
+          {%- assign ing_image = ing.image.value -%}
+          {%- assign ing_caption = ing.image_caption.value | default: ing_name | downcase | append: ' · macro' -%}
+          <div class="pc-ki__row{% if rev == 0 %} pc-ki__row--reverse{% endif %}">
+            {%- if ing_image -%}
+              {%- assign ing_alt = ing_caption | escape -%}
+              <div class="pc-ki__image-wrap">
+                {{ ing_image | image_url: width: 800 | image_tag: alt: ing_alt, class: 'pc-ki__image-real' }}
+              </div>
+            {%- else -%}
+              <div class="ph pc-ki__image"><span>{{ ing_caption }}</span></div>
+            {%- endif -%}
+            <div class="pc-ki__copy">
+              <div class="eyebrow">{{ ing_role }}</div>
+              <h3 class="h-typewriter pc-ki__name">{{ ing_name }}</h3>
+              <p class="pc-ki__story">{{ ing_story }}</p>
+            </div>
           </div>
-        </div>
-      {%- endfor -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for block in section.blocks -%}
+          {%- assign rev = forloop.index | modulo: 2 -%}
+          <div class="pc-ki__row{% if rev == 0 %} pc-ki__row--reverse{% endif %}" {{ block.shopify_attributes }}>
+            <div class="ph pc-ki__image"><span>{{ block.settings.image_caption }}</span></div>
+            <div class="pc-ki__copy">
+              <div class="eyebrow">{{ block.settings.role }}</div>
+              <h3 class="h-typewriter pc-ki__name">{{ block.settings.name }}</h3>
+              <p class="pc-ki__story">{{ block.settings.story }}</p>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
     </div>
   </div>
 </section>
@@ -30,7 +59,7 @@
   "blocks": [
     {
       "type": "ingredient",
-      "name": "Ingredient",
+      "name": "Ingredient (fallback)",
       "settings": [
         { "type": "text", "id": "name", "label": "Name" },
         { "type": "text", "id": "role", "label": "Role" },

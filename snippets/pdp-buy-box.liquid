@@ -10,7 +10,10 @@
   assign current = product.selected_or_first_available_variant
   assign discount_pct = discount_pct | default: 10
   assign sub_price = current.price | times: 0.9 | round
-  assign ribbon_subline = ribbon_subline | default: 'Hand & Body Wash'
+  assign mf_ribbon = product.metafields.pdp.ribbon_subline.value
+  assign ribbon_subline = mf_ribbon | default: ribbon_subline | default: 'Hand & Body Wash'
+  assign review_score = product.metafields.pdp.review_score.value | default: 4.9
+  assign review_count = product.metafields.pdp.review_count.value | default: 327
   assign demo_sizes_str = demo_sizes | default: 'Bottle 300ml,Refill 500ml,Refill 1L'
   assign demo_sizes_arr = demo_sizes_str | split: ','
   assign demo_active_index = demo_active_index | default: 2
@@ -38,7 +41,7 @@
 
   <div class="pc-pdp-buy__rating">
     <span class="pc-pdp-buy__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-    <span class="pc-pdp-buy__rating-text">4.9 &middot; 327 reviews</span>
+    <span class="pc-pdp-buy__rating-text">{{ review_score }} &middot; {{ review_count }} reviews</span>
   </div>
 
   <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data" class="pc-pdp-buy__form">

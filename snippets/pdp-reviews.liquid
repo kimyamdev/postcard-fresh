@@ -1,6 +1,8 @@
 {%- liquid
-  assign score = score | default: '4.9'
-  assign count = count | default: '327'
+  assign mf_score = product.metafields.pdp.review_score.value
+  assign mf_count = product.metafields.pdp.review_count.value
+  assign score = mf_score | default: score | default: '4.9'
+  assign count = mf_count | default: count | default: '327'
 -%}
 <section class="section pc-pdp-reviews">
   <div class="container">

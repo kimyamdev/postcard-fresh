@@ -4,7 +4,8 @@
     assign world_color_default = world.accent_color.value
   endif
   assign world_color = world_color | default: world_color_default | default: '#E8C36A'
-  assign stamp_text = stamp_text | default: 'POSTCARD<br>SG'
+  assign mf_stamp = product.metafields.pdp.gallery_stamp.value
+  assign stamp_text = mf_stamp | default: stamp_text | default: 'POSTCARD<br>SG'
 -%}
 <div class="pc-pdp-gallery">
   <div class="pc-pdp-gallery__layout">
