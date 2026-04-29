@@ -22,8 +22,9 @@
 
       <div class="pc-pdp-gallery">
         {%- if product.featured_image -%}
+          {%- assign main_alt = product.featured_image.alt | default: product.title -%}
           <div class="pc-pdp-gallery__main">
-            {{ product.featured_image | image_url: width: 1200 | image_tag: alt: product.featured_image.alt | escape, class: 'pc-pdp-gallery__img' }}
+            {{ product.featured_image | image_url: width: 1200 | image_tag: alt: main_alt, class: 'pc-pdp-gallery__img' }}
           </div>
           {%- if product.media.size > 1 -%}
             <div class="pc-pdp-gallery__thumbs">

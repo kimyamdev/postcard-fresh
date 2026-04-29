@@ -27,7 +27,8 @@
 <a class="pc-product-card" href="{{ card_url }}">
   <div class="ph ph--world pc-product-card__media" style="--world-color: {{ card_world_color }};">
     {%- if product.featured_image -%}
-      {{ product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: product.featured_image.alt | escape, class: 'pc-product-card__img' }}
+      {%- assign card_alt = product.featured_image.alt | default: product.title -%}
+      {{ product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: card_alt, class: 'pc-product-card__img' }}
     {%- else -%}
       <span style="opacity: 0.55;">product · {{ card_world }}</span>
     {%- endif -%}
