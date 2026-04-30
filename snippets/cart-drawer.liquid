@@ -24,7 +24,40 @@
     assign pct = 100
   endif
   assign sub_savings_cents = cart.original_total_price | minus: cart.total_price
+
+  comment
+    Smile VIP tier integration. Customer's tier name is read from
+    customer.metafields.smile.vip_tier_name (single-line text). The "Villa"
+    tier is the free-shipping tier — the tier badge always paints when set,
+    and the free-ship bar flips to "unlocked" mode for Villa customers.
+    PostcardConfig.villaShippingCode (set in window) optionally lets
+    postcard-cart.js auto-apply a discount code; leave blank if the merchant
+    has set up an automatic discount in Shopify Admin tied to the Smile
+    customer segment.
+  endcomment
+  assign vip_tier = customer.metafields.smile.vip_tier_name.value
+  assign is_villa = false
+  if vip_tier != blank
+    assign vip_tier_lower = vip_tier | downcase | strip
+    if vip_tier_lower == 'villa'
+      assign is_villa = true
+    endif
+  endif
+  if is_villa
+    assign remaining_cents = 0
+    assign pct = 100
+  endif
 -%}
+
+{%- if customer -%}
+  <script>
+    window.PostcardCustomer = {
+      tier: {{ vip_tier | default: '' | json }},
+      isVilla: {{ is_villa | json }},
+      villaShippingCode: window.PostcardConfig && window.PostcardConfig.villaShippingCode || ""
+    };
+  </script>
+{%- endif -%}
 
 <cart-drawer class="pc-cart-drawer drawer{% if cart == empty %} is-empty{% endif %}">
   <div id="CartDrawer-Overlay" class="pc-cart-drawer__overlay"></div>
@@ -61,6 +94,12 @@
           {%- endif -%}
         </div>
         <div class="h-display pc-cart-drawer__header-title">YOUR BAG</div>
+        {%- if vip_tier != blank -%}
+          <div class="pc-cart-drawer__tier{% if is_villa %} pc-cart-drawer__tier--villa{% endif %}" title="Smile VIP tier">
+            <span class="pc-cart-drawer__tier-dot"></span>
+            <span>{{ vip_tier | upcase }} TIER</span>
+          </div>
+        {%- endif -%}
       </div>
       <button class="pc-cart-drawer__close" type="button" onclick="this.closest('cart-drawer').close()" aria-label="Close">&times;</button>
     </div>
@@ -69,7 +108,9 @@
       <div class="pc-cart-drawer__ship{% if remaining_cents <= 0 %} pc-cart-drawer__ship--done{% endif %}">
         <div class="pc-cart-drawer__ship-row">
           <span>
-            {%- if remaining_cents <= 0 -%}
+            {%- if is_villa -%}
+              &#10003; Free shipping &middot; Villa tier perk
+            {%- elsif remaining_cents <= 0 -%}
               &#10003; Free shipping unlocked
             {%- else -%}
               {{ remaining_cents | money }} from free shipping
@@ -174,7 +215,10 @@
               <div class="pc-cart-drawer__total-row pc-cart-drawer__total-row--savings"><span>Subscription savings</span><span>&minus;{{ sub_savings_cents | money }}</span></div>
             {%- endif -%}
             <div class="pc-cart-drawer__total-row"><span>Shipping</span><span>
-              {%- if cart.total_price >= threshold_cents -%}Free{%- else -%}Calc. at checkout{%- endif -%}
+              {%- if is_villa -%}Free &middot; Villa tier
+              {%- elsif cart.total_price >= threshold_cents -%}Free
+              {%- else -%}Calc. at checkout
+              {%- endif -%}
             </span></div>
           </div>
           <div class="pc-cart-drawer__grand">

@@ -108,5 +108,33 @@
     }
   }, true);
 
-  window.PostcardCart = { addItem, updateLine, refreshDrawer, refreshBag };
+  // Smile VIP — auto-apply free-shipping discount code for Villa tier when
+  // window.PostcardCustomer.villaShippingCode is non-empty. Skipped if the
+  // merchant prefers an automatic discount tied to a customer segment.
+  let villaApplied = false;
+  async function tryApplyVillaShipping() {
+    if (villaApplied) return;
+    const c = window.PostcardCustomer;
+    if (!c || !c.isVilla || !c.villaShippingCode) return;
+    villaApplied = true;
+    try {
+      const cart = await (await fetch('/cart.js')).json();
+      if ((cart.discount_codes || []).some(d => d.code === c.villaShippingCode && d.applicable)) return;
+      await fetch('/cart/update.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ discount: c.villaShippingCode })
+      });
+      await Promise.all([refreshDrawer(), refreshBag()]);
+    } catch (e) {
+      villaApplied = false;
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', tryApplyVillaShipping);
+  } else {
+    tryApplyVillaShipping();
+  }
+
+  window.PostcardCart = { addItem, updateLine, refreshDrawer, refreshBag, tryApplyVillaShipping };
 })();

@@ -2801,6 +2801,26 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 }
 .pc-cart-drawer__header-sub { font-size: 10px; }
 .pc-cart-drawer__header-title { font-size: 22px; margin-top: 2px; }
+.pc-cart-drawer__tier {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid var(--color-ink);
+  background: var(--color-bg-card);
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.pc-cart-drawer__tier--villa { background: var(--color-yellow); }
+.pc-cart-drawer__tier-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--color-ink);
+  display: inline-block;
+}
 .pc-cart-drawer__close {
   width: 36px; height: 36px;
   border: 1.5px solid var(--color-ink);
