@@ -445,10 +445,10 @@ a.pc-product-card { cursor: pointer; }
 
 /* === Home: world of the month === */
 .pc-wotm { padding: 96px 0; transition: background 0.3s ease; }
-.pc-wotm__inner { display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; align-items: center; }
+.pc-wotm__inner { display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; align-items: stretch; }
 .pc-wotm__stamp-wrap { position: relative; isolation: isolate; display: flex; justify-content: center; align-items: center; min-height: 360px; }
 .pc-wotm__stamp-wrap > *:not(.pc-wotm__media) { position: relative; z-index: 1; }
-.pc-wotm__media { position: absolute; inset: 0; z-index: 0; overflow: hidden; border: 1.5px solid var(--color-ink); }
+.pc-wotm__media { position: absolute; left: 0; right: 0; top: var(--media-inset, 5%); bottom: var(--media-inset, 5%); z-index: 0; overflow: hidden; border: 1.5px solid var(--color-ink); }
 .pc-wotm__media-img,
 .pc-wotm__media-vid { width: 100%; height: 100%; object-fit: cover; display: block; }
 .pc-wotm__postmark-overlay { position: absolute !important; top: 0; right: 24px; transform: rotate(12deg); z-index: 2 !important; }
