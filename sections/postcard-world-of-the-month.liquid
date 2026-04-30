@@ -52,14 +52,28 @@
       {%- assign media_height = section.settings.media_height | default: 90 -%}
       {%- assign media_inset = 100 | minus: media_height | divided_by: 2 -%}
       {%- capture media_style -%}opacity: {{ media_opacity }}%; --media-inset: {{ media_inset }}%;{%- endcapture -%}
-      {%- if section.settings.media_video != blank -%}
+      {%- comment -%}
+        Resolve media in this order: section-level override → world metaobject's
+        hero_video / hero_image → nothing. Switching the World dropdown therefore
+        flips the playing video automatically; admin can still upload a different
+        video/image on this section if they want a one-off.
+      {%- endcomment -%}
+      {%- assign final_video = section.settings.media_video -%}
+      {%- if final_video == blank -%}
+        {%- assign final_video = world.hero_video.value -%}
+      {%- endif -%}
+      {%- assign final_image = section.settings.media_image -%}
+      {%- if final_image == blank -%}
+        {%- assign final_image = world.hero_image.value -%}
+      {%- endif -%}
+      {%- if final_video != blank -%}
         <div class="pc-wotm__media" style="{{ media_style }}">
-          {{ section.settings.media_video | video_tag: image_size: '1100x', autoplay: true, loop: true, muted: true, controls: false, class: 'pc-wotm__media-vid' }}
+          {{ final_video | video_tag: image_size: '1100x', autoplay: true, loop: true, muted: true, controls: false, class: 'pc-wotm__media-vid' }}
         </div>
-      {%- elsif section.settings.media_image != blank -%}
-        {%- assign media_alt = section.settings.media_image.alt | default: world_name | escape -%}
+      {%- elsif final_image != blank -%}
+        {%- assign media_alt = final_image.alt | default: world_name | escape -%}
         <div class="pc-wotm__media" style="{{ media_style }}">
-          {{ section.settings.media_image | image_url: width: 1100 | image_tag: alt: media_alt, loading: 'lazy', class: 'pc-wotm__media-img' }}
+          {{ final_image | image_url: width: 1100 | image_tag: alt: media_alt, loading: 'lazy', class: 'pc-wotm__media-img' }}
         </div>
       {%- endif -%}
       {% render 'stamp', name: world_name, family: world_family, color: world_color, size: 'lg' %}
@@ -143,9 +157,10 @@
       "info": "Name, family, accent color, and slug all flow from the world metaobject."
     },
     { "type": "range", "id": "bg_alpha", "label": "Background tint (%)", "min": 0, "max": 40, "step": 2, "default": 14, "unit": "%", "info": "How strongly the world's accent color tints the section background." },
-    { "type": "header", "content": "Stamp area media (optional)" },
-    { "type": "image_picker", "id": "media_image", "label": "Background image", "info": "Sits behind the world stamp on the left side. Stamp + 'World of the Month' postmark stay on top." },
-    { "type": "video",        "id": "media_video", "label": "Background video", "info": "Auto-plays muted + loops. Takes priority over the image if both are set." },
+    { "type": "header", "content": "Stamp area media (optional override)" },
+    { "type": "paragraph", "content": "By default this section auto-plays the picked world's Hero video (or shows its Hero image), set under Custom data → Metaobjects → World. The fields below are overrides: leave both blank to use the world's media." },
+    { "type": "image_picker", "id": "media_image", "label": "Background image (override)", "info": "Overrides the world's hero_image for this section instance only." },
+    { "type": "video",        "id": "media_video", "label": "Background video (override)", "info": "Overrides the world's hero_video. Auto-plays muted + loops. Takes priority over the image if both are set." },
     { "type": "range",        "id": "media_opacity", "label": "Media opacity", "min": 10, "max": 100, "step": 5, "default": 100, "unit": "%", "info": "Lower this to fade the image/video so the stamp + postmark read more clearly." },
     { "type": "range",        "id": "media_height",  "label": "Media height",  "min": 50, "max": 150, "step": 5, "default": 90, "unit": "%", "info": "How much of the column's vertical space the media fills. Above 100% the media bleeds into the section padding (≈full section bleed at 130–150% depending on column height). Stamp + postmark stay centered above it." },
     { "type": "select", "id": "light_badges_mode", "label": "White badge borders", "default": "auto",
