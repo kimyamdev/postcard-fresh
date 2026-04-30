@@ -1,0 +1,164 @@
+{%- liquid
+  assign world = page.metafields.custom.world.value
+  if world
+    assign world_name = world.name.value
+    assign world_family = world.family.value
+    assign world_tagline = world.tagline.value
+    assign world_color = world.accent_color.value | default: '#E8C36A'
+    assign world_slug = world.slug.value
+    assign world_theme_class = world.theme_class.value
+    assign hero_video = world.hero_video.value
+    assign hero_image = world.hero_image.value
+  endif
+
+  assign all_worlds = shop.metaobjects.world.values
+  assign total = all_worlds.size
+  assign idx = 0
+  if world
+    for w in all_worlds
+      if w.slug.value == world_slug
+        assign idx = forloop.index
+        break
+      endif
+    endfor
+  endif
+  assign idx_pad = idx | prepend: '00' | slice: -2, 2
+  assign total_pad = total | prepend: '00' | slice: -2, 2
+
+  assign from_address = section.settings.from_address
+  if from_address == blank
+    assign from_address = 'Postcard SG / Orchard, Singapore 238867'
+  endif
+  assign to_label = section.settings.to_label | default: 'TO · THE WEARER'
+  assign cta_text = section.settings.cta_text | default: 'SHOP THE WORLD →'
+  assign cta_url = section.settings.cta_url
+  if cta_url == blank
+    assign cta_url = '/collections/' | append: world_slug
+  endif
+  assign greeting = section.settings.greeting | default: 'greetings from the [world]'
+  assign greeting = greeting | replace: '[world]', world_name | downcase
+  assign body_text = section.settings.body_text | default: world_tagline | default: 'A bright, sparkling citrus opening that warms into something soft, sweet, and skin-like.'
+  assign postmark_label = section.settings.postmark_label | default: 'SINGAPORE · 2026 · POSTCARD'
+  assign flip_hint = section.settings.flip_hint | default: 'TAP TO FLIP · OR SCROLL TO READ'
+  assign watch_label = section.settings.watch_label | default: '▶ WATCH'
+  assign watch_duration = section.settings.watch_duration
+
+  assign no_total_format = section.settings.no_total_format | default: 'POSTCARD NO. [n] OF [total]'
+  assign no_total_text = no_total_format | replace: '[n]', idx_pad | replace: '[total]', total_pad
+-%}
+
+{%- if world -%}
+<section class="pc-wcard" x-data="{ videoOpen: false }">
+  <div class="container pc-wcard__container">
+
+    <div class="pc-wcard__breadcrumb">
+      <a href="{{ routes.root_url }}">HOME</a> / <a href="/pages/worlds">WORLDS</a> / <span class="pc-wcard__breadcrumb-cur">{{ world_name | upcase }}</span>
+    </div>
+
+    <div class="pc-wcard__sheet" style="--world-color: {{ world_color }};">
+
+      {%- comment -%} LEFT half — picture side {%- endcomment -%}
+      <div class="pc-wcard__left">
+        {%- if hero_image != blank -%}
+          {%- assign hero_alt = hero_image.alt | default: world_name | escape -%}
+          {{ hero_image | image_url: width: 1100 | image_tag: alt: hero_alt, loading: 'lazy', class: 'pc-wcard__left-img' }}
+        {%- endif -%}
+        <div class="pc-wcard__left-tex" aria-hidden="true"></div>
+
+        {%- if hero_video != blank -%}
+          <button type="button" class="pc-wcard__watch" @click="videoOpen = true" aria-label="Watch video">
+            <span class="pc-wcard__watch-tri">▶</span>
+            {{ watch_label }}{% if watch_duration != blank %} · {{ watch_duration }}{% endif %}
+          </button>
+        {%- endif -%}
+
+        <div class="pc-wcard__no-tag">NO. {{ idx_pad }} · {{ world_name | upcase }}</div>
+      </div>
+
+      {%- comment -%} RIGHT half — message side {%- endcomment -%}
+      <div class="pc-wcard__right">
+        <div class="pc-wcard__from">
+          <div class="eyebrow pc-wcard__from-label">FROM</div>
+          <div class="pc-wcard__from-addr">{{ from_address | newline_to_br }}</div>
+        </div>
+
+        <div class="pc-wcard__stamp-wrap">
+          <span class="postmark pc-wcard__postmark"><div>{{ postmark_label }}</div></span>
+          <div class="pc-wcard__stamp">
+            {% render 'stamp', name: world_name, family: world_family, color: world_color, size: 'sm' %}
+          </div>
+        </div>
+
+        <div class="script pc-wcard__greeting">{{ greeting }}</div>
+
+        <div class="eyebrow pc-wcard__family-line">{{ world_family }}</div>
+
+        <h1 class="h-typewriter pc-wcard__title">{{ world_name }}.</h1>
+
+        <div class="pc-wcard__rule"></div>
+
+        <div class="pc-wcard__body">{{ body_text }}</div>
+
+        <div class="pc-wcard__to">
+          <div class="eyebrow pc-wcard__to-label">{{ to_label }}</div>
+          <div class="pc-wcard__lines"><span></span><span></span><span></span></div>
+        </div>
+
+        {%- if cta_text != blank -%}
+          <a class="btn pc-wcard__cta" href="{{ cta_url }}">{{ cta_text }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="pc-wcard__foot">
+      <div class="pc-wcard__foot-no">· {{ no_total_text }} ·</div>
+      <div class="pc-wcard__foot-hint">{{ flip_hint }}</div>
+    </div>
+  </div>
+
+  {%- if hero_video != blank -%}
+    <div class="pc-wcard__modal" x-show="videoOpen" x-cloak x-transition.opacity @click.self="videoOpen = false" @keydown.escape.window="videoOpen = false">
+      <button type="button" class="pc-wcard__modal-close" @click="videoOpen = false" aria-label="Close video">&times;</button>
+      <div class="pc-wcard__modal-video" x-show="videoOpen">
+        <template x-if="videoOpen">
+          <div>
+            {{ hero_video | video_tag: image_size: '1600x', autoplay: true, loop: true, muted: false, controls: true }}
+          </div>
+        </template>
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+{%- else -%}
+<section class="section">
+  <div class="container">
+    <div class="eyebrow">Missing world</div>
+    <p>This page isn’t linked to a world metaobject yet. Edit the page and set the “World” metafield to one of the entries under Custom data → Metaobjects → World.</p>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "World page header (card)",
+  "settings": [
+    { "type": "paragraph", "content": "Pulls everything from the page's linked World metaobject (custom.world): name, family, tagline, accent color, hero image, hero video, slug. The settings below override or supplement that data." },
+    { "type": "header", "content": "Copy" },
+    { "type": "textarea", "id": "from_address",   "label": "FROM address (linebreaks preserved)", "default": "Postcard SG / Orchard\nSingapore 238867" },
+    { "type": "text",     "id": "postmark_label", "label": "Postmark label", "default": "SINGAPORE · 2026 · POSTCARD" },
+    { "type": "text",     "id": "greeting",       "label": "Script greeting", "default": "greetings from the [world]", "info": "[world] is replaced with the world's name (lowercased)." },
+    { "type": "richtext", "id": "body_text",      "label": "Body paragraph (override)", "info": "Leave blank to fall back to the world's tagline." },
+    { "type": "text",     "id": "to_label",       "label": "TO label", "default": "TO · THE WEARER" },
+    { "type": "header", "content": "Watch button (shows if hero video set)" },
+    { "type": "text",     "id": "watch_label",    "label": "Watch label", "default": "▶ WATCH" },
+    { "type": "text",     "id": "watch_duration", "label": "Duration suffix", "info": "e.g. 18s — appended after the label." },
+    { "type": "header", "content": "Shop CTA" },
+    { "type": "text",     "id": "cta_text",       "label": "CTA text", "default": "SHOP THE WORLD →" },
+    { "type": "url",      "id": "cta_url",        "label": "CTA link", "info": "Leave blank to auto-link to /collections/{world slug}." },
+    { "type": "header", "content": "Footer" },
+    { "type": "text",     "id": "no_total_format", "label": "Postcard counter format", "default": "POSTCARD NO. [n] OF [total]", "info": "[n] = this world's order in the metaobject list; [total] = total worlds." },
+    { "type": "text",     "id": "flip_hint",      "label": "Flip hint", "default": "TAP TO FLIP · OR SCROLL TO READ" }
+  ],
+  "presets": [{ "name": "World page header (card)" }]
+}
+{% endschema %}
