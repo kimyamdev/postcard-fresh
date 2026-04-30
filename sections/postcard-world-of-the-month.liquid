@@ -1,39 +1,65 @@
+{%- liquid
+  assign world_handle = section.settings.world_handle | default: 'hotel-lobby'
+  assign world = shop.metaobjects.world[world_handle]
+  assign world_name = world.name.value | default: 'Hotel Lobby'
+  assign world_slug = world.slug.value | default: 'hotel-lobby'
+  assign world_family = world.family.value | default: 'Hesperidic Gourmand'
+  assign world_color = world.accent_color.value | default: '#E8C36A'
+  assign world_theme_class = world.theme_class.value | default: 'world-hotel-lobby'
+  assign world_tagline = world.tagline.value
+
+  assign family_line = section.settings.family_line_override
+  if family_line == blank
+    if world_tagline != blank
+      assign family_line = world_family | append: ' · ' | append: world_tagline
+    else
+      assign family_line = world_family
+    endif
+  endif
+
+  assign cta_text = section.settings.cta_text
+  if cta_text == blank
+    assign cta_text = 'Visit ' | append: world_name | append: ' →'
+  endif
+
+  assign cta_url = section.settings.cta_url
+  if cta_url == blank
+    assign cta_url = '/pages/' | append: world_slug
+  endif
+-%}
 <section class="pc-wotm">
   <div class="container pc-wotm__inner">
     <div class="pc-wotm__stamp-wrap">
-      {% render 'stamp', name: 'Hotel Lobby', family: 'Hesperidic Gourmand', color: '#E8C36A', size: 'lg' %}
+      {% render 'stamp', name: world_name, family: world_family, color: world_color, size: 'lg' %}
       <span class="postmark pc-wotm__postmark-overlay">
         <div>WORLD<br>OF THE<br>MONTH</div>
       </span>
     </div>
     <div>
-      <div class="eyebrow">World deep-dive &middot; This month</div>
-      <h2 class="h-typewriter pc-wotm__title">Hotel Lobby.</h2>
-      <p class="pc-wotm__family-line">Hesperidic Gourmand &middot; A bright cup of bergamot with a soft lobby of vanilla.</p>
-      <p class="pc-wotm__body">
-        Polished. Refined. Endlessly elegant. Hotel Lobby opens with the brightness of bergamot and orange blossom, then settles into Earl Grey tea, soft vanilla and a brushed apricot warmth &mdash; like the moment you push through a revolving door into somewhere that smells looked-after.
-      </p>
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+      {%- endif -%}
+      <h2 class="h-typewriter pc-wotm__title">{{ world_name }}.</h2>
+      {%- if family_line != blank -%}
+        <p class="pc-wotm__family-line">{{ family_line }}</p>
+      {%- endif -%}
+      {%- if section.settings.body != blank -%}
+        <div class="pc-wotm__body">{{ section.settings.body }}</div>
+      {%- endif -%}
       <div class="pc-wotm__formats">
-        <div class="pc-wotm__format">
-          <div class="ph ph--world world-hotel-lobby pc-wotm__format-img"></div>
-          Anywhere Fragrance
-        </div>
-        <div class="pc-wotm__format">
-          <div class="ph ph--world world-hotel-lobby pc-wotm__format-img"></div>
-          Hand &amp; Body Wash
-        </div>
-        <div class="pc-wotm__format">
-          <div class="ph ph--world world-hotel-lobby pc-wotm__format-img"></div>
-          Deodorant Spray
-        </div>
-        <div class="pc-wotm__format">
-          <div class="ph ph--world world-hotel-lobby pc-wotm__format-img"></div>
-          Reed Diffuser
-        </div>
+        {%- assign formats_csv = section.settings.formats | default: 'Anywhere Fragrance,Hand & Body Wash,Deodorant Spray,Reed Diffuser' -%}
+        {%- assign formats = formats_csv | split: ',' -%}
+        {%- for fmt in formats -%}
+          {%- assign fmt_label = fmt | strip -%}
+          <div class="pc-wotm__format">
+            <div class="ph ph--world {{ world_theme_class }} pc-wotm__format-img" style="--world-color: {{ world_color }};"></div>
+            {{ fmt_label }}
+          </div>
+        {%- endfor -%}
       </div>
-      {%- if section.settings.cta_text != blank -%}
+      {%- if cta_text != blank -%}
         <div class="pc-wotm__cta">
-          <a class="btn" href="{{ section.settings.cta_url | default: '/pages/hotel-lobby' }}">{{ section.settings.cta_text }}</a>
+          <a class="btn" href="{{ cta_url }}">{{ cta_text }}</a>
         </div>
       {%- endif -%}
     </div>
@@ -44,9 +70,25 @@
 {
   "name": "World of the Month",
   "settings": [
+    { "type": "select", "id": "world_handle", "label": "World", "default": "hotel-lobby",
+      "options": [
+        { "value": "hotel-lobby",      "label": "Hotel Lobby" },
+        { "value": "moon-bloom",       "label": "Moon Bloom" },
+        { "value": "coconut-beach",    "label": "Coconut Beach" },
+        { "value": "wild-flowers",     "label": "Wild Flowers" },
+        { "value": "bath-house",       "label": "Bath House" },
+        { "value": "woodland-retreat", "label": "Woodland Retreat" },
+        { "value": "icy-peaks",        "label": "Icy Peaks" }
+      ],
+      "info": "Name, family, accent color, and slug all flow from the world metaobject."
+    },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "World deep-dive · This month" },
+    { "type": "text", "id": "family_line_override", "label": "Family line override", "info": "Leave blank to auto-compose as 'Family · tagline' from the world metaobject." },
+    { "type": "richtext", "id": "body", "label": "Body paragraph", "default": "<p>Polished. Refined. Endlessly elegant. Hotel Lobby opens with the brightness of bergamot and orange blossom, then settles into Earl Grey tea, soft vanilla and a brushed apricot warmth — like the moment you push through a revolving door into somewhere that smells looked-after.</p>" },
+    { "type": "text", "id": "formats", "label": "Format chips (CSV)", "default": "Anywhere Fragrance,Hand & Body Wash,Deodorant Spray,Reed Diffuser" },
     { "type": "header", "content": "CTA" },
-    { "type": "text", "id": "cta_text", "label": "Text", "default": "Visit Hotel Lobby →" },
-    { "type": "url",  "id": "cta_url",  "label": "Link" }
+    { "type": "text", "id": "cta_text", "label": "Text", "info": "Leave blank to auto-fill with 'Visit {world} →'" },
+    { "type": "url",  "id": "cta_url",  "label": "Link", "info": "Leave blank to auto-link to /pages/{world slug}" }
   ],
   "presets": [{ "name": "World of the Month" }]
 }
