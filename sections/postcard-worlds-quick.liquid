@@ -1,35 +1,41 @@
+{%- liquid
+  assign worlds_all = shop.metaobjects.world.values
+  assign visible_count = section.settings.visible_count | default: 7
+  assign total_count = worlds_all.size
+  assign more_count = total_count | minus: visible_count
+  if more_count < 0
+    assign more_count = 0
+  endif
+-%}
 <section class="pc-worlds-quick">
   <div class="container">
     <div class="pc-worlds-quick__head">
       <div>
-        <div class="eyebrow">Six destinations</div>
-        <h2 class="h-display pc-worlds-quick__title">Pick a world.</h2>
+        {%- if section.settings.eyebrow != blank -%}
+          <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="h-display pc-worlds-quick__title">{{ section.settings.title }}</h2>
+        {%- endif -%}
       </div>
-      <a class="tlink" href="/pages/worlds">See all 22 worlds &rarr;</a>
+      {%- if section.settings.see_all_text != blank -%}
+        {%- assign see_all_text = section.settings.see_all_text | replace: '[count]', total_count -%}
+        <a class="tlink" href="{{ section.settings.see_all_url | default: '/pages/worlds' }}">{{ see_all_text }}</a>
+      {%- endif -%}
     </div>
     <div class="pc-worlds-quick__grid">
-      <a class="pc-worlds-quick__cell" href="/pages/hotel-lobby">
-        {% render 'stamp', name: 'Hotel Lobby', family: 'Hesperidic Gourmand', color: '#E8C36A', size: 'md' %}
-      </a>
-      <a class="pc-worlds-quick__cell" href="/pages/moon-bloom">
-        {% render 'stamp', name: 'Moon Bloom', family: 'White Floral', color: '#5C6688', size: 'md' %}
-      </a>
-      <a class="pc-worlds-quick__cell" href="/pages/coconut-beach">
-        {% render 'stamp', name: 'Coconut Beach', family: 'Tropical Fruity Gourmand', color: '#E8B796', size: 'md' %}
-      </a>
-      <a class="pc-worlds-quick__cell" href="/pages/wild-flowers">
-        {% render 'stamp', name: 'Wild Flowers', family: 'Aromatic Foug&egrave;re', color: '#C7A8D6', size: 'md' %}
-      </a>
-      <a class="pc-worlds-quick__cell" href="/pages/bath-house">
-        {% render 'stamp', name: 'Bath House', family: 'Woody Oriental', color: '#B07A4E', size: 'md' %}
-      </a>
-      <a class="pc-worlds-quick__cell" href="/pages/woodland-retreat">
-        {% render 'stamp', name: 'Woodland Retreat', family: 'Aromatic Herbal', color: '#6E7F58', size: 'md' %}
-      </a>
-      <a class="pc-worlds-quick__cell" href="/pages/icy-peaks">
-        {% render 'stamp', name: 'Icy Peaks', family: 'Fresh Aromatic', color: '#9CC4D6', size: 'md' %}
-      </a>
-      <a class="pc-worlds-quick__more" href="/pages/worlds">+16 more<br>worlds &rarr;</a>
+      {%- for w in worlds_all limit: visible_count -%}
+        {%- assign slug = w.slug.value | default: w.handle -%}
+        {%- assign accent = w.accent_color.value | default: '#E8C36A' -%}
+        {%- assign family = w.family.value -%}
+        <a class="pc-worlds-quick__cell" href="/pages/{{ slug }}">
+          {% render 'stamp', name: w.name.value, family: family, color: accent, size: 'md' %}
+        </a>
+      {%- endfor -%}
+      {%- if more_count > 0 and section.settings.more_text != blank -%}
+        {%- assign more_text = section.settings.more_text | replace: '[count]', more_count -%}
+        <a class="pc-worlds-quick__more" href="{{ section.settings.more_url | default: '/pages/worlds' }}">{{ more_text }}</a>
+      {%- endif -%}
     </div>
   </div>
 </section>
@@ -37,7 +43,18 @@
 {% schema %}
 {
   "name": "Postcard Worlds Quick",
-  "settings": [],
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Six destinations" },
+    { "type": "text", "id": "title",   "label": "Title",   "default": "Pick a world." },
+    { "type": "header", "content": "Grid" },
+    { "type": "range", "id": "visible_count", "label": "Worlds to show", "min": 3, "max": 12, "step": 1, "default": 7, "info": "Reads from your World metaobjects in admin order." },
+    { "type": "header", "content": "See all link" },
+    { "type": "text", "id": "see_all_text", "label": "Text", "default": "See all [count] worlds →", "info": "[count] is replaced with total world count" },
+    { "type": "url",  "id": "see_all_url",  "label": "Link" },
+    { "type": "header", "content": "+more tile (overflow)" },
+    { "type": "text", "id": "more_text", "label": "Text", "default": "+[count] more<br>worlds →", "info": "[count] is replaced with overflow count" },
+    { "type": "url",  "id": "more_url",  "label": "Link" }
+  ],
   "presets": [{ "name": "Postcard Worlds Quick" }]
 }
 {% endschema %}

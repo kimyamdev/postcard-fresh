@@ -31,9 +31,11 @@
           Reed Diffuser
         </div>
       </div>
-      <div class="pc-wotm__cta">
-        <a class="btn" href="/pages/hotel-lobby">Visit Hotel Lobby &rarr;</a>
-      </div>
+      {%- if section.settings.cta_text != blank -%}
+        <div class="pc-wotm__cta">
+          <a class="btn" href="{{ section.settings.cta_url | default: '/pages/hotel-lobby' }}">{{ section.settings.cta_text }}</a>
+        </div>
+      {%- endif -%}
     </div>
   </div>
 </section>
@@ -41,7 +43,11 @@
 {% schema %}
 {
   "name": "World of the Month",
-  "settings": [],
+  "settings": [
+    { "type": "header", "content": "CTA" },
+    { "type": "text", "id": "cta_text", "label": "Text", "default": "Visit Hotel Lobby →" },
+    { "type": "url",  "id": "cta_url",  "label": "Link" }
+  ],
   "presets": [{ "name": "World of the Month" }]
 }
 {% endschema %}

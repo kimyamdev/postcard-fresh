@@ -1,43 +1,72 @@
+{%- liquid
+  assign p1 = section.settings.product_1
+  assign p2 = section.settings.product_2
+  assign p3 = section.settings.product_3
+-%}
 <section class="section">
   <div class="container">
     <div class="pc-bestsellers__intro">
-      <div class="eyebrow">The classics</div>
-      <h2 class="h-display pc-bestsellers__title">Postcards we send most often.</h2>
-      <p class="pc-bestsellers__lede">The ones you keep coming back to. Sent 1,200+ times in the last 95 days.</p>
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="h-display pc-bestsellers__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+      {%- if section.settings.lede != blank -%}
+        <p class="pc-bestsellers__lede">{{ section.settings.lede }}</p>
+      {%- endif -%}
     </div>
     <div class="pc-bestsellers__grid">
-      {% render 'product-card',
-        name: 'Hotel Lobby Anywhere Fragrance',
-        world: 'Hotel Lobby',
-        world_color: '#E8C36A',
-        price: '$42',
-        badge: '#1 bestseller',
-        href: '/products/hotel-lobby-anywhere-fragrance' %}
-      {% render 'product-card',
-        name: 'Moon Bloom Anywhere Fragrance',
-        world: 'Moon Bloom',
-        world_color: '#5C6688',
-        price: '$42',
-        badge: 'Top sleep scent',
-        href: '/products/moon-bloom-anywhere-fragrance' %}
-      {% render 'product-card',
-        name: 'Hotel Lobby Hand & Body Wash',
-        world: 'Hotel Lobby',
-        world_color: '#E8C36A',
-        price: '$32',
-        badge: 'Refillable',
-        href: '/products/hotel-lobby-hand-and-body-wash' %}
+      {%- if p1 -%}
+        {%- assign w1 = p1.metafields.postcard.world.value -%}
+        {%- assign w1_color = w1.accent_color.value | default: '#E8C36A' -%}
+        {%- assign w1_name = w1.name.value | default: '' -%}
+        {%- assign p1_price = p1.price | money -%}
+        {% render 'product-card', name: p1.title, world: w1_name, world_color: w1_color, price: p1_price, badge: section.settings.badge_1, href: p1.url %}
+      {%- endif -%}
+      {%- if p2 -%}
+        {%- assign w2 = p2.metafields.postcard.world.value -%}
+        {%- assign w2_color = w2.accent_color.value | default: '#E8C36A' -%}
+        {%- assign w2_name = w2.name.value | default: '' -%}
+        {%- assign p2_price = p2.price | money -%}
+        {% render 'product-card', name: p2.title, world: w2_name, world_color: w2_color, price: p2_price, badge: section.settings.badge_2, href: p2.url %}
+      {%- endif -%}
+      {%- if p3 -%}
+        {%- assign w3 = p3.metafields.postcard.world.value -%}
+        {%- assign w3_color = w3.accent_color.value | default: '#E8C36A' -%}
+        {%- assign w3_name = w3.name.value | default: '' -%}
+        {%- assign p3_price = p3.price | money -%}
+        {% render 'product-card', name: p3.title, world: w3_name, world_color: w3_color, price: p3_price, badge: section.settings.badge_3, href: p3.url %}
+      {%- endif -%}
     </div>
-    <div class="pc-bestsellers__more">
-      <a class="tlink" href="/collections/bestsellers">See all bestsellers &rarr;</a>
-    </div>
+    {%- if section.settings.see_all_text != blank -%}
+      <div class="pc-bestsellers__more">
+        <a class="tlink" href="{{ section.settings.see_all_url | default: '/collections/bestsellers' }}">{{ section.settings.see_all_text }}</a>
+      </div>
+    {%- endif -%}
   </div>
 </section>
 
 {% schema %}
 {
   "name": "Postcard Bestsellers",
-  "settings": [],
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The classics" },
+    { "type": "text", "id": "title",   "label": "Title",   "default": "Postcards we send most often." },
+    { "type": "text", "id": "lede",    "label": "Lede",    "default": "The ones you keep coming back to. Sent 1,200+ times in the last 95 days." },
+    { "type": "header", "content": "Product 1" },
+    { "type": "product", "id": "product_1", "label": "Product" },
+    { "type": "text",    "id": "badge_1",   "label": "Badge", "default": "#1 bestseller" },
+    { "type": "header", "content": "Product 2" },
+    { "type": "product", "id": "product_2", "label": "Product" },
+    { "type": "text",    "id": "badge_2",   "label": "Badge", "default": "Top sleep scent" },
+    { "type": "header", "content": "Product 3" },
+    { "type": "product", "id": "product_3", "label": "Product" },
+    { "type": "text",    "id": "badge_3",   "label": "Badge", "default": "Refillable" },
+    { "type": "header", "content": "See all link" },
+    { "type": "text", "id": "see_all_text", "label": "Text", "default": "See all bestsellers →" },
+    { "type": "url",  "id": "see_all_url",  "label": "Link" }
+  ],
   "presets": [{ "name": "Postcard Bestsellers" }]
 }
 {% endschema %}

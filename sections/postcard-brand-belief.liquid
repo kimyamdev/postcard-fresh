@@ -10,9 +10,11 @@
       <p class="pc-belief__p">
         We mix, pour, and pack everything ourselves. Refill where we can. Source from local farms and distilleries. Painstakingly fuss until it&rsquo;s perfect.
       </p>
-      <div class="pc-belief__cta">
-        <a class="tlink" href="/pages/about">Read our story &rarr;</a>
-      </div>
+      {%- if section.settings.cta_text != blank -%}
+        <div class="pc-belief__cta">
+          <a class="tlink" href="{{ section.settings.cta_url | default: '/pages/about' }}">{{ section.settings.cta_text }}</a>
+        </div>
+      {%- endif -%}
     </div>
   </div>
 </section>
@@ -20,7 +22,11 @@
 {% schema %}
 {
   "name": "Postcard Brand Belief",
-  "settings": [],
+  "settings": [
+    { "type": "header", "content": "CTA" },
+    { "type": "text", "id": "cta_text", "label": "Text", "default": "Read our story →" },
+    { "type": "url",  "id": "cta_url",  "label": "Link" }
+  ],
   "presets": [{ "name": "Postcard Brand Belief" }]
 }
 {% endschema %}

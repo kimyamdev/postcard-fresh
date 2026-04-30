@@ -19,8 +19,12 @@
       Life supplies, forever yours. From our beauty kitchen in Singapore to your bathroom shelf.
     </p>
     <div class="pc-hero__ctas">
-      <a class="btn" href="/pages/worlds">Find your world &rarr;</a>
-      <a class="tlink" href="/collections/bestsellers">Shop bestsellers</a>
+      {%- if section.settings.primary_cta_text != blank -%}
+        <a class="btn" href="{{ section.settings.primary_cta_url | default: '/pages/worlds' }}">{{ section.settings.primary_cta_text }}</a>
+      {%- endif -%}
+      {%- if section.settings.secondary_cta_text != blank -%}
+        <a class="tlink" href="{{ section.settings.secondary_cta_url | default: '/collections/bestsellers' }}">{{ section.settings.secondary_cta_text }}</a>
+      {%- endif -%}
     </div>
     <div class="script pc-hero__sig">wish you were here.</div>
   </div>
@@ -29,7 +33,14 @@
 {% schema %}
 {
   "name": "Postcard Hero",
-  "settings": [],
+  "settings": [
+    { "type": "header", "content": "Primary CTA" },
+    { "type": "text", "id": "primary_cta_text", "label": "Text", "default": "Find your world →" },
+    { "type": "url",  "id": "primary_cta_url",  "label": "Link" },
+    { "type": "header", "content": "Secondary CTA" },
+    { "type": "text", "id": "secondary_cta_text", "label": "Text", "default": "Shop bestsellers" },
+    { "type": "url",  "id": "secondary_cta_url",  "label": "Link" }
+  ],
   "presets": [{ "name": "Postcard Hero" }]
 }
 {% endschema %}

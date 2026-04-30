@@ -35,8 +35,12 @@
       </div>
     </div>
     <div class="pc-refill__ctas">
-      <a class="btn" href="/pages/refill">See the refill list &rarr;</a>
-      <a class="tlink" href="/pages/flagship">Find a store &rarr;</a>
+      {%- if section.settings.primary_cta_text != blank -%}
+        <a class="btn" href="{{ section.settings.primary_cta_url | default: '/pages/refill' }}">{{ section.settings.primary_cta_text }}</a>
+      {%- endif -%}
+      {%- if section.settings.secondary_cta_text != blank -%}
+        <a class="tlink" href="{{ section.settings.secondary_cta_url | default: '/pages/flagship' }}">{{ section.settings.secondary_cta_text }}</a>
+      {%- endif -%}
     </div>
   </div>
 </section>
@@ -44,7 +48,14 @@
 {% schema %}
 {
   "name": "Postcard Refill Trio",
-  "settings": [],
+  "settings": [
+    { "type": "header", "content": "Primary CTA" },
+    { "type": "text", "id": "primary_cta_text", "label": "Text", "default": "See the refill list →" },
+    { "type": "url",  "id": "primary_cta_url",  "label": "Link" },
+    { "type": "header", "content": "Secondary CTA" },
+    { "type": "text", "id": "secondary_cta_text", "label": "Text", "default": "Find a store →" },
+    { "type": "url",  "id": "secondary_cta_url",  "label": "Link" }
+  ],
   "presets": [{ "name": "Postcard Refill Trio" }]
 }
 {% endschema %}
