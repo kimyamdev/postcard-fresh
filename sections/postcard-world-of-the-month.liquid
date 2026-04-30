@@ -35,6 +35,16 @@
 >
   <div class="container pc-wotm__inner">
     <div class="pc-wotm__stamp-wrap">
+      {%- if section.settings.media_video != blank -%}
+        <div class="pc-wotm__media">
+          {{ section.settings.media_video | video_tag: image_size: '1100x', autoplay: true, loop: true, muted: true, controls: false, class: 'pc-wotm__media-vid' }}
+        </div>
+      {%- elsif section.settings.media_image != blank -%}
+        {%- assign media_alt = section.settings.media_image.alt | default: world_name | escape -%}
+        <div class="pc-wotm__media">
+          {{ section.settings.media_image | image_url: width: 1100 | image_tag: alt: media_alt, loading: 'lazy', class: 'pc-wotm__media-img' }}
+        </div>
+      {%- endif -%}
       {% render 'stamp', name: world_name, family: world_family, color: world_color, size: 'lg' %}
       <span class="postmark pc-wotm__postmark-overlay">
         <div>WORLD<br>OF THE<br>MONTH</div>
@@ -116,6 +126,9 @@
       "info": "Name, family, accent color, and slug all flow from the world metaobject."
     },
     { "type": "range", "id": "bg_alpha", "label": "Background tint (%)", "min": 0, "max": 40, "step": 2, "default": 14, "unit": "%", "info": "How strongly the world's accent color tints the section background." },
+    { "type": "header", "content": "Stamp area media (optional)" },
+    { "type": "image_picker", "id": "media_image", "label": "Background image", "info": "Sits behind the world stamp on the left side. Stamp + 'World of the Month' postmark stay on top." },
+    { "type": "video",        "id": "media_video", "label": "Background video", "info": "Auto-plays muted + loops. Takes priority over the image if both are set." },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "World deep-dive · This month" },
     { "type": "text", "id": "family_line_override", "label": "Family line override", "info": "Leave blank to auto-compose as 'Family · tagline' from the world metaobject." },
     { "type": "richtext", "id": "body", "label": "Body paragraph", "default": "<p>Polished. Refined. Endlessly elegant. Hotel Lobby opens with the brightness of bergamot and orange blossom, then settles into Earl Grey tea, soft vanilla and a brushed apricot warmth — like the moment you push through a revolving door into somewhere that smells looked-after.</p>" },
