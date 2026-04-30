@@ -4,7 +4,14 @@
   {{ section.settings.announcement_html }}
 </div>
 
-<header class="pc-header" x-data="{ shopOpen: false, worldsOpen: false }">
+<header class="pc-header" x-data="{
+    shopOpen: false, shopT: null,
+    worldsOpen: false, worldsT: null,
+    openShop()    { clearTimeout(this.shopT);   this.shopOpen = true; },
+    closeShop()   { clearTimeout(this.shopT);   this.shopT   = setTimeout(() => this.shopOpen   = false, 200); },
+    openWorlds()  { clearTimeout(this.worldsT); this.worldsOpen = true; },
+    closeWorlds() { clearTimeout(this.worldsT); this.worldsT = setTimeout(() => this.worldsOpen = false, 200); }
+  }">
   <button class="pc-mobile-hamburger" type="button" aria-label="Open menu"
     @click="window.dispatchEvent(new CustomEvent('pc-mobile-nav:open'))">
     <span></span><span></span><span></span>
@@ -14,9 +21,9 @@
   </a>
 
   <nav class="pc-nav">
-    <span class="pc-nav__trigger" @mouseenter="shopOpen = true" @mouseleave="shopOpen = false">
-      <button class="pc-nav__link" type="button" @focus="shopOpen = true">Shop &#9662;</button>
-      <div class="pc-megamenu pc-megamenu--shop" x-show="shopOpen" x-cloak @mouseenter="shopOpen = true" @mouseleave="shopOpen = false">
+    <span class="pc-nav__trigger" @mouseenter="openShop()" @mouseleave="closeShop()">
+      <button class="pc-nav__link" type="button" @focus="openShop()" @blur="closeShop()">Shop &#9662;</button>
+      <div class="pc-megamenu pc-megamenu--shop" x-show="shopOpen" x-cloak @mouseenter="openShop()" @mouseleave="closeShop()">
         <div>
           <div class="eyebrow pc-megamenu__col-title">By need</div>
           <a class="pc-megamenu__item" href="/collections/body">Body</a>
@@ -54,9 +61,9 @@
       </div>
     </span>
 
-    <span class="pc-nav__trigger" @mouseenter="worldsOpen = true" @mouseleave="worldsOpen = false">
-      <button class="pc-nav__link" type="button" @focus="worldsOpen = true">Worlds &#9662;</button>
-      <div class="pc-megamenu pc-megamenu--worlds" x-show="worldsOpen" x-cloak @mouseenter="worldsOpen = true" @mouseleave="worldsOpen = false">
+    <span class="pc-nav__trigger" @mouseenter="openWorlds()" @mouseleave="closeWorlds()">
+      <button class="pc-nav__link" type="button" @focus="openWorlds()" @blur="closeWorlds()">Worlds &#9662;</button>
+      <div class="pc-megamenu pc-megamenu--worlds" x-show="worldsOpen" x-cloak @mouseenter="openWorlds()" @mouseleave="closeWorlds()">
         <div class="pc-worlds-grid">
           <a class="pc-world-row" href="/pages/hotel-lobby">
             <div class="pc-world-row__chip" style="background: #E8C36A;">HL</div>
