@@ -33,7 +33,7 @@
   assign cta_text = section.settings.cta_text | default: 'SHOP THE WORLD →'
   assign cta_url = section.settings.cta_url
   if cta_url == blank
-    assign cta_url = '/collections/' | append: world_slug
+    assign cta_url = '/pages/' | append: world_slug
   endif
   assign greeting = section.settings.greeting | default: 'greetings from the [world]'
   assign greeting = greeting | replace: '[world]', world_name | downcase
@@ -156,7 +156,7 @@
     { "type": "text",     "id": "watch_duration", "label": "Duration suffix", "info": "e.g. 18s — appended after the label." },
     { "type": "header", "content": "Shop CTA" },
     { "type": "text",     "id": "cta_text",       "label": "CTA text", "default": "SHOP THE WORLD →" },
-    { "type": "url",      "id": "cta_url",        "label": "CTA link", "info": "Leave blank to auto-link to /collections/{world slug}." },
+    { "type": "url",      "id": "cta_url",        "label": "CTA link", "info": "Leave blank to auto-link to /pages/{world slug}." },
     { "type": "header", "content": "Footer" },
     { "type": "text",     "id": "no_total_format", "label": "Postcard counter format", "default": "POSTCARD NO. [n] OF [total]", "info": "[n] = this world's order in the metaobject list; [total] = total worlds." },
     { "type": "text",     "id": "flip_hint",      "label": "Flip hint", "default": "TAP TO FLIP · OR SCROLL TO READ" }
