@@ -522,9 +522,27 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 .pc-world-hero {
   background: linear-gradient(180deg, var(--world-tint) 0%, var(--color-bg) 100%);
   padding: 80px 0 96px;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
 }
-.pc-world-hero__inner { display: grid; grid-template-columns: 1fr 1.4fr; gap: 64px; align-items: center; }
-.pc-world-hero__stamp { display: flex; justify-content: flex-start; }
+.pc-world-hero__inner { display: grid; grid-template-columns: 1fr 1.4fr; gap: 64px; align-items: stretch; }
+.pc-world-hero__stamp { position: relative; isolation: isolate; display: flex; justify-content: center; align-items: center; min-height: 360px; }
+.pc-world-hero__stamp > *:not(.pc-world-hero__media) { position: relative; z-index: 1; }
+.pc-world-hero__media { position: absolute; left: 0; right: 0; top: var(--media-inset, 5%); bottom: var(--media-inset, 5%); z-index: 0; overflow: hidden; border: 1.5px solid var(--color-ink); }
+.pc-world-hero__media-img,
+.pc-world-hero__media-vid { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* White-badge variant for the world page hero (paired with dark hero media) */
+.pc-world-hero--light .pc-world-hero__stamp .stamp-frame { border-color: var(--color-bg); }
+.pc-world-hero--light .pc-world-hero__stamp .pc-stamp__frame { box-shadow: 3px 3px 0 var(--color-bg); }
+.pc-world-hero--light .pc-world-hero__stamp .pc-stamp__inner { border-color: rgba(248, 246, 237, 0.55); }
+.pc-world-hero--light .pc-world-hero__stamp .pc-stamp__monogram { border-color: var(--color-bg); }
+.pc-world-hero--light .pc-world-hero__stamp .pc-stamp,
+.pc-world-hero--light .pc-world-hero__stamp .pc-stamp__name,
+.pc-world-hero--light .pc-world-hero__stamp .pc-stamp__family,
+.pc-world-hero--light .pc-world-hero__stamp .pc-stamp__label { color: var(--color-bg); }
+.pc-world-hero--light .pc-world-hero__media { border-color: var(--color-bg); }
 .pc-world-hero__title { font-size: clamp(64px, 8vw, 96px); margin-top: 8px; }
 .pc-world-hero__lede { margin-top: 24px; font-size: 20px; line-height: 1.55; max-width: 540px; }
 .pc-world-hero__sig { margin-top: 24px; font-size: 36px; transform: rotate(-2deg); opacity: 0.6; }
