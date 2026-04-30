@@ -147,7 +147,7 @@
     { "type": "image_picker", "id": "media_image", "label": "Background image", "info": "Sits behind the world stamp on the left side. Stamp + 'World of the Month' postmark stay on top." },
     { "type": "video",        "id": "media_video", "label": "Background video", "info": "Auto-plays muted + loops. Takes priority over the image if both are set." },
     { "type": "range",        "id": "media_opacity", "label": "Media opacity", "min": 10, "max": 100, "step": 5, "default": 100, "unit": "%", "info": "Lower this to fade the image/video so the stamp + postmark read more clearly." },
-    { "type": "range",        "id": "media_height",  "label": "Media height",  "min": 50, "max": 100, "step": 5, "default": 90, "unit": "%", "info": "How much of the section's vertical space the media fills. Stamp + postmark stay vertically centered above it." },
+    { "type": "range",        "id": "media_height",  "label": "Media height",  "min": 50, "max": 150, "step": 5, "default": 90, "unit": "%", "info": "How much of the column's vertical space the media fills. Above 100% the media bleeds into the section padding (≈full section bleed at 130–150% depending on column height). Stamp + postmark stay centered above it." },
     { "type": "select", "id": "light_badges_mode", "label": "White badge borders", "default": "auto",
       "options": [
         { "value": "auto", "label": "Auto — follow the world's setting" },

@@ -444,7 +444,7 @@ a.pc-product-card { cursor: pointer; }
 .pc-bestsellers__more { margin-top: 32px; }
 
 /* === Home: world of the month === */
-.pc-wotm { padding: 96px 0; transition: background 0.3s ease; }
+.pc-wotm { padding: 96px 0; transition: background 0.3s ease; position: relative; isolation: isolate; overflow: hidden; }
 .pc-wotm__inner { display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; align-items: stretch; }
 .pc-wotm__stamp-wrap { position: relative; isolation: isolate; display: flex; justify-content: center; align-items: center; min-height: 360px; }
 .pc-wotm__stamp-wrap > *:not(.pc-wotm__media) { position: relative; z-index: 1; }
