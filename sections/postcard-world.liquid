@@ -162,18 +162,26 @@
       <div class="eyebrow">If you love {{ world_name }}</div>
       <h2 class="h-display pc-world-neighbours__title">&hellip;send yourself a postcard from:</h2>
       <div class="pc-neighbours">
-        {%- assign neighbours = 'moon-bloom|Moon Bloom|White Floral|#5C6688|Quiet jasmine, the night air, a window left open.~~coconut-beach|Coconut Beach|Tropical Fruity Gourmand|#E8B796|Sunscreen, salt skin, a coconut split open on the sand.~~wild-flowers|Wild Flowers|Aromatic Foug&egrave;re|#C7A8D6|A meadow walk after light rain.~~bath-house|Bath House|Woody Oriental|#B07A4E|Cedar steam, warm tile, the slow exhale.' | split: '~~' -%}
+        {%- assign all_worlds = shop.metaobjects.world.values -%}
         {%- assign shown = 0 -%}
-        {%- for entry in neighbours -%}
+        {%- for w in all_worlds -%}
           {%- if shown >= 3 -%}{%- break -%}{%- endif -%}
-          {%- assign p = entry | split: '|' -%}
-          {%- if p[0] != world_slug -%}
-            <a class="pc-neighbour" href="/pages/{{ p[0] }}">
-              {% render 'stamp', name: p[1], family: p[2], color: p[3], size: 'sm' %}
+          {%- assign w_slug = w.slug.value | default: w.handle -%}
+          {%- if w_slug != world_slug -%}
+            {%- assign w_name = w.name.value -%}
+            {%- assign w_family = w.family.value -%}
+            {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
+            {%- assign w_tagline = w.tagline.value -%}
+            <a class="pc-neighbour" href="/pages/{{ w_slug }}">
+              {% render 'stamp', name: w_name, family: w_family, color: w_color, size: 'sm' %}
               <div>
-                <div class="eyebrow">{{ p[2] }}</div>
-                <h3 class="h-display pc-neighbour__name">{{ p[1] }}</h3>
-                <p class="pc-neighbour__tag">{{ p[4] }}</p>
+                {%- if w_family != blank -%}
+                  <div class="eyebrow">{{ w_family }}</div>
+                {%- endif -%}
+                <h3 class="h-display pc-neighbour__name">{{ w_name }}</h3>
+                {%- if w_tagline != blank -%}
+                  <p class="pc-neighbour__tag">{{ w_tagline }}</p>
+                {%- endif -%}
               </div>
             </a>
             {%- assign shown = shown | plus: 1 -%}
