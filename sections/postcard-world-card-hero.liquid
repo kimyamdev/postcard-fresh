@@ -57,16 +57,18 @@
 
     <div class="pc-wcard__sheet" style="--world-color: {{ world_color }};">
 
-      {%- comment -%} LEFT half — picture side {%- endcomment -%}
+      {%- comment -%} LEFT half — picture side (video auto-plays inline if set) {%- endcomment -%}
       <div class="pc-wcard__left">
-        {%- if hero_image != blank -%}
+        {%- if hero_video != blank -%}
+          {{ hero_video | video_tag: image_size: '1100x', autoplay: true, loop: true, muted: true, controls: false, class: 'pc-wcard__left-vid' }}
+        {%- elsif hero_image != blank -%}
           {%- assign hero_alt = hero_image.alt | default: world_name | escape -%}
           {{ hero_image | image_url: width: 1100 | image_tag: alt: hero_alt, loading: 'lazy', class: 'pc-wcard__left-img' }}
         {%- endif -%}
         <div class="pc-wcard__left-tex" aria-hidden="true"></div>
 
-        {%- if hero_video != blank -%}
-          <button type="button" class="pc-wcard__watch" @click="videoOpen = true" aria-label="Watch video">
+        {%- if hero_video != blank and watch_label != blank -%}
+          <button type="button" class="pc-wcard__watch" @click="videoOpen = true" aria-label="Watch video with sound">
             <span class="pc-wcard__watch-tri">▶</span>
             {{ watch_label }}{% if watch_duration != blank %} · {{ watch_duration }}{% endif %}
           </button>

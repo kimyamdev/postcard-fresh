@@ -3513,12 +3513,14 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   isolation: isolate;
   min-height: 540px;
 }
-.pc-wcard__left-img {
+.pc-wcard__left-img,
+.pc-wcard__left-vid {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
   z-index: 0;
 }
+.pc-wcard__left-vid { pointer-events: none; }
 .pc-wcard__left-tex {
   position: absolute; inset: 0;
   z-index: 1;
