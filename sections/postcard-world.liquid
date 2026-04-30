@@ -7,7 +7,13 @@
     assign world_color = world.accent_color.value
     assign world_theme_class = world.theme_class.value
     assign world_slug = world.slug.value
+    assign world_wear_notes = world.wear_notes_quote.value
+    assign world_character_label = world.character_label.value
+    assign world_character_desc = world.character_description.value
   endif
+  assign world_wear_notes = world_wear_notes | default: 'Bright then cozy. Reads as unisex but leans slightly feminine. Year-round, but especially welcoming in cooler weather.'
+  assign world_character_label = world_character_label | default: 'Unisex · Year-round'
+  assign world_character_desc = world_character_desc | default: 'Reads polite, leans cosy in cooler weather.'
 -%}
 
 {%- if world -%}
@@ -98,8 +104,8 @@
         </div>
         <div class="pc-scent__row pc-scent__row--last">
           <div class="h-display pc-scent__layer">Character</div>
-          <div class="pc-scent__notes">Unisex &middot; Year-round</div>
-          <div class="pc-scent__desc">Reads polite, leans cosy in cooler weather.</div>
+          <div class="pc-scent__notes">{{ world_character_label }}</div>
+          <div class="pc-scent__desc">{{ world_character_desc }}</div>
         </div>
       </div>
     </div>
@@ -109,7 +115,7 @@
     <div class="container--narrow pc-world-quote__inner">
       <span class="postmark pc-world-quote__pm"><div>WEAR<br>NOTES</div></span>
       <p class="h-typewriter pc-world-quote__text">
-        &ldquo;Bright then cozy. Reads as unisex but leans slightly feminine. Year-round, but especially welcoming in cooler weather.&rdquo;
+        &ldquo;{{ world_wear_notes }}&rdquo;
       </p>
     </div>
   </section>
