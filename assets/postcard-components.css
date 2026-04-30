@@ -452,6 +452,11 @@ a.pc-product-card { cursor: pointer; }
 .pc-wotm__media-img,
 .pc-wotm__media-vid { width: 100%; height: 100%; object-fit: cover; display: block; }
 .pc-wotm__postmark-overlay { position: absolute !important; top: 0; right: 24px; transform: rotate(12deg); z-index: 2 !important; }
+
+/* White-badge variant for use over dark media */
+.pc-wotm--light .pc-wotm__stamp-wrap .stamp-frame { border-color: var(--color-bg); }
+.pc-wotm--light .pc-wotm__stamp-wrap .postmark { border-color: var(--color-bg); color: var(--color-bg); background: transparent; }
+.pc-wotm--light .pc-wotm__media { border-color: var(--color-bg); }
 .pc-wotm__title { font-size: 64px; margin-top: 8px; }
 .pc-wotm__family-line { font-family: var(--font-display); margin-top: 12px; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.7; }
 .pc-wotm__body { margin-top: 24px; font-size: 17px; line-height: 1.65; max-width: 540px; }
