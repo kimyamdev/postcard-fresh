@@ -455,6 +455,13 @@ a.pc-product-card { cursor: pointer; }
 
 /* White-badge variant for use over dark media */
 .pc-wotm--light .pc-wotm__stamp-wrap .stamp-frame { border-color: var(--color-bg); }
+.pc-wotm--light .pc-wotm__stamp-wrap .pc-stamp__frame { box-shadow: 3px 3px 0 var(--color-bg); }
+.pc-wotm--light .pc-wotm__stamp-wrap .pc-stamp__inner { border-color: rgba(248, 246, 237, 0.55); }
+.pc-wotm--light .pc-wotm__stamp-wrap .pc-stamp__monogram { border-color: var(--color-bg); }
+.pc-wotm--light .pc-wotm__stamp-wrap .pc-stamp,
+.pc-wotm--light .pc-wotm__stamp-wrap .pc-stamp__name,
+.pc-wotm--light .pc-wotm__stamp-wrap .pc-stamp__family,
+.pc-wotm--light .pc-wotm__stamp-wrap .pc-stamp__label { color: var(--color-bg); }
 .pc-wotm--light .pc-wotm__stamp-wrap .postmark { border-color: var(--color-bg); color: var(--color-bg); background: transparent; }
 .pc-wotm--light .pc-wotm__media { border-color: var(--color-bg); }
 .pc-wotm__title { font-size: 64px; margin-top: 8px; }
