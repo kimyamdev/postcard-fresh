@@ -444,7 +444,7 @@ a.pc-product-card { cursor: pointer; }
 .pc-bestsellers__more { margin-top: 32px; }
 
 /* === Home: world of the month === */
-.pc-wotm { background: linear-gradient(180deg, #F2EAD0 0%, var(--color-bg) 100%); padding: 96px 0; }
+.pc-wotm { padding: 96px 0; transition: background 0.3s ease; }
 .pc-wotm__inner { display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; align-items: center; }
 .pc-wotm__stamp-wrap { position: relative; display: flex; justify-content: center; }
 .pc-wotm__postmark-overlay { position: absolute; top: 0; right: 24px; transform: rotate(12deg); }
@@ -452,8 +452,11 @@ a.pc-product-card { cursor: pointer; }
 .pc-wotm__family-line { font-family: var(--font-display); margin-top: 12px; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.7; }
 .pc-wotm__body { margin-top: 24px; font-size: 17px; line-height: 1.65; max-width: 540px; }
 .pc-wotm__formats { margin-top: 32px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-.pc-wotm__format { border: 1px solid var(--color-line); padding: 12px; font-family: var(--font-display); font-size: 12px; line-height: 1.3; }
-.pc-wotm__format-img { aspect-ratio: 1/1; margin-bottom: 10px; }
+.pc-wotm__format { border: 1px solid var(--color-line); padding: 12px; font-family: var(--font-display); font-size: 12px; line-height: 1.3; display: block; text-decoration: none; color: inherit; transition: border-color 0.15s ease, transform 0.15s ease; }
+a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(-2px); }
+.pc-wotm__format-img { aspect-ratio: 1/1; margin-bottom: 10px; overflow: hidden; }
+.pc-wotm__format-pic { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pc-wotm__format-label { display: block; }
 .pc-wotm__cta { margin-top: 32px; }
 
 /* === Home: refill trio === */

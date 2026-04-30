@@ -26,8 +26,13 @@
   if cta_url == blank
     assign cta_url = '/pages/' | append: world_slug
   endif
+
+  assign bg_alpha = section.settings.bg_alpha | default: 14
 -%}
-<section class="pc-wotm">
+<section
+  class="pc-wotm"
+  style="--world-color: {{ world_color }}; --world-bg-alpha: {{ bg_alpha }}%; background: color-mix(in srgb, {{ world_color }} {{ bg_alpha }}%, transparent);"
+>
   <div class="container pc-wotm__inner">
     <div class="pc-wotm__stamp-wrap">
       {% render 'stamp', name: world_name, family: world_family, color: world_color, size: 'lg' %}
@@ -46,17 +51,45 @@
       {%- if section.settings.body != blank -%}
         <div class="pc-wotm__body">{{ section.settings.body }}</div>
       {%- endif -%}
-      <div class="pc-wotm__formats">
-        {%- assign formats_csv = section.settings.formats | default: 'Anywhere Fragrance,Hand & Body Wash,Deodorant Spray,Reed Diffuser' -%}
-        {%- assign formats = formats_csv | split: ',' -%}
-        {%- for fmt in formats -%}
-          {%- assign fmt_label = fmt | strip -%}
-          <div class="pc-wotm__format">
-            <div class="ph ph--world {{ world_theme_class }} pc-wotm__format-img" style="--world-color: {{ world_color }};"></div>
-            {{ fmt_label }}
-          </div>
-        {%- endfor -%}
-      </div>
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="pc-wotm__formats">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'format' -%}
+              {%- assign p = block.settings.product -%}
+              {%- assign label = block.settings.label_override -%}
+              {%- if label == blank -%}
+                {%- assign label = p.title | default: 'Format' -%}
+              {%- endif -%}
+              {%- assign url = block.settings.link -%}
+              {%- if url == blank -%}
+                {%- assign url = p.url -%}
+              {%- endif -%}
+              {%- assign img = block.settings.image -%}
+              {%- if img == blank -%}
+                {%- assign img = p.featured_image -%}
+              {%- endif -%}
+              {%- if url != blank -%}
+                <a class="pc-wotm__format" href="{{ url }}" {{ block.shopify_attributes }}>
+              {%- else -%}
+                <div class="pc-wotm__format" {{ block.shopify_attributes }}>
+              {%- endif -%}
+                <div class="ph ph--world {{ world_theme_class }} pc-wotm__format-img" style="--world-color: {{ world_color }};">
+                  {%- if img -%}
+                    {{ img | image_url: width: 200 | image_tag: alt: '', loading: 'lazy', class: 'pc-wotm__format-pic' }}
+                  {%- endif -%}
+                </div>
+                <span class="pc-wotm__format-label">{{ label }}</span>
+              {%- if url != blank -%}
+                </a>
+              {%- else -%}
+                </div>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
       {%- if cta_text != blank -%}
         <div class="pc-wotm__cta">
           <a class="btn" href="{{ cta_url }}">{{ cta_text }}</a>
@@ -82,14 +115,31 @@
       ],
       "info": "Name, family, accent color, and slug all flow from the world metaobject."
     },
+    { "type": "range", "id": "bg_alpha", "label": "Background tint (%)", "min": 0, "max": 40, "step": 2, "default": 14, "unit": "%", "info": "How strongly the world's accent color tints the section background." },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "World deep-dive · This month" },
     { "type": "text", "id": "family_line_override", "label": "Family line override", "info": "Leave blank to auto-compose as 'Family · tagline' from the world metaobject." },
     { "type": "richtext", "id": "body", "label": "Body paragraph", "default": "<p>Polished. Refined. Endlessly elegant. Hotel Lobby opens with the brightness of bergamot and orange blossom, then settles into Earl Grey tea, soft vanilla and a brushed apricot warmth — like the moment you push through a revolving door into somewhere that smells looked-after.</p>" },
-    { "type": "text", "id": "formats", "label": "Format chips (CSV)", "default": "Anywhere Fragrance,Hand & Body Wash,Deodorant Spray,Reed Diffuser" },
     { "type": "header", "content": "CTA" },
     { "type": "text", "id": "cta_text", "label": "Text", "info": "Leave blank to auto-fill with 'Visit {world} →'" },
     { "type": "url",  "id": "cta_url",  "label": "Link", "info": "Leave blank to auto-link to /pages/{world slug}" }
   ],
-  "presets": [{ "name": "World of the Month" }]
+  "blocks": [
+    { "type": "format", "name": "Format chip", "settings": [
+      { "type": "product",      "id": "product",        "label": "Product",         "info": "Optional. If set, label/image/link auto-fill from this product. Leave blank to use manual fields below." },
+      { "type": "text",         "id": "label_override", "label": "Label override" },
+      { "type": "image_picker", "id": "image",          "label": "Image override" },
+      { "type": "url",          "id": "link",           "label": "Link override" }
+    ] }
+  ],
+  "max_blocks": 8,
+  "presets": [{
+    "name": "World of the Month",
+    "blocks": [
+      { "type": "format", "settings": { "label_override": "Anywhere Fragrance" } },
+      { "type": "format", "settings": { "label_override": "Hand & Body Wash" } },
+      { "type": "format", "settings": { "label_override": "Deodorant Spray" } },
+      { "type": "format", "settings": { "label_override": "Reed Diffuser" } }
+    ]
+  }]
 }
 {% endschema %}

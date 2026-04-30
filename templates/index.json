@@ -14,7 +14,14 @@
     },
     "world_of_the_month": {
       "type": "postcard-world-of-the-month",
-      "settings": {}
+      "settings": {},
+      "blocks": {
+        "f1": { "type": "format", "settings": { "label_override": "Anywhere Fragrance" } },
+        "f2": { "type": "format", "settings": { "label_override": "Hand & Body Wash" } },
+        "f3": { "type": "format", "settings": { "label_override": "Deodorant Spray" } },
+        "f4": { "type": "format", "settings": { "label_override": "Reed Diffuser" } }
+      },
+      "block_order": ["f1", "f2", "f3", "f4"]
     },
     "refill_trio": {
       "type": "postcard-refill-trio",
