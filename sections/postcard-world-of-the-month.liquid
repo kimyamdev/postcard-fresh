@@ -29,7 +29,15 @@
 
   assign bg_alpha = section.settings.bg_alpha | default: 14
   assign media_opacity = section.settings.media_opacity | default: 100
-  assign light_badges = section.settings.light_badges
+
+  assign light_badges_mode = section.settings.light_badges_mode | default: 'auto'
+  assign light_badges = false
+  if light_badges_mode == 'on'
+    assign light_badges = true
+  elsif light_badges_mode == 'auto'
+    assign light_badges = world.light_badges.value
+  endif
+
   assign section_class = 'pc-wotm'
   if light_badges
     assign section_class = section_class | append: ' pc-wotm--light'
@@ -136,7 +144,14 @@
     { "type": "image_picker", "id": "media_image", "label": "Background image", "info": "Sits behind the world stamp on the left side. Stamp + 'World of the Month' postmark stay on top." },
     { "type": "video",        "id": "media_video", "label": "Background video", "info": "Auto-plays muted + loops. Takes priority over the image if both are set." },
     { "type": "range",        "id": "media_opacity", "label": "Media opacity", "min": 10, "max": 100, "step": 5, "default": 100, "unit": "%", "info": "Lower this to fade the image/video so the stamp + postmark read more clearly." },
-    { "type": "checkbox",     "id": "light_badges",  "label": "White badge borders", "default": false, "info": "Flip the stamp frame + 'World of the Month' postmark borders to white. Use when the media is dark." },
+    { "type": "select", "id": "light_badges_mode", "label": "White badge borders", "default": "auto",
+      "options": [
+        { "value": "auto", "label": "Auto — follow the world's setting" },
+        { "value": "on",   "label": "Force on" },
+        { "value": "off",  "label": "Force off" }
+      ],
+      "info": "Each world metaobject has its own 'Light badges' field — set it once per world for dark media. Use Force on/off only as a per-instance override."
+    },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "World deep-dive · This month" },
     { "type": "text", "id": "family_line_override", "label": "Family line override", "info": "Leave blank to auto-compose as 'Family · tagline' from the world metaobject." },
     { "type": "richtext", "id": "body", "label": "Body paragraph", "default": "<p>Polished. Refined. Endlessly elegant. Hotel Lobby opens with the brightness of bergamot and orange blossom, then settles into Earl Grey tea, soft vanilla and a brushed apricot warmth — like the moment you push through a revolving door into somewhere that smells looked-after.</p>" },
