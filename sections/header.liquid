@@ -1,5 +1,25 @@
 {{ 'postcard-components.css' | asset_url | stylesheet_tag }}
 
+{%- liquid
+  assign show_shop = section.settings.show_shop
+  assign show_worlds = section.settings.show_worlds
+  assign worlds_limit = section.settings.worlds_limit | default: 7
+
+  assign all_worlds = shop.metaobjects.world.values
+  assign worlds_total = all_worlds.size
+
+  assign see_all_text = section.settings.worlds_see_all_text | default: 'See all [count] worlds →'
+  assign see_all_text = see_all_text | replace: '[count]', worlds_total
+
+  assign has_shop_items = false
+  for b in section.blocks
+    if b.type == 'shop_item'
+      assign has_shop_items = true
+      break
+    endif
+  endfor
+-%}
+
 <div class="pc-announce">
   {{ section.settings.announcement_html }}
 </div>
@@ -21,115 +41,95 @@
   </a>
 
   <nav class="pc-nav">
-    <span class="pc-nav__trigger" @mouseenter="openShop()" @mouseleave="closeShop()">
-      <button class="pc-nav__link" type="button" @focus="openShop()" @blur="closeShop()">Shop &#9662;</button>
-      <div class="pc-megamenu pc-megamenu--shop" x-show="shopOpen" x-cloak @mouseenter="openShop()" @mouseleave="closeShop()">
-        <div>
-          <div class="eyebrow pc-megamenu__col-title">By need</div>
-          <a class="pc-megamenu__item" href="/collections/body">Body</a>
-          <a class="pc-megamenu__item" href="/collections/hair">Hair</a>
-          <a class="pc-megamenu__item" href="/collections/face">Face</a>
-          <a class="pc-megamenu__item" href="/collections/deodorants">Deodorants</a>
-          <a class="pc-megamenu__item" href="/collections/home-fragrance">Home Fragrance</a>
-          <a class="pc-megamenu__item" href="/collections/lip-and-hand">Lip &amp; Hand</a>
-          <a class="pc-megamenu__item" href="/collections/pet">Pet</a>
-          <a class="pc-megamenu__item" href="/collections/kids">Kids</a>
-          <a class="pc-megamenu__item" href="/collections/gifts">Gifts</a>
-          <a class="pc-megamenu__item" href="/collections/accessories">Accessories</a>
+    {%- if show_shop and has_shop_items -%}
+      <span class="pc-nav__trigger" @mouseenter="openShop()" @mouseleave="closeShop()">
+        <button class="pc-nav__link" type="button" @focus="openShop()" @blur="closeShop()">{{ section.settings.shop_label | default: 'Shop' }} &#9662;</button>
+        <div class="pc-megamenu pc-megamenu--shop" x-show="shopOpen" x-cloak @mouseenter="openShop()" @mouseleave="closeShop()">
+          {%- for col_num in (1..4) -%}
+            {%- assign col_title = '' -%}
+            {%- case col_num -%}
+              {%- when 1 -%}{%- assign col_title = section.settings.shop_col1_title -%}
+              {%- when 2 -%}{%- assign col_title = section.settings.shop_col2_title -%}
+              {%- when 3 -%}{%- assign col_title = section.settings.shop_col3_title -%}
+              {%- when 4 -%}{%- assign col_title = section.settings.shop_col4_title -%}
+            {%- endcase -%}
+            {%- assign col_has_items = false -%}
+            {%- for b in section.blocks -%}
+              {%- if b.type == 'shop_item' and b.settings.column == col_num -%}
+                {%- assign col_has_items = true -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if col_has_items or col_title != blank -%}
+              <div>
+                {%- if col_title != blank -%}
+                  <div class="eyebrow pc-megamenu__col-title">{{ col_title }}</div>
+                {%- endif -%}
+                {%- for b in section.blocks -%}
+                  {%- if b.type == 'shop_item' and b.settings.column == col_num -%}
+                    <a class="pc-megamenu__item" href="{{ b.settings.url }}" {{ b.shopify_attributes }}>{{ b.settings.text }}</a>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
         </div>
-        <div>
-          <div class="eyebrow pc-megamenu__col-title">Bestsellers</div>
-          <a class="pc-megamenu__item" href="/products/hotel-lobby-anywhere-fragrance">Hotel Lobby Anywhere Fragrance</a>
-          <a class="pc-megamenu__item" href="/pages/pick-and-mix">Pick &amp; Mix</a>
-          <a class="pc-megamenu__item" href="/collections/discovery-sets">Discovery sets</a>
-          <a class="pc-megamenu__item" href="/products/hotel-lobby-travel-box">Hotel Lobby Travel Box</a>
-        </div>
-        <div>
-          <div class="eyebrow pc-megamenu__col-title">New &amp; limited</div>
-          <a class="pc-megamenu__item" href="/collections/postcard-x-sojao">POSTCARD x SOJAO</a>
-          <a class="pc-megamenu__item" href="/collections/postcard-x-esse">POSTCARD x ESSE</a>
-          <a class="pc-megamenu__item" href="/collections/postcard-x-anya-active">POSTCARD x Anya Active</a>
-          <a class="pc-megamenu__item" href="/collections/seasonal">Seasonal</a>
-        </div>
-        <div>
-          <div class="eyebrow pc-megamenu__col-title">Custom</div>
-          <a class="pc-megamenu__item" href="/pages/pick-and-mix">Pick &amp; Mix</a>
-          <a class="pc-megamenu__item" href="/pages/custom-hand-and-body-wash">Custom Hand &amp; Body Wash</a>
-          <a class="pc-megamenu__item" href="/pages/custom-shampoo">Custom Shampoo</a>
-          <a class="pc-megamenu__item" href="/pages/custom-conditioner">Custom Conditioner</a>
-        </div>
-      </div>
-    </span>
+      </span>
+    {%- endif -%}
 
-    <span class="pc-nav__trigger" @mouseenter="openWorlds()" @mouseleave="closeWorlds()">
-      <button class="pc-nav__link" type="button" @focus="openWorlds()" @blur="closeWorlds()">Worlds &#9662;</button>
-      <div class="pc-megamenu pc-megamenu--worlds" x-show="worldsOpen" x-cloak @mouseenter="openWorlds()" @mouseleave="closeWorlds()">
-        <div class="pc-worlds-grid">
-          <a class="pc-world-row" href="/pages/hotel-lobby">
-            <div class="pc-world-row__chip" style="background: #E8C36A;">HL</div>
-            <div>
-              <div class="pc-world-row__name">Hotel Lobby</div>
-              <div class="pc-world-row__family">Hesperidic Gourmand</div>
-            </div>
-          </a>
-          <a class="pc-world-row" href="/pages/moon-bloom">
-            <div class="pc-world-row__chip" style="background: #5C6688;">MB</div>
-            <div>
-              <div class="pc-world-row__name">Moon Bloom</div>
-              <div class="pc-world-row__family">White Floral</div>
-            </div>
-          </a>
-          <a class="pc-world-row" href="/pages/coconut-beach">
-            <div class="pc-world-row__chip" style="background: #E8B796;">CB</div>
-            <div>
-              <div class="pc-world-row__name">Coconut Beach</div>
-              <div class="pc-world-row__family">Tropical Fruity Gourmand</div>
-            </div>
-          </a>
-          <a class="pc-world-row" href="/pages/wild-flowers">
-            <div class="pc-world-row__chip" style="background: #C7A8D6;">WF</div>
-            <div>
-              <div class="pc-world-row__name">Wild Flowers</div>
-              <div class="pc-world-row__family">Aromatic Foug&egrave;re</div>
-            </div>
-          </a>
-          <a class="pc-world-row" href="/pages/bath-house">
-            <div class="pc-world-row__chip" style="background: #B07A4E;">BH</div>
-            <div>
-              <div class="pc-world-row__name">Bath House</div>
-              <div class="pc-world-row__family">Woody Oriental</div>
-            </div>
-          </a>
-          <a class="pc-world-row" href="/pages/woodland-retreat">
-            <div class="pc-world-row__chip" style="background: #6E7F58;">WR</div>
-            <div>
-              <div class="pc-world-row__name">Woodland Retreat</div>
-              <div class="pc-world-row__family">Aromatic Herbal</div>
-            </div>
-          </a>
-          <a class="pc-world-row" href="/pages/icy-peaks">
-            <div class="pc-world-row__chip" style="background: #9CC4D6;">IP</div>
-            <div>
-              <div class="pc-world-row__name">Icy Peaks</div>
-              <div class="pc-world-row__family">Fresh Aromatic</div>
-            </div>
-          </a>
+    {%- if show_worlds and worlds_total > 0 -%}
+      <span class="pc-nav__trigger" @mouseenter="openWorlds()" @mouseleave="closeWorlds()">
+        <button class="pc-nav__link" type="button" @focus="openWorlds()" @blur="closeWorlds()">{{ section.settings.worlds_label | default: 'Worlds' }} &#9662;</button>
+        <div class="pc-megamenu pc-megamenu--worlds" x-show="worldsOpen" x-cloak @mouseenter="openWorlds()" @mouseleave="closeWorlds()">
+          <div class="pc-worlds-grid">
+            {%- for w in all_worlds limit: worlds_limit -%}
+              {%- assign w_slug = w.slug.value | default: w.handle -%}
+              {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
+              {%- assign w_name = w.name.value -%}
+              {%- assign w_family = w.family.value -%}
+              {%- assign words = w_name | split: ' ' -%}
+              {%- assign initials = '' -%}
+              {%- for word in words limit: 2 -%}
+                {%- assign first_letter = word | slice: 0, 1 | upcase -%}
+                {%- assign initials = initials | append: first_letter -%}
+              {%- endfor -%}
+              <a class="pc-world-row" href="/pages/{{ w_slug }}">
+                <div class="pc-world-row__chip" style="background: {{ w_color }};">{{ initials }}</div>
+                <div>
+                  <div class="pc-world-row__name">{{ w_name }}</div>
+                  {%- if w_family != blank -%}
+                    <div class="pc-world-row__family">{{ w_family }}</div>
+                  {%- endif -%}
+                </div>
+              </a>
+            {%- endfor -%}
+          </div>
+          {%- if section.settings.worlds_see_all_url != blank -%}
+            <a class="tlink" href="{{ section.settings.worlds_see_all_url }}" style="display: inline-block; margin-top: 18px;">{{ see_all_text }}</a>
+          {%- endif -%}
         </div>
-        <a class="tlink" href="/pages/worlds" style="display: inline-block; margin-top: 18px;">See all 22 worlds &rarr;</a>
-      </div>
-    </span>
+      </span>
+    {%- endif -%}
 
-    <a class="pc-nav__link" href="/pages/refill"{% if request.path contains '/pages/refill' %} aria-current="page"{% endif %}>Refill</a>
-    <a class="pc-nav__link" href="/pages/subscriptions"{% if request.path contains '/pages/subscriptions' %} aria-current="page"{% endif %}>Subscribe</a>
-    <a class="pc-nav__link" href="/pages/membership"{% if request.path contains '/pages/membership' %} aria-current="page"{% endif %}>Members</a>
-    <a class="pc-nav__link" href="/pages/about"{% if request.path contains '/pages/about' %} aria-current="page"{% endif %}>About</a>
-    <a class="pc-nav__link" href="/pages/corporate"{% if request.path contains '/pages/corporate' %} aria-current="page"{% endif %}>Corporate</a>
+    {%- for b in section.blocks -%}
+      {%- if b.type == 'nav_link' -%}
+        {%- assign is_current = false -%}
+        {%- if b.settings.url != blank and request.path == b.settings.url -%}
+          {%- assign is_current = true -%}
+        {%- endif -%}
+        <a class="pc-nav__link" href="{{ b.settings.url }}"{% if is_current %} aria-current="page"{% endif %} {{ b.shopify_attributes }}>{{ b.settings.text }}</a>
+      {%- endif -%}
+    {%- endfor -%}
   </nav>
 
   <div class="pc-utility">
-    <a class="pc-utility__link" href="{{ routes.search_url }}">Search</a>
-    <a class="pc-utility__link" href="{{ routes.account_url }}">Account</a>
-    <a class="pc-bag" id="cart-icon-bubble" href="{{ routes.cart_url }}">Bag &middot; <span data-pc-cart-count>{{ cart.item_count }}</span></a>
+    {%- if section.settings.show_search -%}
+      <a class="pc-utility__link" href="{{ routes.search_url }}">{{ section.settings.search_label | default: 'Search' }}</a>
+    {%- endif -%}
+    {%- if section.settings.show_account -%}
+      <a class="pc-utility__link" href="{{ routes.account_url }}">{{ section.settings.account_label | default: 'Account' }}</a>
+    {%- endif -%}
+    <a class="pc-bag" id="cart-icon-bubble" href="{{ routes.cart_url }}">{{ section.settings.bag_label | default: 'Bag' }} &middot; <span data-pc-cart-count>{{ cart.item_count }}</span></a>
   </div>
 </header>
 
@@ -137,12 +137,85 @@
 {
   "name": "Header",
   "settings": [
+    { "type": "html", "id": "announcement_html", "label": "Announcement bar HTML", "default": "Free SG shipping over $80 &middot; Refill at our Orchard flagship &middot; <span class=\"pc-announce__accent\">Postcards in your inbox &rarr;</span>" },
+
+    { "type": "header", "content": "Shop dropdown" },
+    { "type": "checkbox", "id": "show_shop", "label": "Show Shop dropdown", "default": true, "info": "Hidden automatically when there are no Shop link blocks." },
+    { "type": "text", "id": "shop_label", "label": "Trigger label", "default": "Shop" },
+    { "type": "text", "id": "shop_col1_title", "label": "Column 1 title", "default": "By need" },
+    { "type": "text", "id": "shop_col2_title", "label": "Column 2 title", "default": "Bestsellers" },
+    { "type": "text", "id": "shop_col3_title", "label": "Column 3 title", "default": "New & limited" },
+    { "type": "text", "id": "shop_col4_title", "label": "Column 4 title", "default": "Custom" },
+
+    { "type": "header", "content": "Worlds dropdown" },
+    { "type": "checkbox", "id": "show_worlds", "label": "Show Worlds dropdown", "default": true, "info": "Auto-sourced from World metaobject entries." },
+    { "type": "text", "id": "worlds_label", "label": "Trigger label", "default": "Worlds" },
+    { "type": "range", "id": "worlds_limit", "label": "Worlds to show", "min": 4, "max": 12, "step": 1, "default": 7 },
+    { "type": "text", "id": "worlds_see_all_text", "label": "See-all link text", "default": "See all [count] worlds →", "info": "[count] is replaced with total worlds." },
+    { "type": "url",  "id": "worlds_see_all_url",  "label": "See-all link URL" },
+
+    { "type": "header", "content": "Utility row" },
+    { "type": "checkbox", "id": "show_search",  "label": "Show Search link",  "default": true },
+    { "type": "text",     "id": "search_label", "label": "Search label", "default": "Search" },
+    { "type": "checkbox", "id": "show_account", "label": "Show Account link", "default": true },
+    { "type": "text",     "id": "account_label","label": "Account label","default": "Account" },
+    { "type": "text",     "id": "bag_label",    "label": "Bag label",    "default": "Bag" }
+  ],
+  "blocks": [
     {
-      "type": "html",
-      "id": "announcement_html",
-      "label": "Announcement bar HTML",
-      "default": "Free SG shipping over $80 &middot; Refill at our Orchard flagship &middot; <span class=\"pc-announce__accent\">Postcards in your inbox &rarr;</span>"
+      "type": "shop_item",
+      "name": "Shop dropdown link",
+      "settings": [
+        { "type": "range", "id": "column", "label": "Column", "min": 1, "max": 4, "step": 1, "default": 1 },
+        { "type": "text",  "id": "text",   "label": "Text" },
+        { "type": "url",   "id": "url",    "label": "Link" }
+      ]
+    },
+    {
+      "type": "nav_link",
+      "name": "Top-level nav link",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text" },
+        { "type": "url",  "id": "url",  "label": "Link" }
+      ]
     }
-  ]
+  ],
+  "max_blocks": 50,
+  "default": {
+    "settings": {},
+    "blocks": [
+      { "type": "shop_item", "settings": { "column": 1, "text": "Body", "url": "/collections/body" } },
+      { "type": "shop_item", "settings": { "column": 1, "text": "Hair", "url": "/collections/hair" } },
+      { "type": "shop_item", "settings": { "column": 1, "text": "Face", "url": "/collections/face" } },
+      { "type": "shop_item", "settings": { "column": 1, "text": "Deodorants", "url": "/collections/deodorants" } },
+      { "type": "shop_item", "settings": { "column": 1, "text": "Home Fragrance", "url": "/collections/home-fragrance" } },
+      { "type": "shop_item", "settings": { "column": 1, "text": "Lip & Hand", "url": "/collections/lip-and-hand" } },
+      { "type": "shop_item", "settings": { "column": 1, "text": "Pet", "url": "/collections/pet" } },
+      { "type": "shop_item", "settings": { "column": 1, "text": "Kids", "url": "/collections/kids" } },
+      { "type": "shop_item", "settings": { "column": 1, "text": "Gifts", "url": "/collections/gifts" } },
+      { "type": "shop_item", "settings": { "column": 1, "text": "Accessories", "url": "/collections/accessories" } },
+
+      { "type": "shop_item", "settings": { "column": 2, "text": "Hotel Lobby Anywhere Fragrance", "url": "/products/hotel-lobby-anywhere-fragrance" } },
+      { "type": "shop_item", "settings": { "column": 2, "text": "Pick & Mix", "url": "/pages/pick-and-mix" } },
+      { "type": "shop_item", "settings": { "column": 2, "text": "Discovery sets", "url": "/collections/discovery-sets" } },
+      { "type": "shop_item", "settings": { "column": 2, "text": "Hotel Lobby Travel Box", "url": "/products/hotel-lobby-travel-box" } },
+
+      { "type": "shop_item", "settings": { "column": 3, "text": "POSTCARD x SOJAO", "url": "/collections/postcard-x-sojao" } },
+      { "type": "shop_item", "settings": { "column": 3, "text": "POSTCARD x ESSE", "url": "/collections/postcard-x-esse" } },
+      { "type": "shop_item", "settings": { "column": 3, "text": "POSTCARD x Anya Active", "url": "/collections/postcard-x-anya-active" } },
+      { "type": "shop_item", "settings": { "column": 3, "text": "Seasonal", "url": "/collections/seasonal" } },
+
+      { "type": "shop_item", "settings": { "column": 4, "text": "Pick & Mix", "url": "/pages/pick-and-mix" } },
+      { "type": "shop_item", "settings": { "column": 4, "text": "Custom Hand & Body Wash", "url": "/pages/custom-hand-and-body-wash" } },
+      { "type": "shop_item", "settings": { "column": 4, "text": "Custom Shampoo", "url": "/pages/custom-shampoo" } },
+      { "type": "shop_item", "settings": { "column": 4, "text": "Custom Conditioner", "url": "/pages/custom-conditioner" } },
+
+      { "type": "nav_link", "settings": { "text": "Refill",    "url": "/pages/refill" } },
+      { "type": "nav_link", "settings": { "text": "Subscribe", "url": "/pages/subscriptions" } },
+      { "type": "nav_link", "settings": { "text": "Members",   "url": "/pages/membership" } },
+      { "type": "nav_link", "settings": { "text": "About",     "url": "/pages/about" } },
+      { "type": "nav_link", "settings": { "text": "Corporate", "url": "/pages/corporate" } }
+    ]
+  }
 }
 {% endschema %}

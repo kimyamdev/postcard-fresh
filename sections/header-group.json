@@ -4,7 +4,47 @@
   "sections": {
     "header": {
       "type": "header",
-      "settings": {}
+      "settings": {},
+      "blocks": {
+        "s1": { "type": "shop_item", "settings": { "column": 1, "text": "Body", "url": "/collections/body" } },
+        "s2": { "type": "shop_item", "settings": { "column": 1, "text": "Hair", "url": "/collections/hair" } },
+        "s3": { "type": "shop_item", "settings": { "column": 1, "text": "Face", "url": "/collections/face" } },
+        "s4": { "type": "shop_item", "settings": { "column": 1, "text": "Deodorants", "url": "/collections/deodorants" } },
+        "s5": { "type": "shop_item", "settings": { "column": 1, "text": "Home Fragrance", "url": "/collections/home-fragrance" } },
+        "s6": { "type": "shop_item", "settings": { "column": 1, "text": "Lip & Hand", "url": "/collections/lip-and-hand" } },
+        "s7": { "type": "shop_item", "settings": { "column": 1, "text": "Pet", "url": "/collections/pet" } },
+        "s8": { "type": "shop_item", "settings": { "column": 1, "text": "Kids", "url": "/collections/kids" } },
+        "s9": { "type": "shop_item", "settings": { "column": 1, "text": "Gifts", "url": "/collections/gifts" } },
+        "s10": { "type": "shop_item", "settings": { "column": 1, "text": "Accessories", "url": "/collections/accessories" } },
+
+        "s11": { "type": "shop_item", "settings": { "column": 2, "text": "Hotel Lobby Anywhere Fragrance", "url": "/products/hotel-lobby-anywhere-fragrance" } },
+        "s12": { "type": "shop_item", "settings": { "column": 2, "text": "Pick & Mix", "url": "/pages/pick-and-mix" } },
+        "s13": { "type": "shop_item", "settings": { "column": 2, "text": "Discovery sets", "url": "/collections/discovery-sets" } },
+        "s14": { "type": "shop_item", "settings": { "column": 2, "text": "Hotel Lobby Travel Box", "url": "/products/hotel-lobby-travel-box" } },
+
+        "s15": { "type": "shop_item", "settings": { "column": 3, "text": "POSTCARD x SOJAO", "url": "/collections/postcard-x-sojao" } },
+        "s16": { "type": "shop_item", "settings": { "column": 3, "text": "POSTCARD x ESSE", "url": "/collections/postcard-x-esse" } },
+        "s17": { "type": "shop_item", "settings": { "column": 3, "text": "POSTCARD x Anya Active", "url": "/collections/postcard-x-anya-active" } },
+        "s18": { "type": "shop_item", "settings": { "column": 3, "text": "Seasonal", "url": "/collections/seasonal" } },
+
+        "s19": { "type": "shop_item", "settings": { "column": 4, "text": "Pick & Mix", "url": "/pages/pick-and-mix" } },
+        "s20": { "type": "shop_item", "settings": { "column": 4, "text": "Custom Hand & Body Wash", "url": "/pages/custom-hand-and-body-wash" } },
+        "s21": { "type": "shop_item", "settings": { "column": 4, "text": "Custom Shampoo", "url": "/pages/custom-shampoo" } },
+        "s22": { "type": "shop_item", "settings": { "column": 4, "text": "Custom Conditioner", "url": "/pages/custom-conditioner" } },
+
+        "n1": { "type": "nav_link", "settings": { "text": "Refill",    "url": "/pages/refill" } },
+        "n2": { "type": "nav_link", "settings": { "text": "Subscribe", "url": "/pages/subscriptions" } },
+        "n3": { "type": "nav_link", "settings": { "text": "Members",   "url": "/pages/membership" } },
+        "n4": { "type": "nav_link", "settings": { "text": "About",     "url": "/pages/about" } },
+        "n5": { "type": "nav_link", "settings": { "text": "Corporate", "url": "/pages/corporate" } }
+      },
+      "block_order": [
+        "s1","s2","s3","s4","s5","s6","s7","s8","s9","s10",
+        "s11","s12","s13","s14",
+        "s15","s16","s17","s18",
+        "s19","s20","s21","s22",
+        "n1","n2","n3","n4","n5"
+      ]
     }
   },
   "order": [
