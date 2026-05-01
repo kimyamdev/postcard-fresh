@@ -60,7 +60,8 @@
     {%- comment -%} Build preview text based on mode {%- endcomment -%}
     {%- assign preview_html = '' -%}
     {%- if preview_mode == 'categories' -%}
-      {%- assign w_collection = collections[w_slug | append: '-collection'] -%}
+      {%- assign w_collection_handle = w_slug | append: '-collection' -%}
+      {%- assign w_collection = collections[w_collection_handle] -%}
       {%- assign zones_present_csv = '' -%}
       {%- if w_collection.id -%}
         {%- for p in w_collection.products limit: 50 -%}
