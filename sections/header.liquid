@@ -36,8 +36,23 @@
     @click="window.dispatchEvent(new CustomEvent('pc-mobile-nav:open'))">
     <span></span><span></span><span></span>
   </button>
-  <a href="{{ routes.root_url }}" class="pc-logo">
-    POSTCARD<span class="pc-logo__sg">&middot; SG</span>
+  {%- liquid
+    assign logo_image = section.settings.logo
+    assign logo_w = section.settings.logo_width | default: 140
+    assign logo_w_mobile = section.settings.logo_mobile_width | default: 100
+  -%}
+  <a href="{{ routes.root_url }}" class="pc-logo{% if logo_image != blank %} pc-logo--image{% endif %}" style="--pc-logo-w: {{ logo_w }}px; --pc-logo-w-mobile: {{ logo_w_mobile }}px;">
+    {%- if logo_image != blank -%}
+      {%- assign logo_alt = logo_image.alt | default: shop.name | escape -%}
+      {%- if logo_image.format == 'svg' -%}
+        <img src="{{ logo_image.src }}" alt="{{ logo_alt }}" class="pc-logo__img" loading="eager">
+      {%- else -%}
+        {%- assign logo_2x = logo_w | times: 2 -%}
+        {{ logo_image | image_url: width: logo_2x | image_tag: alt: logo_alt, loading: 'eager', class: 'pc-logo__img', widths: '120,240,360,480' }}
+      {%- endif -%}
+    {%- else -%}
+      {{ section.settings.logo_text | default: 'POSTCARD' }}<span class="pc-logo__sg">{{ section.settings.logo_suffix | default: '&middot; SG' }}</span>
+    {%- endif -%}
   </a>
 
   <nav class="pc-nav">
@@ -203,6 +218,13 @@
   "name": "Header",
   "settings": [
     { "type": "html", "id": "announcement_html", "label": "Announcement bar HTML", "default": "Free SG shipping over $80 &middot; Refill at our Orchard flagship &middot; <span class=\"pc-announce__accent\">Postcards in your inbox &rarr;</span>" },
+
+    { "type": "header", "content": "Logo" },
+    { "type": "image_picker", "id": "logo",          "label": "Logo image", "info": "PNG, JPG, SVG, WebP. SVG renders at native resolution; raster files are auto-served at 2× retina up to widths 120/240/360/480." },
+    { "type": "range",        "id": "logo_width",        "label": "Width (desktop)", "min": 60, "max": 260, "step": 10, "default": 140, "unit": "px" },
+    { "type": "range",        "id": "logo_mobile_width", "label": "Width (mobile)",  "min": 60, "max": 200, "step": 10, "default": 100, "unit": "px" },
+    { "type": "text",         "id": "logo_text",   "label": "Text logo (fallback)",   "default": "POSTCARD", "info": "Used only when no logo image is uploaded." },
+    { "type": "text",         "id": "logo_suffix", "label": "Text logo suffix",       "default": "· SG" },
 
     { "type": "header", "content": "Shop dropdown" },
     { "type": "checkbox", "id": "show_shop", "label": "Show Shop dropdown", "default": true, "info": "Hidden automatically when there are no Shop link blocks." },

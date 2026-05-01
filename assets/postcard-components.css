@@ -46,6 +46,16 @@
   opacity: 0.6;
   letter-spacing: 0.16em;
 }
+.pc-logo--image { display: inline-flex; align-items: center; }
+.pc-logo__img {
+  display: block;
+  width: var(--pc-logo-w, 140px);
+  height: auto;
+  max-width: 100%;
+}
+@media (max-width: 800px) {
+  .pc-logo__img { width: var(--pc-logo-w-mobile, 100px); }
+}
 .pc-nav {
   display: flex;
   gap: 14px;
