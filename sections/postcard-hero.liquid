@@ -1,14 +1,42 @@
+{%- liquid
+  assign media_image = section.settings.media_image
+  assign media_video = section.settings.media_video
+  assign media_opacity = section.settings.media_opacity | default: 100
+  assign overlay_eyebrow = section.settings.visual_eyebrow | default: 'Full-bleed · Postcards from our worlds'
+  assign overlay_tag = section.settings.visual_tag | default: 'Hotel Lobby · sunlit marble, brass, a vase of yellow tulips'
+  assign hide_overlay_text = section.settings.hide_overlay_text
+-%}
 <section class="pc-hero">
   <div class="ph ph--world world-hotel-lobby pc-hero__visual">
-    <div class="pc-hero__visual-text">
-      <div class="pc-hero__visual-eyebrow">Full-bleed &middot; Postcards from our worlds</div>
-      <div class="pc-hero__visual-tag">Hotel Lobby &middot; sunlit marble, brass, a vase of yellow tulips</div>
-    </div>
-    <div class="pc-hero__postmark-wrap">
-      <div class="postmark postmark--ink" style="width: 110px; height: 110px; font-size: 10px;">
-        <div>POSTCARD<br>&middot; SINGAPORE &middot;<br>EST. 2019</div>
+    {%- if media_video != blank -%}
+      <div class="pc-hero__media" style="opacity: {{ media_opacity }}%;">
+        {{ media_video | video_tag: image_size: '1600x', autoplay: true, loop: true, muted: true, controls: false, class: 'pc-hero__media-vid' }}
       </div>
-    </div>
+    {%- elsif media_image != blank -%}
+      {%- assign media_alt = media_image.alt | default: 'Hero' | escape -%}
+      <div class="pc-hero__media" style="opacity: {{ media_opacity }}%;">
+        {{ media_image | image_url: width: 1600 | image_tag: alt: media_alt, loading: 'eager', class: 'pc-hero__media-img', widths: '600,900,1200,1600,2000' }}
+      </div>
+    {%- endif -%}
+
+    {%- unless hide_overlay_text -%}
+      <div class="pc-hero__visual-text">
+        {%- if overlay_eyebrow != blank -%}
+          <div class="pc-hero__visual-eyebrow">{{ overlay_eyebrow }}</div>
+        {%- endif -%}
+        {%- if overlay_tag != blank -%}
+          <div class="pc-hero__visual-tag">{{ overlay_tag }}</div>
+        {%- endif -%}
+      </div>
+    {%- endunless -%}
+
+    {%- if section.settings.show_postmark -%}
+      <div class="pc-hero__postmark-wrap">
+        <div class="postmark postmark--ink" style="width: 110px; height: 110px; font-size: 10px;">
+          <div>{{ section.settings.postmark_html | default: 'POSTCARD<br>· SINGAPORE ·<br>EST. 2019' }}</div>
+        </div>
+      </div>
+    {%- endif -%}
   </div>
   <div class="pc-hero__copy">
     <div class="eyebrow">You&rsquo;ve reached</div>
@@ -34,6 +62,16 @@
 {
   "name": "Postcard Hero",
   "settings": [
+    { "type": "header", "content": "Visual side (left)" },
+    { "type": "image_picker", "id": "media_image", "label": "Image", "info": "Fills the left half. PNG/JPG/WebP/SVG accepted." },
+    { "type": "video",        "id": "media_video", "label": "Video", "info": "Auto-plays muted + loops. Takes priority over the image if both are set." },
+    { "type": "range",        "id": "media_opacity", "label": "Media opacity", "min": 20, "max": 100, "step": 5, "default": 100, "unit": "%" },
+    { "type": "text",     "id": "visual_eyebrow", "label": "Overlay eyebrow", "default": "Full-bleed · Postcards from our worlds" },
+    { "type": "text",     "id": "visual_tag",     "label": "Overlay tag",     "default": "Hotel Lobby · sunlit marble, brass, a vase of yellow tulips" },
+    { "type": "checkbox", "id": "hide_overlay_text", "label": "Hide overlay text", "default": false, "info": "Useful when the image/video already carries the message." },
+    { "type": "checkbox", "id": "show_postmark", "label": "Show postmark", "default": true },
+    { "type": "html",     "id": "postmark_html", "label": "Postmark text (HTML)", "default": "POSTCARD<br>· SINGAPORE ·<br>EST. 2019" },
+
     { "type": "header", "content": "Primary CTA" },
     { "type": "text", "id": "primary_cta_text", "label": "Text", "default": "Find your world →" },
     { "type": "url",  "id": "primary_cta_url",  "label": "Link" },
