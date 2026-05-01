@@ -7,27 +7,49 @@
     "core_worlds": {
       "type": "postcard-worlds-index-list",
       "settings": {
-        "eyebrow": "Six core fragrance worlds",
+        "eyebrow": "Core fragrance worlds",
+        "tier": "Core",
         "size": "md",
         "show_meta": true,
-        "start_index": 1,
-        "count": 6
+        "count": 24
       }
     },
-    "minor_worlds": {
+    "skin_worlds": {
       "type": "postcard-worlds-index-list",
       "settings": {
-        "eyebrow": "Skin · hair · wellness · speciality",
+        "eyebrow": "Skin & body",
+        "tier": "Skin & body",
         "size": "sm",
         "show_meta": false,
-        "start_index": 7,
-        "count": 16
+        "count": 24
+      }
+    },
+    "wellness_worlds": {
+      "type": "postcard-worlds-index-list",
+      "settings": {
+        "eyebrow": "Wellness",
+        "tier": "Wellness",
+        "size": "sm",
+        "show_meta": false,
+        "count": 24
+      }
+    },
+    "speciality_worlds": {
+      "type": "postcard-worlds-index-list",
+      "settings": {
+        "eyebrow": "Speciality",
+        "tier": "Speciality",
+        "size": "sm",
+        "show_meta": false,
+        "count": 24
       }
     }
   },
   "order": [
     "hero",
     "core_worlds",
-    "minor_worlds"
+    "skin_worlds",
+    "wellness_worlds",
+    "speciality_worlds"
   ]
 }

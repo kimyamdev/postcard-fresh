@@ -1,18 +1,20 @@
 {%- comment -%}
-  Renders a list of worlds from shop.metaobjects.world.values. Designed to be
-  used multiple times on the worlds index page (e.g. once for the "core
-  fragrance worlds" with size md + family/tagline visible, once for the
-  "speciality worlds" tail with size sm and meta hidden).
+  Renders a list of worlds from shop.metaobjects.world.values. Filtered by
+  tier (matches world.tier.value, which the world metaobject's "Tier" field
+  enforces from a fixed choice list). Designed to be used multiple times on
+  the worlds index page — once per tier.
 
-  Range is controlled by start_index (1-based) and count.
+  Tier "" (any) skips the filter; useful when admin wants all worlds in
+  one rail, or for the legacy positional behavior via start_index + count.
 {%- endcomment -%}
 
 {%- liquid
   assign all_worlds = shop.metaobjects.world.values
   assign worlds_total = all_worlds.size
   assign size = section.settings.size | default: 'md'
+  assign tier_filter = section.settings.tier
   assign start_index = section.settings.start_index | default: 1
-  assign count = section.settings.count | default: 6
+  assign count = section.settings.count | default: 24
   assign show_meta = section.settings.show_meta
   if show_meta == nil
     assign show_meta = true
@@ -27,10 +29,20 @@
     assign skip = 0
   endif
   assign emitted = 0
+  assign passed = 0
 -%}
 
 {%- capture cards -%}
-  {%- for w in all_worlds offset: skip limit: count -%}
+  {%- for w in all_worlds -%}
+    {%- if emitted >= count -%}{%- break -%}{%- endif -%}
+    {%- if tier_filter != blank and tier_filter != 'any' -%}
+      {%- assign w_tier = w.tier.value -%}
+      {%- if w_tier != tier_filter -%}{%- continue -%}{%- endif -%}
+    {%- endif -%}
+    {%- if passed < skip -%}
+      {%- assign passed = passed | plus: 1 -%}
+      {%- continue -%}
+    {%- endif -%}
     {%- assign w_slug = w.slug.value | default: w.handle -%}
     {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
     {%- assign w_name = w.name.value -%}
@@ -90,9 +102,20 @@
       ]
     },
     { "type": "checkbox", "id": "show_meta", "label": "Show family + tagline next to each stamp", "default": true, "info": "Off → just stamps in a row, useful for the secondary worlds strip." },
-    { "type": "header", "content": "Range" },
-    { "type": "range", "id": "start_index", "label": "Start at world #", "min": 1, "max": 30, "step": 1, "default": 1, "info": "1-based position in the metaobject list. Reorder worlds in admin → Custom data → Metaobjects → World." },
-    { "type": "range", "id": "count",       "label": "How many worlds",  "min": 1, "max": 24, "step": 1, "default": 6 },
+    { "type": "header", "content": "Tier filter" },
+    { "type": "select", "id": "tier", "label": "Tier", "default": "Core",
+      "options": [
+        { "value": "any",         "label": "Any (all worlds)" },
+        { "value": "Core",        "label": "Core" },
+        { "value": "Skin & body", "label": "Skin & body" },
+        { "value": "Wellness",    "label": "Wellness" },
+        { "value": "Speciality",  "label": "Speciality" }
+      ],
+      "info": "Filters by the World metaobject's Tier field. Add new options in admin → Custom data → Metaobjects → World → Tier validations."
+    },
+    { "type": "header", "content": "Range (within filtered tier)" },
+    { "type": "range", "id": "start_index", "label": "Start at #", "min": 1, "max": 30, "step": 1, "default": 1, "info": "1-based position in the filtered list." },
+    { "type": "range", "id": "count",       "label": "How many",   "min": 1, "max": 24, "step": 1, "default": 24, "info": "Cap on rendered worlds; defaults to all in the tier." },
     { "type": "checkbox", "id": "hide_if_empty", "label": "Hide section if no worlds in range", "default": true }
   ],
   "presets": [{ "name": "Worlds index · List" }]
