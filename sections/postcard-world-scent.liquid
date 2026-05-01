@@ -1,9 +1,11 @@
 {%- liquid
   assign world = page.metafields.custom.world.value
   assign world_name = world.name.value
+  assign world_color = world.accent_color.value | default: '#E8C36A'
   assign world_wear_notes = world.wear_notes_quote.value | default: 'Bright then cozy. Reads as unisex but leans slightly feminine. Year-round, but especially welcoming in cooler weather.'
   assign world_character_label = world.character_label.value | default: 'Unisex · Year-round'
   assign world_character_desc = world.character_description.value | default: 'Reads polite, leans cosy in cooler weather.'
+  assign bg_alpha = section.settings.bg_alpha | default: 8
 
   assign scent_notes = world.scent_notes.value
   assign top_arr = ''
@@ -48,7 +50,7 @@
 -%}
 
 {%- if world -%}
-<section class="section section--tight pc-world-scent">
+<section class="section section--tight pc-world-scent" style="--world-color: {{ world_color }}; background: color-mix(in srgb, {{ world_color }} {{ bg_alpha }}%, transparent);">
   <div class="container">
     <div class="pc-scent__head">
       {%- if section.settings.eyebrow != blank -%}
@@ -99,6 +101,7 @@
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "How it's built" },
     { "type": "text", "id": "title",   "label": "Title",   "default": "The scent breakdown." },
+    { "type": "range", "id": "bg_alpha", "label": "Background tint (%)", "min": 0, "max": 30, "step": 2, "default": 8, "unit": "%", "info": "How strongly the world's accent color tints the section background." },
     { "type": "header", "content": "Layer rows" },
     { "type": "text", "id": "top_label",       "label": "Top label",       "default": "Top" },
     { "type": "text", "id": "top_desc",        "label": "Top description", "default": "The bright doorway moment." },
