@@ -1,23 +1,26 @@
 {%- comment -%}
-  Renders a list of worlds from shop.metaobjects.world.values. Filtered by
-  tier (matches world.tier.value, which the world metaobject's "Tier" field
-  enforces from a fixed choice list). Designed to be used multiple times on
-  the worlds index page — once per tier.
+  Renders a list of worlds from shop.metaobjects.world.values, filtered by
+  tier. Designed to be used multiple times on the worlds index page — once
+  per tier (Core, Skin & body, Wellness, Speciality, …).
 
-  Tier "" (any) skips the filter; useful when admin wants all worlds in
-  one rail, or for the legacy positional behavior via start_index + count.
+  Each card shows: stamp + family eyebrow + name + tagline + featured
+  products preview row. Featured products come from
+  world.featured_products.value (list.product_reference); admin curates 2–4
+  per world in admin → Custom data → Metaobjects → World → Featured products.
+  When the list is empty the row is skipped — no clutter.
+
+  Tier "any" disables the filter (useful for a single combined rail).
 {%- endcomment -%}
 
 {%- liquid
   assign all_worlds = shop.metaobjects.world.values
-  assign worlds_total = all_worlds.size
   assign size = section.settings.size | default: 'md'
   assign tier_filter = section.settings.tier
   assign start_index = section.settings.start_index | default: 1
   assign count = section.settings.count | default: 24
-  assign show_meta = section.settings.show_meta
-  if show_meta == nil
-    assign show_meta = true
+  assign show_products = section.settings.show_products
+  if show_products == nil
+    assign show_products = true
   endif
   assign hide_if_empty = section.settings.hide_if_empty
   if hide_if_empty == nil
@@ -48,24 +51,26 @@
     {%- assign w_name = w.name.value -%}
     {%- assign w_family = w.family.value -%}
     {%- assign w_tagline = w.tagline.value -%}
-    {%- if show_meta -%}
-      <a class="pc-worlds-index__card" href="/pages/{{ w_slug }}">
-        {% render 'stamp', name: w_name, family: w_family, color: w_color, size: size %}
-        <div>
-          {%- if w_family != blank -%}
-            <div class="eyebrow">{{ w_family }}</div>
-          {%- endif -%}
-          <h3 class="h-display pc-worlds-index__card-name">{{ w_name }}</h3>
-          {%- if w_tagline != blank -%}
-            <p class="pc-worlds-index__card-tag">{{ w_tagline }}</p>
-          {%- endif -%}
-        </div>
-      </a>
-    {%- else -%}
-      <a class="pc-worlds-index__stamp-link" href="/pages/{{ w_slug }}">
-        {% render 'stamp', name: w_name, family: w_family, color: w_color, size: size %}
-      </a>
-    {%- endif -%}
+    {%- assign w_featured = w.featured_products.value -%}
+    <a class="pc-worlds-index__card" href="/pages/{{ w_slug }}">
+      {% render 'stamp', name: w_name, family: w_family, color: w_color, size: size %}
+      <div>
+        {%- if w_family != blank -%}
+          <div class="eyebrow">{{ w_family }}</div>
+        {%- endif -%}
+        <h3 class="h-display pc-worlds-index__card-name">{{ w_name }}</h3>
+        {%- if w_tagline != blank -%}
+          <p class="pc-worlds-index__card-tag">{{ w_tagline }}</p>
+        {%- endif -%}
+        {%- if show_products and w_featured.size > 0 -%}
+          <div class="pc-worlds-index__card-products">
+            {%- for fp in w_featured -%}
+              <span class="pc-worlds-index__card-product">{{ fp.title }}</span>{%- unless forloop.last -%}<span class="pc-worlds-index__card-sep"> &middot; </span>{%- endunless -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </a>
     {%- assign emitted = emitted | plus: 1 -%}
   {%- endfor -%}
 {%- endcapture -%}
@@ -76,13 +81,9 @@
       {%- if section.settings.eyebrow != blank -%}
         <div class="eyebrow" style="margin-bottom: 16px;">{{ section.settings.eyebrow }}</div>
       {%- endif -%}
-      {%- if show_meta -%}
-        <div class="pc-worlds-index__core">{{ cards }}</div>
-      {%- else -%}
-        <div class="pc-worlds-index__minor">{{ cards }}</div>
-      {%- endif -%}
+      <div class="pc-worlds-index__core">{{ cards }}</div>
       {%- if emitted == 0 -%}
-        <p class="pc-ritual__empty-text">No worlds found in this range. Adjust “Start at” / “Count”, or add more world entries under Custom data → Metaobjects → World.</p>
+        <p class="pc-ritual__empty-text">No worlds in this tier yet. Set the <strong>Tier</strong> field on the world metaobject to <code>{{ tier_filter }}</code>.</p>
       {%- endif -%}
     </div>
   </section>
@@ -92,7 +93,7 @@
 {
   "name": "Worlds index · List",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow / heading", "default": "Six core fragrance worlds" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow / heading", "default": "Core fragrance worlds" },
     { "type": "header", "content": "Layout" },
     { "type": "select", "id": "size", "label": "Stamp size", "default": "md",
       "options": [
@@ -101,7 +102,7 @@
         { "value": "sm", "label": "Small" }
       ]
     },
-    { "type": "checkbox", "id": "show_meta", "label": "Show family + tagline next to each stamp", "default": true, "info": "Off → just stamps in a row, useful for the secondary worlds strip." },
+    { "type": "checkbox", "id": "show_products", "label": "Show featured products row", "default": true, "info": "Reads world.featured_products. Hidden automatically if a world's list is empty." },
     { "type": "header", "content": "Tier filter" },
     { "type": "select", "id": "tier", "label": "Tier", "default": "Core",
       "options": [
@@ -110,12 +111,11 @@
         { "value": "Skin & body", "label": "Skin & body" },
         { "value": "Wellness",    "label": "Wellness" },
         { "value": "Speciality",  "label": "Speciality" }
-      ],
-      "info": "Filters by the World metaobject's Tier field. Add new options in admin → Custom data → Metaobjects → World → Tier validations."
+      ]
     },
     { "type": "header", "content": "Range (within filtered tier)" },
-    { "type": "range", "id": "start_index", "label": "Start at #", "min": 1, "max": 30, "step": 1, "default": 1, "info": "1-based position in the filtered list." },
-    { "type": "range", "id": "count",       "label": "How many",   "min": 1, "max": 24, "step": 1, "default": 24, "info": "Cap on rendered worlds; defaults to all in the tier." },
+    { "type": "range", "id": "start_index", "label": "Start at #", "min": 1, "max": 30, "step": 1, "default": 1 },
+    { "type": "range", "id": "count",       "label": "How many",   "min": 1, "max": 24, "step": 1, "default": 24 },
     { "type": "checkbox", "id": "hide_if_empty", "label": "Hide section if no worlds in range", "default": true }
   ],
   "presets": [{ "name": "Worlds index · List" }]

@@ -10,7 +10,7 @@
         "eyebrow": "Core fragrance worlds",
         "tier": "Core",
         "size": "md",
-        "show_meta": true,
+        "show_products": true,
         "count": 24
       }
     },
@@ -19,8 +19,8 @@
       "settings": {
         "eyebrow": "Skin & body",
         "tier": "Skin & body",
-        "size": "sm",
-        "show_meta": false,
+        "size": "md",
+        "show_products": true,
         "count": 24
       }
     },
@@ -29,8 +29,8 @@
       "settings": {
         "eyebrow": "Wellness",
         "tier": "Wellness",
-        "size": "sm",
-        "show_meta": false,
+        "size": "md",
+        "show_products": true,
         "count": 24
       }
     },
@@ -39,8 +39,8 @@
       "settings": {
         "eyebrow": "Speciality",
         "tier": "Speciality",
-        "size": "sm",
-        "show_meta": false,
+        "size": "md",
+        "show_products": true,
         "count": 24
       }
     }
