@@ -1,11 +1,33 @@
 {
   "sections": {
-    "worlds_index": {
-      "type": "postcard-worlds-index",
+    "hero": {
+      "type": "postcard-worlds-index-hero",
       "settings": {}
+    },
+    "core_worlds": {
+      "type": "postcard-worlds-index-list",
+      "settings": {
+        "eyebrow": "Six core fragrance worlds",
+        "size": "md",
+        "show_meta": true,
+        "start_index": 1,
+        "count": 6
+      }
+    },
+    "minor_worlds": {
+      "type": "postcard-worlds-index-list",
+      "settings": {
+        "eyebrow": "Skin · hair · wellness · speciality",
+        "size": "sm",
+        "show_meta": false,
+        "start_index": 7,
+        "count": 16
+      }
     }
   },
   "order": [
-    "worlds_index"
+    "hero",
+    "core_worlds",
+    "minor_worlds"
   ]
 }

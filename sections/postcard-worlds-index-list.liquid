@@ -1,0 +1,100 @@
+{%- comment -%}
+  Renders a list of worlds from shop.metaobjects.world.values. Designed to be
+  used multiple times on the worlds index page (e.g. once for the "core
+  fragrance worlds" with size md + family/tagline visible, once for the
+  "speciality worlds" tail with size sm and meta hidden).
+
+  Range is controlled by start_index (1-based) and count.
+{%- endcomment -%}
+
+{%- liquid
+  assign all_worlds = shop.metaobjects.world.values
+  assign worlds_total = all_worlds.size
+  assign size = section.settings.size | default: 'md'
+  assign start_index = section.settings.start_index | default: 1
+  assign count = section.settings.count | default: 6
+  assign show_meta = section.settings.show_meta
+  if show_meta == nil
+    assign show_meta = true
+  endif
+  assign hide_if_empty = section.settings.hide_if_empty
+  if hide_if_empty == nil
+    assign hide_if_empty = true
+  endif
+
+  assign skip = start_index | minus: 1
+  if skip < 0
+    assign skip = 0
+  endif
+  assign emitted = 0
+-%}
+
+{%- capture cards -%}
+  {%- for w in all_worlds offset: skip limit: count -%}
+    {%- assign w_slug = w.slug.value | default: w.handle -%}
+    {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
+    {%- assign w_name = w.name.value -%}
+    {%- assign w_family = w.family.value -%}
+    {%- assign w_tagline = w.tagline.value -%}
+    {%- if show_meta -%}
+      <a class="pc-worlds-index__card" href="/pages/{{ w_slug }}">
+        {% render 'stamp', name: w_name, family: w_family, color: w_color, size: size %}
+        <div>
+          {%- if w_family != blank -%}
+            <div class="eyebrow">{{ w_family }}</div>
+          {%- endif -%}
+          <h3 class="h-display pc-worlds-index__card-name">{{ w_name }}</h3>
+          {%- if w_tagline != blank -%}
+            <p class="pc-worlds-index__card-tag">{{ w_tagline }}</p>
+          {%- endif -%}
+        </div>
+      </a>
+    {%- else -%}
+      <a class="pc-worlds-index__stamp-link" href="/pages/{{ w_slug }}">
+        {% render 'stamp', name: w_name, family: w_family, color: w_color, size: size %}
+      </a>
+    {%- endif -%}
+    {%- assign emitted = emitted | plus: 1 -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- if emitted > 0 or hide_if_empty == false -%}
+  <section class="section pc-worlds-list">
+    <div class="container">
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="eyebrow" style="margin-bottom: 16px;">{{ section.settings.eyebrow }}</div>
+      {%- endif -%}
+      {%- if show_meta -%}
+        <div class="pc-worlds-index__core">{{ cards }}</div>
+      {%- else -%}
+        <div class="pc-worlds-index__minor">{{ cards }}</div>
+      {%- endif -%}
+      {%- if emitted == 0 -%}
+        <p class="pc-ritual__empty-text">No worlds found in this range. Adjust “Start at” / “Count”, or add more world entries under Custom data → Metaobjects → World.</p>
+      {%- endif -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Worlds index · List",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow / heading", "default": "Six core fragrance worlds" },
+    { "type": "header", "content": "Layout" },
+    { "type": "select", "id": "size", "label": "Stamp size", "default": "md",
+      "options": [
+        { "value": "lg", "label": "Large" },
+        { "value": "md", "label": "Medium" },
+        { "value": "sm", "label": "Small" }
+      ]
+    },
+    { "type": "checkbox", "id": "show_meta", "label": "Show family + tagline next to each stamp", "default": true, "info": "Off → just stamps in a row, useful for the secondary worlds strip." },
+    { "type": "header", "content": "Range" },
+    { "type": "range", "id": "start_index", "label": "Start at world #", "min": 1, "max": 30, "step": 1, "default": 1, "info": "1-based position in the metaobject list. Reorder worlds in admin → Custom data → Metaobjects → World." },
+    { "type": "range", "id": "count",       "label": "How many worlds",  "min": 1, "max": 24, "step": 1, "default": 6 },
+    { "type": "checkbox", "id": "hide_if_empty", "label": "Hide section if no worlds in range", "default": true }
+  ],
+  "presets": [{ "name": "Worlds index · List" }]
+}
+{% endschema %}

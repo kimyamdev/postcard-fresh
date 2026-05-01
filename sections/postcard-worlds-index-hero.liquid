@@ -1,0 +1,31 @@
+{%- liquid
+  assign all_worlds = shop.metaobjects.world.values
+  assign worlds_total = all_worlds.size
+  assign eyebrow_text = section.settings.eyebrow | default: '[count] Worlds'
+  assign eyebrow_text = eyebrow_text | replace: '[count]', worlds_total
+-%}
+<section class="pc-worlds-hero">
+  <div class="container">
+    {%- if eyebrow_text != blank -%}
+      <div class="eyebrow">{{ eyebrow_text }}</div>
+    {%- endif -%}
+    {%- if section.settings.title != blank -%}
+      <h1 class="h-display pc-worlds-hero__title">{{ section.settings.title }}</h1>
+    {%- endif -%}
+    {%- if section.settings.lede != blank -%}
+      <p class="pc-worlds-hero__lede">{{ section.settings.lede }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Worlds index · Hero",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "[count] Worlds", "info": "[count] is replaced with the total world metaobject count." },
+    { "type": "text", "id": "title",   "label": "Title",   "default": "One bathroom shelf at a time." },
+    { "type": "text", "id": "lede",    "label": "Lede",    "default": "Each one a place we’d like to send you." }
+  ],
+  "presets": [{ "name": "Worlds index · Hero" }]
+}
+{% endschema %}
