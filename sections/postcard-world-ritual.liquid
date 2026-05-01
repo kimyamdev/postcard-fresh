@@ -20,10 +20,31 @@
   assign zone = section.settings.zone
   assign limit = section.settings.product_limit | default: 4
   assign source = section.settings.source_collection
+
+  comment
+    Resolve product source. Priority:
+      1. admin-picked source_collection (any catalog scope) — world filter applied in loop
+      2. {world-handle}-collection if it exists (already world-scoped) — only zone filter applies
+      3. fallback: collections.all (paginated to ~50 by Shopify, may miss products)
+  endcomment
+  assign world_collection_handle = world_handle | append: '-collection'
+  assign world_collection = collections[world_collection_handle]
+  assign source_is_world_scoped = false
+  if source != blank
+    assign source_products = source.products
+  elsif world_collection.id
+    assign source_products = world_collection.products
+    assign source_is_world_scoped = true
+  else
+    assign source_products = collections.all.products
+  endif
+
   assign view_all_url = section.settings.view_all_url
   if view_all_url == blank
     if source != blank
       assign view_all_url = source.url
+    elsif source_is_world_scoped
+      assign view_all_url = world_collection.url
     elsif zone != blank
       assign view_all_url = '/collections/' | append: zone
     endif
@@ -46,12 +67,17 @@
 
       <div class="pc-ritual__grid">
         {%- assign matched = 0 -%}
-        {%- assign source_products = source.products | default: collections.all.products -%}
         {%- for p in source_products -%}
           {%- if matched >= limit -%}{%- break -%}{%- endif -%}
-          {%- assign p_world = p.metafields.postcard.world.value -%}
-          {%- assign p_world_handle = p_world.slug.value | default: p_world.handle -%}
-          {%- if p_world_handle != world_handle -%}{%- continue -%}{%- endif -%}
+
+          {%- comment -%} world filter (skipped when source is already world-scoped) {%- endcomment -%}
+          {%- unless source_is_world_scoped -%}
+            {%- assign p_world = p.metafields.postcard.world.value -%}
+            {%- assign p_world_handle = p_world.slug.value | default: p_world.handle -%}
+            {%- if p_world_handle != world_handle -%}{%- continue -%}{%- endif -%}
+          {%- endunless -%}
+
+          {%- comment -%} zone filter (only when admin hasn't manually picked a source) {%- endcomment -%}
           {%- if zone != blank and source == blank -%}
             {%- assign p_zones = p.metafields.postcard.zone.value -%}
             {%- assign in_zone = false -%}
@@ -62,15 +88,21 @@
             {%- endif -%}
             {%- unless in_zone -%}{%- continue -%}{%- endunless -%}
           {%- endif -%}
-          {%- assign p_world_color = p_world.accent_color.value | default: world_color -%}
-          {%- assign p_world_name = p_world.name.value | default: world_name -%}
+
+          {%- assign p_world_obj = p.metafields.postcard.world.value -%}
+          {%- assign p_world_color = p_world_obj.accent_color.value | default: world_color -%}
+          {%- assign p_world_name = p_world_obj.name.value | default: world_name -%}
           {% render 'product-card', product: p, world: p_world_name, world_color: p_world_color %}
           {%- assign matched = matched | plus: 1 -%}
         {%- endfor -%}
 
         {%- if matched == 0 -%}
           <div class="pc-ritual__empty" style="grid-column: 1 / -1;">
-            <p class="pc-ritual__empty-text">No products yet for {{ world_name }} in this ritual. Tag products with <code>postcard.zone = {{ zone | default: '...' }}</code> and <code>postcard.world → {{ world_name }}</code>, or pick a source collection in the section settings.</p>
+            {%- if world_collection.id == blank and source == blank -%}
+              <p class="pc-ritual__empty-text">No <code>{{ world_collection_handle }}</code> collection found. Either create that collection in Shopify (e.g. as a smart collection with rule <code>product.metafields.postcard.world contains {{ world_name }}</code>) or pick a source collection in the section settings.</p>
+            {%- else -%}
+              <p class="pc-ritual__empty-text">No products in <strong>{{ world_name }}</strong> are tagged <code>postcard.zone = {{ zone | default: '(zone)' }}</code> yet. Tag products via Admin → Products → Metafields, or pick a source collection in the section settings.</p>
+            {%- endif -%}
           </div>
         {%- endif -%}
       </div>
