@@ -78,34 +78,99 @@
     {%- endif -%}
 
     {%- if show_worlds and worlds_total > 0 -%}
+      {%- liquid
+        assign has_worlds_blocks = false
+        for b in section.blocks
+          if b.type == 'worlds_group' or b.type == 'worlds_link'
+            assign has_worlds_blocks = true
+            break
+          endif
+        endfor
+      -%}
       <span class="pc-nav__trigger" @mouseenter="openWorlds()" @mouseleave="closeWorlds()">
         <button class="pc-nav__link" type="button" @focus="openWorlds()" @blur="closeWorlds()">{{ section.settings.worlds_label | default: 'Worlds' }} &#9662;</button>
         <div class="pc-megamenu pc-megamenu--worlds" x-show="worldsOpen" x-cloak @mouseenter="openWorlds()" @mouseleave="closeWorlds()">
-          <div class="pc-worlds-grid">
-            {%- for w in all_worlds limit: worlds_limit -%}
-              {%- assign w_slug = w.slug.value | default: w.handle -%}
-              {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
-              {%- assign w_name = w.name.value -%}
-              {%- assign w_family = w.family.value -%}
-              {%- assign words = w_name | split: ' ' -%}
-              {%- assign initials = '' -%}
-              {%- for word in words limit: 2 -%}
-                {%- assign first_letter = word | slice: 0, 1 | upcase -%}
-                {%- assign initials = initials | append: first_letter -%}
-              {%- endfor -%}
-              <a class="pc-world-row" href="/pages/{{ w_slug }}">
-                <div class="pc-world-row__chip" style="background: {{ w_color }};">{{ initials }}</div>
-                <div>
-                  <div class="pc-world-row__name">{{ w_name }}</div>
-                  {%- if w_family != blank -%}
-                    <div class="pc-world-row__family">{{ w_family }}</div>
+          {%- if has_worlds_blocks -%}
+            {%- assign group_open = false -%}
+            {%- for b in section.blocks -%}
+              {%- if b.type == 'worlds_group' -%}
+                {%- if group_open -%}</div></div>{%- endif -%}
+                <div class="pc-worlds-group" {{ b.shopify_attributes }}>
+                  {%- if b.settings.title != blank -%}
+                    <div class="eyebrow pc-megamenu__col-title">{{ b.settings.title }}</div>
                   {%- endif -%}
-                </div>
-              </a>
+                  <div class="pc-worlds-grid">
+                {%- assign group_open = true -%}
+              {%- elsif b.type == 'worlds_link' -%}
+                {%- if group_open == false -%}
+                  <div class="pc-worlds-group"><div class="pc-worlds-grid">
+                  {%- assign group_open = true -%}
+                {%- endif -%}
+                {%- assign w_handle = b.settings.world_handle -%}
+                {%- if w_handle != blank -%}
+                  {%- assign w = shop.metaobjects.world[w_handle] -%}
+                  {%- assign w_name = b.settings.text | default: w.name.value -%}
+                  {%- assign w_slug = w.slug.value | default: w_handle -%}
+                  {%- assign w_url = b.settings.url -%}
+                  {%- if w_url == blank -%}{%- assign w_url = '/pages/' | append: w_slug -%}{%- endif -%}
+                  {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
+                  {%- assign w_family = b.settings.subline | default: w.family.value -%}
+                  {%- assign words = w_name | split: ' ' -%}
+                  {%- assign initials = '' -%}
+                  {%- for word in words limit: 2 -%}
+                    {%- assign first_letter = word | slice: 0, 1 | upcase -%}
+                    {%- assign initials = initials | append: first_letter -%}
+                  {%- endfor -%}
+                  <a class="pc-world-row" href="{{ w_url }}" {{ b.shopify_attributes }}>
+                    <div class="pc-world-row__chip" style="background: {{ w_color }};">{{ initials }}</div>
+                    <div>
+                      <div class="pc-world-row__name">{{ w_name }}</div>
+                      {%- if w_family != blank -%}
+                        <div class="pc-world-row__family">{{ w_family }}</div>
+                      {%- endif -%}
+                    </div>
+                  </a>
+                {%- else -%}
+                  <a class="pc-world-row pc-world-row--plain" href="{{ b.settings.url }}" {{ b.shopify_attributes }}>
+                    <div>
+                      <div class="pc-world-row__name">{{ b.settings.text }}</div>
+                      {%- if b.settings.subline != blank -%}
+                        <div class="pc-world-row__family">{{ b.settings.subline }}</div>
+                      {%- endif -%}
+                    </div>
+                  </a>
+                {%- endif -%}
+              {%- endif -%}
             {%- endfor -%}
-          </div>
+            {%- if group_open -%}</div></div>{%- endif -%}
+          {%- else -%}
+            {%- comment -%} fallback: auto-iterate world metaobjects {%- endcomment -%}
+            <div class="pc-worlds-grid">
+              {%- for w in all_worlds limit: worlds_limit -%}
+                {%- assign w_slug = w.slug.value | default: w.handle -%}
+                {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
+                {%- assign w_name = w.name.value -%}
+                {%- assign w_family = w.family.value -%}
+                {%- assign words = w_name | split: ' ' -%}
+                {%- assign initials = '' -%}
+                {%- for word in words limit: 2 -%}
+                  {%- assign first_letter = word | slice: 0, 1 | upcase -%}
+                  {%- assign initials = initials | append: first_letter -%}
+                {%- endfor -%}
+                <a class="pc-world-row" href="/pages/{{ w_slug }}">
+                  <div class="pc-world-row__chip" style="background: {{ w_color }};">{{ initials }}</div>
+                  <div>
+                    <div class="pc-world-row__name">{{ w_name }}</div>
+                    {%- if w_family != blank -%}
+                      <div class="pc-world-row__family">{{ w_family }}</div>
+                    {%- endif -%}
+                  </div>
+                </a>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
           {%- if section.settings.worlds_see_all_url != blank -%}
-            <a class="tlink" href="{{ section.settings.worlds_see_all_url }}" style="display: inline-block; margin-top: 18px;">{{ see_all_text }}</a>
+            <a class="tlink pc-megamenu__see-all" href="{{ section.settings.worlds_see_all_url }}">{{ see_all_text }}</a>
           {%- endif -%}
         </div>
       </span>
@@ -177,6 +242,37 @@
       "settings": [
         { "type": "text", "id": "text", "label": "Text" },
         { "type": "url",  "id": "url",  "label": "Link" }
+      ]
+    },
+    {
+      "type": "worlds_group",
+      "name": "Worlds group title",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Group title", "default": "Featured worlds" },
+        { "type": "paragraph", "content": "Items added below this block (Worlds dropdown · Link) belong to this group until the next group block." }
+      ]
+    },
+    {
+      "type": "worlds_link",
+      "name": "Worlds dropdown link",
+      "settings": [
+        { "type": "select", "id": "world_handle", "label": "World",
+          "options": [
+            { "value": "",                 "label": "— None (use Text/Link below)" },
+            { "value": "hotel-lobby",      "label": "Hotel Lobby" },
+            { "value": "moon-bloom",       "label": "Moon Bloom" },
+            { "value": "coconut-beach",    "label": "Coconut Beach" },
+            { "value": "wild-flowers",     "label": "Wild Flowers" },
+            { "value": "bath-house",       "label": "Bath House" },
+            { "value": "woodland-retreat", "label": "Woodland Retreat" },
+            { "value": "icy-peaks",        "label": "Icy Peaks" }
+          ],
+          "default": "",
+          "info": "If picked, name/slug/family/chip color all auto-fill from the world metaobject."
+        },
+        { "type": "text", "id": "text",    "label": "Text (override)",    "info": "Leave blank to use the world's name." },
+        { "type": "text", "id": "subline", "label": "Subline (override)", "info": "Leave blank to use the world's family." },
+        { "type": "url",  "id": "url",     "label": "Link (override)",    "info": "Leave blank to auto-link to /pages/{world slug}." }
       ]
     }
   ],

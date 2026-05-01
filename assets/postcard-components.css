@@ -109,7 +109,12 @@
 }
 
 .pc-worlds-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.pc-worlds-group { margin-bottom: 18px; }
+.pc-worlds-group:last-child { margin-bottom: 0; }
+.pc-worlds-group .pc-megamenu__col-title { margin-bottom: 12px; }
+.pc-megamenu__see-all { display: inline-block; margin-top: 18px; }
 .pc-world-row { display: flex; gap: 10px; align-items: center; cursor: pointer; color: inherit; text-decoration: none; }
+.pc-world-row--plain { padding-left: 4px; }
 .pc-world-row__chip {
   width: 36px; height: 46px;
   border: 1.5px solid var(--color-ink);

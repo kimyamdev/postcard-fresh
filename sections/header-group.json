@@ -36,14 +36,32 @@
         "n2": { "type": "nav_link", "settings": { "text": "Subscribe", "url": "/pages/subscriptions" } },
         "n3": { "type": "nav_link", "settings": { "text": "Members",   "url": "/pages/membership" } },
         "n4": { "type": "nav_link", "settings": { "text": "About",     "url": "/pages/about" } },
-        "n5": { "type": "nav_link", "settings": { "text": "Corporate", "url": "/pages/corporate" } }
+        "n5": { "type": "nav_link", "settings": { "text": "Corporate", "url": "/pages/corporate" } },
+
+        "wg1": { "type": "worlds_group", "settings": { "title": "Featured worlds" } },
+        "wl1": { "type": "worlds_link",  "settings": { "world_handle": "hotel-lobby"      } },
+        "wl2": { "type": "worlds_link",  "settings": { "world_handle": "moon-bloom"       } },
+        "wl3": { "type": "worlds_link",  "settings": { "world_handle": "coconut-beach"    } },
+        "wl4": { "type": "worlds_link",  "settings": { "world_handle": "wild-flowers"     } },
+
+        "wg2": { "type": "worlds_group", "settings": { "title": "Skin & body" } },
+        "wl5": { "type": "worlds_link",  "settings": { "world_handle": "bath-house"       } },
+        "wl6": { "type": "worlds_link",  "settings": { "world_handle": "woodland-retreat" } },
+        "wl7": { "type": "worlds_link",  "settings": { "world_handle": "icy-peaks"        } },
+
+        "wg3": { "type": "worlds_group", "settings": { "title": "Browse" } },
+        "wl8": { "type": "worlds_link",  "settings": { "text": "All worlds",    "url": "/pages/worlds",     "subline": "All 22 destinations" } },
+        "wl9": { "type": "worlds_link",  "settings": { "text": "By family",     "url": "/pages/by-family",  "subline": "Floral, woody, fresh, gourmand" } }
       },
       "block_order": [
         "s1","s2","s3","s4","s5","s6","s7","s8","s9","s10",
         "s11","s12","s13","s14",
         "s15","s16","s17","s18",
         "s19","s20","s21","s22",
-        "n1","n2","n3","n4","n5"
+        "n1","n2","n3","n4","n5",
+        "wg1","wl1","wl2","wl3","wl4",
+        "wg2","wl5","wl6","wl7",
+        "wg3","wl8","wl9"
       ]
     }
   },
