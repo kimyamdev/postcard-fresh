@@ -94,7 +94,10 @@
   letter-spacing: normal;
   font-size: 13px;
   z-index: 60;
+  white-space: normal;
 }
+.pc-megamenu > * { min-width: 0; }
+.pc-megamenu__item { overflow-wrap: break-word; line-height: 1.35; }
 /* Invisible hover-bridge over the 12px gap so the cursor doesn't leave the
    trigger's hit area when moving to the menu. The bridge is part of the
    .pc-megamenu element, so its @mouseenter handler fires too. */
