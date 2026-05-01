@@ -1,0 +1,116 @@
+{%- liquid
+  assign world = page.metafields.custom.world.value
+  assign world_name = world.name.value
+  assign world_wear_notes = world.wear_notes_quote.value | default: 'Bright then cozy. Reads as unisex but leans slightly feminine. Year-round, but especially welcoming in cooler weather.'
+  assign world_character_label = world.character_label.value | default: 'Unisex · Year-round'
+  assign world_character_desc = world.character_description.value | default: 'Reads polite, leans cosy in cooler weather.'
+
+  assign scent_notes = world.scent_notes.value
+  assign top_arr = ''
+  assign heart_arr = ''
+  assign base_arr = ''
+  if scent_notes
+    for n in scent_notes
+      case n.family.value
+        when 'Top'
+          if top_arr == blank
+            assign top_arr = n.name.value
+          else
+            assign top_arr = top_arr | append: ', ' | append: n.name.value
+          endif
+        when 'Heart'
+          if heart_arr == blank
+            assign heart_arr = n.name.value
+          else
+            assign heart_arr = heart_arr | append: ', ' | append: n.name.value
+          endif
+        when 'Base'
+          if base_arr == blank
+            assign base_arr = n.name.value
+          else
+            assign base_arr = base_arr | append: ', ' | append: n.name.value
+          endif
+      endcase
+    endfor
+  endif
+  if top_arr == blank and world.notes_top.value != blank
+    assign top_arr = world.notes_top.value | join: ', '
+  endif
+  if heart_arr == blank and world.notes_heart.value != blank
+    assign heart_arr = world.notes_heart.value | join: ', '
+  endif
+  if base_arr == blank and world.notes_base.value != blank
+    assign base_arr = world.notes_base.value | join: ', '
+  endif
+  assign top_arr = top_arr | default: 'Bergamot, Orange Blossom'
+  assign heart_arr = heart_arr | default: 'Earl Grey Tea, Apricot'
+  assign base_arr = base_arr | default: 'Vanilla, White Musk'
+-%}
+
+{%- if world -%}
+<section class="section section--tight pc-world-scent">
+  <div class="container">
+    <div class="pc-scent__head">
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="h-display pc-scent__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+    </div>
+    <div class="pc-scent__table">
+      <div class="pc-scent__row">
+        <div class="h-display pc-scent__layer">{{ section.settings.top_label | default: 'Top' }}</div>
+        <div class="pc-scent__notes">{{ top_arr }}</div>
+        <div class="pc-scent__desc">{{ section.settings.top_desc | default: 'The bright doorway moment.' }}</div>
+      </div>
+      <div class="pc-scent__row">
+        <div class="h-display pc-scent__layer">{{ section.settings.heart_label | default: 'Heart' }}</div>
+        <div class="pc-scent__notes">{{ heart_arr }}</div>
+        <div class="pc-scent__desc">{{ section.settings.heart_desc | default: 'Warm tea steam, soft fruit.' }}</div>
+      </div>
+      <div class="pc-scent__row">
+        <div class="h-display pc-scent__layer">{{ section.settings.base_label | default: 'Base' }}</div>
+        <div class="pc-scent__notes">{{ base_arr }}</div>
+        <div class="pc-scent__desc">{{ section.settings.base_desc | default: 'The settled, skin-like finish.' }}</div>
+      </div>
+      <div class="pc-scent__row pc-scent__row--last">
+        <div class="h-display pc-scent__layer">{{ section.settings.character_label | default: 'Character' }}</div>
+        <div class="pc-scent__notes">{{ world_character_label }}</div>
+        <div class="pc-scent__desc">{{ world_character_desc }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- if section.settings.show_wear_notes -%}
+  <section class="pc-world-quote">
+    <div class="container--narrow pc-world-quote__inner">
+      <span class="postmark pc-world-quote__pm"><div>{{ section.settings.wear_notes_label | default: 'WEAR<br>NOTES' }}</div></span>
+      <p class="h-typewriter pc-world-quote__text">&ldquo;{{ world_wear_notes }}&rdquo;</p>
+    </div>
+  </section>
+{%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "World page · Scent",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "How it's built" },
+    { "type": "text", "id": "title",   "label": "Title",   "default": "The scent breakdown." },
+    { "type": "header", "content": "Layer rows" },
+    { "type": "text", "id": "top_label",       "label": "Top label",       "default": "Top" },
+    { "type": "text", "id": "top_desc",        "label": "Top description", "default": "The bright doorway moment." },
+    { "type": "text", "id": "heart_label",     "label": "Heart label",     "default": "Heart" },
+    { "type": "text", "id": "heart_desc",      "label": "Heart description","default": "Warm tea steam, soft fruit." },
+    { "type": "text", "id": "base_label",      "label": "Base label",      "default": "Base" },
+    { "type": "text", "id": "base_desc",       "label": "Base description","default": "The settled, skin-like finish." },
+    { "type": "text", "id": "character_label", "label": "Character label", "default": "Character" },
+    { "type": "header", "content": "Wear-notes quote" },
+    { "type": "checkbox", "id": "show_wear_notes", "label": "Show wear-notes quote", "default": true },
+    { "type": "text", "id": "wear_notes_label", "label": "Postmark label (HTML)", "default": "WEAR<br>NOTES" }
+  ],
+  "presets": [{ "name": "World page · Scent" }]
+}
+{% endschema %}

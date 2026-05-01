@@ -1,0 +1,109 @@
+{%- comment -%}
+  One ritual on a world page. Auto-pulls products that:
+    1. Match the page's linked world (product.metafields.postcard.world.value
+       == page.metafields.custom.world.value), AND
+    2. Optionally belong to the chosen zone (product.metafields.postcard.zone
+       contains the section's zone value), OR are in the chosen source
+       collection (collection picker fallback for shops that haven't tagged
+       zones yet).
+
+  Source resolution priority:
+    - source_collection (if picked) — iterate that collection, world-filtered
+    - else: iterate collections.all, both world- AND zone-filtered
+{%- endcomment -%}
+
+{%- liquid
+  assign world = page.metafields.custom.world.value
+  assign world_handle = world.slug.value | default: world.handle
+  assign world_name = world.name.value
+  assign world_color = world.accent_color.value | default: '#E8C36A'
+  assign zone = section.settings.zone
+  assign limit = section.settings.product_limit | default: 4
+  assign source = section.settings.source_collection
+  assign view_all_url = section.settings.view_all_url
+  if view_all_url == blank
+    if source != blank
+      assign view_all_url = source.url
+    elsif zone != blank
+      assign view_all_url = '/collections/' | append: zone
+    endif
+  endif
+-%}
+
+{%- if world -%}
+<section class="section pc-world-ritual">
+  <div class="container">
+    <div class="pc-ritual">
+      <div class="pc-ritual__head">
+        <h2 class="h-display pc-ritual__title">{{ section.settings.title | default: 'On your skin.' }}</h2>
+        {%- if section.settings.view_all_text != blank -%}
+          <a class="tlink" href="{{ view_all_url | default: '#' }}">{{ section.settings.view_all_text }}</a>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.lede != blank -%}
+        <p class="pc-ritual__lede">{{ section.settings.lede }}</p>
+      {%- endif -%}
+
+      <div class="pc-ritual__grid">
+        {%- assign matched = 0 -%}
+        {%- assign source_products = source.products | default: collections.all.products -%}
+        {%- for p in source_products -%}
+          {%- if matched >= limit -%}{%- break -%}{%- endif -%}
+          {%- assign p_world = p.metafields.postcard.world.value -%}
+          {%- assign p_world_handle = p_world.slug.value | default: p_world.handle -%}
+          {%- if p_world_handle != world_handle -%}{%- continue -%}{%- endif -%}
+          {%- if zone != blank and source == blank -%}
+            {%- assign p_zones = p.metafields.postcard.zone.value -%}
+            {%- assign in_zone = false -%}
+            {%- if p_zones -%}
+              {%- for z in p_zones -%}
+                {%- if z == zone -%}{%- assign in_zone = true -%}{%- break -%}{%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+            {%- unless in_zone -%}{%- continue -%}{%- endunless -%}
+          {%- endif -%}
+          {%- assign p_world_color = p_world.accent_color.value | default: world_color -%}
+          {%- assign p_world_name = p_world.name.value | default: world_name -%}
+          {% render 'product-card', product: p, world: p_world_name, world_color: p_world_color %}
+          {%- assign matched = matched | plus: 1 -%}
+        {%- endfor -%}
+
+        {%- if matched == 0 -%}
+          <div class="pc-ritual__empty" style="grid-column: 1 / -1;">
+            <p class="pc-ritual__empty-text">No products yet for {{ world_name }} in this ritual. Tag products with <code>postcard.zone = {{ zone | default: '...' }}</code> and <code>postcard.world → {{ world_name }}</code>, or pick a source collection in the section settings.</p>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "World page · Ritual",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "On your skin." },
+    { "type": "text", "id": "lede",  "label": "Lede (optional)" },
+    { "type": "header", "content": "Source" },
+    { "type": "select", "id": "zone", "label": "Zone (uses postcard.zone metafield)", "default": "skin",
+      "options": [
+        { "value": "",       "label": "— None (use collection picker below)" },
+        { "value": "skin",   "label": "Skin (body, hands)" },
+        { "value": "room",   "label": "Room (diffusers, sprays)" },
+        { "value": "travel", "label": "Travel-size" },
+        { "value": "face",   "label": "Face" },
+        { "value": "hair",   "label": "Hair" },
+        { "value": "hand",   "label": "Hand" }
+      ],
+      "info": "Filters products whose postcard.zone list contains this value. Admin sets the zone per product in admin → Products → Metafields."
+    },
+    { "type": "collection", "id": "source_collection", "label": "Source collection (override)", "info": "If picked, takes priority over zone. Useful before products have postcard.zone tagged." },
+    { "type": "range", "id": "product_limit", "label": "Number of products", "min": 1, "max": 12, "step": 1, "default": 4 },
+    { "type": "header", "content": "View all link" },
+    { "type": "text", "id": "view_all_text", "label": "Text", "default": "View all →" },
+    { "type": "url",  "id": "view_all_url",  "label": "Link", "info": "Leave blank to auto-link to the source collection (or /collections/{zone})." }
+  ],
+  "presets": [{ "name": "World page · Ritual" }]
+}
+{% endschema %}

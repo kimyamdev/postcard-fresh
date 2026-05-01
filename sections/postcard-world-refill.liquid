@@ -1,0 +1,38 @@
+{%- liquid
+  assign world = page.metafields.custom.world.value
+  assign world_name = world.name.value | default: 'this world'
+
+  assign title_template = section.settings.title | default: 'Refill your [world] in store.'
+  assign title_text = title_template | replace: '[world]', world_name
+
+  assign cta_text = section.settings.cta_text | default: 'Visit our Orchard flagship →'
+  assign cta_url = section.settings.cta_url | default: '/pages/refill'
+-%}
+
+{%- if world -%}
+<section class="pc-world-refill">
+  <div class="container pc-world-refill__inner">
+    <h3 class="h-display pc-world-refill__title">{{ title_text }}</h3>
+    {%- if section.settings.body != blank -%}
+      <p class="pc-world-refill__body">{{ section.settings.body | replace: '[world]', world_name }}</p>
+    {%- endif -%}
+    {%- if cta_text != blank -%}
+      <a class="btn btn--ink" href="{{ cta_url }}">{{ cta_text }}</a>
+    {%- endif -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "World page · Refill",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Refill your [world] in store.", "info": "[world] is replaced with the page's world name." },
+    { "type": "text", "id": "body",  "label": "Body (optional)", "info": "[world] is replaced with the page's world name." },
+    { "type": "header", "content": "CTA" },
+    { "type": "text", "id": "cta_text", "label": "Text", "default": "Visit our Orchard flagship →" },
+    { "type": "url",  "id": "cta_url",  "label": "Link" }
+  ],
+  "presets": [{ "name": "World page · Refill" }]
+}
+{% endschema %}

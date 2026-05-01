@@ -1,11 +1,56 @@
 {
   "sections": {
-    "world": {
-      "type": "postcard-world",
+    "hero": {
+      "type": "postcard-world-card-hero",
+      "settings": {}
+    },
+    "scent": {
+      "type": "postcard-world-scent",
+      "settings": {}
+    },
+    "ritual_skin": {
+      "type": "postcard-world-ritual",
+      "settings": {
+        "title": "On your skin.",
+        "zone": "skin",
+        "view_all_text": "View all →",
+        "product_limit": 4
+      }
+    },
+    "ritual_room": {
+      "type": "postcard-world-ritual",
+      "settings": {
+        "title": "In the room.",
+        "zone": "room",
+        "view_all_text": "View all →",
+        "product_limit": 4
+      }
+    },
+    "ritual_travel": {
+      "type": "postcard-world-ritual",
+      "settings": {
+        "title": "Travel-size.",
+        "zone": "travel",
+        "view_all_text": "View all →",
+        "product_limit": 4
+      }
+    },
+    "neighbours": {
+      "type": "postcard-world-neighbours",
+      "settings": {}
+    },
+    "refill": {
+      "type": "postcard-world-refill",
       "settings": {}
     }
   },
   "order": [
-    "world"
+    "hero",
+    "scent",
+    "ritual_skin",
+    "ritual_room",
+    "ritual_travel",
+    "neighbours",
+    "refill"
   ]
 }

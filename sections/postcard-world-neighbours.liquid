@@ -1,0 +1,58 @@
+{%- liquid
+  assign world = page.metafields.custom.world.value
+  assign world_name = world.name.value
+  assign world_slug = world.slug.value | default: world.handle
+  assign limit = section.settings.neighbour_limit | default: 3
+-%}
+
+{%- if world -%}
+<section class="section--tight section pc-world-neighbours">
+  <div class="container">
+    {%- if section.settings.eyebrow != blank -%}
+      {%- assign eyebrow_text = section.settings.eyebrow | replace: '[world]', world_name -%}
+      <div class="eyebrow">{{ eyebrow_text }}</div>
+    {%- endif -%}
+    {%- if section.settings.title != blank -%}
+      <h2 class="h-display pc-world-neighbours__title">{{ section.settings.title }}</h2>
+    {%- endif -%}
+    <div class="pc-neighbours">
+      {%- assign all_worlds = shop.metaobjects.world.values -%}
+      {%- assign shown = 0 -%}
+      {%- for w in all_worlds -%}
+        {%- if shown >= limit -%}{%- break -%}{%- endif -%}
+        {%- assign w_slug = w.slug.value | default: w.handle -%}
+        {%- if w_slug == world_slug -%}{%- continue -%}{%- endif -%}
+        {%- assign w_name = w.name.value -%}
+        {%- assign w_family = w.family.value -%}
+        {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
+        {%- assign w_tagline = w.tagline.value -%}
+        <a class="pc-neighbour" href="/pages/{{ w_slug }}">
+          {% render 'stamp', name: w_name, family: w_family, color: w_color, size: 'sm' %}
+          <div>
+            {%- if w_family != blank -%}
+              <div class="eyebrow">{{ w_family }}</div>
+            {%- endif -%}
+            <h3 class="h-display pc-neighbour__name">{{ w_name }}</h3>
+            {%- if w_tagline != blank -%}
+              <p class="pc-neighbour__tag">{{ w_tagline }}</p>
+            {%- endif -%}
+          </div>
+        </a>
+        {%- assign shown = shown | plus: 1 -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "World page · Neighbours",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "If you love [world]", "info": "[world] is replaced with the page's world name." },
+    { "type": "text", "id": "title",   "label": "Title",   "default": "…send yourself a postcard from:" },
+    { "type": "range", "id": "neighbour_limit", "label": "Neighbours to show", "min": 1, "max": 6, "step": 1, "default": 3 }
+  ],
+  "presets": [{ "name": "World page · Neighbours" }]
+}
+{% endschema %}
