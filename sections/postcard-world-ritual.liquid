@@ -8,8 +8,16 @@
        zones yet).
 
   Source resolution priority:
-    - source_collection (if picked) — iterate that collection, world-filtered
-    - else: iterate collections.all, both world- AND zone-filtered
+    1. admin-picked source_collection — world filter applied in loop
+    2. {world-handle}-collection if it exists — already world-scoped, only
+       zone filter applies
+    3. fallback: collections.all (paginated to ~50 by Shopify, may miss
+       products on large catalogs)
+
+  When matched == 0:
+    - hide_if_empty: section emits nothing at all (default)
+    - !hide_if_empty: renders the empty-state placeholder so admin can see
+      the issue in the editor
 {%- endcomment -%}
 
 {%- liquid
@@ -20,13 +28,11 @@
   assign zone = section.settings.zone
   assign limit = section.settings.product_limit | default: 4
   assign source = section.settings.source_collection
+  assign hide_if_empty = section.settings.hide_if_empty
+  if hide_if_empty == nil
+    assign hide_if_empty = true
+  endif
 
-  comment
-    Resolve product source. Priority:
-      1. admin-picked source_collection (any catalog scope) — world filter applied in loop
-      2. {world-handle}-collection if it exists (already world-scoped) — only zone filter applies
-      3. fallback: collections.all (paginated to ~50 by Shopify, may miss products)
-  endcomment
   assign world_collection_handle = world_handle | append: '-collection'
   assign world_collection = collections[world_collection_handle]
   assign source_is_world_scoped = false
@@ -52,63 +58,67 @@
 -%}
 
 {%- if world -%}
-<section class="section pc-world-ritual">
-  <div class="container">
-    <div class="pc-ritual">
-      <div class="pc-ritual__head">
-        <h2 class="h-display pc-ritual__title">{{ section.settings.title | default: 'On your skin.' }}</h2>
-        {%- if section.settings.view_all_text != blank -%}
-          <a class="tlink" href="{{ view_all_url | default: '#' }}">{{ section.settings.view_all_text }}</a>
+  {%- assign matched = 0 -%}
+  {%- capture ritual_cards -%}
+    {%- for p in source_products -%}
+      {%- if matched >= limit -%}{%- break -%}{%- endif -%}
+
+      {%- unless source_is_world_scoped -%}
+        {%- assign p_world = p.metafields.postcard.world.value -%}
+        {%- assign p_world_handle = p_world.slug.value | default: p_world.handle -%}
+        {%- if p_world_handle != world_handle -%}{%- continue -%}{%- endif -%}
+      {%- endunless -%}
+
+      {%- if zone != blank and source == blank -%}
+        {%- assign p_zones = p.metafields.postcard.zone.value -%}
+        {%- assign in_zone = false -%}
+        {%- if p_zones -%}
+          {%- for z in p_zones -%}
+            {%- if z == zone -%}{%- assign in_zone = true -%}{%- break -%}{%- endif -%}
+          {%- endfor -%}
         {%- endif -%}
-      </div>
-      {%- if section.settings.lede != blank -%}
-        <p class="pc-ritual__lede">{{ section.settings.lede }}</p>
+        {%- unless in_zone -%}{%- continue -%}{%- endunless -%}
       {%- endif -%}
 
-      <div class="pc-ritual__grid">
-        {%- assign matched = 0 -%}
-        {%- for p in source_products -%}
-          {%- if matched >= limit -%}{%- break -%}{%- endif -%}
+      {%- assign p_world_obj = p.metafields.postcard.world.value -%}
+      {%- assign p_world_color = p_world_obj.accent_color.value | default: world_color -%}
+      {%- assign p_world_name = p_world_obj.name.value | default: world_name -%}
+      {% render 'product-card', product: p, world: p_world_name, world_color: p_world_color %}
+      {%- assign matched = matched | plus: 1 -%}
+    {%- endfor -%}
+  {%- endcapture -%}
 
-          {%- comment -%} world filter (skipped when source is already world-scoped) {%- endcomment -%}
-          {%- unless source_is_world_scoped -%}
-            {%- assign p_world = p.metafields.postcard.world.value -%}
-            {%- assign p_world_handle = p_world.slug.value | default: p_world.handle -%}
-            {%- if p_world_handle != world_handle -%}{%- continue -%}{%- endif -%}
-          {%- endunless -%}
-
-          {%- comment -%} zone filter (only when admin hasn't manually picked a source) {%- endcomment -%}
-          {%- if zone != blank and source == blank -%}
-            {%- assign p_zones = p.metafields.postcard.zone.value -%}
-            {%- assign in_zone = false -%}
-            {%- if p_zones -%}
-              {%- for z in p_zones -%}
-                {%- if z == zone -%}{%- assign in_zone = true -%}{%- break -%}{%- endif -%}
-              {%- endfor -%}
-            {%- endif -%}
-            {%- unless in_zone -%}{%- continue -%}{%- endunless -%}
-          {%- endif -%}
-
-          {%- assign p_world_obj = p.metafields.postcard.world.value -%}
-          {%- assign p_world_color = p_world_obj.accent_color.value | default: world_color -%}
-          {%- assign p_world_name = p_world_obj.name.value | default: world_name -%}
-          {% render 'product-card', product: p, world: p_world_name, world_color: p_world_color %}
-          {%- assign matched = matched | plus: 1 -%}
-        {%- endfor -%}
-
-        {%- if matched == 0 -%}
-          <div class="pc-ritual__empty" style="grid-column: 1 / -1;">
-            {%- if world_collection.id == blank and source == blank -%}
-              <p class="pc-ritual__empty-text">No <code>{{ world_collection_handle }}</code> collection found. Either create that collection in Shopify (e.g. as a smart collection with rule <code>product.metafields.postcard.world contains {{ world_name }}</code>) or pick a source collection in the section settings.</p>
-            {%- else -%}
-              <p class="pc-ritual__empty-text">No products in <strong>{{ world_name }}</strong> are tagged <code>postcard.zone = {{ zone | default: '(zone)' }}</code> yet. Tag products via Admin → Products → Metafields, or pick a source collection in the section settings.</p>
+  {%- if matched > 0 or hide_if_empty == false -%}
+    <section class="section pc-world-ritual">
+      <div class="container">
+        <div class="pc-ritual">
+          <div class="pc-ritual__head">
+            <h2 class="h-display pc-ritual__title">{{ section.settings.title | default: 'On your skin.' }}</h2>
+            {%- if section.settings.view_all_text != blank and matched > 0 -%}
+              <a class="tlink" href="{{ view_all_url | default: '#' }}">{{ section.settings.view_all_text }}</a>
             {%- endif -%}
           </div>
-        {%- endif -%}
+          {%- if section.settings.lede != blank -%}
+            <p class="pc-ritual__lede">{{ section.settings.lede }}</p>
+          {%- endif -%}
+
+          <div class="pc-ritual__grid">
+            {%- if matched > 0 -%}
+              {{ ritual_cards }}
+            {%- else -%}
+              <div class="pc-ritual__empty" style="grid-column: 1 / -1;">
+                {%- if world_collection.id == blank and source == blank -%}
+                  <p class="pc-ritual__empty-text">No <code>{{ world_collection_handle }}</code> collection found. Either create that collection in Shopify (e.g. as a smart collection with rule <code>product.metafields.postcard.world contains {{ world_name }}</code>) or pick a source collection in the section settings.</p>
+                {%- else -%}
+                  <p class="pc-ritual__empty-text">No products in <strong>{{ world_name }}</strong> are tagged <code>postcard.zone = {{ zone | default: '(zone)' }}</code> yet. Tag products via Admin → Products → Metafields, or pick a source collection in the section settings.</p>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
+  {%- endif -%}
 {%- endif -%}
 
 {% schema %}
@@ -132,6 +142,7 @@
     },
     { "type": "collection", "id": "source_collection", "label": "Source collection (override)", "info": "If picked, takes priority over zone. Useful before products have postcard.zone tagged." },
     { "type": "range", "id": "product_limit", "label": "Number of products", "min": 1, "max": 12, "step": 1, "default": 4 },
+    { "type": "checkbox", "id": "hide_if_empty", "label": "Hide section if no products", "default": true, "info": "When on, this ritual disappears entirely on worlds that have no matching products. Turn off to show the diagnostic empty-state instead (useful while tagging)." },
     { "type": "header", "content": "View all link" },
     { "type": "text", "id": "view_all_text", "label": "Text", "default": "View all →" },
     { "type": "url",  "id": "view_all_url",  "label": "Link", "info": "Leave blank to auto-link to the source collection (or /collections/{zone})." }
