@@ -551,6 +551,7 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 .pc-worlds-hero__lede { margin-top: 16px; font-size: 18px; opacity: 0.8; }
 .pc-worlds-index__core { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; margin-bottom: 64px; }
 .pc-worlds-index__card {
+  --tilt: 0deg;
   display: grid;
   grid-template-columns: 1fr 0.95fr;
   gap: 24px;
@@ -562,11 +563,21 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   text-decoration: none;
   position: relative;
   isolation: isolate;
-  transition: box-shadow 0.18s ease, transform 0.18s ease;
+  transform: rotate(var(--tilt));
+  transition: box-shadow 0.22s ease, transform 0.22s ease;
 }
+/* Random-feeling tilts cycled across 7 cards so neighbours never match */
+.pc-worlds-index__card:nth-child(7n+1) { --tilt: -1.2deg; }
+.pc-worlds-index__card:nth-child(7n+2) { --tilt:  0.8deg; }
+.pc-worlds-index__card:nth-child(7n+3) { --tilt: -0.4deg; }
+.pc-worlds-index__card:nth-child(7n+4) { --tilt:  1.5deg; }
+.pc-worlds-index__card:nth-child(7n+5) { --tilt: -0.9deg; }
+.pc-worlds-index__card:nth-child(7n+6) { --tilt:  0.6deg; }
+.pc-worlds-index__card:nth-child(7n+7) { --tilt: -1.4deg; }
 .pc-worlds-index__card:hover {
   box-shadow: 4px 6px 0 rgba(33, 32, 32, 0.10);
-  transform: translate(2px, 2px);
+  transform: rotate(0deg) translate(2px, 2px);
+  z-index: 2;
 }
 .pc-worlds-index__card-left {
   min-width: 0;
