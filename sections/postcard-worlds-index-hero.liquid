@@ -1,8 +1,13 @@
 {%- liquid
   assign all_worlds = shop.metaobjects.world.values
-  assign worlds_total = all_worlds.size
+  assign worlds_count = 0
+  for w in all_worlds
+    if w.tier.value == 'World'
+      assign worlds_count = worlds_count | plus: 1
+    endif
+  endfor
   assign eyebrow_text = section.settings.eyebrow | default: '[count] Worlds'
-  assign eyebrow_text = eyebrow_text | replace: '[count]', worlds_total
+  assign eyebrow_text = eyebrow_text | replace: '[count]', worlds_count
 -%}
 <section class="pc-worlds-hero">
   <div class="container">

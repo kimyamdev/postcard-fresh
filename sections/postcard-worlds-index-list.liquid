@@ -77,31 +77,38 @@
       {%- if types_present != blank -%}
         {%- assign type_arr = types_present | split: '|' -%}
         {%- capture preview_html -%}
-          <div class="pc-worlds-index__card-products">
-            {%- assign first_emitted = false -%}
-            {%- for label in type_arr -%}
-              {%- if label == blank -%}{%- continue -%}{%- endif -%}
-              {%- if first_emitted -%}<span class="pc-worlds-index__card-sep"> &middot; </span>{%- endif -%}
-              <span class="pc-worlds-index__card-product">{{ label }}</span>
-              {%- assign first_emitted = true -%}
-            {%- endfor -%}
+          <div class="pc-worlds-index__chips-block">
+            <div class="eyebrow pc-worlds-index__chips-label">Available in</div>
+            <div class="pc-worlds-index__chips" style="--world-color: {{ w_color }};">
+              {%- for label in type_arr -%}
+                {%- if label == blank -%}{%- continue -%}{%- endif -%}
+                <span class="pc-worlds-index__chip">{{ label }}</span>
+              {%- endfor -%}
+            </div>
           </div>
         {%- endcapture -%}
       {%- endif -%}
     {%- elsif preview_mode == 'products' -%}
       {%- if w_featured.size > 0 -%}
         {%- capture preview_html -%}
-          <div class="pc-worlds-index__card-products">
-            {%- for fp in w_featured -%}
-              <span class="pc-worlds-index__card-product">{{ fp.title }}</span>{%- unless forloop.last -%}<span class="pc-worlds-index__card-sep"> &middot; </span>{%- endunless -%}
-            {%- endfor -%}
+          <div class="pc-worlds-index__chips-block">
+            <div class="eyebrow pc-worlds-index__chips-label">Featured</div>
+            <div class="pc-worlds-index__chips" style="--world-color: {{ w_color }};">
+              {%- for fp in w_featured -%}
+                <span class="pc-worlds-index__chip">{{ fp.title }}</span>
+              {%- endfor -%}
+            </div>
           </div>
         {%- endcapture -%}
       {%- endif -%}
     {%- endif -%}
 
-    <a class="pc-worlds-index__card" href="/pages/{{ w_slug }}">
-      {% render 'stamp', name: w_name, family: w_family, color: w_color, size: size %}
+    {%- assign w_video = w.hero_video.value -%}
+    <a class="pc-worlds-index__card" href="/pages/{{ w_slug }}"
+       x-data
+       @mouseenter="$el.querySelector('.pc-stamp__hover-vid')?.play()"
+       @mouseleave="$el.querySelector('.pc-stamp__hover-vid')?.pause()">
+      {% render 'stamp', name: w_name, family: w_family, color: w_color, size: size, video: w_video %}
       <div>
         {%- if w_family != blank -%}
           <div class="eyebrow">{{ w_family }}</div>

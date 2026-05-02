@@ -17,7 +17,7 @@
     "non_worlds_rail": {
       "type": "postcard-worlds-index-list",
       "settings": {
-        "eyebrow": "Non-worlds",
+        "eyebrow": "Postscripts",
         "tier": "Non-world",
         "size": "md",
         "preview_mode": "product_types",
