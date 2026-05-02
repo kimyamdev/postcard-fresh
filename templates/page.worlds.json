@@ -4,41 +4,21 @@
       "type": "postcard-worlds-index-hero",
       "settings": {}
     },
-    "core_worlds": {
+    "worlds_rail": {
       "type": "postcard-worlds-index-list",
       "settings": {
-        "eyebrow": "Core fragrance worlds",
-        "tier": "Core",
+        "eyebrow": "Worlds",
+        "tier": "World",
         "size": "md",
         "preview_mode": "product_types",
         "count": 24
       }
     },
-    "skin_worlds": {
+    "non_worlds_rail": {
       "type": "postcard-worlds-index-list",
       "settings": {
-        "eyebrow": "Skin & body",
-        "tier": "Skin & body",
-        "size": "md",
-        "preview_mode": "product_types",
-        "count": 24
-      }
-    },
-    "wellness_worlds": {
-      "type": "postcard-worlds-index-list",
-      "settings": {
-        "eyebrow": "Wellness",
-        "tier": "Wellness",
-        "size": "md",
-        "preview_mode": "product_types",
-        "count": 24
-      }
-    },
-    "speciality_worlds": {
-      "type": "postcard-worlds-index-list",
-      "settings": {
-        "eyebrow": "Speciality",
-        "tier": "Speciality",
+        "eyebrow": "Non-worlds",
+        "tier": "Non-world",
         "size": "md",
         "preview_mode": "product_types",
         "count": 24
@@ -47,9 +27,7 @@
   },
   "order": [
     "hero",
-    "core_worlds",
-    "skin_worlds",
-    "wellness_worlds",
-    "speciality_worlds"
+    "worlds_rail",
+    "non_worlds_rail"
   ]
 }

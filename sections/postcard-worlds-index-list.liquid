@@ -154,13 +154,11 @@
     },
     { "type": "range", "id": "type_limit", "label": "Max product types per card", "min": 2, "max": 8, "step": 1, "default": 4 },
     { "type": "header", "content": "Tier filter" },
-    { "type": "select", "id": "tier", "label": "Tier", "default": "Core",
+    { "type": "select", "id": "tier", "label": "Tier", "default": "World",
       "options": [
-        { "value": "any",         "label": "Any (all worlds)" },
-        { "value": "Core",        "label": "Core" },
-        { "value": "Skin & body", "label": "Skin & body" },
-        { "value": "Wellness",    "label": "Wellness" },
-        { "value": "Speciality",  "label": "Speciality" }
+        { "value": "any",       "label": "Any (all entries)" },
+        { "value": "World",     "label": "Worlds" },
+        { "value": "Non-world", "label": "Non-worlds" }
       ]
     },
     { "type": "header", "content": "Range (within filtered tier)" },
