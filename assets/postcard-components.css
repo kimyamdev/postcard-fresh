@@ -609,11 +609,19 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   transition: opacity 0.35s ease;
   z-index: 0;
 }
-.pc-worlds-index__card:hover .pc-stamp__hover-vid {
-  opacity: 1;
-}
 .pc-stamp__inner {
   z-index: 1;
+  transition: opacity 0.35s ease;
+}
+.pc-stamp__label {
+  transition: opacity 0.35s ease;
+}
+.pc-worlds-index__card:has(.pc-stamp__hover-vid):hover .pc-stamp__hover-vid {
+  opacity: 1;
+}
+.pc-worlds-index__card:has(.pc-stamp__hover-vid):hover .pc-stamp__inner,
+.pc-worlds-index__card:has(.pc-stamp__hover-vid):hover .pc-stamp__label {
+  opacity: 0;
 }
 .pc-worlds-index__minor { display: grid; grid-template-columns: repeat(8, 1fr); gap: 14px; justify-items: center; }
 
