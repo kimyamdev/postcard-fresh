@@ -632,9 +632,13 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 }
 .pc-worlds-index__card:hover .pc-worlds-index__card-hover { opacity: 1; }
 .pc-worlds-index__card:hover .pc-worlds-index__card-resting { opacity: 0; }
-.pc-worlds-index__card-hover .eyebrow { color: rgba(255, 253, 244, 0.78); }
-.pc-worlds-index__card-hover .pc-worlds-index__card-name { color: white; }
-.pc-worlds-index__card-hover .pc-worlds-index__card-tag { color: rgba(255, 253, 244, 0.86); }
+.pc-worlds-index__card-hover .eyebrow { color: rgba(255, 253, 244, 0.78); font-size: 11px; }
+.pc-worlds-index__card-hover .pc-worlds-index__card-name { color: white; font-size: 30px; line-height: 1.05; }
+.pc-worlds-index__card-hover .pc-worlds-index__card-tag { color: rgba(255, 253, 244, 0.86); font-size: 15px; line-height: 1.5; }
+.pc-worlds-index__card-hover .pc-worlds-index__chips-label { font-size: 10px; }
+.pc-worlds-index__card-hover .pc-worlds-index__chip { font-size: 12px; padding: 5px 11px; }
+.pc-worlds-index__card-hover .pc-worlds-index__to-label { font-size: 12px; }
+.pc-worlds-index__card-hover .pc-worlds-index__to-list { font-size: 14px; line-height: 1.7; }
 .pc-worlds-index__card-hover .pc-worlds-index__card-left {
   border-right-color: rgba(255, 253, 244, 0.32);
 }
