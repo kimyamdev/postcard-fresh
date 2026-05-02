@@ -549,7 +549,14 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 .pc-worlds-hero { padding: 80px 0; text-align: center; background: var(--color-bg-warm); }
 .pc-worlds-hero__title { font-size: clamp(56px, 8vw, 96px); margin-top: 12px; }
 .pc-worlds-hero__lede { margin-top: 16px; font-size: 18px; opacity: 0.8; }
-.pc-worlds-index__core { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; margin-bottom: 64px; }
+.pc-worlds-index__core {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-bottom: 64px;
+  max-width: 760px;
+  margin-inline: auto;
+}
 .pc-worlds-index__card {
   --tilt: 0deg;
   display: grid;
@@ -905,7 +912,6 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   .pc-wotm__formats { grid-template-columns: repeat(2, 1fr); }
   .pc-refill__grid { grid-template-columns: 1fr; }
   .pc-belief__inner { grid-template-columns: 1fr; gap: 32px; }
-  .pc-worlds-index__core { grid-template-columns: 1fr; }
   .pc-worlds-index__minor { grid-template-columns: repeat(3, 1fr); }
   .pc-world-hero__inner { grid-template-columns: 1fr; gap: 32px; }
   .pc-world-hero__title { font-size: 56px; }
