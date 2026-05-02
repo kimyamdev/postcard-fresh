@@ -104,10 +104,7 @@
     {%- assign w_video = w.hero_video.value -%}
     {%- assign w_image = w.hero_image.value -%}
     {%- assign w_best_for = w.best_for.value -%}
-    <a class="pc-worlds-index__card" href="/pages/{{ w_slug }}"
-       x-data
-       @mouseenter="$el.querySelector('.pc-worlds-index__card-bg-video')?.play()"
-       @mouseleave="$el.querySelector('.pc-worlds-index__card-bg-video')?.pause()">
+    <a class="pc-worlds-index__card" href="/pages/{{ w_slug }}">
 
       {%- comment -%} Full-bleed background — video → image → world-color fallback {%- endcomment -%}
       <div class="pc-worlds-index__card-bg" style="background: linear-gradient(160deg, {{ w_color }}, color-mix(in srgb, {{ w_color }} 60%, var(--color-ink)));">
