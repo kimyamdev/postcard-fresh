@@ -30,13 +30,7 @@
   endif
   assign emitted = 0
   assign passed = 0
-
-  comment
-    Order zones in a fixed sequence regardless of which products mention
-    them first, so cards read consistently across worlds.
-  endcomment
-  assign zone_order = 'skin,face,hair,hand,room,travel'
-  assign zone_labels_csv = 'skin=Skin,face=Face,hair=Hair,hand=Hand,room=Room,travel=Travel'
+  assign type_limit = section.settings.type_limit | default: 4
 -%}
 
 {%- capture cards -%}
@@ -59,49 +53,37 @@
 
     {%- comment -%} Build preview text based on mode {%- endcomment -%}
     {%- assign preview_html = '' -%}
-    {%- if preview_mode == 'categories' -%}
+    {%- if preview_mode == 'product_types' -%}
       {%- assign w_collection_handle = w_slug | append: '-collection' -%}
       {%- assign w_collection = collections[w_collection_handle] -%}
-      {%- assign zones_present_csv = '' -%}
+      {%- assign types_present = '' -%}
+      {%- assign types_count = 0 -%}
       {%- if w_collection.id -%}
         {%- for p in w_collection.products limit: 50 -%}
-          {%- assign p_zones = p.metafields.postcard.zone.value -%}
-          {%- if p_zones -%}
-            {%- for z in p_zones -%}
-              {%- unless zones_present_csv contains z -%}
-                {%- if zones_present_csv == blank -%}
-                  {%- assign zones_present_csv = z -%}
-                {%- else -%}
-                  {%- assign zones_present_csv = zones_present_csv | append: ',' | append: z -%}
-                {%- endif -%}
-              {%- endunless -%}
-            {%- endfor -%}
-          {%- endif -%}
+          {%- if types_count >= type_limit -%}{%- break -%}{%- endif -%}
+          {%- assign t = p.type -%}
+          {%- if t == blank -%}{%- continue -%}{%- endif -%}
+          {%- assign t_marker = '|' | append: t | append: '|' -%}
+          {%- unless types_present contains t_marker -%}
+            {%- if types_present == blank -%}
+              {%- assign types_present = t_marker -%}
+            {%- else -%}
+              {%- assign types_present = types_present | append: t | append: '|' -%}
+            {%- endif -%}
+            {%- assign types_count = types_count | plus: 1 -%}
+          {%- endunless -%}
         {%- endfor -%}
       {%- endif -%}
-      {%- if zones_present_csv != blank -%}
-        {%- assign zone_order_arr = zone_order | split: ',' -%}
-        {%- assign label_pairs = zone_labels_csv | split: ',' -%}
-        {%- assign ordered_labels = '' -%}
-        {%- for z in zone_order_arr -%}
-          {%- if zones_present_csv contains z -%}
-            {%- for pair in label_pairs -%}
-              {%- assign kv = pair | split: '=' -%}
-              {%- if kv[0] == z -%}
-                {%- if ordered_labels == blank -%}
-                  {%- assign ordered_labels = kv[1] -%}
-                {%- else -%}
-                  {%- assign ordered_labels = ordered_labels | append: '|' | append: kv[1] -%}
-                {%- endif -%}
-              {%- endif -%}
-            {%- endfor -%}
-          {%- endif -%}
-        {%- endfor -%}
-        {%- assign label_arr = ordered_labels | split: '|' -%}
+      {%- if types_present != blank -%}
+        {%- assign type_arr = types_present | split: '|' -%}
         {%- capture preview_html -%}
           <div class="pc-worlds-index__card-products">
-            {%- for label in label_arr -%}
-              <span class="pc-worlds-index__card-product">{{ label }}</span>{%- unless forloop.last -%}<span class="pc-worlds-index__card-sep"> &middot; </span>{%- endunless -%}
+            {%- assign first_emitted = false -%}
+            {%- for label in type_arr -%}
+              {%- if label == blank -%}{%- continue -%}{%- endif -%}
+              {%- if first_emitted -%}<span class="pc-worlds-index__card-sep"> &middot; </span>{%- endif -%}
+              <span class="pc-worlds-index__card-product">{{ label }}</span>
+              {%- assign first_emitted = true -%}
             {%- endfor -%}
           </div>
         {%- endcapture -%}
@@ -162,14 +144,15 @@
         { "value": "sm", "label": "Small" }
       ]
     },
-    { "type": "select", "id": "preview_mode", "label": "Preview row", "default": "categories",
+    { "type": "select", "id": "preview_mode", "label": "Preview row", "default": "product_types",
       "options": [
-        { "value": "categories", "label": "Categories (auto: skin, room, travel…)" },
-        { "value": "products",   "label": "Featured product titles (manually picked)" },
-        { "value": "none",       "label": "None" }
+        { "value": "product_types", "label": "Product types (auto: from Shopify product type)" },
+        { "value": "products",      "label": "Featured product titles (manually picked)" },
+        { "value": "none",          "label": "None" }
       ],
-      "info": "Categories derive from each world's products' postcard.zone metafield. Products read world.featured_products."
+      "info": "Product types are pulled from each product's Shopify Product type field, deduped per world. Featured products read world.featured_products."
     },
+    { "type": "range", "id": "type_limit", "label": "Max product types per card", "min": 2, "max": 8, "step": 1, "default": 4 },
     { "type": "header", "content": "Tier filter" },
     { "type": "select", "id": "tier", "label": "Tier", "default": "Core",
       "options": [
