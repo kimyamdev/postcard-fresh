@@ -10,7 +10,7 @@
         "eyebrow": "Worlds",
         "tier": "World",
         "size": "md",
-        "preview_mode": "product_types",
+        "preview_mode": "none",
         "count": 24
       }
     },
@@ -20,7 +20,7 @@
         "eyebrow": "Postscripts",
         "tier": "Non-world",
         "size": "md",
-        "preview_mode": "product_types",
+        "preview_mode": "none",
         "count": 24
       }
     }
