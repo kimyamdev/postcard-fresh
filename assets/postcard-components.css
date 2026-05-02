@@ -559,19 +559,95 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 }
 .pc-worlds-index__card {
   --tilt: 0deg;
-  display: grid;
-  grid-template-columns: 1fr 0.95fr;
-  gap: 24px;
-  padding: 28px 28px 24px;
-  border: 1.5px solid var(--color-ink);
-  background: var(--color-bg-card);
-  box-shadow: 6px 8px 0 rgba(33, 32, 32, 0.10);
-  color: inherit;
-  text-decoration: none;
   position: relative;
+  display: block;
+  min-height: 540px;
+  border: 1.5px solid var(--color-ink);
+  background: var(--color-ink);
+  box-shadow: 6px 8px 0 rgba(33, 32, 32, 0.10);
+  color: white;
+  text-decoration: none;
+  overflow: hidden;
   isolation: isolate;
   transform: rotate(var(--tilt));
   transition: box-shadow 0.22s ease, transform 0.22s ease;
+}
+/* Full-bleed background — video / image / fallback */
+.pc-worlds-index__card-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.pc-worlds-index__card-bg-video,
+.pc-worlds-index__card-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.pc-worlds-index__card-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.7) 100%);
+  pointer-events: none;
+}
+/* Resting state — name only, in white */
+.pc-worlds-index__card-resting {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 36px;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.pc-worlds-index__resting-name {
+  color: white;
+  font-family: var(--font-headline);
+  font-size: clamp(40px, 5.5vw, 64px);
+  line-height: 0.95;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.45);
+}
+/* Hover state — full postcard-back over a darker veil */
+.pc-worlds-index__card-hover {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.62);
+  display: grid;
+  grid-template-columns: 1fr 0.95fr;
+  gap: 24px;
+  padding: 32px;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  color: rgba(255, 253, 244, 0.94);
+}
+.pc-worlds-index__card:hover .pc-worlds-index__card-hover { opacity: 1; }
+.pc-worlds-index__card:hover .pc-worlds-index__card-resting { opacity: 0; }
+.pc-worlds-index__card-hover .eyebrow { color: rgba(255, 253, 244, 0.78); }
+.pc-worlds-index__card-hover .pc-worlds-index__card-name { color: white; }
+.pc-worlds-index__card-hover .pc-worlds-index__card-tag { color: rgba(255, 253, 244, 0.86); }
+.pc-worlds-index__card-hover .pc-worlds-index__card-left {
+  border-right-color: rgba(255, 253, 244, 0.32);
+}
+.pc-worlds-index__card-hover .pc-worlds-index__chip {
+  background: transparent;
+  border-color: rgba(255, 253, 244, 0.55);
+  color: rgba(255, 253, 244, 0.94);
+}
+.pc-worlds-index__card-hover .pc-worlds-index__to-block {
+  border-top-color: rgba(255, 253, 244, 0.32);
+}
+.pc-worlds-index__card-hover .pc-worlds-index__to-item {
+  border-bottom-color: rgba(255, 253, 244, 0.20);
 }
 /* Random-feeling tilts cycled across 7 cards so neighbours never match */
 .pc-worlds-index__card:nth-child(7n+1) { --tilt: -1.2deg; }
