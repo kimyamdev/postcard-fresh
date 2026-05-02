@@ -78,7 +78,6 @@
         {%- assign type_arr = types_present | split: '|' -%}
         {%- capture preview_html -%}
           <div class="pc-worlds-index__chips-block">
-            <div class="eyebrow pc-worlds-index__chips-label">Available in</div>
             <div class="pc-worlds-index__chips" style="--world-color: {{ w_color }};">
               {%- for label in type_arr -%}
                 {%- if label == blank -%}{%- continue -%}{%- endif -%}
@@ -92,7 +91,6 @@
       {%- if w_featured.size > 0 -%}
         {%- capture preview_html -%}
           <div class="pc-worlds-index__chips-block">
-            <div class="eyebrow pc-worlds-index__chips-label">Featured</div>
             <div class="pc-worlds-index__chips" style="--world-color: {{ w_color }};">
               {%- for fp in w_featured -%}
                 <span class="pc-worlds-index__chip">{{ fp.title }}</span>
@@ -140,7 +138,7 @@
         </div>
         <div class="pc-worlds-index__card-right">
           <div class="pc-worlds-index__card-stamp">
-            {% render 'stamp', name: w_name, family: w_family, color: w_color, size: size %}
+            {% render 'stamp', name: w_name, family: w_family, color: w_color, size: size, monogram_only: true %}
           </div>
           {%- if w_best_for and w_best_for.size > 0 -%}
             <div class="pc-worlds-index__to-block">

@@ -31,10 +31,12 @@
       <div class="pc-stamp__monogram" style="background: {{ color }};">
         <span class="pc-stamp__monogram-letters">{{ initials }}</span>
       </div>
-      <div class="pc-stamp__name">{{ name }}</div>
-      {%- if family != blank and size != 'sm' -%}
-        <div class="pc-stamp__family">{{ family }}</div>
-      {%- endif -%}
+      {%- unless monogram_only -%}
+        <div class="pc-stamp__name">{{ name }}</div>
+        {%- if family != blank and size != 'sm' -%}
+          <div class="pc-stamp__family">{{ family }}</div>
+        {%- endif -%}
+      {%- endunless -%}
     </div>
   </div>
   {%- if label != blank -%}
