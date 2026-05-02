@@ -14,7 +14,8 @@
         "title": "On your skin.",
         "zone": "skin",
         "view_all_text": "View all →",
-        "product_limit": 4
+        "product_limit": 4,
+        "hide_if_empty": true
       }
     },
     "ritual_room": {
@@ -23,7 +24,8 @@
         "title": "In the room.",
         "zone": "room",
         "view_all_text": "View all →",
-        "product_limit": 4
+        "product_limit": 4,
+        "hide_if_empty": true
       }
     },
     "ritual_travel": {
@@ -32,7 +34,8 @@
         "title": "Travel-size.",
         "zone": "travel",
         "view_all_text": "View all →",
-        "product_limit": 4
+        "product_limit": 4,
+        "hide_if_empty": true
       }
     },
     "neighbours": {
