@@ -581,7 +581,7 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 18px;
+  gap: 22px;
   padding-left: 0;
 }
 .pc-worlds-index__card-stamp {
@@ -589,6 +589,38 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   transform: rotate(2.5deg);
 }
 .pc-worlds-index__card-eyebrow { margin-bottom: 8px; }
+
+/* TO: list (right column under stamp) */
+.pc-worlds-index__to-block {
+  border-top: 1px dashed rgba(33, 32, 32, 0.32);
+  padding-top: 12px;
+}
+.pc-worlds-index__to-label {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  margin-bottom: 8px;
+  opacity: 0.7;
+}
+.pc-worlds-index__to-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.pc-worlds-index__to-item {
+  border-bottom: 1px dotted rgba(33, 32, 32, 0.22);
+  padding: 2px 0;
+}
+.pc-worlds-index__to-item:last-child { border-bottom: 0; }
+
+/* AVAILABLE IN moved into the left column under the tagline */
+.pc-worlds-index__card-left .pc-worlds-index__chips-block {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(33, 32, 32, 0.32);
+}
 .pc-worlds-index__card-name { font-size: 24px; margin-top: 6px; }
 .pc-worlds-index__card-tag { font-size: 13px; opacity: 0.78; margin-top: 8px; }
 .pc-worlds-index__card-products {
