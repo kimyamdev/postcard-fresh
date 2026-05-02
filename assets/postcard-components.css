@@ -549,8 +549,46 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 .pc-worlds-hero { padding: 80px 0; text-align: center; background: var(--color-bg-warm); }
 .pc-worlds-hero__title { font-size: clamp(56px, 8vw, 96px); margin-top: 12px; }
 .pc-worlds-hero__lede { margin-top: 16px; font-size: 18px; opacity: 0.8; }
-.pc-worlds-index__core { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-bottom: 64px; }
-.pc-worlds-index__card { display: flex; gap: 20px; padding: 24px; border: 1.5px solid var(--color-ink); background: var(--color-bg-card); color: inherit; text-decoration: none; }
+.pc-worlds-index__core { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; margin-bottom: 64px; }
+.pc-worlds-index__card {
+  display: grid;
+  grid-template-columns: 1fr 0.95fr;
+  gap: 24px;
+  padding: 28px 28px 24px;
+  border: 1.5px solid var(--color-ink);
+  background: var(--color-bg-card);
+  box-shadow: 6px 8px 0 rgba(33, 32, 32, 0.10);
+  color: inherit;
+  text-decoration: none;
+  position: relative;
+  isolation: isolate;
+  transition: box-shadow 0.18s ease, transform 0.18s ease;
+}
+.pc-worlds-index__card:hover {
+  box-shadow: 4px 6px 0 rgba(33, 32, 32, 0.10);
+  transform: translate(2px, 2px);
+}
+.pc-worlds-index__card-left {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-right: 22px;
+  border-right: 1.5px dashed rgba(33, 32, 32, 0.32);
+}
+.pc-worlds-index__card-right {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 18px;
+  padding-left: 0;
+}
+.pc-worlds-index__card-stamp {
+  align-self: flex-end;
+  transform: rotate(2.5deg);
+}
+.pc-worlds-index__card-eyebrow { margin-bottom: 8px; }
 .pc-worlds-index__card-name { font-size: 24px; margin-top: 6px; }
 .pc-worlds-index__card-tag { font-size: 13px; opacity: 0.78; margin-top: 8px; }
 .pc-worlds-index__card-products {
@@ -567,9 +605,8 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 
 /* Structured chip block on the worlds index card */
 .pc-worlds-index__chips-block {
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px dashed var(--color-line);
+  /* dashed divider lives on .pc-worlds-index__card-left's border-right
+     in the new postcard layout, so no top border here. */
 }
 .pc-worlds-index__chips-label {
   font-size: 9px;
