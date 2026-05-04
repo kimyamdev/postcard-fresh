@@ -1,0 +1,192 @@
+{%- comment -%}
+  Postcard-themed search results.
+
+  Three result groups, each rendered only if it has matches:
+    1. Worlds   — substring match of the query against world metaobject's
+                  name + family + tagline (Shopify search doesn't index
+                  metaobjects natively).
+    2. Products — Shopify's search.results filtered by object_type product.
+    3. Pages    — same, filtered by object_type page (and articles).
+
+  Empty state: when search.performed and zero matches across all three.
+  Idle state:  when no query yet — popular search pills.
+{%- endcomment -%}
+
+{%- liquid
+  assign terms = search.terms
+  assign terms_lc = terms | downcase | strip
+
+  assign all_worlds = shop.metaobjects.world.values
+  assign world_matches_csv = ''
+  if terms_lc != blank
+    for w in all_worlds
+      assign hay = w.name.value | append: ' ' | append: w.family.value | append: ' ' | append: w.tagline.value | downcase
+      if hay contains terms_lc
+        assign world_matches_csv = world_matches_csv | append: w.handle | append: '|'
+      endif
+    endfor
+  endif
+  assign world_matches_arr = world_matches_csv | split: '|'
+  assign world_matches_count = world_matches_arr.size
+
+  assign products_total = 0
+  assign pages_total = 0
+  if search.performed
+    for r in search.results
+      case r.object_type
+        when 'product'
+          assign products_total = products_total | plus: 1
+        when 'page'
+          assign pages_total = pages_total | plus: 1
+        when 'article'
+          assign pages_total = pages_total | plus: 1
+      endcase
+    endfor
+  endif
+  assign total = world_matches_count | plus: products_total | plus: pages_total
+
+  assign popular_csv = section.settings.popular | default: 'Hotel Lobby,Anywhere Fragrance,Refill,Gift,Bakuchiol'
+-%}
+
+<section class="pc-search">
+  <div class="container">
+
+    <header class="pc-search__head">
+      <div class="eyebrow pc-search__eyebrow">{{ section.settings.eyebrow | default: 'Postal dispatches' }}</div>
+      {%- if search.performed and terms != blank -%}
+        <h1 class="h-display pc-search__title">
+          {{ section.settings.title_prefix | default: 'Search results for' }}
+          <span class="pc-search__terms">&ldquo;{{ terms | escape }}&rdquo;</span>
+        </h1>
+        <div class="pc-search__count">{{ total }} {% if total == 1 %}result{% else %}results{% endif %}</div>
+      {%- else -%}
+        <h1 class="h-display pc-search__title">{{ section.settings.idle_title | default: 'What are you looking for?' }}</h1>
+      {%- endif -%}
+    </header>
+
+    <form action="{{ routes.search_url }}" method="get" role="search" class="pc-search__form">
+      <input type="hidden" name="options[prefix]" value="last">
+      <span class="pc-search__icon" aria-hidden="true">&#8981;</span>
+      <input type="search" name="q" value="{{ terms | escape }}" placeholder="{{ section.settings.placeholder | default: 'Search worlds, products, ingredients…' }}" class="pc-search__input" autocomplete="off" autofocus>
+      <button type="submit" class="pc-search__submit">{{ section.settings.submit_text | default: 'Send →' }}</button>
+    </form>
+
+    {%- if search.performed -%}
+      {%- if total == 0 -%}
+        <div class="pc-search__empty">
+          <div class="postmark postmark--ink pc-search__empty-pm"><div>NO<br>MATCH</div></div>
+          <h2 class="h-typewriter pc-search__empty-title">{{ section.settings.empty_title | default: 'Nothing in the postbag for that.' }}</h2>
+          <p class="pc-search__empty-body">{{ section.settings.empty_body | default: 'Try a world name, a scent family, or a product type.' }}</p>
+        </div>
+      {%- endif -%}
+
+      {%- if world_matches_count > 0 -%}
+        <div class="pc-search__group">
+          <div class="pc-search__group-head">
+            <h2 class="h-display pc-search__group-title">Worlds</h2>
+            <div class="pc-search__group-count">{{ world_matches_count }}</div>
+          </div>
+          <div class="pc-search__worlds">
+            {%- for handle in world_matches_arr -%}
+              {%- if handle == blank -%}{%- continue -%}{%- endif -%}
+              {%- assign w = shop.metaobjects.world[handle] -%}
+              {%- if w == blank -%}{%- continue -%}{%- endif -%}
+              {%- assign w_slug = w.slug.value | default: handle -%}
+              {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
+              {%- assign w_name = w.name.value -%}
+              {%- assign w_family = w.family.value -%}
+              {%- assign w_tagline = w.tagline.value -%}
+              <a class="pc-search__world-card" href="/pages/{{ w_slug }}" style="--world-color: {{ w_color }};">
+                {% render 'stamp', name: w_name, family: w_family, color: w_color, size: 'sm', monogram_only: true %}
+                <div class="pc-search__world-text">
+                  {%- if w_family != blank -%}
+                    <div class="eyebrow">{{ w_family }}</div>
+                  {%- endif -%}
+                  <h3 class="h-display pc-search__world-name">{{ w_name }}</h3>
+                  {%- if w_tagline != blank -%}
+                    <p class="pc-search__world-tag">{{ w_tagline }}</p>
+                  {%- endif -%}
+                </div>
+                <span class="pc-search__world-arrow">&rarr;</span>
+              </a>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if products_total > 0 -%}
+        <div class="pc-search__group">
+          <div class="pc-search__group-head">
+            <h2 class="h-display pc-search__group-title">Products</h2>
+            <div class="pc-search__group-count">{{ products_total }}</div>
+          </div>
+          <div class="pc-search__products">
+            {%- for r in search.results -%}
+              {%- if r.object_type != 'product' -%}{%- continue -%}{%- endif -%}
+              {%- assign p_world = r.metafields.postcard.world.value -%}
+              {%- assign p_world_color = p_world.accent_color.value | default: '#E8C36A' -%}
+              {%- assign p_world_name = p_world.name.value | default: '' -%}
+              {% render 'product-card', product: r, world: p_world_name, world_color: p_world_color %}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if pages_total > 0 -%}
+        <div class="pc-search__group">
+          <div class="pc-search__group-head">
+            <h2 class="h-display pc-search__group-title">Pages &amp; journal</h2>
+            <div class="pc-search__group-count">{{ pages_total }}</div>
+          </div>
+          <ul class="pc-search__pages">
+            {%- for r in search.results -%}
+              {%- if r.object_type != 'page' and r.object_type != 'article' -%}{%- continue -%}{%- endif -%}
+              <li class="pc-search__page-row">
+                <a class="pc-search__page-link" href="{{ r.url }}">
+                  <span class="pc-search__page-kind">{{ r.object_type | upcase }}</span>
+                  <span class="pc-search__page-title">{{ r.title }}</span>
+                  <span class="pc-search__page-arrow">&rarr;</span>
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+    {%- else -%}
+      {%- comment -%} Idle state — pop suggestions {%- endcomment -%}
+      <div class="pc-search__suggest">
+        <div class="eyebrow pc-search__suggest-label">{{ section.settings.popular_label | default: 'Popular searches' }}</div>
+        <div class="pc-search__suggest-pills">
+          {%- assign popular_arr = popular_csv | split: ',' -%}
+          {%- for term in popular_arr -%}
+            {%- assign t = term | strip -%}
+            {%- if t == blank -%}{%- continue -%}{%- endif -%}
+            <a class="pc-search__suggest-pill" href="{{ routes.search_url }}?q={{ t | url_encode }}">{{ t }}</a>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Postcard Search",
+  "settings": [
+    { "type": "text",     "id": "eyebrow",        "label": "Eyebrow",          "default": "Postal dispatches" },
+    { "type": "text",     "id": "idle_title",     "label": "Idle title",       "default": "What are you looking for?" },
+    { "type": "text",     "id": "title_prefix",   "label": "Results title prefix", "default": "Search results for" },
+    { "type": "text",     "id": "placeholder",    "label": "Input placeholder","default": "Search worlds, products, ingredients…" },
+    { "type": "text",     "id": "submit_text",    "label": "Submit button",    "default": "Send →" },
+    { "type": "header",   "content": "Empty state" },
+    { "type": "text",     "id": "empty_title",    "label": "Title",            "default": "Nothing in the postbag for that." },
+    { "type": "text",     "id": "empty_body",     "label": "Body",             "default": "Try a world name, a scent family, or a product type." },
+    { "type": "header",   "content": "Idle suggestions" },
+    { "type": "text",     "id": "popular_label",  "label": "Label",            "default": "Popular searches" },
+    { "type": "text",     "id": "popular",        "label": "Popular searches (CSV)", "default": "Hotel Lobby,Anywhere Fragrance,Refill,Gift,Bakuchiol" }
+  ],
+  "presets": [{ "name": "Postcard Search" }]
+}
+{% endschema %}
