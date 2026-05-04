@@ -1,0 +1,120 @@
+{%- comment -%}
+  Postcard-themed blog (article list).
+
+  Header band with eyebrow + blog title, then a list of articles rendered
+  as horizontal postcard rows: tilted small stamp / postmark on the left,
+  date+title+excerpt+author in the middle, "Read →" arrow on the right.
+  Cards alternate small tilts so the column reads like a stack of mailed
+  postcards. Hover lifts the card with an ink shadow.
+{%- endcomment -%}
+
+{%- liquid
+  assign per_page = section.settings.per_page | default: 12
+  assign show_excerpt = section.settings.show_excerpt
+  if show_excerpt == nil
+    assign show_excerpt = true
+  endif
+  assign show_author = section.settings.show_author
+-%}
+
+<section class="pc-blog">
+  <div class="container">
+
+    <header class="pc-blog__head">
+      <div class="eyebrow pc-blog__eyebrow">{{ section.settings.eyebrow | default: 'Postcard journal' }}</div>
+      <h1 class="h-display pc-blog__title">{{ blog.title | default: 'Field notes' }}</h1>
+      {%- if section.settings.lede != blank -%}
+        <p class="pc-blog__lede">{{ section.settings.lede }}</p>
+      {%- endif -%}
+    </header>
+
+    {%- if blog.articles.size == 0 -%}
+      <div class="pc-blog__empty">
+        <div class="postmark postmark--ink pc-blog__empty-pm"><div>EMPTY<br>POSTBAG</div></div>
+        <h2 class="h-typewriter">{{ section.settings.empty_title | default: 'No postcards filed yet.' }}</h2>
+        <p>{{ section.settings.empty_body | default: 'Come back soon — the postman is on a slow round.' }}</p>
+      </div>
+    {%- else -%}
+      {%- paginate blog.articles by per_page -%}
+        <div class="pc-blog__list">
+          {%- for article in blog.articles -%}
+            {%- assign tilt_n = forloop.index0 | modulo: 4 -%}
+            {%- case tilt_n -%}
+              {%- when 0 -%}{%- assign tilt = '-1.1deg' -%}
+              {%- when 1 -%}{%- assign tilt = '0.7deg' -%}
+              {%- when 2 -%}{%- assign tilt = '-0.4deg' -%}
+              {%- else -%}{%- assign tilt = '1.2deg' -%}
+            {%- endcase -%}
+
+            <a class="pc-blog__card" href="{{ article.url }}" style="--tilt: {{ tilt }};">
+              <div class="pc-blog__card-stamp">
+                {%- if article.image -%}
+                  {%- assign card_alt = article.title | escape -%}
+                  {{ article.image | image_url: width: 200 | image_tag: alt: card_alt, loading: 'lazy', class: 'pc-blog__card-img' }}
+                {%- else -%}
+                  <div class="postmark postmark--yellow pc-blog__card-pm">
+                    <div>POSTCARD<br>JOURNAL</div>
+                  </div>
+                {%- endif -%}
+              </div>
+
+              <div class="pc-blog__card-body">
+                <div class="pc-blog__card-meta">
+                  <span class="pc-blog__card-date">{{ article.published_at | date: '%b %d, %Y' | upcase }}</span>
+                  {%- if show_author and article.author != blank -%}
+                    <span class="pc-blog__card-sep">·</span>
+                    <span class="pc-blog__card-author">By {{ article.author }}</span>
+                  {%- endif -%}
+                  {%- if article.tags.size > 0 -%}
+                    <span class="pc-blog__card-sep">·</span>
+                    <span class="pc-blog__card-tag">{{ article.tags | first }}</span>
+                  {%- endif -%}
+                </div>
+                <h3 class="h-display pc-blog__card-title">{{ article.title }}</h3>
+                {%- if show_excerpt -%}
+                  {%- assign excerpt = article.excerpt_or_content | strip_html | truncatewords: 30 -%}
+                  {%- if excerpt != blank -%}
+                    <p class="pc-blog__card-excerpt">{{ excerpt }}</p>
+                  {%- endif -%}
+                </p>
+                {%- endif -%}
+              </div>
+
+              <span class="pc-blog__card-arrow">Read &rarr;</span>
+            </a>
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="pc-blog__pagination">
+            {%- if paginate.previous -%}
+              <a class="tlink" href="{{ paginate.previous.url }}">&larr; Previous</a>
+            {%- endif -%}
+            <span class="pc-blog__pagination-mid">Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+            {%- if paginate.next -%}
+              <a class="tlink" href="{{ paginate.next.url }}">Next &rarr;</a>
+            {%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Postcard Blog",
+  "settings": [
+    { "type": "text", "id": "eyebrow",      "label": "Eyebrow", "default": "Postcard journal" },
+    { "type": "text", "id": "lede",         "label": "Lede (optional)" },
+    { "type": "range","id": "per_page",     "label": "Articles per page", "min": 4, "max": 24, "step": 2, "default": 12 },
+    { "type": "checkbox", "id": "show_excerpt", "label": "Show excerpt", "default": true },
+    { "type": "checkbox", "id": "show_author",  "label": "Show author",  "default": false },
+    { "type": "header", "content": "Empty state" },
+    { "type": "text", "id": "empty_title", "label": "Title", "default": "No postcards filed yet." },
+    { "type": "text", "id": "empty_body",  "label": "Body",  "default": "Come back soon — the postman is on a slow round." }
+  ],
+  "presets": [{ "name": "Postcard Blog" }]
+}
+{% endschema %}

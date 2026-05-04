@@ -1,0 +1,128 @@
+{%- comment -%}
+  Postcard-themed individual article (blog post).
+
+  Layout:
+    - Breadcrumb back to blog
+    - Hero: postcard-back inspired — left half eyebrow + title + meta;
+            right half hero image with rotated stamp + "POSTCARD JOURNAL"
+            postmark anchor.
+    - Body: prose container, max ~720px wide for readability
+    - Share strip + "Back to journal" CTA
+    - Related: latest 3 articles from the same blog (excluding current)
+{%- endcomment -%}
+
+{%- liquid
+  assign related_count = section.settings.related_count | default: 3
+-%}
+
+<section class="pc-art">
+  <div class="container">
+
+    <nav class="pc-art__breadcrumb">
+      <a href="{{ routes.root_url }}">Home</a>
+      <span class="pc-art__crumb-sep">/</span>
+      <a href="{{ blog.url }}">{{ blog.title }}</a>
+      <span class="pc-art__crumb-sep">/</span>
+      <span class="pc-art__crumb-cur">{{ article.title }}</span>
+    </nav>
+
+    <header class="pc-art__hero">
+      <div class="pc-art__hero-left">
+        <div class="eyebrow pc-art__eyebrow">{{ section.settings.eyebrow | default: 'Field note' }}</div>
+        <h1 class="h-display pc-art__title">{{ article.title }}</h1>
+        <div class="pc-art__meta">
+          <span>{{ article.published_at | date: '%b %d, %Y' | upcase }}</span>
+          {%- if section.settings.show_author and article.author != blank -%}
+            <span class="pc-art__meta-sep">·</span>
+            <span>By {{ article.author }}</span>
+          {%- endif -%}
+          {%- if article.tags.size > 0 -%}
+            <span class="pc-art__meta-sep">·</span>
+            <span>{{ article.tags | first }}</span>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="pc-art__hero-right">
+        {%- if article.image -%}
+          {%- assign alt = article.image.alt | default: article.title | escape -%}
+          <div class="pc-art__hero-img-wrap">
+            {{ article.image | image_url: width: 1200 | image_tag: alt: alt, loading: 'eager', class: 'pc-art__hero-img', widths: '600,900,1200,1600' }}
+          </div>
+        {%- else -%}
+          <div class="pc-art__hero-placeholder ph ph--world" style="--world-color: #E8C36A;">
+            <span class="postmark postmark--ink pc-art__hero-pm"><div>POSTCARD<br>JOURNAL</div></span>
+          </div>
+        {%- endif -%}
+        <span class="postmark postmark--ink pc-art__hero-stamp"><div>POST<br>NO. {{ article.id | modulo: 999 | prepend: '000' | slice: -3, 3 }}</div></span>
+      </div>
+    </header>
+
+    <article class="pc-art__body rte">
+      {{ article.content }}
+    </article>
+
+    <footer class="pc-art__footer">
+      {%- if section.settings.show_share -%}
+        <div class="pc-art__share">
+          <span class="eyebrow">Send this postcard</span>
+          {%- assign share_url = shop.url | append: article.url -%}
+          {%- assign share_title = article.title | url_encode -%}
+          <a class="tlink" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?url={{ share_url | url_encode }}&text={{ share_title }}">Twitter</a>
+          <a class="tlink" target="_blank" rel="noopener" href="https://www.facebook.com/sharer.php?u={{ share_url | url_encode }}">Facebook</a>
+          <a class="tlink" href="mailto:?subject={{ share_title }}&body={{ share_url | url_encode }}">Email</a>
+        </div>
+      {%- endif -%}
+      <a class="btn btn--ghost pc-art__back" href="{{ blog.url }}">&larr; Back to {{ blog.title }}</a>
+    </footer>
+
+    {%- comment -%} Related — latest N articles from same blog (excl. this one) {%- endcomment -%}
+    {%- assign shown = 0 -%}
+    {%- assign related_html = '' -%}
+    {%- capture related_html -%}
+      {%- for a in blog.articles -%}
+        {%- if shown >= related_count -%}{%- break -%}{%- endif -%}
+        {%- if a.id == article.id -%}{%- continue -%}{%- endif -%}
+        <a class="pc-art__related-card" href="{{ a.url }}">
+          {%- if a.image -%}
+            {%- assign rel_alt = a.title | escape -%}
+            {{ a.image | image_url: width: 600 | image_tag: alt: rel_alt, loading: 'lazy', class: 'pc-art__related-img' }}
+          {%- else -%}
+            <div class="pc-art__related-placeholder"></div>
+          {%- endif -%}
+          <div>
+            <div class="pc-art__related-date">{{ a.published_at | date: '%b %d, %Y' | upcase }}</div>
+            <h3 class="h-typewriter pc-art__related-title">{{ a.title }}</h3>
+          </div>
+        </a>
+        {%- assign shown = shown | plus: 1 -%}
+      {%- endfor -%}
+    {%- endcapture -%}
+
+    {%- if shown > 0 -%}
+      <section class="pc-art__related">
+        <div class="pc-art__related-head">
+          <h2 class="h-display">{{ section.settings.related_title | default: 'More from the journal' }}</h2>
+          <a class="tlink" href="{{ blog.url }}">All postcards &rarr;</a>
+        </div>
+        <div class="pc-art__related-grid">{{ related_html }}</div>
+      </section>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Postcard Article",
+  "settings": [
+    { "type": "text", "id": "eyebrow",       "label": "Eyebrow",      "default": "Field note" },
+    { "type": "checkbox", "id": "show_author", "label": "Show author", "default": false },
+    { "type": "checkbox", "id": "show_share",  "label": "Show share strip", "default": true },
+    { "type": "header", "content": "Related" },
+    { "type": "text", "id": "related_title", "label": "Related heading", "default": "More from the journal" },
+    { "type": "range","id": "related_count", "label": "Related count", "min": 0, "max": 6, "step": 1, "default": 3 }
+  ],
+  "presets": [{ "name": "Postcard Article" }]
+}
+{% endschema %}
