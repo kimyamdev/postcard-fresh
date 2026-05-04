@@ -564,7 +564,8 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   --tilt: 0deg;
   position: relative;
   display: block;
-  min-height: 540px;
+  aspect-ratio: 3 / 2;
+  min-height: 320px;
   border: 1.5px solid var(--color-ink);
   background: var(--color-ink);
   box-shadow: 6px 8px 0 rgba(33, 32, 32, 0.10);
@@ -613,7 +614,7 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 .pc-worlds-index__resting-name {
   color: white;
   font-family: var(--font-headline);
-  font-size: clamp(40px, 5.5vw, 64px);
+  font-size: clamp(32px, 3.4vw, 48px);
   line-height: 0.95;
   letter-spacing: 0.04em;
   text-transform: uppercase;
