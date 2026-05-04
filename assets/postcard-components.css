@@ -4417,18 +4417,27 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 }
 .pc-art__related-img {
   width: 240px;
-  height: 100%;
+  height: 140px;
   object-fit: cover;
+  object-position: center top;
   display: block;
   border-right: 1.5px solid var(--color-line);
+  background: var(--color-bg);
 }
 .pc-art__related-placeholder {
   width: 240px;
-  height: 100%;
+  height: 140px;
   background: var(--color-bg-warm);
   border-right: 1.5px solid var(--color-line);
 }
-.pc-art__related-card > div { padding: 0; min-width: 0; }
+.pc-art__related-text { padding: 0; min-width: 0; }
+.pc-art__related-card > div.pc-art__related-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  gap: 6px;
+}
 .pc-art__related-title {
   display: -webkit-box;
   -webkit-line-clamp: 2;

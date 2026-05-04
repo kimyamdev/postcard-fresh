@@ -82,17 +82,25 @@
     {%- capture related_html -%}
       {%- for a in blog.articles -%}
         {%- if shown >= related_count -%}{%- break -%}{%- endif -%}
+        {%- if a == blank or a.url == blank -%}{%- continue -%}{%- endif -%}
         {%- if a.id == article.id -%}{%- continue -%}{%- endif -%}
+        {%- assign a_title = a.title | default: 'Untitled' -%}
+        {%- assign a_date_str = '' -%}
+        {%- if a.published_at -%}
+          {%- assign a_date_str = a.published_at | date: '%b %d, %Y' | upcase -%}
+        {%- endif -%}
         <a class="pc-art__related-card" href="{{ a.url }}">
           {%- if a.image -%}
-            {%- assign rel_alt = a.title | escape -%}
+            {%- assign rel_alt = a_title | escape -%}
             {{ a.image | image_url: width: 600 | image_tag: alt: rel_alt, loading: 'lazy', class: 'pc-art__related-img' }}
           {%- else -%}
             <div class="pc-art__related-placeholder"></div>
           {%- endif -%}
-          <div>
-            <div class="pc-art__related-date">{{ a.published_at | date: '%b %d, %Y' | upcase }}</div>
-            <h3 class="h-typewriter pc-art__related-title">{{ a.title }}</h3>
+          <div class="pc-art__related-text">
+            {%- if a_date_str != blank -%}
+              <div class="pc-art__related-date">{{ a_date_str }}</div>
+            {%- endif -%}
+            <h3 class="h-typewriter pc-art__related-title">{{ a_title }}</h3>
           </div>
         </a>
         {%- assign shown = shown | plus: 1 -%}
