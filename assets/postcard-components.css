@@ -600,7 +600,7 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   position: absolute;
   inset: 0;
   background: var(--world-color, #E8C36A);
-  opacity: calc(var(--world-tint-alpha, 30%) / 100);
+  opacity: var(--world-tint-alpha, 30%);
   mix-blend-mode: var(--world-tint-blend, multiply);
   pointer-events: none;
   z-index: 1;
