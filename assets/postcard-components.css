@@ -4354,14 +4354,50 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 .pc-art__body p { margin: 0 0 1.4em; }
 .pc-art__body h2 { font-family: var(--font-headline); font-size: 32px; margin: 2em 0 0.6em; }
 .pc-art__body h3 { font-family: var(--font-display); font-size: 22px; margin: 1.6em 0 0.5em; }
-.pc-art__body ul, .pc-art__body ol { padding-left: 1.4em; margin: 0 0 1.4em; }
-.pc-art__body li { margin-bottom: 0.6em; }
-/* Reset paragraph margins inside list items so bullets align with the
-   first line of text instead of floating above an empty top-margin gap. */
+/* Custom-bullet lists.
+   Shopify's rich-text editor wraps li contents in <p>, which forces a
+   block-level child inside the li and makes the native browser bullet
+   render alone above the text. Killing the native bullet and drawing
+   our own ::before bullet pinned to the top-left of the li always
+   aligns it with the first line of content, regardless of whether the
+   li contains a <p>, plain text, <strong>, etc. */
+.pc-art__body ul, .pc-art__body ol {
+  list-style: none;
+  padding-left: 0;
+  margin: 0 0 1.4em;
+}
+.pc-art__body li {
+  position: relative;
+  padding-left: 1.5em;
+  margin-bottom: 0.4em;
+}
+.pc-art__body ul > li::before {
+  content: "•";
+  position: absolute;
+  left: 0.45em;
+  top: 0;
+  line-height: inherit;
+}
+.pc-art__body ol {
+  counter-reset: pc-li;
+}
+.pc-art__body ol > li {
+  counter-increment: pc-li;
+}
+.pc-art__body ol > li::before {
+  content: counter(pc-li) ".";
+  position: absolute;
+  left: 0;
+  top: 0;
+  line-height: inherit;
+  font-family: var(--font-display);
+  font-size: 0.92em;
+}
 .pc-art__body li > p { margin: 0; }
-.pc-art__body li > p + p { margin-top: 0.5em; }
+.pc-art__body li > p + p { margin-top: 0.4em; }
 .pc-art__body li > ul,
 .pc-art__body li > ol { margin: 0.4em 0 0; }
+.pc-art__body li > br { display: none; }
 .pc-art__body blockquote {
   border-left: 3px solid var(--color-ink);
   padding-left: 22px;
