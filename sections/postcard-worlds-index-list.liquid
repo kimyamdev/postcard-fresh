@@ -105,7 +105,8 @@
     {%- assign w_image = w.hero_image.value -%}
     {%- assign w_best_for = w.best_for.value -%}
     {%- assign tint_alpha = section.settings.tint_alpha | default: 30 -%}
-    <a class="pc-worlds-index__card" href="/pages/{{ w_slug }}" style="--world-color: {{ w_color }}; --world-tint-alpha: {{ tint_alpha }}%;">
+    {%- assign tint_blend = section.settings.tint_blend | default: 'multiply' -%}
+    <a class="pc-worlds-index__card" href="/pages/{{ w_slug }}" style="--world-color: {{ w_color }}; --world-tint-alpha: {{ tint_alpha }}%; --world-tint-blend: {{ tint_blend }};">
 
       {%- comment -%} Full-bleed background — video → image → world-color fallback {%- endcomment -%}
       <div class="pc-worlds-index__card-bg" style="background: linear-gradient(160deg, {{ w_color }}, color-mix(in srgb, {{ w_color }} 60%, var(--color-ink)));">
@@ -191,7 +192,20 @@
       "info": "Product types are pulled from each product's Shopify Product type field, deduped per world. Featured products read world.featured_products."
     },
     { "type": "range", "id": "type_limit", "label": "Max product types per card", "min": 2, "max": 8, "step": 1, "default": 4 },
-    { "type": "range", "id": "tint_alpha", "label": "Video tint strength (%)", "min": 0, "max": 80, "step": 5, "default": 30, "unit": "%", "info": "Each card overlays a multiply-blended layer of its world's accent color on top of the video. Tunes how strong the brand colour reads through the footage." },
+    { "type": "header", "content": "Video tint" },
+    { "type": "range", "id": "tint_alpha", "label": "Strength (%)", "min": 0, "max": 80, "step": 5, "default": 30, "unit": "%", "info": "How strongly the world's accent color sits over the video." },
+    { "type": "select", "id": "tint_blend", "label": "Blend mode", "default": "multiply",
+      "options": [
+        { "value": "normal",      "label": "Normal — flat color veil" },
+        { "value": "multiply",    "label": "Multiply — enriches darks (default)" },
+        { "value": "overlay",     "label": "Overlay — punchy contrast" },
+        { "value": "soft-light",  "label": "Soft light — gentle wash" },
+        { "value": "screen",      "label": "Screen — lifts to lighter tints" },
+        { "value": "color",       "label": "Color — hue shift, keeps luminance" },
+        { "value": "hue",         "label": "Hue — lightest hue shift" }
+      ],
+      "info": "Try a few — different videos look better under different blends."
+    },
     { "type": "header", "content": "Tier filter" },
     { "type": "select", "id": "tier", "label": "Tier", "default": "World",
       "options": [
