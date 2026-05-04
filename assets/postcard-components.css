@@ -592,12 +592,26 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   object-fit: cover;
   display: block;
 }
+/* World-color tint over the video. Alpha is per-instance via the
+   --world-tint-alpha CSS variable on the card. Sits ABOVE the video
+   but BELOW the bottom-darken gradient + content layers. */
+.pc-worlds-index__card-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--world-color, #E8C36A);
+  opacity: calc(var(--world-tint-alpha, 30%) / 100);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  z-index: 1;
+}
 .pc-worlds-index__card-bg::after {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.7) 100%);
   pointer-events: none;
+  z-index: 2;
 }
 /* Resting state — name only, in white */
 .pc-worlds-index__card-resting {
