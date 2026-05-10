@@ -2,11 +2,18 @@
   assign worlds = shop.metaobjects.world.values
   assign show_family = section.settings.show_family
   assign max_count = section.settings.max_count | default: 0
+  assign world_total = 0
+  for w in worlds
+    if w.tier.value == 'World'
+      assign world_total = world_total | plus: 1
+    endif
+  endfor
+  assign rendered_title = section.settings.title | replace: '[count]', world_total
 -%}
 <section class="section--tight section pc-about-worlds">
   <div class="container">
-    {%- if section.settings.title != blank -%}
-      <h2 class="h-display pc-about-worlds__title">{{ section.settings.title }}</h2>
+    {%- if rendered_title != blank -%}
+      <h2 class="h-display pc-about-worlds__title">{{ rendered_title }}</h2>
     {%- endif -%}
     <div class="pc-about-worlds__strip">
       {%- assign emitted = 0 -%}
@@ -34,7 +41,7 @@
   "tag": "section",
   "settings": [
     { "type": "paragraph", "content": "Shows every World metaobject with tier = 'World', in admin order." },
-    { "type": "text", "id": "title", "label": "Title", "default": "22 worlds. One bathroom shelf at a time." },
+    { "type": "text", "id": "title", "label": "Title", "default": "[count] worlds. One bathroom shelf at a time.", "info": "[count] is replaced with the live count of tier-World metaobjects." },
     { "type": "checkbox", "id": "show_family", "label": "Show family label under each stamp", "default": true },
     { "type": "range", "id": "max_count", "label": "Max worlds to show", "min": 0, "max": 50, "step": 1, "default": 0, "info": "0 = show all tier-World worlds." }
   ],
