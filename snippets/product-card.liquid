@@ -1,4 +1,5 @@
 {%- liquid
+  assign card_compare_at = ''
   if product
     assign card_name = product.title
     assign card_url = product.url
@@ -6,6 +7,9 @@
       assign card_price = product.price_min | money | prepend: 'From '
     else
       assign card_price = product.price | money
+    endif
+    if product.compare_at_price > product.price
+      assign card_compare_at = product.compare_at_price | money
     endif
     assign world_obj = product.metafields.postcard.world.value | default: product.metafields.custom.world.value
     if world_obj
@@ -18,6 +22,7 @@
   assign card_name = name | default: card_name
   assign card_url = href | default: card_url | default: '#'
   assign card_price = price | default: card_price
+  assign card_compare_at = compare_at | default: card_compare_at
   assign card_world = world | default: card_world | default: ''
   assign card_world_color = world_color | default: card_world_color | default: '#E8C36A'
   assign card_world_stamp = world_stamp | default: card_world_stamp
@@ -55,7 +60,12 @@
     <div class="pc-product-card__world">{{ card_world }}</div>
     <h3 class="pc-product-card__name">{{ card_name }}</h3>
     <div class="pc-product-card__row">
-      <span class="pc-product-card__price">{{ card_price }}</span>
+      <span class="pc-product-card__price">
+        {{ card_price }}
+        {%- if card_compare_at != blank -%}
+          <s class="pc-product-card__compare-at">{{ card_compare_at }}</s>
+        {%- endif -%}
+      </span>
       <span class="tlink">Add &rarr;</span>
     </div>
   </div>

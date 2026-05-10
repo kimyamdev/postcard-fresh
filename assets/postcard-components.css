@@ -377,6 +377,12 @@ a.pc-product-card { cursor: pointer; }
   font-size: 14px;
   font-weight: 500;
 }
+.pc-product-card__compare-at {
+  margin-left: 6px;
+  text-decoration: line-through;
+  font-weight: 400;
+  opacity: 0.55;
+}
 
 /* === PDP Reviews === */
 .pc-pdp-reviews { background: var(--color-bg-warm); }
