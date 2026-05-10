@@ -1,0 +1,50 @@
+<section class="section pc-mem-earn">
+  <div class="container">
+    {%- if section.settings.title != blank -%}
+      <h2 class="h-display pc-mem-earn__title">{{ section.settings.title }}</h2>
+    {%- endif -%}
+    <div class="pc-mem-earn__grid">
+      {%- for block in section.blocks -%}
+        <div class="pc-earn-card" {{ block.shopify_attributes }}>
+          <span class="postmark pc-earn-card__pm"><div>{{ block.settings.postmark | default: 'EARN' }}</div></span>
+          <div>
+            <div class="h-display pc-earn-card__h">{{ block.settings.heading }}</div>
+            <div class="pc-earn-card__s">{{ block.settings.body }}</div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Membership · Earn",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Earning coins is as easy as self-care should be." }
+  ],
+  "blocks": [
+    {
+      "type": "earn",
+      "name": "Earn card",
+      "settings": [
+        { "type": "text", "id": "postmark", "label": "Postmark text", "default": "EARN" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Place an order" },
+        { "type": "textarea", "id": "body", "label": "Body", "default": "1 coin / $1 (Deluxe + Club). 2 coins / $1 (Villa)." }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Membership · Earn",
+    "blocks": [
+      { "type": "earn", "settings": { "postmark": "EARN", "heading": "Place an order", "body": "1 coin / $1 (Deluxe + Club). 2 coins / $1 (Villa)." }},
+      { "type": "earn", "settings": { "postmark": "EARN", "heading": "Celebrate your birthday", "body": "100 coins." }},
+      { "type": "earn", "settings": { "postmark": "EARN", "heading": "Write a review", "body": "20 coins · +10 photo · +15 video." }},
+      { "type": "earn", "settings": { "postmark": "EARN", "heading": "Follow on Instagram", "body": "20 coins." }},
+      { "type": "earn", "settings": { "postmark": "EARN", "heading": "Follow on TikTok", "body": "20 coins." }},
+      { "type": "earn", "settings": { "postmark": "EARN", "heading": "Refer a friend", "body": "You both get 10% off." }}
+    ]
+  }]
+}
+{% endschema %}

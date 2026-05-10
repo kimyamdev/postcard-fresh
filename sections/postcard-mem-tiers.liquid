@@ -1,0 +1,70 @@
+{%- liquid
+  assign row_labels = section.settings.row_labels | default: 'Earn,Welcome,Shipping,Birthday,Pals events,Exclusive drops' | split: ','
+-%}
+<section class="section">
+  <div class="container">
+    {%- if section.settings.title != blank -%}
+      <h2 class="h-display pc-mem-tiers__title">{{ section.settings.title }}</h2>
+    {%- endif -%}
+    <div class="pc-mem-tiers__grid">
+      {%- for block in section.blocks -%}
+        <div class="stamp-frame stamp-side pc-tier-card" style="background: {{ block.settings.bg_color }};" {{ block.shopify_attributes }}>
+          <div class="pc-tier-card__head">
+            <h3 class="h-display pc-tier-card__name">{{ block.settings.name }}</h3>
+            <span class="postmark"><div>{{ block.settings.postmark }}</div></span>
+          </div>
+          <div class="pc-tier-card__sub">{{ block.settings.subtitle }}</div>
+          <div class="pc-tier-card__divider"></div>
+          {%- for label in row_labels -%}
+            {%- assign label_clean = label | strip -%}
+            {%- assign idx = forloop.index -%}
+            {%- assign value_key = 'value_' | append: idx -%}
+            {%- assign value = block.settings[value_key] | default: '—' -%}
+            <div class="pc-tier-card__row"><span>{{ label_clean }}</span><span>{{ value }}</span></div>
+          {%- endfor -%}
+        </div>
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.note != blank -%}
+      <p class="pc-mem-tiers__note">{{ section.settings.note }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Membership · Tiers",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Three tiers. More love. More rewards." },
+    { "type": "text", "id": "row_labels", "label": "Row labels", "default": "Earn,Welcome,Shipping,Birthday,Pals events,Exclusive drops", "info": "Comma-separated, applied to all tier cards. Each tier has 6 corresponding values below." },
+    { "type": "text", "id": "note", "label": "Footer note", "default": "100 coins = $5 store credit." }
+  ],
+  "blocks": [
+    {
+      "type": "tier",
+      "name": "Tier card",
+      "settings": [
+        { "type": "color", "id": "bg_color", "label": "Background color", "default": "#FFFDF4" },
+        { "type": "text", "id": "name", "label": "Name", "default": "Deluxe" },
+        { "type": "text", "id": "postmark", "label": "Postmark text", "default": "01" },
+        { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Just sign up" },
+        { "type": "text", "id": "value_1", "label": "Row 1 value", "default": "1 coin / $1" },
+        { "type": "text", "id": "value_2", "label": "Row 2 value", "default": "—" },
+        { "type": "text", "id": "value_3", "label": "Row 3 value", "default": "$80+ orders" },
+        { "type": "text", "id": "value_4", "label": "Row 4 value", "default": "100 coins" },
+        { "type": "text", "id": "value_5", "label": "Row 5 value", "default": "—" },
+        { "type": "text", "id": "value_6", "label": "Row 6 value", "default": "—" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Membership · Tiers",
+    "blocks": [
+      { "type": "tier", "settings": { "bg_color": "#FFFDF4", "name": "Deluxe", "postmark": "01", "subtitle": "Just sign up", "value_1": "1 coin / $1", "value_2": "—", "value_3": "$80+ orders", "value_4": "100 coins", "value_5": "—", "value_6": "—" }},
+      { "type": "tier", "settings": { "bg_color": "#F2EEDD", "name": "Club", "postmark": "02", "subtitle": "$250+ a year", "value_1": "1 coin / $1", "value_2": "$30 gift card", "value_3": "$80+ orders", "value_4": "100 coins", "value_5": "✓", "value_6": "✓" }},
+      { "type": "tier", "settings": { "bg_color": "#FFB233", "name": "Villa", "postmark": "03", "subtitle": "$500+ a year", "value_1": "2 coins / $1", "value_2": "$60 gift card", "value_3": "Always free", "value_4": "100 coins", "value_5": "✓", "value_6": "✓" }}
+    ]
+  }]
+}
+{% endschema %}

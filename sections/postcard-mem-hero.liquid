@@ -1,0 +1,40 @@
+<section class="pc-mem-hero">
+  <div class="container">
+    {%- if section.settings.eyebrow != blank -%}
+      <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+    {%- endif -%}
+    {%- if section.settings.title != blank -%}
+      <h1 class="h-display pc-mem-hero__title">{{ section.settings.title }}</h1>
+    {%- endif -%}
+    {%- if section.settings.body != blank -%}
+      <p class="pc-mem-hero__body">{{ section.settings.body }}</p>
+    {%- endif -%}
+    <div class="pc-mem-hero__ctas">
+      {%- if section.settings.cta_primary_text != blank -%}
+        <a class="btn" href="{{ section.settings.cta_primary_url | default: routes.account_register_url }}">{{ section.settings.cta_primary_text }}</a>
+      {%- endif -%}
+      {%- if section.settings.cta_secondary_text != blank -%}
+        <a class="tlink" href="{{ section.settings.cta_secondary_url | default: routes.account_login_url }}">{{ section.settings.cta_secondary_text }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Membership · Hero",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Postcard Membership" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Your self-care passport." },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "Earn coins on every order. Unlock perks the more you visit." },
+    { "type": "header", "content": "Primary CTA" },
+    { "type": "text", "id": "cta_primary_text", "label": "Text", "default": "Join free →" },
+    { "type": "url", "id": "cta_primary_url", "label": "Link" },
+    { "type": "header", "content": "Secondary CTA" },
+    { "type": "text", "id": "cta_secondary_text", "label": "Text", "default": "Already a member? Sign in" },
+    { "type": "url", "id": "cta_secondary_url", "label": "Link" }
+  ],
+  "presets": [{ "name": "Membership · Hero" }]
+}
+{% endschema %}

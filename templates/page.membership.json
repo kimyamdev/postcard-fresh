@@ -1,6 +1,33 @@
 {
   "sections": {
-    "main": { "type": "postcard-membership", "settings": {} }
+    "mem_hero": { "type": "postcard-mem-hero", "settings": {} },
+    "mem_tiers": {
+      "type": "postcard-mem-tiers",
+      "blocks": {
+        "t1": { "type": "tier", "settings": { "bg_color": "#FFFDF4", "name": "Deluxe", "postmark": "01", "subtitle": "Just sign up", "value_1": "1 coin / $1", "value_2": "—", "value_3": "$80+ orders", "value_4": "100 coins", "value_5": "—", "value_6": "—" }},
+        "t2": { "type": "tier", "settings": { "bg_color": "#F2EEDD", "name": "Club", "postmark": "02", "subtitle": "$250+ a year", "value_1": "1 coin / $1", "value_2": "$30 gift card", "value_3": "$80+ orders", "value_4": "100 coins", "value_5": "✓", "value_6": "✓" }},
+        "t3": { "type": "tier", "settings": { "bg_color": "#FFB233", "name": "Villa", "postmark": "03", "subtitle": "$500+ a year", "value_1": "2 coins / $1", "value_2": "$60 gift card", "value_3": "Always free", "value_4": "100 coins", "value_5": "✓", "value_6": "✓" }}
+      },
+      "block_order": ["t1","t2","t3"],
+      "settings": {}
+    },
+    "mem_earn": {
+      "type": "postcard-mem-earn",
+      "blocks": {
+        "e1": { "type": "earn", "settings": { "postmark": "EARN", "heading": "Place an order", "body": "1 coin / $1 (Deluxe + Club). 2 coins / $1 (Villa)." }},
+        "e2": { "type": "earn", "settings": { "postmark": "EARN", "heading": "Celebrate your birthday", "body": "100 coins." }},
+        "e3": { "type": "earn", "settings": { "postmark": "EARN", "heading": "Write a review", "body": "20 coins · +10 photo · +15 video." }},
+        "e4": { "type": "earn", "settings": { "postmark": "EARN", "heading": "Follow on Instagram", "body": "20 coins." }},
+        "e5": { "type": "earn", "settings": { "postmark": "EARN", "heading": "Follow on TikTok", "body": "20 coins." }},
+        "e6": { "type": "earn", "settings": { "postmark": "EARN", "heading": "Refer a friend", "body": "You both get 10% off." }}
+      },
+      "block_order": ["e1","e2","e3","e4","e5","e6"],
+      "settings": {}
+    }
   },
-  "order": ["main"]
+  "order": [
+    "mem_hero",
+    "mem_tiers",
+    "mem_earn"
+  ]
 }
