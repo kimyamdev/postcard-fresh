@@ -7,46 +7,68 @@
   assign world_character_desc = world.character_description.value | default: 'Reads polite, leans cosy in cooler weather.'
   assign bg_alpha = section.settings.bg_alpha | default: 8
 
-  assign scent_notes = world.scent_notes.value
   assign top_arr = ''
   assign heart_arr = ''
   assign base_arr = ''
+  if world.notes_top.value != blank
+    assign top_arr = world.notes_top.value | join: ', '
+  endif
+  if world.notes_heart.value != blank
+    assign heart_arr = world.notes_heart.value | join: ', '
+  endif
+  if world.notes_base.value != blank
+    assign base_arr = world.notes_base.value | join: ', '
+  endif
+  assign use_scent_top = false
+  assign use_scent_heart = false
+  assign use_scent_base = false
+  if top_arr == blank
+    assign use_scent_top = true
+  endif
+  if heart_arr == blank
+    assign use_scent_heart = true
+  endif
+  if base_arr == blank
+    assign use_scent_base = true
+  endif
+  assign scent_notes = world.scent_notes.value
   if scent_notes
     for n in scent_notes
       case n.family.value
         when 'Top'
-          if top_arr == blank
-            assign top_arr = n.name.value
-          else
-            assign top_arr = top_arr | append: ', ' | append: n.name.value
+          if use_scent_top
+            if top_arr == blank
+              assign top_arr = n.name.value
+            else
+              assign top_arr = top_arr | append: ', ' | append: n.name.value
+            endif
           endif
         when 'Heart'
-          if heart_arr == blank
-            assign heart_arr = n.name.value
-          else
-            assign heart_arr = heart_arr | append: ', ' | append: n.name.value
+          if use_scent_heart
+            if heart_arr == blank
+              assign heart_arr = n.name.value
+            else
+              assign heart_arr = heart_arr | append: ', ' | append: n.name.value
+            endif
           endif
         when 'Base'
-          if base_arr == blank
-            assign base_arr = n.name.value
-          else
-            assign base_arr = base_arr | append: ', ' | append: n.name.value
+          if use_scent_base
+            if base_arr == blank
+              assign base_arr = n.name.value
+            else
+              assign base_arr = base_arr | append: ', ' | append: n.name.value
+            endif
           endif
       endcase
     endfor
   endif
-  if top_arr == blank and world.notes_top.value != blank
-    assign top_arr = world.notes_top.value | join: ', '
-  endif
-  if heart_arr == blank and world.notes_heart.value != blank
-    assign heart_arr = world.notes_heart.value | join: ', '
-  endif
-  if base_arr == blank and world.notes_base.value != blank
-    assign base_arr = world.notes_base.value | join: ', '
-  endif
   assign top_arr = top_arr | default: 'Bergamot, Orange Blossom'
   assign heart_arr = heart_arr | default: 'Earl Grey Tea, Apricot'
   assign base_arr = base_arr | default: 'Vanilla, White Musk'
+
+  assign top_desc = world.top_description.value | default: section.settings.top_desc | default: 'The bright doorway moment.'
+  assign heart_desc = world.heart_description.value | default: section.settings.heart_desc | default: 'Warm tea steam, soft fruit.'
+  assign base_desc = world.base_description.value | default: section.settings.base_desc | default: 'The settled, skin-like finish.'
 -%}
 
 {%- if world -%}
@@ -64,17 +86,17 @@
       <div class="pc-scent__row">
         <div class="h-display pc-scent__layer">{{ section.settings.top_label | default: 'Top' }}</div>
         <div class="pc-scent__notes">{{ top_arr }}</div>
-        <div class="pc-scent__desc">{{ section.settings.top_desc | default: 'The bright doorway moment.' }}</div>
+        <div class="pc-scent__desc">{{ top_desc }}</div>
       </div>
       <div class="pc-scent__row">
         <div class="h-display pc-scent__layer">{{ section.settings.heart_label | default: 'Heart' }}</div>
         <div class="pc-scent__notes">{{ heart_arr }}</div>
-        <div class="pc-scent__desc">{{ section.settings.heart_desc | default: 'Warm tea steam, soft fruit.' }}</div>
+        <div class="pc-scent__desc">{{ heart_desc }}</div>
       </div>
       <div class="pc-scent__row">
         <div class="h-display pc-scent__layer">{{ section.settings.base_label | default: 'Base' }}</div>
         <div class="pc-scent__notes">{{ base_arr }}</div>
-        <div class="pc-scent__desc">{{ section.settings.base_desc | default: 'The settled, skin-like finish.' }}</div>
+        <div class="pc-scent__desc">{{ base_desc }}</div>
       </div>
       <div class="pc-scent__row pc-scent__row--last">
         <div class="h-display pc-scent__layer">{{ section.settings.character_label | default: 'Character' }}</div>
