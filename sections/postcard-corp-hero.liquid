@@ -1,0 +1,54 @@
+{%- liquid
+  assign image = section.settings.image
+  assign image_alt = section.settings.image_alt | default: section.settings.title | default: 'Corporate hero' | escape
+-%}
+<section class="pc-corp-hero">
+  <div class="pc-corp-hero__copy">
+    {%- if section.settings.eyebrow != blank -%}
+      <div class="eyebrow pc-corp-hero__eyebrow">{{ section.settings.eyebrow }}</div>
+    {%- endif -%}
+    {%- if section.settings.title != blank -%}
+      <h1 class="h-display pc-corp-hero__title">{{ section.settings.title }}</h1>
+    {%- endif -%}
+    {%- if section.settings.body != blank -%}
+      <p class="pc-corp-hero__body">{{ section.settings.body }}</p>
+    {%- endif -%}
+    <div class="pc-corp-hero__ctas">
+      {%- if section.settings.cta_primary_text != blank -%}
+        <a class="btn" href="{{ section.settings.cta_primary_url | default: '#enquiry' }}">{{ section.settings.cta_primary_text }}</a>
+      {%- endif -%}
+      {%- if section.settings.cta_secondary_text != blank -%}
+        <a class="tlink pc-corp-hero__link2" href="{{ section.settings.cta_secondary_url | default: '#' }}">{{ section.settings.cta_secondary_text }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+  <div class="ph ph--ink pc-corp-hero__image">
+    {%- if image != blank -%}
+      {{ image | image_url: width: 1200 | image_tag: alt: image_alt, loading: 'eager', widths: '600,900,1200' }}
+    {%- else -%}
+      <span>{{ section.settings.image_placeholder | default: 'luxe hamper · top-down' }}</span>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Corporate · Hero",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Corporate & Hospitality" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Pamper with a postcard." },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "Bespoke gifts, hotel amenities, and brand collaborations — made in Singapore, delivered with care." },
+    { "type": "image_picker", "id": "image", "label": "Hero image" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text" },
+    { "type": "text", "id": "image_placeholder", "label": "Placeholder text", "default": "luxe hamper · top-down" },
+    { "type": "header", "content": "Primary CTA" },
+    { "type": "text", "id": "cta_primary_text", "label": "Text", "default": "Start an enquiry →" },
+    { "type": "url", "id": "cta_primary_url", "label": "Link" },
+    { "type": "header", "content": "Secondary CTA" },
+    { "type": "text", "id": "cta_secondary_text", "label": "Text", "default": "Download one-pager (PDF)" },
+    { "type": "url", "id": "cta_secondary_url", "label": "Link" }
+  ],
+  "presets": [{ "name": "Corporate · Hero" }]
+}
+{% endschema %}

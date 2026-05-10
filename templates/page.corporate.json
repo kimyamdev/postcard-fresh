@@ -1,6 +1,42 @@
 {
   "sections": {
-    "main": { "type": "postcard-corporate", "settings": {} }
+    "corp_hero": {
+      "type": "postcard-corp-hero",
+      "settings": {
+        "cta_primary_url": "#enquiry"
+      }
+    },
+    "corp_ways": {
+      "type": "postcard-corp-ways",
+      "blocks": {
+        "w1": { "type": "way", "settings": { "image_placeholder": "Corporate gifts & hampers", "postmark_html": "CORPORATE", "heading": "Send a gift they'll keep.", "body": "From $80 / recipient. Bespoke wrap. Logo print available.", "cta_text": "Enquire →", "cta_url": "#enquiry" }},
+        "w2": { "type": "way", "settings": { "image_placeholder": "Hotel & spa amenities", "postmark_html": "HOTEL", "heading": "Your guests, our supplies.", "body": "Refillable formats. Custom scents. Trusted by Resorts World Sentosa.", "cta_text": "Enquire →", "cta_url": "#enquiry" }},
+        "w3": { "type": "way", "settings": { "image_placeholder": "Brand collaborations", "postmark_html": "BRAND", "heading": "Build something together.", "body": "Co-branded products. Workshops. Sustainable merch.", "cta_text": "Enquire →", "cta_url": "#enquiry" }}
+      },
+      "block_order": ["w1","w2","w3"],
+      "settings": {}
+    },
+    "corp_how": {
+      "type": "postcard-corp-how",
+      "blocks": {
+        "s1": { "type": "step", "settings": { "number": "01", "heading": "Tell us.", "body": "Form, volume, scent direction." }},
+        "s2": { "type": "step", "settings": { "number": "02", "heading": "We propose.", "body": "Within 2 working days." }},
+        "s3": { "type": "step", "settings": { "number": "03", "heading": "Sample.", "body": "Physical samples on orders >$1,000." }},
+        "s4": { "type": "step", "settings": { "number": "04", "heading": "We make.", "body": "Singapore beauty kitchen." }},
+        "s5": { "type": "step", "settings": { "number": "05", "heading": "We deliver.", "body": "Pickup, courier, or direct." }}
+      },
+      "block_order": ["s1","s2","s3","s4","s5"],
+      "settings": {}
+    },
+    "corp_form": {
+      "type": "postcard-corp-form",
+      "settings": { "anchor_id": "enquiry" }
+    }
   },
-  "order": ["main"]
+  "order": [
+    "corp_hero",
+    "corp_ways",
+    "corp_how",
+    "corp_form"
+  ]
 }

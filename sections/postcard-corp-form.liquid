@@ -1,0 +1,77 @@
+<section class="section" id="{{ section.settings.anchor_id | default: 'enquiry' }}">
+  <div class="container pc-corp-form__inner">
+    <div>
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="h-display pc-corp-form__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subtitle != blank -%}
+        <p class="pc-corp-form__sub">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+      {%- if section.settings.signature != blank -%}
+        <div class="script pc-corp-form__sig">{{ section.settings.signature }}</div>
+      {%- endif -%}
+    </div>
+    {%- form 'contact', class: 'pc-corp-form__form' -%}
+      <input type="hidden" name="contact[tags]" value="{{ section.settings.contact_tag | default: 'corporate' }}">
+      <div class="pc-corp-form__field">
+        <label class="eyebrow">{{ section.settings.label_name | default: 'Your name *' }}</label>
+        <input type="text" name="contact[name]" required>
+      </div>
+      <div class="pc-corp-form__field">
+        <label class="eyebrow">{{ section.settings.label_company | default: 'Company name *' }}</label>
+        <input type="text" name="contact[company]" required>
+      </div>
+      <div class="pc-corp-form__field">
+        <label class="eyebrow">{{ section.settings.label_email | default: 'Work email *' }}</label>
+        <input type="email" name="contact[email]" required>
+      </div>
+      <div class="pc-corp-form__field">
+        <label class="eyebrow">{{ section.settings.label_phone | default: 'Phone (optional)' }}</label>
+        <input type="tel" name="contact[phone]">
+      </div>
+      <div class="pc-corp-form__field">
+        <label class="eyebrow">{{ section.settings.label_topic | default: "I'm interested in *" }}</label>
+        <div class="pc-corp-form__pills">
+          {%- assign topics = section.settings.topics | default: 'Gifts,Hospitality,Collaboration,Workshop,Other' | split: ',' -%}
+          {%- for t in topics -%}
+            {%- assign t_clean = t | strip -%}
+            <label class="pc-corp-form__pill"><input type="radio" name="contact[topic]" value="{{ t_clean }}"> {{ t_clean }}</label>
+          {%- endfor -%}
+        </div>
+      </div>
+      <div class="pc-corp-form__field">
+        <label class="eyebrow">{{ section.settings.label_body | default: 'Tell us more' }}</label>
+        <textarea name="contact[body]" rows="4"></textarea>
+      </div>
+      <button class="btn" type="submit">{{ section.settings.submit_text | default: 'Send enquiry →' }}</button>
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Corporate · Form",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Anchor ID", "default": "enquiry" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Tell us what you need" },
+    { "type": "text", "id": "title", "label": "Title", "default": "We reply in 2 working days." },
+    { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "No bots, just Postcard humans." },
+    { "type": "text", "id": "signature", "label": "Script signature", "default": "— Hildra & team" },
+    { "type": "header", "content": "Form labels" },
+    { "type": "text", "id": "label_name", "label": "Name label", "default": "Your name *" },
+    { "type": "text", "id": "label_company", "label": "Company label", "default": "Company name *" },
+    { "type": "text", "id": "label_email", "label": "Email label", "default": "Work email *" },
+    { "type": "text", "id": "label_phone", "label": "Phone label", "default": "Phone (optional)" },
+    { "type": "text", "id": "label_topic", "label": "Topic label", "default": "I'm interested in *" },
+    { "type": "text", "id": "label_body", "label": "Message label", "default": "Tell us more" },
+    { "type": "text", "id": "topics", "label": "Topic options", "default": "Gifts,Hospitality,Collaboration,Workshop,Other", "info": "Comma-separated list of radio options." },
+    { "type": "text", "id": "submit_text", "label": "Submit button", "default": "Send enquiry →" },
+    { "type": "text", "id": "contact_tag", "label": "Contact tag", "default": "corporate", "info": "Tag added to the submission for filtering in admin." }
+  ],
+  "presets": [{ "name": "Corporate · Form" }]
+}
+{% endschema %}
