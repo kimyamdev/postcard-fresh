@@ -1,0 +1,30 @@
+<section class="section">
+  <div class="container--narrow pc-about-why">
+    {%- if section.settings.eyebrow != blank -%}
+      <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+    {%- endif -%}
+    {%- if section.settings.title != blank -%}
+      <h2 class="h-typewriter pc-about-why__title">{{ section.settings.title }}</h2>
+    {%- endif -%}
+    {%- if section.settings.body != blank -%}
+      <p class="pc-about-why__p">{{ section.settings.body }}</p>
+    {%- endif -%}
+    {%- if section.settings.signature != blank -%}
+      <div class="script pc-about-why__sig">{{ section.settings.signature }}</div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About · Manifesto",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Why postcards?" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Every product is a moment of arrival." },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "Every world a destination. Every refill a return trip. The postcard is what you send when you wish someone could feel what you're feeling." },
+    { "type": "text", "id": "signature", "label": "Script signature", "default": "life supplies, forever yours." }
+  ],
+  "presets": [{ "name": "About · Manifesto" }]
+}
+{% endschema %}

@@ -1,0 +1,59 @@
+{%- liquid
+  assign image = section.settings.image
+  assign image_alt = section.settings.image_alt | default: 'Origin story' | escape
+-%}
+<section class="section">
+  <div class="container pc-about-story">
+    <div>
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="h-display pc-about-story__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'paragraph' -%}
+          <p class="pc-about-story__p" {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    <div class="ph pc-about-story__image">
+      {%- if image != blank -%}
+        {{ image | image_url: width: 1000 | image_tag: alt: image_alt, loading: 'lazy', widths: '500,750,1000' }}
+      {%- else -%}
+        <span>{{ section.settings.image_placeholder | default: 'cookie-jar refillery, 2019' }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About · Story",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The beginning" },
+    { "type": "text", "id": "title", "label": "Title", "default": "It started with a face that wouldn't behave." },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text" },
+    { "type": "text", "id": "image_placeholder", "label": "Placeholder text", "default": "cookie-jar refillery, 2019" }
+  ],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "name": "Paragraph",
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Paragraph text…</p>" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "About · Story",
+    "blocks": [
+      { "type": "paragraph", "settings": { "text": "<p>Hildra had eczema as a kid, acne as a teenager, then it all came back in her twenties. Pharmacy creams worked until they didn't. Expensive serums worked once. The cycle repeated.</p>" }},
+      { "type": "paragraph", "settings": { "text": "<p>So she started making things in her kitchen. Simple shampoo bars. A face oil with three ingredients. A deodorant that didn't smell like an airport. Her skin agreed. Friends asked. The cookie jar in the kitchen filled, then sold out.</p>" }},
+      { "type": "paragraph", "settings": { "text": "<p>Postcard was born in 2019 — first as a refillery in Everton Park, then as a brand built around a question: <em>what if self-care was simpler, kinder, and a little bit playful?</em></p>" }}
+    ]
+  }]
+}
+{% endschema %}

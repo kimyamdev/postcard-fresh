@@ -1,6 +1,64 @@
 {
   "sections": {
-    "main": { "type": "postcard-about", "settings": {} }
+    "about_hero": { "type": "postcard-about-hero", "settings": {} },
+    "about_story": {
+      "type": "postcard-about-story",
+      "blocks": {
+        "p1": { "type": "paragraph", "settings": { "text": "<p>Hildra had eczema as a kid, acne as a teenager, then it all came back in her twenties. Pharmacy creams worked until they didn't. Expensive serums worked once. The cycle repeated.</p>" }},
+        "p2": { "type": "paragraph", "settings": { "text": "<p>So she started making things in her kitchen. Simple shampoo bars. A face oil with three ingredients. A deodorant that didn't smell like an airport. Her skin agreed. Friends asked. The cookie jar in the kitchen filled, then sold out.</p>" }},
+        "p3": { "type": "paragraph", "settings": { "text": "<p>Postcard was born in 2019 — first as a refillery in Everton Park, then as a brand built around a question: <em>what if self-care was simpler, kinder, and a little bit playful?</em></p>" }}
+      },
+      "block_order": ["p1","p2","p3"],
+      "settings": {}
+    },
+    "about_beliefs": {
+      "type": "postcard-about-beliefs",
+      "blocks": {
+        "b1": { "type": "belief", "settings": { "color": "#E8C36A", "postmark_html": "SIMPLICITY", "heading": "Simplicity", "body": "Fewer steps. Fewer ingredients. More impact." }},
+        "b2": { "type": "belief", "settings": { "color": "#9CC4D6", "postmark_html": "SUSTAINABLE", "heading": "Sustainable, not preachy", "body": "Refillable. Recyclable. Optimistic." }},
+        "b3": { "type": "belief", "settings": { "color": "#E8B796", "postmark_html": "SENSORIAL", "heading": "Sensorial transport", "body": "Every product is a destination." }},
+        "b4": { "type": "belief", "settings": { "color": "#C7A8D6", "postmark_html": "MADE", "heading": "Made by humans", "body": "Mixed, poured, packed in Singapore." }},
+        "b5": { "type": "belief", "settings": { "color": "#FFB233", "postmark_html": "PERSONAL", "heading": "Personal & playful", "body": "Custom blends, postcards in the post." }}
+      },
+      "block_order": ["b1","b2","b3","b4","b5"],
+      "settings": {}
+    },
+    "about_why": { "type": "postcard-about-why", "settings": {} },
+    "about_worlds": {
+      "type": "postcard-about-worlds",
+      "blocks": {
+        "w1": { "type": "world_stamp", "settings": { "name": "Hotel Lobby", "color": "#E8C36A", "show_family": true, "family": "Hesperidic Gourmand" }},
+        "w2": { "type": "world_stamp", "settings": { "name": "Moon Bloom", "color": "#5C6688", "show_family": true, "family": "White Floral" }},
+        "w3": { "type": "world_stamp", "settings": { "name": "Coconut Beach", "color": "#E8B796", "show_family": true, "family": "Tropical Fruity Gourmand" }},
+        "w4": { "type": "world_stamp", "settings": { "name": "Wild Flowers", "color": "#C7A8D6", "show_family": true, "family": "Aromatic Fougère" }},
+        "w5": { "type": "world_stamp", "settings": { "name": "Bath House", "color": "#B07A4E", "show_family": true, "family": "Woody Oriental" }},
+        "w6": { "type": "world_stamp", "settings": { "name": "Woodland Retreat", "color": "#6E7F58", "show_family": true, "family": "Aromatic Herbal" }},
+        "w7": { "type": "world_stamp", "settings": { "name": "Icy Peaks", "color": "#9CC4D6", "show_family": true, "family": "Fresh Aromatic" }},
+        "m1": { "type": "world_stamp", "settings": { "name": "Smoked Roses", "color": "#C7A8D6" }},
+        "m2": { "type": "world_stamp", "settings": { "name": "Threads of Nonya", "color": "#9CC4D6" }},
+        "m3": { "type": "world_stamp", "settings": { "name": "Forever Yours", "color": "#E8B796" }},
+        "m4": { "type": "world_stamp", "settings": { "name": "Oasis Perfume Oil", "color": "#FFB233" }},
+        "m5": { "type": "world_stamp", "settings": { "name": "Bakuchiol Bay", "color": "#6E7F58" }},
+        "m6": { "type": "world_stamp", "settings": { "name": "Hyaluronic Heaven", "color": "#B07A4E" }},
+        "m7": { "type": "world_stamp", "settings": { "name": "Rose Valley", "color": "#5C6688" }},
+        "m8": { "type": "world_stamp", "settings": { "name": "Ancient Tearoom", "color": "#C7A8D6" }},
+        "m9": { "type": "world_stamp", "settings": { "name": "Clear Skies", "color": "#9CC4D6" }},
+        "m10": { "type": "world_stamp", "settings": { "name": "Citrus Circus", "color": "#E8B796" }},
+        "m11": { "type": "world_stamp", "settings": { "name": "Coffee Spot", "color": "#FFB233" }},
+        "m12": { "type": "world_stamp", "settings": { "name": "Java Jungle", "color": "#6E7F58" }},
+        "m13": { "type": "world_stamp", "settings": { "name": "Hidden Garden", "color": "#B07A4E" }},
+        "m14": { "type": "world_stamp", "settings": { "name": "Curl Cove", "color": "#5C6688" }},
+        "m15": { "type": "world_stamp", "settings": { "name": "Sunlit Terrace", "color": "#C7A8D6" }}
+      },
+      "block_order": ["w1","w2","w3","w4","w5","w6","w7","m1","m2","m3","m4","m5","m6","m7","m8","m9","m10","m11","m12","m13","m14","m15"],
+      "settings": {}
+    }
   },
-  "order": ["main"]
+  "order": [
+    "about_hero",
+    "about_story",
+    "about_beliefs",
+    "about_why",
+    "about_worlds"
+  ]
 }

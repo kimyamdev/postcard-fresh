@@ -1,0 +1,48 @@
+<section class="section pc-about-beliefs">
+  <div class="container">
+    {%- if section.settings.title != blank -%}
+      <h2 class="h-display pc-about-beliefs__title">{{ section.settings.title }}</h2>
+    {%- endif -%}
+    <div class="pc-about-beliefs__grid">
+      {%- for block in section.blocks -%}
+        <div class="stamp-frame stamp-side pc-belief-card" style="background: {{ block.settings.color }};" {{ block.shopify_attributes }}>
+          <span class="postmark pc-belief-card__pm"><div>{{ block.settings.postmark_html }}</div></span>
+          <div class="h-display pc-belief-card__h">{{ block.settings.heading }}</div>
+          <p class="pc-belief-card__p">{{ block.settings.body }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About · Beliefs",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Five things we believe." }
+  ],
+  "blocks": [
+    {
+      "type": "belief",
+      "name": "Belief card",
+      "settings": [
+        { "type": "color", "id": "color", "label": "Background color", "default": "#E8C36A" },
+        { "type": "html", "id": "postmark_html", "label": "Postmark text (HTML)", "default": "SIMPLICITY" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Simplicity" },
+        { "type": "textarea", "id": "body", "label": "Body", "default": "Fewer steps. Fewer ingredients. More impact." }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "About · Beliefs",
+    "blocks": [
+      { "type": "belief", "settings": { "color": "#E8C36A", "postmark_html": "SIMPLICITY", "heading": "Simplicity", "body": "Fewer steps. Fewer ingredients. More impact." }},
+      { "type": "belief", "settings": { "color": "#9CC4D6", "postmark_html": "SUSTAINABLE", "heading": "Sustainable, not preachy", "body": "Refillable. Recyclable. Optimistic." }},
+      { "type": "belief", "settings": { "color": "#E8B796", "postmark_html": "SENSORIAL", "heading": "Sensorial transport", "body": "Every product is a destination." }},
+      { "type": "belief", "settings": { "color": "#C7A8D6", "postmark_html": "MADE", "heading": "Made by humans", "body": "Mixed, poured, packed in Singapore." }},
+      { "type": "belief", "settings": { "color": "#FFB233", "postmark_html": "PERSONAL", "heading": "Personal & playful", "body": "Custom blends, postcards in the post." }}
+    ]
+  }]
+}
+{% endschema %}

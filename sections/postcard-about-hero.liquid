@@ -1,0 +1,40 @@
+{%- liquid
+  assign image = section.settings.image
+  assign image_alt = section.settings.image_alt | default: section.settings.title | default: 'About hero' | escape
+-%}
+<section class="pc-about-hero">
+  <div class="ph pc-about-hero__image">
+    {%- if image != blank -%}
+      {{ image | image_url: width: 1200 | image_tag: alt: image_alt, loading: 'eager', widths: '600,900,1200' }}
+    {%- else -%}
+      <span>{{ section.settings.image_placeholder | default: 'Hildra · in the beauty kitchen, mid-formulation' }}</span>
+    {%- endif -%}
+  </div>
+  <div class="pc-about-hero__copy">
+    {%- if section.settings.eyebrow != blank -%}
+      <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+    {%- endif -%}
+    {%- if section.settings.title != blank -%}
+      <h1 class="h-display pc-about-hero__title">{{ section.settings.title }}</h1>
+    {%- endif -%}
+    {%- if section.settings.body != blank -%}
+      <p class="pc-about-hero__body">{{ section.settings.body }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About · Hero",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Hero image" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text" },
+    { "type": "text", "id": "image_placeholder", "label": "Placeholder text", "default": "Hildra · in the beauty kitchen, mid-formulation" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Made by humans, in Singapore." },
+    { "type": "text", "id": "title", "label": "Title", "default": "Do more with less." },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "Postcard is a self-care destination, made in our beauty kitchen in Singapore. Effective natural recipes, simple ingredients, the least wasteful packaging we can manage. We're here to make care personal again." }
+  ],
+  "presets": [{ "name": "About · Hero" }]
+}
+{% endschema %}
