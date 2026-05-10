@@ -1,0 +1,126 @@
+{%- liquid
+  assign accent = section.settings.accent_color | default: '#B07A4E'
+  assign sub_discount = section.settings.sub_discount | default: 15
+  assign sub_factor = 100 | minus: sub_discount | divided_by: 100.0
+-%}
+<section class="section pc-sub-popular" style="--world-color: {{ accent }};">
+  <div class="container">
+    <div class="pc-sub-popular__head">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}
+          <div class="eyebrow" style="color: {{ accent }};">{{ section.settings.eyebrow }}</div>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="h-display pc-sub-popular__title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.see_all_text != blank -%}
+        <a class="tlink" href="{{ section.settings.see_all_url | default: '/collections/subscribable' }}">{{ section.settings.see_all_text }}</a>
+      {%- endif -%}
+    </div>
+    <div class="pc-sub-popular__grid">
+      {%- assign rank_idx = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'product_card' -%}
+          {%- assign rank_idx = rank_idx | plus: 1 -%}
+          {%- assign price_num = block.settings.price | times: 1 -%}
+          {%- assign sub_price_num = price_num | times: sub_factor | round: 2 -%}
+          <div class="pc-sub-popular-card" {{ block.shopify_attributes }}>
+            <div class="pc-sub-popular-card__rank">#{{ rank_idx }}</div>
+            <div class="ph ph--world pc-sub-popular-card__media" style="--world-color: {{ block.settings.world_color }};">
+              <span>{{ block.settings.world_name }}</span>
+              <span class="postmark postmark--yellow pc-sub-popular-card__pm"><div>SAVE<br>· {{ sub_discount }}% ·<br>SUB</div></span>
+            </div>
+            <div class="pc-sub-popular-card__body">
+              <div class="pc-sub-popular-card__chip-row">
+                <div class="pc-sub-popular-card__chip" style="background: {{ block.settings.world_color }};"></div>
+                <div class="eyebrow">{{ block.settings.world_name }}</div>
+              </div>
+              <h3 class="h-typewriter pc-sub-popular-card__title">{{ block.settings.title }}</h3>
+              <div class="pc-sub-popular-card__row">
+                <div>
+                  <div class="pc-sub-popular-card__caption">{{ section.settings.cadence_label | default: 'Most popular cadence' }}</div>
+                  <div class="pc-sub-popular-card__cadence">{{ block.settings.cadence }}</div>
+                </div>
+                <div class="pc-sub-popular-card__price-block">
+                  <div class="pc-sub-popular-card__strike">S${{ price_num }}</div>
+                  <div class="h-display pc-sub-popular-card__price" style="color: {{ accent }};">S${{ sub_price_num }}</div>
+                </div>
+              </div>
+              <div class="pc-sub-popular-card__subs">{{ block.settings.subscribers }} active subscribers</div>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.show_discovery -%}
+      <div class="pc-sub-discovery">
+        <span class="postmark postmark--ink pc-sub-discovery__pm"><div>{{ section.settings.discovery_postmark | default: 'NEW<br>· 26 ·<br>BOX' }}</div></span>
+        <div>
+          {%- if section.settings.discovery_eyebrow != blank -%}
+            <div class="eyebrow">{{ section.settings.discovery_eyebrow }}</div>
+          {%- endif -%}
+          {%- if section.settings.discovery_title != blank -%}
+            <h3 class="h-display pc-sub-discovery__title">{{ section.settings.discovery_title }}</h3>
+          {%- endif -%}
+          {%- if section.settings.discovery_body != blank -%}
+            <p class="pc-sub-discovery__body">{{ section.settings.discovery_body }}</p>
+          {%- endif -%}
+        </div>
+        {%- if section.settings.discovery_cta_text != blank -%}
+          <a class="btn btn--ink" href="{{ section.settings.discovery_cta_url | default: '#' }}">{{ section.settings.discovery_cta_text }}</a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Subs · Popular products",
+  "tag": "section",
+  "settings": [
+    { "type": "color", "id": "accent_color", "label": "Accent color", "default": "#B07A4E" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "What 12,000+ subscribers ship monthly" },
+    { "type": "text", "id": "title", "label": "Title", "default": "The regulars." },
+    { "type": "text", "id": "see_all_text", "label": "See-all text", "default": "Browse all subscribable products →" },
+    { "type": "url", "id": "see_all_url", "label": "See-all link" },
+    { "type": "range", "id": "sub_discount", "label": "Subscription discount %", "min": 0, "max": 50, "step": 1, "default": 15, "unit": "%" },
+    { "type": "text", "id": "cadence_label", "label": "Cadence caption", "default": "Most popular cadence" },
+    { "type": "header", "content": "Discovery box (optional)" },
+    { "type": "checkbox", "id": "show_discovery", "label": "Show Discovery box", "default": true },
+    { "type": "html", "id": "discovery_postmark", "label": "Postmark (HTML)", "default": "NEW<br>· 26 ·<br>BOX" },
+    { "type": "text", "id": "discovery_eyebrow", "label": "Eyebrow", "default": "New: the Discovery subscription" },
+    { "type": "text", "id": "discovery_title", "label": "Title", "default": "A different world, every quarter." },
+    { "type": "textarea", "id": "discovery_body", "label": "Body", "default": "Three travel-size products from a curated world, posted every 90 days. We pick. You discover. Cancel after one box if it's not for you." },
+    { "type": "text", "id": "discovery_cta_text", "label": "CTA text", "default": "From S$32/quarter →" },
+    { "type": "url", "id": "discovery_cta_url", "label": "CTA link" }
+  ],
+  "blocks": [
+    {
+      "type": "product_card",
+      "name": "Popular product card",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Product title", "default": "Hotel Lobby Hand & Body Wash" },
+        { "type": "text", "id": "world_name", "label": "World name", "default": "Hotel Lobby" },
+        { "type": "color", "id": "world_color", "label": "World color", "default": "#C7A8D6" },
+        { "type": "text", "id": "cadence", "label": "Cadence", "default": "Every 60 days" },
+        { "type": "text", "id": "subscribers", "label": "Subscribers", "default": "2840" },
+        { "type": "number", "id": "price", "label": "One-time price (numeric)", "default": 28 }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Subs · Popular products",
+    "blocks": [
+      { "type": "product_card", "settings": { "title": "Hotel Lobby Hand & Body Wash", "world_name": "Hotel Lobby", "world_color": "#C7A8D6", "cadence": "Every 60 days", "subscribers": "2840", "price": 28 }},
+      { "type": "product_card", "settings": { "title": "Moon Bloom Body Wash", "world_name": "Moon Bloom", "world_color": "#5C6688", "cadence": "Every 60 days", "subscribers": "1920", "price": 28 }},
+      { "type": "product_card", "settings": { "title": "Smoked Roses Shampoo", "world_name": "Smoked Roses", "world_color": "#8E4F5C", "cadence": "Every 90 days", "subscribers": "1610", "price": 32 }},
+      { "type": "product_card", "settings": { "title": "Java Jungle Shampoo Bar", "world_name": "Java Jungle", "world_color": "#6E8B5C", "cadence": "Every 60 days", "subscribers": "1480", "price": 18 }},
+      { "type": "product_card", "settings": { "title": "Bakuchiol Bay Serum", "world_name": "Bakuchiol Bay", "world_color": "#9CC4D6", "cadence": "Every 30 days", "subscribers": "1240", "price": 64 }},
+      { "type": "product_card", "settings": { "title": "Coconut Beach Deo Stick", "world_name": "Coconut Beach", "world_color": "#E8B796", "cadence": "Every 60 days", "subscribers": "980", "price": 22 }}
+    ]
+  }]
+}
+{% endschema %}

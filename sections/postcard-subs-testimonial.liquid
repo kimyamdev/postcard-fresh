@@ -1,0 +1,44 @@
+{%- liquid
+  assign accent = section.settings.accent_color | default: '#B07A4E'
+  assign photo = section.settings.photo
+-%}
+<section class="pc-sub-testimonial" style="--world-color: {{ accent }};">
+  <div class="container pc-sub-testimonial__inner">
+    <div class="ph ph--world pc-sub-testimonial__photo" style="--world-color: {{ section.settings.photo_color | default: '#C7A8D6' }};">
+      {%- if photo != blank -%}
+        {{ photo | image_url: width: 800 | image_tag: alt: section.settings.photo_alt | default: 'Customer portrait', loading: 'lazy', widths: '400,600,800' }}
+      {%- else -%}
+        <span>{{ section.settings.photo_placeholder | default: 'customer · portrait' }}</span>
+      {%- endif -%}
+    </div>
+    <div>
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+      {%- endif -%}
+      {%- if section.settings.quote != blank -%}
+        <p class="h-typewriter pc-sub-testimonial__quote">&ldquo;{{ section.settings.quote }}&rdquo;</p>
+      {%- endif -%}
+      {%- if section.settings.attribution != blank -%}
+        <div class="pc-sub-testimonial__attribution">{{ section.settings.attribution }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Subs · Testimonial",
+  "tag": "section",
+  "settings": [
+    { "type": "color", "id": "accent_color", "label": "Accent color", "default": "#B07A4E" },
+    { "type": "image_picker", "id": "photo", "label": "Customer photo" },
+    { "type": "text", "id": "photo_alt", "label": "Photo alt text" },
+    { "type": "color", "id": "photo_color", "label": "Photo frame color", "default": "#C7A8D6" },
+    { "type": "text", "id": "photo_placeholder", "label": "Placeholder text", "default": "customer · portrait" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "From Mei, subscriber since 2024" },
+    { "type": "textarea", "id": "quote", "label": "Quote", "default": "I forgot I had a Postcard subscription. Then the box landed. Then I remembered why I have it. Three years and I haven't bought shampoo from anywhere else." },
+    { "type": "text", "id": "attribution", "label": "Attribution", "default": "MEI L. · 4 active subscriptions · Hotel Lobby loyalist" }
+  ],
+  "presets": [{ "name": "Subs · Testimonial" }]
+}
+{% endschema %}

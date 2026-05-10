@@ -1,0 +1,52 @@
+{%- liquid
+  assign accent = section.settings.accent_color | default: '#B07A4E'
+-%}
+<section class="section pc-sub-faq" style="--world-color: {{ accent }};">
+  <div class="container container--narrow">
+    {%- if section.settings.title != blank -%}
+      <h2 class="h-display pc-sub-faq__title">{{ section.settings.title }}</h2>
+    {%- endif -%}
+    <div class="pc-pdp-faq__list">
+      {%- for block in section.blocks -%}
+        <details class="pc-pdp-faq__item"{% if block.settings.open %} open{% endif %} {{ block.shopify_attributes }}>
+          <summary class="pc-pdp-faq__q">{{ block.settings.question }}</summary>
+          <p class="pc-pdp-faq__a">{{ block.settings.answer }}</p>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Subs · FAQ",
+  "tag": "section",
+  "settings": [
+    { "type": "color", "id": "accent_color", "label": "Accent color", "default": "#B07A4E" },
+    { "type": "text", "id": "title", "label": "Title", "default": "The questions everyone asks." }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ item",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "Question?" },
+        { "type": "textarea", "id": "answer", "label": "Answer" },
+        { "type": "checkbox", "id": "open", "label": "Open by default", "default": false }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Subs · FAQ",
+    "blocks": [
+      { "type": "faq", "settings": { "question": "Is there a minimum commitment?", "answer": "None. You can cancel after your first delivery — no fees, no \"are you sure\" emails. We'd rather you come back happy than stay reluctantly.", "open": true }},
+      { "type": "faq", "settings": { "question": "What if I don't need it yet?", "answer": "Skip the next order from your dashboard or directly from the email we send 5 days before each ship date. You can skip indefinitely if you're running through last month's slowly." }},
+      { "type": "faq", "settings": { "question": "Can I subscribe to refills only?", "answer": "Yes — once you've bought the bottle, the refill is what your subscription delivers. It costs less, it weighs less, and it counts toward free-shipping thresholds." }},
+      { "type": "faq", "settings": { "question": "Can I switch worlds within a subscription?", "answer": "Anytime. Same product, new scent, same cadence. Switch from Hotel Lobby to Moon Bloom in two clicks. Some subscribers rotate four worlds across the year." }},
+      { "type": "faq", "settings": { "question": "Does the 15% discount stack with member tiers?", "answer": "Yes. Wanderer gets 15% sub + 5% tier = 20%. Voyager gets 15% sub + 8% tier = 23%. Postmaster gets 15% sub + 10% tier = 25%. Plus the free shipping over S$40." }},
+      { "type": "faq", "settings": { "question": "What happens if my card fails?", "answer": "We try twice over 5 days, then email you to update. The order pauses — it doesn't cancel. You don't lose your subscriber status, your discount, or your custom blend." }},
+      { "type": "faq", "settings": { "question": "Will you upsell me to bigger sizes?", "answer": "No. We'll suggest the right cadence based on your usage, and we'll surface relevant new products in your dashboard — but we don't auto-add anything. The box you set is the box you get." }}
+    ]
+  }]
+}
+{% endschema %}

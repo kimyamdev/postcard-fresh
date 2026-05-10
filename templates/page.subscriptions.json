@@ -1,6 +1,119 @@
 {
   "sections": {
-    "main": { "type": "postcard-subscriptions", "settings": {} }
+    "subs_hero": {
+      "type": "postcard-subs-hero",
+      "blocks": {
+        "d1": { "type": "delivery", "settings": { "color": "#C7A8D6", "shadow_offset": "4px 4px", "postmark_html": "MAR<br>· 2026 ·<br>SG", "label": "Delivery 1", "from": "From Hotel Lobby" }},
+        "d2": { "type": "delivery", "settings": { "color": "#5C6688", "shadow_offset": "3px 3px", "postmark_html": "JUN<br>· 2026 ·<br>SG", "label": "Delivery 2", "from": "From Moon Bloom" }},
+        "d3": { "type": "delivery", "settings": { "color": "#6E8B5C", "shadow_offset": "2px 2px", "postmark_html": "SEP<br>· 2026 ·<br>SG", "label": "Delivery 3", "from": "From Java Jungle" }},
+        "d4": { "type": "delivery", "settings": { "color": "#E8B796", "shadow_offset": "1px 1px", "postmark_html": "DEC<br>· 2026 ·<br>SG", "label": "Delivery 4", "from": "From Coconut Beach" }},
+        "t1": { "type": "trust_item", "settings": { "heading": "Save 15%", "note": "every order, every time" }},
+        "t2": { "type": "trust_item", "settings": { "heading": "Free shipping", "note": "on subscription orders over S$40" }},
+        "t3": { "type": "trust_item", "settings": { "heading": "Skip, swap, pause", "note": "no questions, no fees" }},
+        "t4": { "type": "trust_item", "settings": { "heading": "Cancel anytime", "note": "in 2 clicks. We mean it." }}
+      },
+      "block_order": ["d1","d2","d3","d4","t1","t2","t3","t4"],
+      "settings": {
+        "cta_primary_url": "/collections/subscribable"
+      }
+    },
+    "subs_how": {
+      "type": "postcard-subs-how",
+      "blocks": {
+        "s1": { "type": "step", "settings": { "chip_color": "#C7A8D6", "number": "01", "heading": "Pick your products", "body": "Any of the 80+ subscribable items. Mix worlds. Mix categories." }},
+        "s2": { "type": "step", "settings": { "chip_color": "#5C6688", "number": "02", "heading": "Choose your cadence", "body": "30, 60, or 90 days. Skin first, hair second, scent third — set each one to its own rhythm." }},
+        "s3": { "type": "step", "settings": { "chip_color": "#6E8B5C", "number": "03", "heading": "We post. You shower.", "body": "Box arrives 3 days before you run out, on average. Tracked, paper-only packaging." }},
+        "s4": { "type": "step", "settings": { "chip_color": "#FFB233", "number": "04", "heading": "Skip, swap, cancel", "body": "Anytime. From the email. From your phone. From your account. No call required." }}
+      },
+      "block_order": ["s1","s2","s3","s4"],
+      "settings": {}
+    },
+    "subs_perks": {
+      "type": "postcard-subs-perks",
+      "blocks": {
+        "p1": { "type": "perk", "settings": { "color": "#FFB233", "postmark_html": "SET IT", "tag": "Set it", "heading": "One less browser tab.", "body": "No more \"did I order shampoo?\" thoughts at 11pm. Pick once, set the cadence, walk away. Your future self stays clean and lightly perfumed.", "stat_value": "4.2", "stat_label": "minutes saved per re-order" }},
+        "p2": { "type": "perk", "settings": { "color": "#C7A8D6", "postmark_html": "FORGET IT", "tag": "Forget it", "heading": "It arrives before you notice.", "body": "We watch your last order. By default, we ship a fresh batch 3 days before you typically run out. You can move that window — or just trust it.", "stat_value": "3 days", "stat_label": "before you finish the last one" }},
+        "p3": { "type": "perk", "settings": { "color": "#6E8B5C", "postmark_html": "SAVE 15%", "tag": "Save 15%", "heading": "Loyalty paid in cash, not points.", "body": "15% off every subscription order, every time. Stacks with member tiers. Free shipping over S$40. The bottle that costs S$28 once costs you S$23.80 forever.", "stat_value": "15%", "stat_label": "off every order, automatically" }}
+      },
+      "block_order": ["p1","p2","p3"],
+      "settings": {}
+    },
+    "subs_fine_print": {
+      "type": "postcard-subs-fine-print",
+      "blocks": {
+        "b1": { "type": "benefit", "settings": { "heading": "Skip an order", "note": "Until your next cycle" }},
+        "b2": { "type": "benefit", "settings": { "heading": "Swap a world", "note": "Same product, new scent" }},
+        "b3": { "type": "benefit", "settings": { "heading": "Change cadence", "note": "Slower or faster, anytime" }},
+        "b4": { "type": "benefit", "settings": { "heading": "Pause indefinitely", "note": "Resume on a tap" }},
+        "b5": { "type": "benefit", "settings": { "heading": "Cancel", "note": "No questions asked" }}
+      },
+      "block_order": ["b1","b2","b3","b4","b5"],
+      "settings": {}
+    },
+    "subs_popular": {
+      "type": "postcard-subs-popular",
+      "blocks": {
+        "c1": { "type": "product_card", "settings": { "title": "Hotel Lobby Hand & Body Wash", "world_name": "Hotel Lobby", "world_color": "#C7A8D6", "cadence": "Every 60 days", "subscribers": "2840", "price": 28 }},
+        "c2": { "type": "product_card", "settings": { "title": "Moon Bloom Body Wash", "world_name": "Moon Bloom", "world_color": "#5C6688", "cadence": "Every 60 days", "subscribers": "1920", "price": 28 }},
+        "c3": { "type": "product_card", "settings": { "title": "Smoked Roses Shampoo", "world_name": "Smoked Roses", "world_color": "#8E4F5C", "cadence": "Every 90 days", "subscribers": "1610", "price": 32 }},
+        "c4": { "type": "product_card", "settings": { "title": "Java Jungle Shampoo Bar", "world_name": "Java Jungle", "world_color": "#6E8B5C", "cadence": "Every 60 days", "subscribers": "1480", "price": 18 }},
+        "c5": { "type": "product_card", "settings": { "title": "Bakuchiol Bay Serum", "world_name": "Bakuchiol Bay", "world_color": "#9CC4D6", "cadence": "Every 30 days", "subscribers": "1240", "price": 64 }},
+        "c6": { "type": "product_card", "settings": { "title": "Coconut Beach Deo Stick", "world_name": "Coconut Beach", "world_color": "#E8B796", "cadence": "Every 60 days", "subscribers": "980", "price": 22 }}
+      },
+      "block_order": ["c1","c2","c3","c4","c5","c6"],
+      "settings": {
+        "see_all_url": "/collections/subscribable",
+        "discovery_cta_url": "/products/discovery-subscription"
+      }
+    },
+    "subs_compare": {
+      "type": "postcard-subs-compare",
+      "blocks": {
+        "r1": { "type": "row", "settings": { "label": "Hand & body wash (refilled)", "col_a": "S$112", "col_b": "S$95.20" }},
+        "r2": { "type": "row", "settings": { "label": "Shampoo (refilled)", "col_a": "S$128", "col_b": "S$108.80" }},
+        "r3": { "type": "row", "settings": { "label": "Conditioner (refilled)", "col_a": "S$128", "col_b": "S$108.80" }},
+        "r4": { "type": "row", "settings": { "label": "Deodorant", "col_a": "S$132", "col_b": "S$112.20" }},
+        "r5": { "type": "row", "settings": { "label": "Anywhere fragrance", "col_a": "S$84", "col_b": "S$71.40" }},
+        "r6": { "type": "row", "settings": { "label": "Shipping (over S$40 → free on sub)", "col_a": "S$48", "col_b": "S$0" }}
+      },
+      "block_order": ["r1","r2","r3","r4","r5","r6"],
+      "settings": {}
+    },
+    "subs_testimonial": {
+      "type": "postcard-subs-testimonial",
+      "settings": {}
+    },
+    "subs_faq": {
+      "type": "postcard-subs-faq",
+      "blocks": {
+        "f1": { "type": "faq", "settings": { "question": "Is there a minimum commitment?", "answer": "None. You can cancel after your first delivery — no fees, no \"are you sure\" emails. We'd rather you come back happy than stay reluctantly.", "open": true }},
+        "f2": { "type": "faq", "settings": { "question": "What if I don't need it yet?", "answer": "Skip the next order from your dashboard or directly from the email we send 5 days before each ship date. You can skip indefinitely if you're running through last month's slowly." }},
+        "f3": { "type": "faq", "settings": { "question": "Can I subscribe to refills only?", "answer": "Yes — once you've bought the bottle, the refill is what your subscription delivers. It costs less, it weighs less, and it counts toward free-shipping thresholds." }},
+        "f4": { "type": "faq", "settings": { "question": "Can I switch worlds within a subscription?", "answer": "Anytime. Same product, new scent, same cadence. Switch from Hotel Lobby to Moon Bloom in two clicks. Some subscribers rotate four worlds across the year." }},
+        "f5": { "type": "faq", "settings": { "question": "Does the 15% discount stack with member tiers?", "answer": "Yes. Wanderer gets 15% sub + 5% tier = 20%. Voyager gets 15% sub + 8% tier = 23%. Postmaster gets 15% sub + 10% tier = 25%. Plus the free shipping over S$40." }},
+        "f6": { "type": "faq", "settings": { "question": "What happens if my card fails?", "answer": "We try twice over 5 days, then email you to update. The order pauses — it doesn't cancel. You don't lose your subscriber status, your discount, or your custom blend." }},
+        "f7": { "type": "faq", "settings": { "question": "Will you upsell me to bigger sizes?", "answer": "No. We'll suggest the right cadence based on your usage, and we'll surface relevant new products in your dashboard — but we don't auto-add anything. The box you set is the box you get." }}
+      },
+      "block_order": ["f1","f2","f3","f4","f5","f6","f7"],
+      "settings": {}
+    },
+    "subs_cta": {
+      "type": "postcard-subs-cta",
+      "settings": {
+        "cta_primary_url": "/collections/subscribable",
+        "cta_secondary_url": "/pages/subscription-quiz"
+      }
+    }
   },
-  "order": ["main"]
+  "order": [
+    "subs_hero",
+    "subs_how",
+    "subs_perks",
+    "subs_fine_print",
+    "subs_popular",
+    "subs_compare",
+    "subs_testimonial",
+    "subs_faq",
+    "subs_cta"
+  ]
 }

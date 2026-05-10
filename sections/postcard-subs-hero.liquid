@@ -1,0 +1,113 @@
+{%- liquid
+  assign accent = section.settings.accent_color | default: '#B07A4E'
+-%}
+<section class="pc-sub-hero" style="--world-color: {{ accent }};">
+  <div class="container pc-sub-hero__inner">
+    <div>
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="eyebrow pc-sub-hero__eyebrow">{{ section.settings.eyebrow }}</div>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h1 class="h-display pc-sub-hero__title">{{ section.settings.title }}</h1>
+      {%- endif -%}
+      {%- if section.settings.body != blank -%}
+        <p class="pc-sub-hero__body">{{ section.settings.body }}</p>
+      {%- endif -%}
+      <div class="pc-sub-hero__ctas">
+        {%- if section.settings.cta_primary_text != blank -%}
+          <a class="btn" href="{{ section.settings.cta_primary_url | default: '#' }}">{{ section.settings.cta_primary_text }}</a>
+        {%- endif -%}
+        {%- if section.settings.cta_secondary_text != blank -%}
+          <a class="tlink" href="{{ section.settings.cta_secondary_url | default: routes.account_url }}">{{ section.settings.cta_secondary_text }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+    <div class="pc-sub-hero__stack">
+      {%- assign d_idx = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'delivery' -%}
+          {%- assign rot_mod = d_idx | modulo: 2 -%}
+          {%- assign rotation = 'cw' -%}
+          {%- if rot_mod == 1 -%}{%- assign rotation = 'ccw' -%}{%- endif -%}
+          <div class="pc-sub-postcard pc-sub-postcard--{{ d_idx }}" style="box-shadow: {{ block.settings.shadow_offset }} 0 {{ block.settings.color }};" {{ block.shopify_attributes }}>
+            <div class="pc-sub-postcard__row">
+              <div class="pc-sub-postcard__chip" style="background: {{ block.settings.color }};"></div>
+              <span class="postmark pc-sub-postcard__pm pc-sub-postcard__pm--{{ rotation }}"><div>{{ block.settings.postmark_html }}</div></span>
+            </div>
+            <div>
+              <div class="pc-sub-postcard__cap">{{ block.settings.label }}</div>
+              <div class="h-typewriter pc-sub-postcard__from">{{ block.settings.from }}</div>
+            </div>
+          </div>
+          {%- assign d_idx = d_idx | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+  <div class="pc-sub-trust">
+    <div class="container pc-sub-trust__inner">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'trust_item' -%}
+          <div class="pc-sub-trust__item" {{ block.shopify_attributes }}>
+            <div class="h-display pc-sub-trust__h">{{ block.settings.heading }}</div>
+            <div class="pc-sub-trust__n">{{ block.settings.note }}</div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Subs · Hero + trust",
+  "tag": "section",
+  "settings": [
+    { "type": "color", "id": "accent_color", "label": "Accent color", "default": "#B07A4E" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Postcard subscriptions" },
+    { "type": "html", "id": "title", "label": "Title (HTML)", "default": "Set it.<br><span class=\"pc-sub-hero__title-em\">Forget</span> it.<br>Save 15%." },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "The shampoo arrives the week you finish the last one. The hand wash refills before you notice. Your favourite scent shows up like clockwork — and you stop thinking about it." },
+    { "type": "header", "content": "Primary CTA" },
+    { "type": "text", "id": "cta_primary_text", "label": "Text", "default": "Browse subscribable products →" },
+    { "type": "url", "id": "cta_primary_url", "label": "Link" },
+    { "type": "header", "content": "Secondary CTA" },
+    { "type": "text", "id": "cta_secondary_text", "label": "Text", "default": "Already subscribed? Manage in your account" },
+    { "type": "url", "id": "cta_secondary_url", "label": "Link" }
+  ],
+  "blocks": [
+    {
+      "type": "delivery",
+      "name": "Postcard delivery",
+      "limit": 4,
+      "settings": [
+        { "type": "color", "id": "color", "label": "Color", "default": "#C7A8D6" },
+        { "type": "text", "id": "shadow_offset", "label": "Shadow offset", "default": "4px 4px", "info": "CSS px x y" },
+        { "type": "html", "id": "postmark_html", "label": "Postmark text (HTML)", "default": "MAR<br>· 2026 ·<br>SG" },
+        { "type": "text", "id": "label", "label": "Cap label", "default": "Delivery 1" },
+        { "type": "text", "id": "from", "label": "From label", "default": "From Hotel Lobby" }
+      ]
+    },
+    {
+      "type": "trust_item",
+      "name": "Trust item",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Save 15%" },
+        { "type": "text", "id": "note", "label": "Note", "default": "every order, every time" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Subs · Hero + trust",
+    "blocks": [
+      { "type": "delivery", "settings": { "color": "#C7A8D6", "shadow_offset": "4px 4px", "postmark_html": "MAR<br>· 2026 ·<br>SG", "label": "Delivery 1", "from": "From Hotel Lobby" }},
+      { "type": "delivery", "settings": { "color": "#5C6688", "shadow_offset": "3px 3px", "postmark_html": "JUN<br>· 2026 ·<br>SG", "label": "Delivery 2", "from": "From Moon Bloom" }},
+      { "type": "delivery", "settings": { "color": "#6E8B5C", "shadow_offset": "2px 2px", "postmark_html": "SEP<br>· 2026 ·<br>SG", "label": "Delivery 3", "from": "From Java Jungle" }},
+      { "type": "delivery", "settings": { "color": "#E8B796", "shadow_offset": "1px 1px", "postmark_html": "DEC<br>· 2026 ·<br>SG", "label": "Delivery 4", "from": "From Coconut Beach" }},
+      { "type": "trust_item", "settings": { "heading": "Save 15%", "note": "every order, every time" }},
+      { "type": "trust_item", "settings": { "heading": "Free shipping", "note": "on subscription orders over S$40" }},
+      { "type": "trust_item", "settings": { "heading": "Skip, swap, pause", "note": "no questions, no fees" }},
+      { "type": "trust_item", "settings": { "heading": "Cancel anytime", "note": "in 2 clicks. We mean it." }}
+    ]
+  }]
+}
+{% endschema %}

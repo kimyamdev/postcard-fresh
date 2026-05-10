@@ -1,0 +1,44 @@
+{%- liquid
+  assign accent = section.settings.accent_color | default: '#B07A4E'
+-%}
+<section class="pc-sub-cta" style="--world-color: {{ accent }};">
+  <div class="container container--narrow pc-sub-cta__inner">
+    {%- if section.settings.eyebrow != blank -%}
+      <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+    {%- endif -%}
+    {%- if section.settings.title != blank -%}
+      <h2 class="h-display pc-sub-cta__title">{{ section.settings.title }}</h2>
+    {%- endif -%}
+    {%- if section.settings.body != blank -%}
+      <p class="pc-sub-cta__body">{{ section.settings.body }}</p>
+    {%- endif -%}
+    <div class="pc-sub-cta__ctas">
+      {%- if section.settings.cta_primary_text != blank -%}
+        <a class="btn btn--ink" href="{{ section.settings.cta_primary_url | default: '#' }}">{{ section.settings.cta_primary_text }}</a>
+      {%- endif -%}
+      {%- if section.settings.cta_secondary_text != blank -%}
+        <a class="tlink pc-sub-cta__quiz" href="{{ section.settings.cta_secondary_url | default: '#' }}">{{ section.settings.cta_secondary_text }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Subs · Final CTA",
+  "tag": "section",
+  "settings": [
+    { "type": "color", "id": "accent_color", "label": "Accent color", "default": "#B07A4E" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Begin your habit" },
+    { "type": "html", "id": "title", "label": "Title (HTML)", "default": "One subscription.<br>One less errand." },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "Start with one product. Add more when you're ready. Cancel when you're done." },
+    { "type": "header", "content": "Primary CTA" },
+    { "type": "text", "id": "cta_primary_text", "label": "Text", "default": "Browse subscribable products →" },
+    { "type": "url", "id": "cta_primary_url", "label": "Link" },
+    { "type": "header", "content": "Secondary CTA" },
+    { "type": "text", "id": "cta_secondary_text", "label": "Text", "default": "Or take the 2-min subscription quiz" },
+    { "type": "url", "id": "cta_secondary_url", "label": "Link" }
+  ],
+  "presets": [{ "name": "Subs · Final CTA" }]
+}
+{% endschema %}

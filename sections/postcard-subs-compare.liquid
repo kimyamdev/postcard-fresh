@@ -1,0 +1,95 @@
+{%- liquid
+  assign accent = section.settings.accent_color | default: '#B07A4E'
+-%}
+<section class="section" style="--world-color: {{ accent }};">
+  <div class="container">
+    <div class="pc-sub-compare__head">
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="h-display pc-sub-compare__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+    </div>
+    <div class="pc-sub-compare__table">
+      <div class="pc-sub-compare__head-row">
+        <div class="pc-sub-compare__head-cell pc-sub-compare__head-cell--label">{{ section.settings.col_label_header }}</div>
+        <div class="pc-sub-compare__head-cell">{{ section.settings.col_a_label }}</div>
+        <div class="pc-sub-compare__head-cell pc-sub-compare__head-cell--accent">
+          <div class="pc-sub-compare__chip" style="background: {{ accent }};"></div>
+          <span class="h-display">{{ section.settings.col_b_label }}</span>
+        </div>
+      </div>
+      {%- assign row_idx = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'row' -%}
+          {%- assign row_idx = row_idx | plus: 1 -%}
+          {%- assign mod = row_idx | modulo: 2 -%}
+          <div class="pc-sub-compare__row{% if mod == 0 %} pc-sub-compare__row--alt{% endif %}" {{ block.shopify_attributes }}>
+            <div class="pc-sub-compare__cell pc-sub-compare__cell--label">{{ block.settings.label }}</div>
+            <div class="pc-sub-compare__cell">{{ block.settings.col_a }}</div>
+            <div class="pc-sub-compare__cell" style="color: {{ accent }};">{{ block.settings.col_b }}</div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+      <div class="pc-sub-compare__total">
+        <div class="pc-sub-compare__total-label">{{ section.settings.total_label }}</div>
+        <div class="pc-sub-compare__total-cell">{{ section.settings.total_a }}</div>
+        <div class="pc-sub-compare__total-cell">
+          <div class="h-display" style="color: {{ accent }};">{{ section.settings.total_b }}</div>
+          {%- if section.settings.savings_text != blank -%}
+            <div class="pc-sub-compare__savings">{{ section.settings.savings_text }}</div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+    {%- if section.settings.footnote != blank -%}
+      <p class="pc-sub-compare__footnote">{{ section.settings.footnote }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Subs · Savings table",
+  "tag": "section",
+  "settings": [
+    { "type": "color", "id": "accent_color", "label": "Accent color", "default": "#B07A4E" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Subscription vs one-time, year on year" },
+    { "type": "text", "id": "title", "label": "Title", "default": "What it actually saves you." },
+    { "type": "header", "content": "Table headers" },
+    { "type": "text", "id": "col_label_header", "label": "Row-label column header", "default": "One-shower household, year of" },
+    { "type": "text", "id": "col_a_label", "label": "Column A label", "default": "One-time" },
+    { "type": "text", "id": "col_b_label", "label": "Column B label", "default": "Subscription" },
+    { "type": "header", "content": "Totals row" },
+    { "type": "text", "id": "total_label", "label": "Total label", "default": "Annual total" },
+    { "type": "text", "id": "total_a", "label": "Column A total", "default": "S$632" },
+    { "type": "text", "id": "total_b", "label": "Column B total", "default": "S$496.40" },
+    { "type": "text", "id": "savings_text", "label": "Savings line", "default": "You save S$135.60 / year" },
+    { "type": "header", "content": "Footnote" },
+    { "type": "text", "id": "footnote", "label": "Footnote", "default": "Based on average household consumption · refills count · cancel anytime · these maths never lie." }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Comparison row",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Row label", "default": "Hand & body wash (refilled)" },
+        { "type": "text", "id": "col_a", "label": "Column A value", "default": "S$112" },
+        { "type": "text", "id": "col_b", "label": "Column B value", "default": "S$95.20" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Subs · Savings table",
+    "blocks": [
+      { "type": "row", "settings": { "label": "Hand & body wash (refilled)", "col_a": "S$112", "col_b": "S$95.20" }},
+      { "type": "row", "settings": { "label": "Shampoo (refilled)", "col_a": "S$128", "col_b": "S$108.80" }},
+      { "type": "row", "settings": { "label": "Conditioner (refilled)", "col_a": "S$128", "col_b": "S$108.80" }},
+      { "type": "row", "settings": { "label": "Deodorant", "col_a": "S$132", "col_b": "S$112.20" }},
+      { "type": "row", "settings": { "label": "Anywhere fragrance", "col_a": "S$84", "col_b": "S$71.40" }},
+      { "type": "row", "settings": { "label": "Shipping (over S$40 → free on sub)", "col_a": "S$48", "col_b": "S$0" }}
+    ]
+  }]
+}
+{% endschema %}

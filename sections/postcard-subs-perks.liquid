@@ -1,0 +1,64 @@
+{%- liquid
+  assign accent = section.settings.accent_color | default: '#B07A4E'
+-%}
+<section class="section pc-sub-perks" style="--world-color: {{ accent }};">
+  <div class="container">
+    <div class="pc-sub-perks__head">
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="eyebrow pc-sub-perks__eyebrow">{{ section.settings.eyebrow }}</div>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="h-display pc-sub-perks__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+    </div>
+    <div class="pc-sub-perks__grid">
+      {%- for block in section.blocks -%}
+        <div class="pc-sub-perk-card" {{ block.shopify_attributes }}>
+          <span class="postmark pc-sub-perk-card__pm" style="border-color: {{ block.settings.color }}; color: {{ block.settings.color }};"><div>{{ block.settings.postmark_html }}</div></span>
+          <div class="pc-sub-perk-card__tag" style="color: {{ block.settings.color }};">{{ block.settings.tag }}</div>
+          <h3 class="h-display pc-sub-perk-card__h">{{ block.settings.heading }}</h3>
+          <p class="pc-sub-perk-card__p">{{ block.settings.body }}</p>
+          <div class="pc-sub-perk-card__stat-block">
+            <div class="h-display pc-sub-perk-card__stat" style="color: {{ block.settings.color }};">{{ block.settings.stat_value }}</div>
+            <div class="pc-sub-perk-card__stat-label">{{ block.settings.stat_label }}</div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Subs · Perks",
+  "tag": "section",
+  "settings": [
+    { "type": "color", "id": "accent_color", "label": "Accent color", "default": "#B07A4E" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The trade you make" },
+    { "type": "text", "id": "title", "label": "Title", "default": "You give us a habit. We give you back time, money, and one less thing to remember." }
+  ],
+  "blocks": [
+    {
+      "type": "perk",
+      "name": "Perk card",
+      "settings": [
+        { "type": "color", "id": "color", "label": "Accent color", "default": "#FFB233" },
+        { "type": "html", "id": "postmark_html", "label": "Postmark text (HTML)", "default": "SET IT" },
+        { "type": "text", "id": "tag", "label": "Tag", "default": "Set it" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "One less browser tab." },
+        { "type": "textarea", "id": "body", "label": "Body", "default": "No more \"did I order shampoo?\" thoughts at 11pm. Pick once, set the cadence, walk away. Your future self stays clean and lightly perfumed." },
+        { "type": "text", "id": "stat_value", "label": "Stat value", "default": "4.2" },
+        { "type": "text", "id": "stat_label", "label": "Stat label", "default": "minutes saved per re-order" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Subs · Perks",
+    "blocks": [
+      { "type": "perk", "settings": { "color": "#FFB233", "postmark_html": "SET IT", "tag": "Set it", "heading": "One less browser tab.", "body": "No more \"did I order shampoo?\" thoughts at 11pm. Pick once, set the cadence, walk away. Your future self stays clean and lightly perfumed.", "stat_value": "4.2", "stat_label": "minutes saved per re-order" }},
+      { "type": "perk", "settings": { "color": "#C7A8D6", "postmark_html": "FORGET IT", "tag": "Forget it", "heading": "It arrives before you notice.", "body": "We watch your last order. By default, we ship a fresh batch 3 days before you typically run out. You can move that window — or just trust it.", "stat_value": "3 days", "stat_label": "before you finish the last one" }},
+      { "type": "perk", "settings": { "color": "#6E8B5C", "postmark_html": "SAVE 15%", "tag": "Save 15%", "heading": "Loyalty paid in cash, not points.", "body": "15% off every subscription order, every time. Stacks with member tiers. Free shipping over S$40. The bottle that costs S$28 once costs you S$23.80 forever.", "stat_value": "15%", "stat_label": "off every order, automatically" }}
+    ]
+  }]
+}
+{% endschema %}

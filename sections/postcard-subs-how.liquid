@@ -1,0 +1,59 @@
+{%- liquid
+  assign accent = section.settings.accent_color | default: '#B07A4E'
+-%}
+<section class="section" style="--world-color: {{ accent }};">
+  <div class="container">
+    <div class="pc-sub-how__head">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="pc-sub-how__pill" style="background: {{ accent }}22;">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="h-display pc-sub-how__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+    </div>
+    <div class="pc-sub-how__grid">
+      {%- for block in section.blocks -%}
+        {%- assign mod = forloop.index0 | modulo: 2 -%}
+        <div class="pc-sub-how__cell{% if mod == 1 %} pc-sub-how__cell--alt{% endif %}" {{ block.shopify_attributes }}>
+          <div class="pc-sub-how__chip" style="background: {{ block.settings.chip_color }};"></div>
+          <div class="h-display pc-sub-how__num">{{ block.settings.number }}</div>
+          <h3 class="h-typewriter pc-sub-how__h">{{ block.settings.heading }}</h3>
+          <p class="pc-sub-how__p">{{ block.settings.body }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Subs · How it works",
+  "tag": "section",
+  "settings": [
+    { "type": "color", "id": "accent_color", "label": "Accent color", "default": "#B07A4E" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow pill", "default": "How it works" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Four small steps. One forever-shower." }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "color", "id": "chip_color", "label": "Chip color", "default": "#C7A8D6" },
+        { "type": "text", "id": "number", "label": "Number", "default": "01" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Pick your products" },
+        { "type": "textarea", "id": "body", "label": "Body", "default": "Any of the 80+ subscribable items. Mix worlds. Mix categories." }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Subs · How it works",
+    "blocks": [
+      { "type": "step", "settings": { "chip_color": "#C7A8D6", "number": "01", "heading": "Pick your products", "body": "Any of the 80+ subscribable items. Mix worlds. Mix categories." }},
+      { "type": "step", "settings": { "chip_color": "#5C6688", "number": "02", "heading": "Choose your cadence", "body": "30, 60, or 90 days. Skin first, hair second, scent third — set each one to its own rhythm." }},
+      { "type": "step", "settings": { "chip_color": "#6E8B5C", "number": "03", "heading": "We post. You shower.", "body": "Box arrives 3 days before you run out, on average. Tracked, paper-only packaging." }},
+      { "type": "step", "settings": { "chip_color": "#FFB233", "number": "04", "heading": "Skip, swap, cancel", "body": "Anytime. From the email. From your phone. From your account. No call required." }}
+    ]
+  }]
+}
+{% endschema %}
