@@ -1,7 +1,12 @@
 {%- liquid
   assign worlds_all = shop.metaobjects.world.values
   assign visible_count = section.settings.visible_count | default: 7
-  assign total_count = worlds_all.size
+  assign total_count = 0
+  for w in worlds_all
+    if w.tier.value == 'World'
+      assign total_count = total_count | plus: 1
+    endif
+  endfor
   assign more_count = total_count | minus: visible_count
   if more_count < 0
     assign more_count = 0
@@ -24,13 +29,17 @@
       {%- endif -%}
     </div>
     <div class="pc-worlds-quick__grid">
-      {%- for w in worlds_all limit: visible_count -%}
+      {%- assign emitted = 0 -%}
+      {%- for w in worlds_all -%}
+        {%- if emitted >= visible_count -%}{%- break -%}{%- endif -%}
+        {%- if w.tier.value != 'World' -%}{%- continue -%}{%- endif -%}
         {%- assign slug = w.slug.value | default: w.handle -%}
         {%- assign accent = w.accent_color.value | default: '#E8C36A' -%}
         {%- assign family = w.family.value -%}
         <a class="pc-worlds-quick__cell" href="/pages/{{ slug }}">
           {% render 'stamp', name: w.name.value, family: family, color: accent, size: 'md' %}
         </a>
+        {%- assign emitted = emitted | plus: 1 -%}
       {%- endfor -%}
       {%- if more_count > 0 and section.settings.more_text != blank -%}
         {%- assign more_text = section.settings.more_text | replace: '[count]', more_count -%}
