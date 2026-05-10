@@ -3,10 +3,11 @@
     assign card_name = product.title
     assign card_url = product.url
     assign card_price = product.price | money
-    if product.metafields.custom.world.value
-      assign world_obj = product.metafields.custom.world.value
+    assign world_obj = product.metafields.postcard.world.value | default: product.metafields.custom.world.value
+    if world_obj
       assign card_world = world_obj.name
       assign card_world_color = world_obj.accent_color
+      assign card_world_stamp = world_obj.world_stamp.value
     endif
   endif
 
@@ -15,6 +16,7 @@
   assign card_price = price | default: card_price
   assign card_world = world | default: card_world | default: ''
   assign card_world_color = world_color | default: card_world_color | default: '#E8C36A'
+  assign card_world_stamp = world_stamp | default: card_world_stamp
   assign card_badge = badge
 
   assign world_words = card_world | split: ' '
@@ -37,6 +39,12 @@
     {%- endif -%}
     {%- if card_world != blank -%}
       <div class="pc-product-card__chip" style="background: {{ card_world_color }};">{{ world_initials }}</div>
+    {%- endif -%}
+    {%- if card_world_stamp != blank -%}
+      {%- assign ws_alt = card_world | append: ' stamp' | escape -%}
+      <div class="pc-product-card__world-stamp">
+        {{ card_world_stamp | image_url: width: 240 | image_tag: alt: ws_alt, loading: 'lazy', class: 'pc-product-card__world-stamp-img' }}
+      </div>
     {%- endif -%}
   </div>
   <div>

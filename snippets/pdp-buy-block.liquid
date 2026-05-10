@@ -39,19 +39,27 @@
 
 {%- when 'rating' -%}
   {%- liquid
-    assign sp_score = product.metafields.stamped.score.value | default: product.metafields.stamped.reviews_average.value
-    assign sp_count = product.metafields.stamped.count.value | default: product.metafields.stamped.reviews_count.value
-    assign review_score = sp_score | default: product.metafields.pdp.review_score.value | default: 4.9
-    assign review_count = sp_count | default: product.metafields.pdp.review_count.value | default: 327
+    assign sp_count = product.metafields.stamped.reviews_count.value | plus: 0
+    assign sp_avg_raw = product.metafields.stamped.reviews_average.value | default: 0
+    assign sp_tenths = sp_avg_raw | times: 10 | round
+    assign sp_int = sp_tenths | divided_by: 10
+    assign sp_dec = sp_tenths | modulo: 10
+    assign sp_filled = sp_avg_raw | round
   -%}
-  <div class="pc-pdp-buy__rating" data-pc-stamped-product-id="{{ product.id }}" {{ block.shopify_attributes }}>
-    <span class="pc-pdp-buy__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-    <span class="pc-pdp-buy__rating-text">
-      <span class="pc-pdp-buy__rating-score">{{ review_score }}</span>
-      &middot;
-      <span class="pc-pdp-buy__rating-count">{{ review_count }}</span> reviews
-    </span>
-  </div>
+  {%- if sp_count > 0 -%}
+    <div class="pc-pdp-buy__rating" {{ block.shopify_attributes }}>
+      <span class="pc-pdp-buy__stars" aria-label="Rated {{ sp_int }}.{{ sp_dec }} out of 5">
+        {%- for i in (1..5) -%}
+          {%- if i <= sp_filled -%}&#9733;{%- else -%}&#9734;{%- endif -%}
+        {%- endfor -%}
+      </span>
+      <span class="pc-pdp-buy__rating-text">
+        <span class="pc-pdp-buy__rating-score">{{ sp_int }}.{{ sp_dec }}</span>
+        &middot;
+        <a class="pc-pdp-buy__rating-link" href="#pc-stamped-reviews">{{ sp_count }} review{% if sp_count != 1 %}s{% endif %}</a>
+      </span>
+    </div>
+  {%- endif -%}
 
 {%- when 'sizes' -%}
   {%- assign demo_sizes_str = block.settings.demo_sizes | default: 'Bottle 300ml,Refill 500ml,Refill 1L' -%}

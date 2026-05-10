@@ -2,7 +2,10 @@
   assign label = section.settings.label | default: 'Dispatches · Field notes from the pit'
   assign heading = section.settings.heading | default: 'Mail from our pen-pals.'
   assign bg_color = section.settings.bg_color
+  assign sp_count = product.metafields.stamped.reviews_count.value | plus: 0
 -%}
+
+{%- if sp_count == 0 -%}{%- comment -%} Hide entirely when product has no reviews {%- endcomment -%}{%- else -%}
 
 {%- style -%}
   #pc-stamped-{{ section.id }} {
@@ -301,6 +304,7 @@
 {%- endstyle -%}
 
 <section id="pc-stamped-{{ section.id }}" class="pc-section">
+  <a id="pc-stamped-reviews" class="pc-anchor" aria-hidden="true"></a>
   <div class="pc-stamped-inner">
     {%- if heading != blank or label != blank -%}
       <div class="pc-section-head">
@@ -414,6 +418,7 @@
     }
   })();
 </script>
+{%- endif -%}
 
 {% schema %}
 {

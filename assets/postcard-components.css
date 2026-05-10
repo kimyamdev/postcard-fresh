@@ -342,6 +342,19 @@ a.pc-product-card { cursor: pointer; }
   text-align: center;
   padding: 4px;
 }
+.pc-product-card__world-stamp {
+  position: absolute;
+  top: 12px; right: 12px;
+  width: 60px;
+  pointer-events: none;
+  z-index: 2;
+}
+.pc-product-card__world-stamp-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(1px 2px 0 rgba(33, 32, 32, 0.18));
+}
 .pc-product-card__world {
   font-family: var(--font-display);
   font-size: 10px;

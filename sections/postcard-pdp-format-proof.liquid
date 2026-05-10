@@ -1,5 +1,29 @@
 {%- liquid
-  assign world_color = product.metafields.postcard.world.value.accent_color.value | default: '#6E8B5C'
+  assign world = product.metafields.postcard.world.value
+  assign world_color = world.accent_color.value | default: '#6E8B5C'
+  assign world_name_upper = world.name.value | upcase
+
+  assign current = product.selected_or_first_available_variant
+  assign weight_g = current.weight
+  if current.weight_unit == 'kg'
+    assign weight_g = weight_g | times: 1000
+  elsif current.weight_unit == 'lb'
+    assign weight_g = weight_g | times: 453.592 | round
+  elsif current.weight_unit == 'oz'
+    assign weight_g = weight_g | times: 28.3495 | round
+  endif
+  assign weight_g = weight_g | round
+
+  assign auto_label_top = world_name_upper | default: product.title | upcase
+  assign auto_label_bottom = ''
+  if weight_g > 0
+    assign auto_label_bottom = weight_g | append: 'g · postcard sg'
+  endif
+  assign auto_left_price = current.price | money
+
+  assign label_top    = section.settings.bar_label_top    | default: auto_label_top
+  assign label_bottom = section.settings.bar_label_bottom | default: auto_label_bottom
+  assign left_price   = section.settings.left_price       | default: auto_left_price
 -%}
 <section class="section pc-fp" style="--world-color: {{ world_color }};">
   <div class="container">
@@ -14,12 +38,12 @@
           <ellipse cx="100" cy="120" rx="78" ry="6" fill="rgba(33,32,32,0.12)"/>
           <rect x="32" y="36" width="136" height="80" rx="14" fill="{{ world_color }}" stroke="#212020" stroke-width="1.8"/>
           <rect x="32" y="36" width="136" height="14" rx="14" fill="rgba(248,246,237,0.18)"/>
-          <text x="100" y="84" text-anchor="middle" font-family="Special Elite, monospace" font-size="11" fill="#212020" letter-spacing="0.1em">{{ section.settings.bar_label_top }}</text>
-          <text x="100" y="100" text-anchor="middle" font-family="Special Elite, monospace" font-size="9" fill="#212020" opacity="0.7" letter-spacing="0.08em">{{ section.settings.bar_label_bottom }}</text>
+          <text x="100" y="84" text-anchor="middle" font-family="Special Elite, monospace" font-size="11" fill="#212020" letter-spacing="0.1em">{{ label_top }}</text>
+          <text x="100" y="100" text-anchor="middle" font-family="Special Elite, monospace" font-size="9" fill="#212020" opacity="0.7" letter-spacing="0.08em">{{ label_bottom }}</text>
         </svg>
         <div class="h-display pc-fp__big">1</div>
         <div class="eyebrow">{{ section.settings.left_unit }}</div>
-        <div class="pc-fp__price">{{ section.settings.left_price }}</div>
+        <div class="pc-fp__price">{{ left_price }}</div>
       </div>
 
       <div class="h-display pc-fp__equals">=</div>
@@ -67,10 +91,10 @@
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Pill text", "default": "The format proof" },
     { "type": "text", "id": "title", "label": "Title", "default": "What you're swapping." },
-    { "type": "text", "id": "bar_label_top", "label": "Bar label (top line)", "default": "JAVA JUNGLE" },
-    { "type": "text", "id": "bar_label_bottom", "label": "Bar label (bottom)", "default": "75g · postcard sg" },
+    { "type": "text", "id": "bar_label_top", "label": "Bar label top (blank = world name)", "info": "Auto-fills with the linked world's name in caps" },
+    { "type": "text", "id": "bar_label_bottom", "label": "Bar label bottom (blank = variant weight)", "info": "Auto-fills as e.g. '75g · postcard sg' from variant weight" },
     { "type": "text", "id": "left_unit", "label": "Left side unit", "default": "Bar" },
-    { "type": "text", "id": "left_price", "label": "Left price", "default": "S$18" },
+    { "type": "text", "id": "left_price", "label": "Left price (blank = product price)", "info": "Auto-fills with current variant price" },
     { "type": "text", "id": "right_unit", "label": "Right side unit", "default": "250ml bottles" },
     { "type": "text", "id": "right_price", "label": "Right price (struck through)", "default": "S$48 of plastic" },
     { "type": "text", "id": "seal_text", "label": "Postmark seal", "default": "SAVES<br>· 500g ·<br>PLASTIC" }
