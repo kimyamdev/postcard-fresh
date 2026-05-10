@@ -1,0 +1,120 @@
+{%- liquid
+  assign eyebrow = section.settings.eyebrow
+  assign heading = section.settings.heading
+  assign lede = section.settings.lede
+  assign embed_key = section.settings.embed_api_key
+  assign place_id = section.settings.place_id
+  assign zoom = section.settings.zoom | default: 17
+  assign place_name = section.settings.place_name
+  assign address = section.settings.address
+  assign hours = section.settings.hours
+  assign phone = section.settings.phone
+  assign directions_url = section.settings.directions_url
+  assign override_src = section.settings.override_src
+
+  assign map_src = override_src
+  if map_src == blank and embed_key != blank and place_id != blank
+    assign q_value = 'place_id:' | append: place_id | url_encode
+    assign map_src = 'https://www.google.com/maps/embed/v1/place?key=' | append: embed_key | append: '&q=' | append: q_value | append: '&zoom=' | append: zoom
+  endif
+-%}
+
+<section class="pc-omap" id="pc-omap-{{ section.id }}">
+  <div class="container">
+    {%- if eyebrow != blank or heading != blank or lede != blank -%}
+      <header class="pc-omap__head">
+        {%- if eyebrow != blank -%}<div class="eyebrow pc-omap__eyebrow">{{ eyebrow }}</div>{%- endif -%}
+        {%- if heading != blank -%}<h2 class="h-display pc-omap__title">{{ heading }}</h2>{%- endif -%}
+        {%- if lede != blank -%}<p class="pc-omap__lede">{{ lede }}</p>{%- endif -%}
+      </header>
+    {%- endif -%}
+
+    <div class="pc-omap__layout">
+      <div class="pc-omap__embed">
+        {%- if map_src != blank -%}
+          <iframe
+            src="{{ map_src }}"
+            title="Map to {{ place_name | default: 'flagship' | escape }}"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen></iframe>
+        {%- else -%}
+          <div class="pc-omap__empty">
+            Paste your <strong>Maps Embed API key</strong> in this section's settings to display the map.
+          </div>
+        {%- endif -%}
+      </div>
+
+      <aside class="pc-omap__card">
+        {%- if place_name != blank -%}<h3 class="h-display pc-omap__name">{{ place_name }}</h3>{%- endif -%}
+        {%- if address != blank -%}
+          <div class="pc-omap__field">
+            <div class="eyebrow pc-omap__label">Address</div>
+            <p class="pc-omap__value">{{ address | newline_to_br }}</p>
+          </div>
+        {%- endif -%}
+        {%- if hours != blank -%}
+          <div class="pc-omap__field">
+            <div class="eyebrow pc-omap__label">Hours</div>
+            <p class="pc-omap__value">{{ hours | newline_to_br }}</p>
+          </div>
+        {%- endif -%}
+        {%- if phone != blank -%}
+          <div class="pc-omap__field">
+            <div class="eyebrow pc-omap__label">Phone</div>
+            <p class="pc-omap__value"><a href="tel:{{ phone | replace: ' ', '' | replace: '-', '' }}">{{ phone }}</a></p>
+          </div>
+        {%- endif -%}
+        {%- if directions_url != blank -%}
+          <a class="btn btn--ink pc-omap__cta" href="{{ directions_url }}" target="_blank" rel="noopener">Get directions &rarr;</a>
+        {%- endif -%}
+      </aside>
+    </div>
+  </div>
+</section>
+
+<style>
+.pc-omap { padding: 96px 0; border-top: 1px solid var(--color-ink); background: var(--color-bg); }
+.pc-omap__head { margin-bottom: 48px; max-width: 720px; }
+.pc-omap__eyebrow { margin-bottom: 12px; opacity: 0.7; }
+.pc-omap__title { margin: 0 0 14px; font-style: italic; font-size: clamp(28px, 4vw, 44px); }
+.pc-omap__lede { margin: 0; font-size: 17px; line-height: 1.55; opacity: 0.8; }
+.pc-omap__layout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 36px; align-items: stretch; }
+@media (max-width: 900px) { .pc-omap__layout { grid-template-columns: 1fr; } }
+.pc-omap__embed { position: relative; min-height: 480px; border: 1.5px solid var(--color-ink); background: var(--color-bg-warm); overflow: hidden; box-shadow: 6px 8px 0 rgba(0,0,0,0.10); }
+.pc-omap__embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.pc-omap__empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 32px; text-align: center; font-size: 14px; }
+.pc-omap__card { background: var(--color-bg-card, #fdf8ee); border: 1.5px solid var(--color-ink); padding: 32px; box-shadow: 4px 6px 0 rgba(0,0,0,0.10); display: flex; flex-direction: column; gap: 20px; }
+.pc-omap__name { margin: 0; font-size: clamp(22px, 2.4vw, 30px); }
+.pc-omap__field { margin: 0; }
+.pc-omap__label { margin-bottom: 6px; opacity: 0.7; }
+.pc-omap__value { margin: 0; font-family: var(--font-display); font-size: 15px; line-height: 1.5; }
+.pc-omap__value a { color: inherit; }
+.pc-omap__cta { margin-top: 6px; align-self: flex-start; }
+</style>
+
+{% schema %}
+{
+  "name": "Orchard map",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Find us" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The flagship." },
+    { "type": "textarea", "id": "lede", "label": "Lede" },
+    { "type": "header", "content": "Map" },
+    { "type": "text", "id": "embed_api_key", "label": "Maps Embed API key" },
+    { "type": "text", "id": "place_id", "label": "Google Place ID", "default": "ChIJlTgRmfgZ2jERUGJrCQ-BC0g" },
+    { "type": "range", "id": "zoom", "label": "Zoom", "min": 10, "max": 20, "step": 1, "default": 17 },
+    { "type": "url", "id": "override_src", "label": "Map embed URL (override)" },
+    { "type": "header", "content": "Address card" },
+    { "type": "text",     "id": "place_name", "label": "Name",    "default": "Postcard Orchard" },
+    { "type": "textarea", "id": "address",    "label": "Address", "default": "391 Orchard Road, #02-14\nTakashimaya Shopping Centre\nSingapore 238872" },
+    { "type": "textarea", "id": "hours",      "label": "Hours",   "default": "Mon–Sun · 10:00–21:30" },
+    { "type": "text",     "id": "phone",      "label": "Phone" },
+    { "type": "url",      "id": "directions_url", "label": "Get-directions URL" }
+  ],
+  "presets": [
+    { "name": "Orchard map" }
+  ]
+}
+{% endschema %}

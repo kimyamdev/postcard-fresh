@@ -1,0 +1,279 @@
+{%- comment -%}
+  Google Reviews — fetches review JSON from a Cloudflare Worker proxy
+  (see infra/google-reviews-worker/) and renders postcard-style cards.
+
+  Section settings hold the worker URL + place_id so admin can change them
+  without touching code. No API key is ever sent to the browser.
+{%- endcomment -%}
+
+{%- liquid
+  assign proxy_url = section.settings.proxy_url
+  assign place_id = section.settings.place_id
+  assign max_reviews = section.settings.max_reviews | default: 5
+  assign eyebrow = section.settings.eyebrow | default: 'From the postbag'
+  assign heading = section.settings.heading | default: 'What people are saying about the flagship.'
+  assign sort_order = section.settings.sort_order | default: 'relevant'
+-%}
+
+<section class="pc-greviews" id="pc-greviews-{{ section.id }}">
+  <div class="container">
+    <header class="pc-greviews__head">
+      {%- if eyebrow != blank -%}<div class="eyebrow pc-greviews__eyebrow">{{ eyebrow }}</div>{%- endif -%}
+      {%- if heading != blank -%}<h2 class="h-display pc-greviews__title">{{ heading }}</h2>{%- endif -%}
+      <div class="pc-greviews__summary" data-pc-greviews-summary>
+        <span class="pc-greviews__summary-stars" aria-hidden="true"></span>
+        <span class="pc-greviews__summary-text"></span>
+      </div>
+    </header>
+
+    {%- if proxy_url == blank -%}
+      <div class="pc-greviews__empty">
+        <strong>Set the Proxy URL</strong> in this section's settings — paste the URL of
+        your Cloudflare Worker (see <code>infra/google-reviews-worker/README.md</code>).
+      </div>
+    {%- else -%}
+      <div class="pc-greviews__grid" data-pc-greviews-grid aria-busy="true">
+        {%- for i in (1..3) -%}
+          <article class="pc-greviews__card pc-greviews__card--skeleton" aria-hidden="true">
+            <div class="pc-greviews__skel-line pc-greviews__skel-line--short"></div>
+            <div class="pc-greviews__skel-line"></div>
+            <div class="pc-greviews__skel-line"></div>
+            <div class="pc-greviews__skel-line pc-greviews__skel-line--short"></div>
+          </article>
+        {%- endfor -%}
+      </div>
+      <p class="pc-greviews__attrib">
+        <a class="tlink" data-pc-greviews-mapsuri target="_blank" rel="noopener">See all reviews on Google &rarr;</a>
+      </p>
+    {%- endif -%}
+  </div>
+</section>
+
+{%- if proxy_url != blank -%}
+<script type="application/json" id="pc-greviews-data-{{ section.id }}">
+{
+  "proxy": {{ proxy_url | json }},
+  "placeId": {{ place_id | json }},
+  "max": {{ max_reviews | json }},
+  "sort": {{ sort_order | json }}
+}
+</script>
+<script>
+(function(){
+  var cfg = JSON.parse(document.getElementById('pc-greviews-data-{{ section.id }}').textContent);
+  var root = document.getElementById('pc-greviews-{{ section.id }}');
+  var grid = root.querySelector('[data-pc-greviews-grid]');
+  var summary = root.querySelector('[data-pc-greviews-summary]');
+  var summaryStars = summary && summary.querySelector('.pc-greviews__summary-stars');
+  var summaryText = summary && summary.querySelector('.pc-greviews__summary-text');
+  var mapsLink = root.querySelector('[data-pc-greviews-mapsuri]');
+
+  function stars(rating, label) {
+    var n = Math.round(Number(rating) || 0);
+    var s = '';
+    for (var i = 1; i <= 5; i++) s += i <= n ? '★' : '☆';
+    return '<span class="pc-greviews__stars" aria-label="' + (label || (n + ' out of 5')) + '">' + s + '</span>';
+  }
+
+  function escape(t) {
+    return String(t == null ? '' : t).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  function fmtDate(iso, fallback) {
+    if (!iso) return fallback || '';
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return fallback || '';
+    return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+
+  function renderSummary(data) {
+    if (!summary) return;
+    if (data.rating != null && data.total != null) {
+      summaryStars.innerHTML = stars(data.rating);
+      var avg = (Math.round(Number(data.rating) * 10) / 10).toFixed(1);
+      summaryText.textContent = avg + ' · ' + data.total + ' Google review' + (data.total === 1 ? '' : 's');
+    }
+    if (mapsLink && data.mapsUri) mapsLink.href = data.mapsUri;
+  }
+
+  function renderError(msg) {
+    grid.removeAttribute('aria-busy');
+    grid.innerHTML = '<div class="pc-greviews__empty">' + escape(msg) + '</div>';
+  }
+
+  function sortReviews(reviews, mode) {
+    var arr = (reviews || []).slice();
+    var byTime = function(a, b) { return (b.time || '').localeCompare(a.time || ''); };
+    if (mode === 'newest')        arr.sort(byTime);
+    else if (mode === 'highest')  arr.sort(function(a, b){ return (b.rating || 0) - (a.rating || 0) || byTime(a, b); });
+    else if (mode === 'lowest')   arr.sort(function(a, b){ return (a.rating || 0) - (b.rating || 0) || byTime(a, b); });
+    return arr;
+  }
+
+  function renderReviews(reviews) {
+    grid.removeAttribute('aria-busy');
+    if (!reviews || !reviews.length) {
+      grid.innerHTML = '<div class="pc-greviews__empty">No reviews yet — be the first to drop by Orchard.</div>';
+      return;
+    }
+    reviews = sortReviews(reviews, cfg.sort);
+    var html = reviews.slice(0, cfg.max).map(function(r, i){
+      var tilt = ['-1deg', '0.7deg', '-0.4deg', '1.2deg'][i % 4];
+      var bodyHtml = escape(r.text).replace(/\n+/g, '<br>');
+      var when = r.relative || fmtDate(r.time);
+      var initials = (r.author || '?').split(/\s+/).slice(0,2).map(function(w){return w[0]||'';}).join('').toUpperCase();
+      var avatar = r.photo
+        ? '<img class="pc-greviews__avatar-img" src="' + escape(r.photo) + '" alt="" loading="lazy" referrerpolicy="no-referrer">'
+        : '<span class="pc-greviews__avatar-initials">' + escape(initials) + '</span>';
+      return ''
+        + '<article class="pc-greviews__card" style="--tilt:' + tilt + ';">'
+        +   '<div class="pc-greviews__card-head">'
+        +     '<div class="pc-greviews__avatar">' + avatar + '</div>'
+        +     '<div class="pc-greviews__byline">'
+        +       '<div class="pc-greviews__author">' + escape(r.author || 'Anonymous') + '</div>'
+        +       '<div class="pc-greviews__when">' + escape(when) + '</div>'
+        +     '</div>'
+        +     stars(r.rating)
+        +   '</div>'
+        +   '<p class="pc-greviews__text">' + bodyHtml + '</p>'
+        + '</article>';
+    }).join('');
+    grid.innerHTML = html;
+  }
+
+  if (!cfg.proxy) { renderError('Proxy URL not configured.'); return; }
+
+  var url = cfg.proxy + (cfg.proxy.indexOf('?') === -1 ? '?' : '&') + 'place_id=' + encodeURIComponent(cfg.placeId || '');
+  fetch(url, { credentials: 'omit' })
+    .then(function(r){
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function(data){
+      if (data && data.error) throw new Error(data.error);
+      renderSummary(data || {});
+      renderReviews(data && data.reviews);
+    })
+    .catch(function(err){
+      renderError('Could not load reviews. ' + (err && err.message ? '(' + err.message + ')' : ''));
+    });
+})();
+</script>
+{%- endif -%}
+
+{%- stylesheet -%}
+.pc-greviews { padding: 96px 0; background: var(--color-bg-warm); border-top: 1px solid var(--color-ink); }
+.pc-greviews__head { margin-bottom: 48px; }
+.pc-greviews__eyebrow { margin-bottom: 12px; opacity: 0.7; }
+.pc-greviews__title { margin: 0 0 18px; font-style: italic; font-size: clamp(28px, 4vw, 44px); }
+.pc-greviews__summary { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+.pc-greviews__summary-stars,
+.pc-greviews__stars {
+  font-size: 16px; letter-spacing: 1px; line-height: 1;
+  color: var(--color-yellow, #E8C36A);
+  -webkit-text-stroke: 0.5px var(--color-ink);
+}
+.pc-greviews__summary-text { opacity: 0.78; }
+
+.pc-greviews__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+@media (max-width: 980px) { .pc-greviews__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .pc-greviews__grid { grid-template-columns: 1fr; gap: 22px; } }
+
+.pc-greviews__card {
+  background: var(--color-bg-card, #fdf8ee);
+  border: 1.5px solid var(--color-ink);
+  padding: 28px 26px 24px;
+  box-shadow: 4px 6px 0 rgba(0,0,0,0.10);
+  display: flex; flex-direction: column; gap: 16px;
+  transform: rotate(var(--tilt, 0deg));
+  min-height: 220px;
+}
+.pc-greviews__card-head {
+  display: flex; align-items: center; gap: 12px;
+}
+.pc-greviews__avatar {
+  flex: 0 0 auto;
+  width: 40px; height: 40px;
+  border: 1.5px solid var(--color-ink);
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--color-bg-warm);
+  font-family: var(--font-display);
+  font-size: 12px; letter-spacing: 0.04em;
+}
+.pc-greviews__avatar-img { width: 100%; height: 100%; object-fit: cover; }
+.pc-greviews__byline { flex: 1 1 auto; min-width: 0; }
+.pc-greviews__author {
+  font-family: var(--font-body);
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+}
+.pc-greviews__when { font-size: 11px; opacity: 0.6; margin-top: 2px; }
+.pc-greviews__text {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.55;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 8;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.pc-greviews__attrib { margin-top: 28px; font-size: 12px; opacity: 0.75; }
+.pc-greviews__empty {
+  grid-column: 1 / -1;
+  padding: 24px;
+  border: 1.5px dashed var(--color-ink);
+  font-size: 14px;
+  background: var(--color-bg);
+}
+
+.pc-greviews__card--skeleton {
+  background: var(--color-bg-card, #fdf8ee);
+  display: flex; flex-direction: column; gap: 12px;
+  transform: rotate(var(--tilt, 0deg));
+}
+.pc-greviews__skel-line {
+  height: 12px;
+  background: linear-gradient(90deg, rgba(33,32,32,0.06), rgba(33,32,32,0.12), rgba(33,32,32,0.06));
+  background-size: 200% 100%;
+  animation: pc-greviews-shimmer 1.2s ease-in-out infinite;
+  border-radius: 2px;
+}
+.pc-greviews__skel-line--short { width: 40%; }
+@keyframes pc-greviews-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "Google reviews",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "From the postbag" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What people are saying about the flagship." },
+    { "type": "header", "content": "Source" },
+    { "type": "url", "id": "proxy_url", "label": "Proxy URL", "info": "Cloudflare Worker URL — never paste your API key here. See infra/google-reviews-worker/README.md." },
+    { "type": "text", "id": "place_id", "label": "Google Place ID", "default": "ChIJlTgRmfgZ2jERUGJrCQ-BC0g" },
+    { "type": "range", "id": "max_reviews", "label": "Max reviews to show", "min": 1, "max": 5, "step": 1, "default": 5, "info": "Google returns up to 5 reviews per place." },
+    { "type": "select", "id": "sort_order", "label": "Sort by", "default": "relevant",
+      "options": [
+        { "value": "relevant", "label": "Most relevant" },
+        { "value": "newest",   "label": "Newest" },
+        { "value": "highest",  "label": "Highest rating" },
+        { "value": "lowest",   "label": "Lowest rating" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Google reviews" }]
+}
+{% endschema %}
