@@ -1,6 +1,79 @@
 {
   "sections": {
-    "main": { "type": "postcard-refill", "settings": {} }
+    "refill_hero": {
+      "type": "postcard-refill-hero",
+      "settings": {
+        "cta_primary_url": "#refill-stores",
+        "cta_secondary_url": "#refill-list"
+      }
+    },
+    "refill_story": {
+      "type": "postcard-refill-story",
+      "blocks": {
+        "p1": { "type": "paragraph", "settings": { "text": "Postcard started as a refillery in 2019 — a little corner shop in Everton Park where you brought your bottle and we filled it from a cookie jar. We've grown up since, but the idea hasn't changed." }},
+        "p2": { "type": "paragraph", "settings": { "text": "Every refill is a bottle that doesn't go to landfill, a label that gets a second chapter, and a little more space in your bathroom for the things that matter." }}
+      },
+      "block_order": ["p1","p2"],
+      "settings": {}
+    },
+    "refill_steps": {
+      "type": "postcard-refill-steps",
+      "blocks": {
+        "s1": { "type": "step", "settings": { "number": "01", "postmark_html": "NO FOMO", "image_placeholder": "postcard panel 1", "heading": "Bring it back.", "body": "Empty Postcard bottle. Any size, any world." }},
+        "s2": { "type": "step", "settings": { "number": "02", "postmark_html": "MADE FRESH", "image_placeholder": "postcard panel 2", "heading": "We refill it.", "body": "From the beauty kitchen. Same recipe, same scent." }},
+        "s3": { "type": "step", "settings": { "number": "03", "postmark_html": "FOREVER<br>YOURS", "image_placeholder": "postcard panel 3", "heading": "You go again.", "body": "Clean it, label it, take it home." }}
+      },
+      "block_order": ["s1","s2","s3"],
+      "settings": {}
+    },
+    "refill_stats": {
+      "type": "postcard-refill-stats",
+      "blocks": {
+        "st1": { "type": "stat", "settings": { "number": "20%", "label": "off every refill" }},
+        "st2": { "type": "stat", "settings": { "number": "80%", "label": "less packaging per top-up" }},
+        "st3": { "type": "stat", "settings": { "number": "0", "label": "label waste" }}
+      },
+      "block_order": ["st1","st2","st3"],
+      "settings": {}
+    },
+    "refill_catalogue": {
+      "type": "postcard-refill-catalogue",
+      "blocks": {
+        "f1": { "type": "filter", "settings": { "label": "Body & bath" }},
+        "f2": { "type": "filter", "settings": { "label": "Hair" }},
+        "f3": { "type": "filter", "settings": { "label": "Face" }},
+        "f4": { "type": "filter", "settings": { "label": "Deodorant" }},
+        "f5": { "type": "filter", "settings": { "label": "Home" }},
+        "f6": { "type": "filter", "settings": { "label": "Other" }},
+        "p1": { "type": "product", "settings": { "name": "Hotel Lobby Hand & Body Wash", "world": "Hotel Lobby", "world_color": "#E8C36A", "price": "$26", "badge": "Refill" }},
+        "p2": { "type": "product", "settings": { "name": "Moon Bloom Hand & Body Wash", "world": "Moon Bloom", "world_color": "#5C6688", "price": "$26", "badge": "Refill" }},
+        "p3": { "type": "product", "settings": { "name": "Coconut Beach Hand & Body Wash", "world": "Coconut Beach", "world_color": "#E8B796", "price": "$26", "badge": "Refill" }},
+        "p4": { "type": "product", "settings": { "name": "Wild Flowers Hand & Body Wash", "world": "Wild Flowers", "world_color": "#C7A8D6", "price": "$26", "badge": "Refill" }},
+        "p5": { "type": "product", "settings": { "name": "Bath House Hand & Body Wash", "world": "Bath House", "world_color": "#B07A4E", "price": "$26", "badge": "Refill" }},
+        "p6": { "type": "product", "settings": { "name": "Woodland Retreat Hand & Body Wash", "world": "Woodland Retreat", "world_color": "#6E7F58", "price": "$26", "badge": "Refill" }},
+        "p7": { "type": "product", "settings": { "name": "Icy Peaks Hand & Body Wash", "world": "Icy Peaks", "world_color": "#9CC4D6", "price": "$26", "badge": "Refill" }},
+        "p8": { "type": "product", "settings": { "name": "Hotel Lobby Hand & Body Wash", "world": "Hotel Lobby", "world_color": "#E8C36A", "price": "$26", "badge": "Refill" }}
+      },
+      "block_order": ["f1","f2","f3","f4","f5","f6","p1","p2","p3","p4","p5","p6","p7","p8"],
+      "settings": {
+        "anchor_id": "refill-list"
+      }
+    },
+    "refill_stores": {
+      "type": "postcard-refill-stores",
+      "settings": {
+        "anchor_id": "refill-stores",
+        "flagship_link_1_url": "https://maps.google.com/?q=391+Orchard+Road+Singapore",
+        "flagship_link_2_url": "/pages/flagship"
+      }
+    }
   },
-  "order": ["main"]
+  "order": [
+    "refill_hero",
+    "refill_story",
+    "refill_steps",
+    "refill_stats",
+    "refill_catalogue",
+    "refill_stores"
+  ]
 }

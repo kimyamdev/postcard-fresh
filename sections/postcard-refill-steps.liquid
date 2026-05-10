@@ -1,0 +1,63 @@
+<section class="section pc-refill-steps">
+  <div class="container">
+    {%- if section.settings.title != blank -%}
+      <h2 class="h-display pc-refill-steps__title">{{ section.settings.title }}</h2>
+    {%- endif -%}
+    <div class="pc-refill-steps__grid">
+      {%- for block in section.blocks -%}
+        <div class="stamp-frame stamp-side pc-refill-step" {{ block.shopify_attributes }}>
+          <div class="pc-refill-step__head">
+            <div class="h-display pc-refill-step__num">{{ block.settings.number }}</div>
+            <span class="postmark postmark--yellow"><div>{{ block.settings.postmark_html }}</div></span>
+          </div>
+          <div class="ph pc-refill-step__panel">
+            {%- if block.settings.image != blank -%}
+              {%- assign step_alt = block.settings.heading | default: 'Refill step' | escape -%}
+              {{ block.settings.image | image_url: width: 600 | image_tag: alt: step_alt, loading: 'lazy' }}
+            {%- else -%}
+              <span>{{ block.settings.image_placeholder | default: 'postcard panel' }}</span>
+            {%- endif -%}
+          </div>
+          <h3 class="h-typewriter pc-refill-step__h">{{ block.settings.heading }}</h3>
+          <p class="pc-refill-step__p">{{ block.settings.body }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.note != blank -%}
+      <p class="pc-refill-steps__note">{{ section.settings.note }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Refill · Steps",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Three steps. One coffee." },
+    { "type": "text", "id": "note", "label": "Note", "default": "Takes about 5 minutes. We'll throw in a coffee at the Orchard flagship." }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "text", "id": "number", "label": "Number", "default": "01" },
+        { "type": "html", "id": "postmark_html", "label": "Postmark text (HTML)", "default": "NO FOMO" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "image_placeholder", "label": "Placeholder text", "default": "postcard panel 1" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Bring it back." },
+        { "type": "textarea", "id": "body", "label": "Body", "default": "Empty Postcard bottle. Any size, any world." }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Refill · Steps",
+    "blocks": [
+      { "type": "step", "settings": { "number": "01", "postmark_html": "NO FOMO", "image_placeholder": "postcard panel 1", "heading": "Bring it back.", "body": "Empty Postcard bottle. Any size, any world." }},
+      { "type": "step", "settings": { "number": "02", "postmark_html": "MADE FRESH", "image_placeholder": "postcard panel 2", "heading": "We refill it.", "body": "From the beauty kitchen. Same recipe, same scent." }},
+      { "type": "step", "settings": { "number": "03", "postmark_html": "FOREVER<br>YOURS", "image_placeholder": "postcard panel 3", "heading": "You go again.", "body": "Clean it, label it, take it home." }}
+    ]
+  }]
+}
+{% endschema %}

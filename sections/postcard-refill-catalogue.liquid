@@ -1,0 +1,93 @@
+<section class="section" id="{{ section.settings.anchor_id | default: 'refill-list' }}">
+  <div class="container">
+    <div class="pc-refill-cat__head">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}
+          <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="h-display pc-refill-cat__title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+      </div>
+      <div class="pc-refill-cat__filters">
+        {%- assign first_filter = true -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'filter' -%}
+            <button class="pc-refill-cat__filter{% if first_filter %} pc-refill-cat__filter--active{% endif %}" type="button" {{ block.shopify_attributes }}>{{ block.settings.label }}</button>
+            {%- assign first_filter = false -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+    <div class="pc-refill-cat__grid">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'product' -%}
+          {%- if block.settings.product != blank -%}
+            {% render 'product-card', product: block.settings.product, badge: block.settings.badge %}
+          {%- else -%}
+            <div {{ block.shopify_attributes }}>
+              {% render 'product-card',
+                name: block.settings.name,
+                world: block.settings.world,
+                world_color: block.settings.world_color,
+                price: block.settings.price,
+                badge: block.settings.badge %}
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Refill · Catalogue",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Anchor ID", "default": "refill-list", "info": "Used in #anchor links from CTAs." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The catalogue" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Every postcard you can return." }
+  ],
+  "blocks": [
+    {
+      "type": "filter",
+      "name": "Category filter",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Body & bath" }
+      ]
+    },
+    {
+      "type": "product",
+      "name": "Product card",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product (preferred)", "info": "When set, pulls real product data and overrides the manual fields below." },
+        { "type": "text", "id": "name", "label": "Name (manual)", "default": "Hotel Lobby Hand & Body Wash" },
+        { "type": "text", "id": "world", "label": "World name", "default": "Hotel Lobby" },
+        { "type": "color", "id": "world_color", "label": "World color", "default": "#E8C36A" },
+        { "type": "text", "id": "price", "label": "Price", "default": "$26" },
+        { "type": "text", "id": "badge", "label": "Badge", "default": "Refill" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Refill · Catalogue",
+    "blocks": [
+      { "type": "filter", "settings": { "label": "Body & bath" }},
+      { "type": "filter", "settings": { "label": "Hair" }},
+      { "type": "filter", "settings": { "label": "Face" }},
+      { "type": "filter", "settings": { "label": "Deodorant" }},
+      { "type": "filter", "settings": { "label": "Home" }},
+      { "type": "filter", "settings": { "label": "Other" }},
+      { "type": "product", "settings": { "name": "Hotel Lobby Hand & Body Wash", "world": "Hotel Lobby", "world_color": "#E8C36A", "price": "$26", "badge": "Refill" }},
+      { "type": "product", "settings": { "name": "Moon Bloom Hand & Body Wash", "world": "Moon Bloom", "world_color": "#5C6688", "price": "$26", "badge": "Refill" }},
+      { "type": "product", "settings": { "name": "Coconut Beach Hand & Body Wash", "world": "Coconut Beach", "world_color": "#E8B796", "price": "$26", "badge": "Refill" }},
+      { "type": "product", "settings": { "name": "Wild Flowers Hand & Body Wash", "world": "Wild Flowers", "world_color": "#C7A8D6", "price": "$26", "badge": "Refill" }},
+      { "type": "product", "settings": { "name": "Bath House Hand & Body Wash", "world": "Bath House", "world_color": "#B07A4E", "price": "$26", "badge": "Refill" }},
+      { "type": "product", "settings": { "name": "Woodland Retreat Hand & Body Wash", "world": "Woodland Retreat", "world_color": "#6E7F58", "price": "$26", "badge": "Refill" }},
+      { "type": "product", "settings": { "name": "Icy Peaks Hand & Body Wash", "world": "Icy Peaks", "world_color": "#9CC4D6", "price": "$26", "badge": "Refill" }},
+      { "type": "product", "settings": { "name": "Hotel Lobby Hand & Body Wash", "world": "Hotel Lobby", "world_color": "#E8C36A", "price": "$26", "badge": "Refill" }}
+    ]
+  }]
+}
+{% endschema %}

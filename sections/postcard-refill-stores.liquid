@@ -1,0 +1,124 @@
+{%- liquid
+  assign flagship_image = section.settings.flagship_image
+  assign flagship_alt = section.settings.flagship_name | default: 'Flagship store' | escape
+-%}
+<section class="section pc-refill-stores" id="{{ section.settings.anchor_id | default: 'refill-stores' }}">
+  <div class="container">
+    {%- if section.settings.title != blank -%}
+      <h2 class="h-display pc-refill-stores__title">{{ section.settings.title }}</h2>
+    {%- endif -%}
+    <div class="pc-refill-stores__grid">
+      <div class="pc-refill-stores__flagship">
+        {%- if section.settings.flagship_postmark_html != blank -%}
+          <span class="postmark postmark--yellow pc-refill-stores__pm"><div>{{ section.settings.flagship_postmark_html }}</div></span>
+        {%- endif -%}
+        <div class="ph pc-refill-stores__photo">
+          {%- if flagship_image != blank -%}
+            {{ flagship_image | image_url: width: 1200 | image_tag: alt: flagship_alt, loading: 'lazy', widths: '600,900,1200' }}
+          {%- else -%}
+            <span>{{ section.settings.flagship_image_placeholder | default: 'Orchard storefront photo' }}</span>
+          {%- endif -%}
+        </div>
+        {%- if section.settings.flagship_eyebrow != blank -%}
+          <div class="eyebrow">{{ section.settings.flagship_eyebrow }}</div>
+        {%- endif -%}
+        {%- if section.settings.flagship_name != blank -%}
+          <h3 class="h-display pc-refill-stores__name">{{ section.settings.flagship_name }}</h3>
+        {%- endif -%}
+        {%- if section.settings.flagship_details != blank -%}
+          <div class="pc-refill-stores__details">{{ section.settings.flagship_details | newline_to_br }}</div>
+        {%- endif -%}
+        <div class="pc-refill-stores__links">
+          {%- if section.settings.flagship_link_1_text != blank -%}
+            <a class="tlink" href="{{ section.settings.flagship_link_1_url }}">{{ section.settings.flagship_link_1_text }}</a>
+          {%- endif -%}
+          {%- if section.settings.flagship_link_2_text != blank -%}
+            <a class="tlink" href="{{ section.settings.flagship_link_2_url }}">{{ section.settings.flagship_link_2_text }}</a>
+          {%- endif -%}
+        </div>
+      </div>
+      <div class="pc-refill-stores__popups">
+        {%- if section.settings.popups_eyebrow != blank -%}
+          <div class="eyebrow">{{ section.settings.popups_eyebrow }}</div>
+        {%- endif -%}
+        {%- if section.settings.popups_title != blank -%}
+          <h3 class="h-display pc-refill-stores__popups-title">{{ section.settings.popups_title }}</h3>
+        {%- endif -%}
+        {%- if section.settings.popups_body != blank -%}
+          <p class="pc-refill-stores__popups-body">{{ section.settings.popups_body }}</p>
+        {%- endif -%}
+        {%- if section.settings.popups_link_text != blank -%}
+          <a class="tlink" href="{{ section.settings.popups_link_url | default: '#' }}">{{ section.settings.popups_link_text }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+    {%- if section.settings.show_map -%}
+      <div class="pc-refill-map">
+        <svg viewBox="0 0 800 340" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="pc-refill-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M40 0H0v40" fill="none" stroke="#21202012" stroke-width="0.6"/>
+            </pattern>
+          </defs>
+          <rect width="800" height="340" fill="#DDE7DC"/>
+          <rect width="800" height="340" fill="url(#pc-refill-grid)"/>
+          <path d="M40 180 C 80 130, 160 110, 230 120 C 290 128, 330 100, 400 110 C 470 118, 520 95, 600 115 C 670 132, 740 130, 770 160 C 770 200, 740 230, 670 240 C 600 250, 540 250, 470 245 C 400 240, 330 250, 270 245 C 200 240, 120 235, 80 220 C 50 210, 30 195, 40 180 Z"
+            fill="#F8F6ED" stroke="#212020" stroke-width="1.5"/>
+          <path d="M120 180 L 700 195" stroke="#21202044" stroke-width="1" fill="none"/>
+          <path d="M200 150 L 250 240" stroke="#21202044" stroke-width="1" fill="none"/>
+          <path d="M450 130 L 480 240" stroke="#21202044" stroke-width="1" fill="none"/>
+          <g transform="translate(420, 165)">
+            <circle r="30" fill="#FFB233" stroke="#212020" stroke-width="2"/>
+            <circle r="22" fill="none" stroke="#212020" stroke-width="0.6"/>
+            <text text-anchor="middle" y="-2" font-family="Special Elite, monospace" font-size="9" fill="#212020">FLAG&#9733;</text>
+            <text text-anchor="middle" y="10" font-family="Special Elite, monospace" font-size="9" fill="#212020">SHIP</text>
+            <text x="0" y="54" text-anchor="middle" font-family="Special Elite, monospace" font-size="11" fill="#212020">{{ section.settings.map_pin_label | default: 'Orchard' }}</text>
+          </g>
+          <g transform="translate(680, 70) rotate(-12)">
+            <circle r="42" fill="none" stroke="#212020" stroke-width="1.5"/>
+            <circle r="36" fill="none" stroke="#212020" stroke-width="0.6"/>
+            <text text-anchor="middle" y="-4" font-family="Special Elite, monospace" font-size="9" fill="#212020">POSTCARD</text>
+            <text text-anchor="middle" y="8" font-family="Special Elite, monospace" font-size="9" fill="#212020">SINGAPORE</text>
+            <text text-anchor="middle" y="20" font-family="Special Elite, monospace" font-size="8" fill="#212020">&middot;  REFILL  &middot;</text>
+          </g>
+          <text x="40" y="34" font-family="Special Elite, monospace" font-size="13" fill="#212020" letter-spacing="2">{{ section.settings.map_title | default: 'SINGAPORE · REFILL MAP' }}</text>
+          <text x="40" y="320" font-family="Special Elite, monospace" font-size="10" fill="#21202099" letter-spacing="1.5">{{ section.settings.map_footer | default: 'ONE FLAGSHIP · POPUPS ROTATE — SIGN UP TO FIND US NEXT' }}</text>
+        </svg>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Refill · Stores",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Anchor ID", "default": "refill-stores" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Where to refill in Singapore." },
+    { "type": "header", "content": "Flagship card" },
+    { "type": "html", "id": "flagship_postmark_html", "label": "Postmark text (HTML)", "default": "FLAGSHIP<br>·OPEN·" },
+    { "type": "image_picker", "id": "flagship_image", "label": "Flagship photo" },
+    { "type": "text", "id": "flagship_image_placeholder", "label": "Placeholder text", "default": "Orchard storefront photo" },
+    { "type": "text", "id": "flagship_eyebrow", "label": "Eyebrow", "default": "Our home" },
+    { "type": "text", "id": "flagship_name", "label": "Name", "default": "Postcard Flagship · Orchard" },
+    { "type": "textarea", "id": "flagship_details", "label": "Details (linebreaks preserved)", "default": "391 Orchard Road, #02–14 Ngee Ann City\nMon–Thu 10am–9pm · Fri–Sat 10am–10pm · Sun 11am–8pm\n+65 6123 4567" },
+    { "type": "text", "id": "flagship_link_1_text", "label": "Link 1 text", "default": "Get directions →" },
+    { "type": "url", "id": "flagship_link_1_url", "label": "Link 1 URL" },
+    { "type": "text", "id": "flagship_link_2_text", "label": "Link 2 text", "default": "Tour the flagship →" },
+    { "type": "url", "id": "flagship_link_2_url", "label": "Link 2 URL" },
+    { "type": "header", "content": "Pop-ups card" },
+    { "type": "text", "id": "popups_eyebrow", "label": "Eyebrow", "default": "Pop-ups & stockists" },
+    { "type": "text", "id": "popups_title", "label": "Title", "default": "We pop up around Singapore." },
+    { "type": "textarea", "id": "popups_body", "label": "Body", "default": "Tiong Bahru Bakery weekends, Dempsey market days, plus rotating stockists at Tangs, Naiise, and a few independent boutiques. Sign up to find us next." },
+    { "type": "text", "id": "popups_link_text", "label": "Link text", "default": "See current pop-ups →" },
+    { "type": "url", "id": "popups_link_url", "label": "Link URL" },
+    { "type": "header", "content": "Decorative map" },
+    { "type": "checkbox", "id": "show_map", "label": "Show map illustration", "default": true },
+    { "type": "text", "id": "map_pin_label", "label": "Map pin label", "default": "Orchard" },
+    { "type": "text", "id": "map_title", "label": "Map title", "default": "SINGAPORE · REFILL MAP" },
+    { "type": "text", "id": "map_footer", "label": "Map footer", "default": "ONE FLAGSHIP · POPUPS ROTATE — SIGN UP TO FIND US NEXT" }
+  ],
+  "presets": [{ "name": "Refill · Stores" }]
+}
+{% endschema %}

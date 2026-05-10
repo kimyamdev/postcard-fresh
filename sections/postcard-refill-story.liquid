@@ -1,0 +1,57 @@
+{%- liquid
+  assign image = section.settings.image
+-%}
+<section class="section">
+  <div class="container pc-refill-story">
+    <div>
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="h-display pc-refill-story__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'paragraph' -%}
+          <p class="pc-refill-story__p" {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    <div class="ph pc-refill-story__image">
+      {%- if image != blank -%}
+        {{ image | image_url: width: 1000 | image_tag: alt: section.settings.image_alt | default: 'Refilled bottle', loading: 'lazy', widths: '500,750,1000' }}
+      {%- else -%}
+        <span>{{ section.settings.image_placeholder | default: 'refilled bottle · stack of crushed empties' }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Refill · Story",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "We're refill-first" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Less landfill. More postcards." },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text" },
+    { "type": "text", "id": "image_placeholder", "label": "Placeholder text", "default": "refilled bottle · stack of crushed empties" }
+  ],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "name": "Paragraph",
+      "settings": [
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Postcard started as a refillery in 2019…" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Refill · Story",
+    "blocks": [
+      { "type": "paragraph", "settings": { "text": "Postcard started as a refillery in 2019 — a little corner shop in Everton Park where you brought your bottle and we filled it from a cookie jar. We've grown up since, but the idea hasn't changed." }},
+      { "type": "paragraph", "settings": { "text": "Every refill is a bottle that doesn't go to landfill, a label that gets a second chapter, and a little more space in your bathroom for the things that matter." }}
+    ]
+  }]
+}
+{% endschema %}
