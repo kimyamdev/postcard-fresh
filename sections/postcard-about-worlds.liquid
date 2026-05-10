@@ -1,17 +1,28 @@
+{%- liquid
+  assign worlds = shop.metaobjects.world.values
+  assign show_family = section.settings.show_family
+  assign max_count = section.settings.max_count | default: 0
+-%}
 <section class="section--tight section pc-about-worlds">
   <div class="container">
     {%- if section.settings.title != blank -%}
       <h2 class="h-display pc-about-worlds__title">{{ section.settings.title }}</h2>
     {%- endif -%}
     <div class="pc-about-worlds__strip">
-      {%- for block in section.blocks -%}
-        <div class="pc-about-worlds__cell" {{ block.shopify_attributes }}>
-          {%- if block.settings.show_family and block.settings.family != blank -%}
-            {% render 'stamp', name: block.settings.name, family: block.settings.family, color: block.settings.color, size: 'sm' %}
+      {%- assign emitted = 0 -%}
+      {%- for w in worlds -%}
+        {%- if w.tier.value != 'World' -%}{%- continue -%}{%- endif -%}
+        {%- if max_count > 0 and emitted >= max_count -%}{%- break -%}{%- endif -%}
+        {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
+        {%- assign w_family = w.family.value -%}
+        <div class="pc-about-worlds__cell">
+          {%- if show_family and w_family != blank -%}
+            {% render 'stamp', name: w.name.value, family: w_family, color: w_color, size: 'sm' %}
           {%- else -%}
-            {% render 'stamp', name: block.settings.name, color: block.settings.color, size: 'sm' %}
+            {% render 'stamp', name: w.name.value, color: w_color, size: 'sm' %}
           {%- endif -%}
         </div>
+        {%- assign emitted = emitted | plus: 1 -%}
       {%- endfor -%}
     </div>
   </div>
@@ -22,46 +33,11 @@
   "name": "About · Worlds index",
   "tag": "section",
   "settings": [
-    { "type": "text", "id": "title", "label": "Title", "default": "22 worlds. One bathroom shelf at a time." }
+    { "type": "paragraph", "content": "Shows every World metaobject with tier = 'World', in admin order." },
+    { "type": "text", "id": "title", "label": "Title", "default": "22 worlds. One bathroom shelf at a time." },
+    { "type": "checkbox", "id": "show_family", "label": "Show family label under each stamp", "default": true },
+    { "type": "range", "id": "max_count", "label": "Max worlds to show", "min": 0, "max": 50, "step": 1, "default": 0, "info": "0 = show all tier-World worlds." }
   ],
-  "blocks": [
-    {
-      "type": "world_stamp",
-      "name": "World stamp",
-      "settings": [
-        { "type": "text", "id": "name", "label": "World name", "default": "Hotel Lobby" },
-        { "type": "color", "id": "color", "label": "Color", "default": "#E8C36A" },
-        { "type": "checkbox", "id": "show_family", "label": "Show family label", "default": false },
-        { "type": "text", "id": "family", "label": "Family (optional)", "default": "Hesperidic Gourmand" }
-      ]
-    }
-  ],
-  "presets": [{
-    "name": "About · Worlds index",
-    "blocks": [
-      { "type": "world_stamp", "settings": { "name": "Hotel Lobby", "color": "#E8C36A", "show_family": true, "family": "Hesperidic Gourmand" }},
-      { "type": "world_stamp", "settings": { "name": "Moon Bloom", "color": "#5C6688", "show_family": true, "family": "White Floral" }},
-      { "type": "world_stamp", "settings": { "name": "Coconut Beach", "color": "#E8B796", "show_family": true, "family": "Tropical Fruity Gourmand" }},
-      { "type": "world_stamp", "settings": { "name": "Wild Flowers", "color": "#C7A8D6", "show_family": true, "family": "Aromatic Fougère" }},
-      { "type": "world_stamp", "settings": { "name": "Bath House", "color": "#B07A4E", "show_family": true, "family": "Woody Oriental" }},
-      { "type": "world_stamp", "settings": { "name": "Woodland Retreat", "color": "#6E7F58", "show_family": true, "family": "Aromatic Herbal" }},
-      { "type": "world_stamp", "settings": { "name": "Icy Peaks", "color": "#9CC4D6", "show_family": true, "family": "Fresh Aromatic" }},
-      { "type": "world_stamp", "settings": { "name": "Smoked Roses", "color": "#C7A8D6" }},
-      { "type": "world_stamp", "settings": { "name": "Threads of Nonya", "color": "#9CC4D6" }},
-      { "type": "world_stamp", "settings": { "name": "Forever Yours", "color": "#E8B796" }},
-      { "type": "world_stamp", "settings": { "name": "Oasis Perfume Oil", "color": "#FFB233" }},
-      { "type": "world_stamp", "settings": { "name": "Bakuchiol Bay", "color": "#6E7F58" }},
-      { "type": "world_stamp", "settings": { "name": "Hyaluronic Heaven", "color": "#B07A4E" }},
-      { "type": "world_stamp", "settings": { "name": "Rose Valley", "color": "#5C6688" }},
-      { "type": "world_stamp", "settings": { "name": "Ancient Tearoom", "color": "#C7A8D6" }},
-      { "type": "world_stamp", "settings": { "name": "Clear Skies", "color": "#9CC4D6" }},
-      { "type": "world_stamp", "settings": { "name": "Citrus Circus", "color": "#E8B796" }},
-      { "type": "world_stamp", "settings": { "name": "Coffee Spot", "color": "#FFB233" }},
-      { "type": "world_stamp", "settings": { "name": "Java Jungle", "color": "#6E7F58" }},
-      { "type": "world_stamp", "settings": { "name": "Hidden Garden", "color": "#B07A4E" }},
-      { "type": "world_stamp", "settings": { "name": "Curl Cove", "color": "#5C6688" }},
-      { "type": "world_stamp", "settings": { "name": "Sunlit Terrace", "color": "#C7A8D6" }}
-    ]
-  }]
+  "presets": [{ "name": "About · Worlds index" }]
 }
 {% endschema %}

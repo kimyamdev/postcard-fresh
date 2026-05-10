@@ -23,14 +23,28 @@
         <a class="pc-footer__link" href="/pages/custom">Custom</a>
         <a class="pc-footer__link" href="/collections/refills">Refills</a>
       </div>
+      {%- liquid
+        assign worlds_all = shop.metaobjects.world.values
+        assign world_total = 0
+        for w in worlds_all
+          if w.tier.value == 'World'
+            assign world_total = world_total | plus: 1
+          endif
+        endfor
+        assign worlds_visible = section.settings.worlds_visible | default: 5
+      -%}
       <div>
-        <div class="eyebrow pc-footer__col-title">Worlds</div>
-        <a class="pc-footer__link" href="/pages/hotel-lobby">Hotel Lobby</a>
-        <a class="pc-footer__link" href="/pages/moon-bloom">Moon Bloom</a>
-        <a class="pc-footer__link" href="/pages/coconut-beach">Coconut Beach</a>
-        <a class="pc-footer__link" href="/pages/bath-house">Bath House</a>
-        <a class="pc-footer__link" href="/pages/wild-flowers">Wild Flowers</a>
-        <a class="pc-footer__link" href="/pages/worlds">See all 22 &rarr;</a>
+        <div class="eyebrow pc-footer__col-title">{{ section.settings.worlds_heading | default: 'Worlds' }}</div>
+        {%- assign emitted = 0 -%}
+        {%- for w in worlds_all -%}
+          {%- if w.tier.value != 'World' -%}{%- continue -%}{%- endif -%}
+          {%- if emitted >= worlds_visible -%}{%- break -%}{%- endif -%}
+          {%- assign w_slug = w.slug.value | default: w.handle -%}
+          <a class="pc-footer__link" href="/pages/{{ w_slug }}">{{ w.name.value }}</a>
+          {%- assign emitted = emitted | plus: 1 -%}
+        {%- endfor -%}
+        {%- assign see_all_text = section.settings.worlds_see_all | default: 'See all [count] →' | replace: '[count]', world_total -%}
+        <a class="pc-footer__link" href="{{ section.settings.worlds_see_all_url | default: '/pages/worlds' }}">{{ see_all_text }}</a>
       </div>
       <div>
         <div class="eyebrow pc-footer__col-title">Discover</div>
@@ -70,6 +84,12 @@
 {% schema %}
 {
   "name": "Footer",
-  "settings": []
+  "settings": [
+    { "type": "header", "content": "Worlds column" },
+    { "type": "text", "id": "worlds_heading", "label": "Heading", "default": "Worlds" },
+    { "type": "range", "id": "worlds_visible", "label": "Worlds to show", "min": 0, "max": 12, "step": 1, "default": 5, "info": "Pulls tier-World metaobjects in admin order." },
+    { "type": "text", "id": "worlds_see_all", "label": "See-all text", "default": "See all [count] →", "info": "[count] is replaced with the total tier-World worlds." },
+    { "type": "url", "id": "worlds_see_all_url", "label": "See-all URL" }
+  ]
 }
 {% endschema %}
