@@ -30,10 +30,18 @@
     assign from_address = 'Postcard SG / Orchard, Singapore 238867'
   endif
   assign to_label = section.settings.to_label | default: 'TO · THE WEARER'
-  assign cta_text = section.settings.cta_text | default: 'SHOP THE WORLD →'
-  assign cta_url = section.settings.cta_url
-  if cta_url == blank
-    assign cta_url = '/pages/' | append: world_slug
+  assign cta_text = section.settings.cta_text | default: "LISTEN TO [WORLD]'S PLAYLIST →"
+  assign cta_text = cta_text | replace: '[world]', world_name | replace: '[WORLD]', world_name | upcase
+  assign cta_url = world.spotify_url.value | default: section.settings.cta_url
+  assign cta_is_spotify = false
+  assign cta_embed_url = ''
+  if cta_url contains 'open.spotify.com'
+    assign cta_is_spotify = true
+    assign cta_embed_url = cta_url | split: '?' | first | replace: 'open.spotify.com/', 'open.spotify.com/embed/'
+  endif
+  assign cta_external = false
+  if cta_url contains '://'
+    assign cta_external = true
   endif
   assign greeting = section.settings.greeting | default: 'greetings from the [world]'
   assign greeting = greeting | replace: '[world]', world_name | downcase
@@ -48,7 +56,7 @@
 -%}
 
 {%- if world -%}
-<section class="pc-wcard" x-data="{ videoOpen: false }">
+<section class="pc-wcard" x-data="{ videoOpen: false, playlistOpen: false }">
   <div class="container pc-wcard__container">
 
     <div class="pc-wcard__breadcrumb">
@@ -106,8 +114,12 @@
           <div class="pc-wcard__lines"><span></span><span></span><span></span></div>
         </div>
 
-        {%- if cta_text != blank -%}
-          <a class="btn pc-wcard__cta" href="{{ cta_url }}">{{ cta_text }}</a>
+        {%- if cta_text != blank and cta_url != blank -%}
+          {%- if cta_is_spotify -%}
+            <button type="button" class="btn pc-wcard__cta" @click="playlistOpen = true">{{ cta_text }}</button>
+          {%- else -%}
+            <a class="btn pc-wcard__cta" href="{{ cta_url }}"{% if cta_external %} target="_blank" rel="noopener"{% endif %}>{{ cta_text }}</a>
+          {%- endif -%}
         {%- endif -%}
       </div>
     </div>
@@ -128,6 +140,24 @@
           </div>
         </template>
       </div>
+    </div>
+  {%- endif -%}
+
+  {%- if cta_is_spotify -%}
+    <div class="pc-wcard__player" x-show="playlistOpen" x-cloak x-transition>
+      <button type="button" class="pc-wcard__player-close" @click="playlistOpen = false" aria-label="Close playlist">&times;</button>
+      <template x-if="playlistOpen">
+        <iframe
+          class="pc-wcard__player-frame"
+          src="{{ cta_embed_url }}"
+          width="100%"
+          height="152"
+          frameborder="0"
+          allowtransparency="true"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture; web-playback"
+          loading="lazy"
+          title="{{ world_name | escape }} playlist"></iframe>
+      </template>
     </div>
   {%- endif -%}
 </section>
@@ -155,8 +185,8 @@
     { "type": "text",     "id": "watch_label",    "label": "Watch label", "default": "▶ WATCH" },
     { "type": "text",     "id": "watch_duration", "label": "Duration suffix", "info": "e.g. 18s — appended after the label." },
     { "type": "header", "content": "Shop CTA" },
-    { "type": "text",     "id": "cta_text",       "label": "CTA text", "default": "SHOP THE WORLD →" },
-    { "type": "url",      "id": "cta_url",        "label": "CTA link", "info": "Leave blank to auto-link to /pages/{world slug}." },
+    { "type": "text",     "id": "cta_text",       "label": "CTA text", "default": "LISTEN TO [WORLD]'S PLAYLIST →", "info": "Use [world] for the world name (e.g. \"Hotel Lobby\") or [WORLD] for upper-case." },
+    { "type": "url",      "id": "cta_url",        "label": "CTA link (fallback)", "info": "Used only if the World metaobject has no spotify_url set. Leave blank to hide the CTA when no Spotify URL." },
     { "type": "header", "content": "Footer" },
     { "type": "text",     "id": "no_total_format", "label": "Postcard counter format", "default": "POSTCARD NO. [n] OF [total]", "info": "[n] = this world's order in the metaobject list; [total] = total worlds." },
     { "type": "text",     "id": "flip_hint",      "label": "Flip hint", "default": "TAP TO FLIP · OR SCROLL TO READ" }
