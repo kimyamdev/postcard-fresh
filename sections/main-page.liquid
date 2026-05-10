@@ -1,6 +1,19 @@
+{%- liquid
+  assign media_image = section.settings.media_image
+  assign media_video = section.settings.media_video
+  assign has_media = false
+  if media_image != blank or media_video != blank
+    assign has_media = true
+  endif
+  assign use_custom_font = section.settings.use_custom_title_font
+  assign title_font = section.settings.title_font
+-%}
 {{ 'section-main-page.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
+  {%- if use_custom_font and title_font -%}
+    {{ title_font | font_face: font_display: 'swap' }}
+  {%- endif -%}
   .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
@@ -12,14 +25,99 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  .pc-page { display: block; }
+  .pc-page__grid { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: stretch; }
+  .pc-page__copy { display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+  .pc-page-head { max-width: 720px; margin: 0 0 28px; }
+  .pc-page-head__eyebrow { margin-bottom: 12px; opacity: 0.7; }
+  .pc-page-head__title { margin: 0; font-size: clamp(28px, 4vw, 44px);
+    {%- if use_custom_font and title_font -%}
+      font-family: {{ title_font.family }}, {{ title_font.fallback_families }};
+      font-style: {{ title_font.style }};
+      font-weight: {{ title_font.weight }};
+    {%- endif -%}
+  }
+  .pc-page-head__title--italic { font-style: italic; }
+  .pc-page-rte { font-size: 17px; line-height: 1.55; opacity: 0.85; }
+  .pc-page-rte > :first-child { margin-top: 0; }
+  @media screen and (min-width: 750px) {
+    .pc-page-head { margin-bottom: 40px; }
+  }
+
+  /* Mobile media: stacked, with aspect ratio */
+  .pc-page__media {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    background: var(--color-bg-warm, #f6efdf);
+    overflow: hidden;
+  }
+  .pc-page__media > img,
+  .pc-page__media > video {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+  }
+
+  /* When media is present on desktop: section becomes a full-width 2-col layout
+     where the media flushes to the right viewport edge, top, and bottom. */
+  .shopify-section:has(.pc-page--has-media),
+  .shopify-section.section:has(.pc-page--has-media) {
+    padding: 0;
+    max-width: none;
+  }
+  @media screen and (min-width: 900px) {
+    .pc-page--has-media.section-{{ section.id }}-padding { padding-top: 0; padding-bottom: 0; }
+    .pc-page--has-media { max-width: none; width: 100%; padding-left: 0; padding-right: 0; margin: 0; }
+    .pc-page--has-media .pc-page__grid { grid-template-columns: minmax(0, 40%) minmax(0, 60%); gap: 0; }
+    .pc-page--has-media .pc-page__copy {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-left: clamp(20px, 5vw, 64px);
+      padding-right: clamp(20px, 3vw, 40px);
+    }
+    .pc-page--has-media .pc-page__media {
+      aspect-ratio: auto;
+      height: 100%;
+      min-height: clamp(380px, 48vh, 520px);
+    }
+  }
 {%- endstyle -%}
 
-<div class="page-width page-width--narrow section-{{ section.id }}-padding">
-  <h1 class="main-page-title page-title h0{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
-    {{ page.title | escape }}
-  </h1>
-  <div class="rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-    {{ page.content }}
+<div class="{% unless has_media %}page-width page-width--narrow {% endunless %}section-{{ section.id }}-padding pc-page{% if has_media %} pc-page--has-media{% endif %}">
+  <div class="pc-page__grid">
+    <div class="pc-page__copy">
+      <header class="pc-page-head{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+        {%- if section.settings.eyebrow != blank -%}
+          <div class="eyebrow pc-page-head__eyebrow">{{ section.settings.eyebrow }}</div>
+        {%- endif -%}
+        <h1 class="h-display pc-page-head__title{% if section.settings.italic_title %} pc-page-head__title--italic{% endif %}">
+          {%- if section.settings.title_override != blank -%}
+            {{ section.settings.title_override | escape }}
+          {%- else -%}
+            {{ page.title | escape }}
+          {%- endif -%}
+        </h1>
+      </header>
+      <div class="rte pc-page-rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        {%- if section.settings.body_override != blank -%}
+          {{ section.settings.body_override }}
+        {%- else -%}
+          {{ page.content }}
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- if has_media -%}
+      <div class="pc-page__media">
+        {%- if media_video != blank -%}
+          {{ media_video | video_tag: image_size: '1200x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true }}
+        {%- else -%}
+          {%- assign media_alt = media_image.alt | default: page.title | escape -%}
+          {{ media_image | image_url: width: 1600 | image_tag: alt: media_alt, loading: 'lazy', widths: '600,900,1200,1600,2000', sizes: '(min-width: 900px) 50vw, 100vw' }}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
   </div>
 </div>
 
@@ -29,6 +127,16 @@
   "tag": "section",
   "class": "section",
   "settings": [
+    { "type": "header", "content": "Header" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "info": "Small caps line above the title (optional)" },
+    { "type": "text", "id": "title_override", "label": "Title (override)", "info": "When set, replaces the admin page title for display only (does not change SEO or URL)." },
+    { "type": "checkbox", "id": "italic_title", "label": "Italic title", "default": false },
+    { "type": "checkbox", "id": "use_custom_title_font", "label": "Use custom title font", "default": false, "info": "Off = uses the theme headline font (matches the rest of the site)." },
+    { "type": "font_picker", "id": "title_font", "label": "Title font", "default": "assistant_n4", "info": "Only applied when \"Use custom title font\" is on." },
+    { "type": "richtext", "id": "body_override", "label": "Body copy (override)", "info": "When set, replaces the page's admin content on this template only." },
+    { "type": "header", "content": "Media (right side)" },
+    { "type": "image_picker", "id": "media_image", "label": "Image", "info": "Fills the right column on desktop, stacks below on mobile." },
+    { "type": "video", "id": "media_video", "label": "Video", "info": "Auto-plays muted + loops. Takes priority over the image if both are set." },
     {
       "type": "header",
       "content": "t:sections.all.padding.section_padding_heading"
