@@ -2,7 +2,11 @@
   if product
     assign card_name = product.title
     assign card_url = product.url
-    assign card_price = product.price | money
+    if product.price_varies
+      assign card_price = product.price_min | money | prepend: 'From '
+    else
+      assign card_price = product.price | money
+    endif
     assign world_obj = product.metafields.postcard.world.value | default: product.metafields.custom.world.value
     if world_obj
       assign card_world = world_obj.name
