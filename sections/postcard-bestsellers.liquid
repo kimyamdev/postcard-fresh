@@ -1,7 +1,30 @@
 {%- liquid
-  assign p1 = section.settings.product_1
-  assign p2 = section.settings.product_2
-  assign p3 = section.settings.product_3
+  assign coll = section.settings.collection
+  assign use_collection = false
+  if coll != blank and coll.products_count > 0
+    assign use_collection = true
+  endif
+
+  assign badges = section.settings.badge_1 | append: '||' | append: section.settings.badge_2 | append: '||' | append: section.settings.badge_3 | split: '||'
+
+  assign offset = 0
+  if use_collection
+    assign max_offset = coll.products_count | minus: 3
+    if max_offset < 0
+      assign max_offset = 0
+    endif
+    if section.settings.randomize and max_offset > 0
+      assign max_off_plus = max_offset | plus: 1
+      assign seed = 'now' | date: '%j' | times: 1
+      assign offset = seed | modulo: max_off_plus
+    endif
+  endif
+
+  unless use_collection
+    assign p1 = section.settings.product_1
+    assign p2 = section.settings.product_2
+    assign p3 = section.settings.product_3
+  endunless
 -%}
 <section class="section">
   <div class="container">
@@ -17,23 +40,37 @@
       {%- endif -%}
     </div>
     <div class="pc-bestsellers__grid">
-      {%- if p1 -%}
-        {%- assign w1 = p1.metafields.postcard.world.value -%}
-        {%- assign w1_color = w1.accent_color.value | default: '#E8C36A' -%}
-        {%- assign w1_name = w1.name.value | default: '' -%}
-        {% render 'product-card', product: p1, world: w1_name, world_color: w1_color, badge: section.settings.badge_1 %}
-      {%- endif -%}
-      {%- if p2 -%}
-        {%- assign w2 = p2.metafields.postcard.world.value -%}
-        {%- assign w2_color = w2.accent_color.value | default: '#E8C36A' -%}
-        {%- assign w2_name = w2.name.value | default: '' -%}
-        {% render 'product-card', product: p2, world: w2_name, world_color: w2_color, badge: section.settings.badge_2 %}
-      {%- endif -%}
-      {%- if p3 -%}
-        {%- assign w3 = p3.metafields.postcard.world.value -%}
-        {%- assign w3_color = w3.accent_color.value | default: '#E8C36A' -%}
-        {%- assign w3_name = w3.name.value | default: '' -%}
-        {% render 'product-card', product: p3, world: w3_name, world_color: w3_color, badge: section.settings.badge_3 %}
+      {%- if use_collection -%}
+        {%- assign emitted = 0 -%}
+        {%- for p in coll.products limit: 50 -%}
+          {%- if forloop.index0 < offset -%}{%- continue -%}{%- endif -%}
+          {%- if emitted >= 3 -%}{%- break -%}{%- endif -%}
+          {%- assign w = p.metafields.postcard.world.value | default: p.metafields.custom.world.value -%}
+          {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
+          {%- assign w_name = w.name.value | default: '' -%}
+          {%- assign card_badge = badges[emitted] -%}
+          {% render 'product-card', product: p, world: w_name, world_color: w_color, badge: card_badge %}
+          {%- assign emitted = emitted | plus: 1 -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- if p1 -%}
+          {%- assign w1 = p1.metafields.postcard.world.value -%}
+          {%- assign w1_color = w1.accent_color.value | default: '#E8C36A' -%}
+          {%- assign w1_name = w1.name.value | default: '' -%}
+          {% render 'product-card', product: p1, world: w1_name, world_color: w1_color, badge: section.settings.badge_1 %}
+        {%- endif -%}
+        {%- if p2 -%}
+          {%- assign w2 = p2.metafields.postcard.world.value -%}
+          {%- assign w2_color = w2.accent_color.value | default: '#E8C36A' -%}
+          {%- assign w2_name = w2.name.value | default: '' -%}
+          {% render 'product-card', product: p2, world: w2_name, world_color: w2_color, badge: section.settings.badge_2 %}
+        {%- endif -%}
+        {%- if p3 -%}
+          {%- assign w3 = p3.metafields.postcard.world.value -%}
+          {%- assign w3_color = w3.accent_color.value | default: '#E8C36A' -%}
+          {%- assign w3_name = w3.name.value | default: '' -%}
+          {% render 'product-card', product: p3, world: w3_name, world_color: w3_color, badge: section.settings.badge_3 %}
+        {%- endif -%}
       {%- endif -%}
     </div>
     {%- if section.settings.see_all_text != blank -%}
@@ -51,15 +88,17 @@
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The classics" },
     { "type": "text", "id": "title",   "label": "Title",   "default": "Postcards we send most often." },
     { "type": "text", "id": "lede",    "label": "Lede",    "default": "The ones you keep coming back to. Sent 1,200+ times in the last 95 days." },
-    { "type": "header", "content": "Product 1" },
-    { "type": "product", "id": "product_1", "label": "Product" },
-    { "type": "text",    "id": "badge_1",   "label": "Badge", "default": "#1 bestseller" },
-    { "type": "header", "content": "Product 2" },
-    { "type": "product", "id": "product_2", "label": "Product" },
-    { "type": "text",    "id": "badge_2",   "label": "Badge", "default": "Top sleep scent" },
-    { "type": "header", "content": "Product 3" },
-    { "type": "product", "id": "product_3", "label": "Product" },
-    { "type": "text",    "id": "badge_3",   "label": "Badge", "default": "Refillable" },
+    { "type": "header", "content": "Source" },
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "When set, pulls 3 products from this collection. Leave blank to use the manual pickers below." },
+    { "type": "checkbox", "id": "randomize", "label": "Rotate daily", "default": true, "info": "Picks a different starting offset each day so the 3 shown products rotate through the collection. Stable within a day so the page isn't jittery on refresh." },
+    { "type": "header", "content": "Badges (used in either mode)" },
+    { "type": "text", "id": "badge_1", "label": "Badge 1", "default": "#1 bestseller" },
+    { "type": "text", "id": "badge_2", "label": "Badge 2", "default": "Top sleep scent" },
+    { "type": "text", "id": "badge_3", "label": "Badge 3", "default": "Refillable" },
+    { "type": "header", "content": "Manual pickers (used when no collection set)" },
+    { "type": "product", "id": "product_1", "label": "Product 1" },
+    { "type": "product", "id": "product_2", "label": "Product 2" },
+    { "type": "product", "id": "product_3", "label": "Product 3" },
     { "type": "header", "content": "See all link" },
     { "type": "text", "id": "see_all_text", "label": "Text", "default": "See all bestsellers →" },
     { "type": "url",  "id": "see_all_url",  "label": "Link" }
