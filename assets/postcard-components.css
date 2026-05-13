@@ -509,6 +509,9 @@ a.pc-product-card { cursor: pointer; }
 .pc-bestsellers__lede { margin-top: 12px; font-size: 17px; opacity: 0.78; }
 .pc-bestsellers__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
 .pc-bestsellers__more { margin-top: 32px; }
+/* Bestsellers: hide the world-initials chip and move the world stamp to the top-left instead */
+.pc-bestsellers__grid .pc-product-card__chip { display: none; }
+.pc-bestsellers__grid .pc-product-card__world-stamp { right: auto; left: 12px; }
 
 /* === Home: world of the month === */
 .pc-wotm { padding: 96px 0; transition: background 0.3s ease; position: relative; isolation: isolate; overflow: hidden; }
