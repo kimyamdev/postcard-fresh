@@ -48,7 +48,8 @@
           {%- assign w = p.metafields.postcard.world.value | default: p.metafields.custom.world.value -%}
           {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
           {%- assign w_name = w.name.value | default: '' -%}
-          {%- assign card_badge = badges[emitted] -%}
+          {%- assign w_family = w.family.value -%}
+          {%- assign card_badge = badges[emitted] | default: w_family -%}
           {% render 'product-card', product: p, world: w_name, world_color: w_color, badge: card_badge %}
           {%- assign emitted = emitted | plus: 1 -%}
         {%- endfor -%}
@@ -57,19 +58,22 @@
           {%- assign w1 = p1.metafields.postcard.world.value -%}
           {%- assign w1_color = w1.accent_color.value | default: '#E8C36A' -%}
           {%- assign w1_name = w1.name.value | default: '' -%}
-          {% render 'product-card', product: p1, world: w1_name, world_color: w1_color, badge: section.settings.badge_1 %}
+          {%- assign b1 = section.settings.badge_1 | default: w1.family.value -%}
+          {% render 'product-card', product: p1, world: w1_name, world_color: w1_color, badge: b1 %}
         {%- endif -%}
         {%- if p2 -%}
           {%- assign w2 = p2.metafields.postcard.world.value -%}
           {%- assign w2_color = w2.accent_color.value | default: '#E8C36A' -%}
           {%- assign w2_name = w2.name.value | default: '' -%}
-          {% render 'product-card', product: p2, world: w2_name, world_color: w2_color, badge: section.settings.badge_2 %}
+          {%- assign b2 = section.settings.badge_2 | default: w2.family.value -%}
+          {% render 'product-card', product: p2, world: w2_name, world_color: w2_color, badge: b2 %}
         {%- endif -%}
         {%- if p3 -%}
           {%- assign w3 = p3.metafields.postcard.world.value -%}
           {%- assign w3_color = w3.accent_color.value | default: '#E8C36A' -%}
           {%- assign w3_name = w3.name.value | default: '' -%}
-          {% render 'product-card', product: p3, world: w3_name, world_color: w3_color, badge: section.settings.badge_3 %}
+          {%- assign b3 = section.settings.badge_3 | default: w3.family.value -%}
+          {% render 'product-card', product: p3, world: w3_name, world_color: w3_color, badge: b3 %}
         {%- endif -%}
       {%- endif -%}
     </div>
@@ -91,10 +95,11 @@
     { "type": "header", "content": "Source" },
     { "type": "collection", "id": "collection", "label": "Collection", "info": "When set, pulls 3 products from this collection. Leave blank to use the manual pickers below." },
     { "type": "checkbox", "id": "randomize", "label": "Rotate daily", "default": true, "info": "Picks a different starting offset each day so the 3 shown products rotate through the collection. Stable within a day so the page isn't jittery on refresh." },
-    { "type": "header", "content": "Badges (used in either mode)" },
-    { "type": "text", "id": "badge_1", "label": "Badge 1", "default": "#1 bestseller" },
-    { "type": "text", "id": "badge_2", "label": "Badge 2", "default": "Top sleep scent" },
-    { "type": "text", "id": "badge_3", "label": "Badge 3", "default": "Refillable" },
+    { "type": "header", "content": "Badges (optional per-position override)" },
+    { "type": "paragraph", "content": "Leave blank and the badge auto-fills with each card's world family (e.g. \"Hesperidic Gourmand\"). Fill in to override a specific position." },
+    { "type": "text", "id": "badge_1", "label": "Badge 1 (override)" },
+    { "type": "text", "id": "badge_2", "label": "Badge 2 (override)" },
+    { "type": "text", "id": "badge_3", "label": "Badge 3 (override)" },
     { "type": "header", "content": "Manual pickers (used when no collection set)" },
     { "type": "product", "id": "product_1", "label": "Product 1" },
     { "type": "product", "id": "product_2", "label": "Product 2" },
