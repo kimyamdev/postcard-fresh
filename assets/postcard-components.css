@@ -513,6 +513,17 @@ a.pc-product-card { cursor: pointer; }
 .pc-bestsellers__grid .pc-product-card__chip { display: none; }
 .pc-bestsellers__grid .pc-product-card__world-stamp { right: auto; left: 12px; }
 .pc-bestsellers__grid .pc-product-card__world-stamp-img { filter: none; }
+.pc-bestsellers__grid .pc-product-card__badge {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.15;
+}
 
 /* === Home: world of the month === */
 .pc-wotm { padding: 96px 0; transition: background 0.3s ease; position: relative; isolation: isolate; overflow: hidden; }
