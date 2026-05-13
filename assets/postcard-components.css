@@ -512,6 +512,7 @@ a.pc-product-card { cursor: pointer; }
 /* Bestsellers: hide the world-initials chip and move the world stamp to the top-left instead */
 .pc-bestsellers__grid .pc-product-card__chip { display: none; }
 .pc-bestsellers__grid .pc-product-card__world-stamp { right: auto; left: 12px; }
+.pc-bestsellers__grid .pc-product-card__world-stamp-img { filter: none; }
 
 /* === Home: world of the month === */
 .pc-wotm { padding: 96px 0; transition: background 0.3s ease; position: relative; isolation: isolate; overflow: hidden; }
