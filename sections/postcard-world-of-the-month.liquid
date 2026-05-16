@@ -79,7 +79,9 @@
       {%- assign wotm_stamp_img = world.world_stamp.value -%}
       {%- if wotm_stamp_img != blank -%}
         {%- assign wotm_stamp_alt = world_name | append: ' stamp' | escape -%}
-        <div class="pc-wotm__stamp-img-wrap">
+        {%- assign stamp_size = section.settings.stamp_size | default: 60 -%}
+        {%- assign stamp_opacity = section.settings.stamp_opacity | default: 100 -%}
+        <div class="pc-wotm__stamp-img-wrap" style="--stamp-size: {{ stamp_size }}; --stamp-opacity: {{ stamp_opacity }};">
           {{ wotm_stamp_img | image_url: width: 480 | image_tag: alt: wotm_stamp_alt, loading: 'lazy', class: 'pc-wotm__stamp-img', widths: '240,360,480,720' }}
         </div>
       {%- else -%}
@@ -170,6 +172,8 @@
     { "type": "image_picker", "id": "media_image", "label": "Background image (override)", "info": "Overrides the world's hero_image for this section instance only." },
     { "type": "video",        "id": "media_video", "label": "Background video (override)", "info": "Overrides the world's hero_video. Auto-plays muted + loops. Takes priority over the image if both are set." },
     { "type": "range",        "id": "media_opacity", "label": "Media opacity", "min": 10, "max": 100, "step": 5, "default": 100, "unit": "%", "info": "Lower this to fade the image/video so the stamp + postmark read more clearly." },
+    { "type": "range",        "id": "stamp_size",    "label": "Stamp size",    "min": 30, "max": 120, "step": 5, "default": 60, "unit": "%", "info": "Size of the world stamp image relative to its slot. Applies only when the World metaobject has a world_stamp set." },
+    { "type": "range",        "id": "stamp_opacity", "label": "Stamp opacity", "min": 20, "max": 100, "step": 5, "default": 100, "unit": "%", "info": "Transparency of the world stamp image. Lower it for a faded watermark feel." },
     { "type": "range",        "id": "media_height",  "label": "Media height",  "min": 50, "max": 150, "step": 5, "default": 90, "unit": "%", "info": "How much of the column's vertical space the media fills. Above 100% the media bleeds into the section padding (≈full section bleed at 130–150% depending on column height). Stamp + postmark stay centered above it." },
     { "type": "select", "id": "light_badges_mode", "label": "White badge borders", "default": "auto",
       "options": [
