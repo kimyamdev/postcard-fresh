@@ -509,9 +509,8 @@ a.pc-product-card { cursor: pointer; }
 .pc-bestsellers__lede { margin-top: 12px; font-size: 17px; opacity: 0.78; }
 .pc-bestsellers__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
 .pc-bestsellers__more { margin-top: 32px; }
-/* Bestsellers: hide the world-initials chip and move the world stamp to the top-left instead */
+/* Bestsellers: hide the world-initials chip; stamp stays top-right; round scent badge moves to top-left */
 .pc-bestsellers__grid .pc-product-card__chip { display: none; }
-.pc-bestsellers__grid .pc-product-card__world-stamp { right: auto; left: 12px; }
 .pc-bestsellers__grid .pc-product-card__world-stamp-img { filter: none; }
 /* World page ritual grids: hide the world-initials chip; stamp stays on top-right */
 .pc-ritual__grid .pc-product-card__chip { display: none; }
@@ -519,6 +518,9 @@ a.pc-product-card { cursor: pointer; }
 .pc-pw__grid .pc-product-card__chip { display: none; }
 .pc-pw__grid .pc-product-card__world-stamp-img { filter: none; }
 .pc-bestsellers__grid .pc-product-card__badge {
+  top: 12px;
+  left: 12px;
+  right: auto;
   width: 80px;
   height: 80px;
   border-radius: 50%;
