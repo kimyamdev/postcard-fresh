@@ -4002,7 +4002,15 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 }
 
 .pc-wcard__family-line {
+  display: inline-block;
+  background: #F58025;
+  color: var(--color-ink);
+  border: 1.5px solid var(--color-ink);
+  padding: 6px 12px;
   font-size: 11px;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  margin: 6px 0;
 }
 .pc-wcard__title {
   font-size: clamp(56px, 6vw, 84px);
