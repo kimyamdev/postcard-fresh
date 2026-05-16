@@ -9,6 +9,11 @@
     assign world_theme_class = world.theme_class.value
     assign hero_video = world.hero_video.value
     assign hero_image = world.hero_image.value
+    assign world_soundtrack = world.soundtrack.value
+    assign world_soundtrack_url = world_soundtrack.url
+    if world_soundtrack_url == blank
+      assign world_soundtrack_url = world.soundtrack_url.value
+    endif
   endif
 
   assign all_worlds = shop.metaobjects.world.values
@@ -56,7 +61,10 @@
 -%}
 
 {%- if world -%}
-<section class="pc-wcard" x-data="{ videoOpen: false, playlistOpen: false }">
+<section class="pc-wcard" x-data="{ videoOpen: false, playlistOpen: false, audioPlaying: false }"
+  {% if world_soundtrack_url != blank %}
+  x-init="$nextTick(() => { if ($refs.worldAudio) { $refs.worldAudio.play().then(() => { audioPlaying = true }).catch(() => {}) } })"
+  {% endif %}>
   <div class="container pc-wcard__container">
 
     <div class="pc-wcard__breadcrumb">
@@ -80,6 +88,18 @@
             <span class="pc-wcard__watch-tri">▶</span>
             {{ watch_label }}{% if watch_duration != blank %} · {{ watch_duration }}{% endif %}
           </button>
+        {%- endif -%}
+
+        {%- if world_soundtrack_url != blank -%}
+          <button type="button" class="pc-wcard__listen"
+            @click="audioPlaying = !audioPlaying; $refs.worldAudio[audioPlaying ? 'play' : 'pause']()"
+            :aria-pressed="audioPlaying"
+            :aria-label="audioPlaying ? 'Pause soundtrack' : 'Play soundtrack'">
+            <span x-show="!audioPlaying" x-cloak>♪ LISTEN</span>
+            <span x-show="audioPlaying" x-cloak>‖ PAUSE</span>
+          </button>
+          <audio x-ref="worldAudio" loop preload="metadata" src="{{ world_soundtrack_url }}"
+            @play="audioPlaying = true" @pause="audioPlaying = false"></audio>
         {%- endif -%}
 
         <div class="pc-wcard__no-tag">NO. {{ idx_pad }} · {{ world_name | upcase }}</div>
