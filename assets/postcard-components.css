@@ -518,9 +518,9 @@ a.pc-product-card { cursor: pointer; }
 .pc-pw__grid .pc-product-card__chip { display: none; }
 .pc-pw__grid .pc-product-card__world-stamp-img { filter: none; }
 .pc-bestsellers__grid .pc-product-card__badge {
-  top: 12px;
-  left: 12px;
-  right: auto;
+  top: 12px !important;
+  left: 12px !important;
+  right: auto !important;
   width: 80px;
   height: 80px;
   border-radius: 50%;
@@ -530,6 +530,26 @@ a.pc-product-card { cursor: pointer; }
   justify-content: center;
   text-align: center;
   line-height: 1.15;
+  will-change: transform;
+  animation: pc-badge-float-base 5.5s ease-in-out infinite;
+}
+@keyframes pc-badge-float-base {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50%      { transform: translateY(-6px) rotate(3deg); }
+}
+/* Scroll-driven float: badge drifts as its card scrolls through the viewport.
+   Falls back gracefully to the perpetual sway above when the browser doesn't support scroll-driven animations. */
+@supports (animation-timeline: view()) {
+  .pc-bestsellers__grid .pc-product-card { view-timeline-name: --bestseller-card; view-timeline-axis: block; }
+  .pc-bestsellers__grid .pc-product-card__badge {
+    animation: pc-badge-float-scroll linear both;
+    animation-timeline: --bestseller-card;
+    animation-range: entry 0% exit 100%;
+  }
+  @keyframes pc-badge-float-scroll {
+    from { transform: translateY(-22px) rotate(-7deg); }
+    to   { transform: translateY(22px) rotate(7deg); }
+  }
 }
 
 /* === Home: world of the month === */
