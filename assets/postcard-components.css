@@ -1012,6 +1012,8 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 }
 .pc-neighbour__name { font-size: 22px; margin-top: 4px; }
 .pc-neighbour__tag { font-size: 13px; opacity: 0.78; margin-top: 8px; }
+.pc-neighbour__stamp { flex-shrink: 0; width: 84px; display: flex; align-items: flex-start; }
+.pc-neighbour__stamp-img { display: block; width: 100%; height: auto; }
 
 .pc-world-refill {
   background: var(--color-yellow);

@@ -26,8 +26,16 @@
         {%- assign w_family = w.family.value -%}
         {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
         {%- assign w_tagline = w.tagline.value -%}
+        {%- assign w_stamp_img = w.world_stamp.value -%}
         <a class="pc-neighbour" href="/pages/{{ w_slug }}">
-          {% render 'stamp', name: w_name, family: w_family, color: w_color, size: 'sm' %}
+          {%- if w_stamp_img != blank -%}
+            {%- assign stamp_alt = w_name | append: ' stamp' | escape -%}
+            <div class="pc-neighbour__stamp">
+              {{ w_stamp_img | image_url: width: 240 | image_tag: alt: stamp_alt, loading: 'lazy', class: 'pc-neighbour__stamp-img', widths: '120,180,240,360' }}
+            </div>
+          {%- else -%}
+            {% render 'stamp', name: w_name, family: w_family, color: w_color, size: 'sm' %}
+          {%- endif -%}
           <div>
             {%- if w_family != blank -%}
               <div class="eyebrow">{{ w_family }}</div>
