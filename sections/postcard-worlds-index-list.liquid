@@ -118,8 +118,11 @@
         {%- endif -%}
       </div>
 
-      {%- comment -%} Resting layer — world name in white {%- endcomment -%}
+      {%- comment -%} Resting layer — world name in white, scent badge top-right {%- endcomment -%}
       <div class="pc-worlds-index__card-resting">
+        {%- if w_family != blank -%}
+          <span class="pc-worlds-index__card-badge"><span>{{ w_family }}</span></span>
+        {%- endif -%}
         <div class="pc-worlds-index__resting-name">{{ w_name }}</div>
       </div>
 

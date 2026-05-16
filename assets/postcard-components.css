@@ -659,6 +659,28 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   transition: opacity 0.35s ease;
   pointer-events: none;
 }
+.pc-worlds-index__card-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: #F58025;
+  border: 1.5px solid var(--color-ink);
+  color: var(--color-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 10px;
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  line-height: 1.15;
+  text-transform: uppercase;
+  transform: rotate(-6deg);
+}
 .pc-worlds-index__resting-name {
   color: white;
   font-family: var(--font-headline);
