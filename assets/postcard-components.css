@@ -589,6 +589,8 @@ a.pc-product-card { cursor: pointer; }
 .pc-wotm__inner { display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; align-items: stretch; }
 .pc-wotm__stamp-wrap { position: relative; isolation: isolate; display: flex; justify-content: center; align-items: center; min-height: 360px; }
 .pc-wotm__stamp-wrap > *:not(.pc-wotm__media) { position: relative; z-index: 1; }
+.pc-wotm__stamp-img-wrap { width: clamp(180px, 22vw, 260px); }
+.pc-wotm__stamp-img { display: block; width: 100%; height: auto; }
 .pc-wotm__media { position: absolute; left: 0; right: 0; top: var(--media-inset, 5%); bottom: var(--media-inset, 5%); z-index: 0; overflow: hidden; border: 1.5px solid var(--color-ink); }
 .pc-wotm__media-img,
 .pc-wotm__media-vid { width: 100%; height: 100%; object-fit: cover; display: block; }

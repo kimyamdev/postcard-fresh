@@ -76,7 +76,15 @@
           {{ final_image | image_url: width: 1100 | image_tag: alt: media_alt, loading: 'lazy', class: 'pc-wotm__media-img' }}
         </div>
       {%- endif -%}
-      {% render 'stamp', name: world_name, family: world_family, color: world_color, size: 'lg' %}
+      {%- assign wotm_stamp_img = world.world_stamp.value -%}
+      {%- if wotm_stamp_img != blank -%}
+        {%- assign wotm_stamp_alt = world_name | append: ' stamp' | escape -%}
+        <div class="pc-wotm__stamp-img-wrap">
+          {{ wotm_stamp_img | image_url: width: 480 | image_tag: alt: wotm_stamp_alt, loading: 'lazy', class: 'pc-wotm__stamp-img', widths: '240,360,480,720' }}
+        </div>
+      {%- else -%}
+        {% render 'stamp', name: world_name, family: world_family, color: world_color, size: 'lg' %}
+      {%- endif -%}
       <span class="postmark pc-wotm__postmark-overlay">
         <div>WORLD<br>OF THE<br>MONTH</div>
       </span>
