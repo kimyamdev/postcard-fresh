@@ -115,7 +115,13 @@
         <div class="pc-wcard__stamp-wrap">
           <span class="postmark pc-wcard__postmark"><div>{{ postmark_label }}</div></span>
           <div class="pc-wcard__stamp">
-            {% render 'stamp', name: world_name, family: world_family, color: world_color, size: 'sm' %}
+            {%- assign world_stamp_img = world.world_stamp.value -%}
+            {%- if world_stamp_img != blank -%}
+              {%- assign stamp_alt = world_name | append: ' stamp' | escape -%}
+              {{ world_stamp_img | image_url: width: 320 | image_tag: alt: stamp_alt, loading: 'lazy', class: 'pc-wcard__stamp-img', widths: '160,240,320,480' }}
+            {%- else -%}
+              {% render 'stamp', name: world_name, family: world_family, color: world_color, size: 'sm' %}
+            {%- endif -%}
           </div>
         </div>
 

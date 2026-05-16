@@ -4016,6 +4016,12 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   z-index: 2;
   transform: rotate(6deg);
 }
+.pc-wcard__stamp-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(2px 3px 0 rgba(33, 32, 32, 0.18));
+}
 .pc-wcard__postmark {
   position: absolute !important;
   top: 36px;
