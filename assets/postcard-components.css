@@ -4020,7 +4020,6 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   display: block;
   width: 100%;
   height: auto;
-  filter: drop-shadow(2px 3px 0 rgba(33, 32, 32, 0.18));
 }
 .pc-wcard__postmark {
   position: absolute !important;
@@ -4029,7 +4028,7 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   width: 78px; height: 78px;
   background: transparent !important;
   border-color: rgba(33, 32, 32, 0.35) !important;
-  z-index: 1;
+  z-index: 3;
   font-size: 8px !important;
 }
 
