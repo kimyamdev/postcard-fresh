@@ -36,8 +36,20 @@
         {%- assign slug = w.slug.value | default: w.handle -%}
         {%- assign accent = w.accent_color.value | default: '#E8C36A' -%}
         {%- assign family = w.family.value -%}
+        {%- assign w_stamp_img = w.world_stamp.value -%}
         <a class="pc-worlds-quick__cell" href="/pages/{{ slug }}">
-          {% render 'stamp', name: w.name.value, family: family, color: accent, size: 'md' %}
+          {%- if w_stamp_img != blank -%}
+            {%- assign stamp_alt = w.name.value | append: ' stamp' | escape -%}
+            <div class="pc-worlds-quick__stamp-slot">
+              {{ w_stamp_img | image_url: width: 320 | image_tag: alt: stamp_alt, loading: 'lazy', class: 'pc-worlds-quick__stamp-img', widths: '160,240,320,480' }}
+              {%- if family != blank -%}
+                <span class="pc-worlds-quick__badge"><span>{{ family }}</span></span>
+              {%- endif -%}
+            </div>
+            <div class="pc-worlds-quick__name">{{ w.name.value }}</div>
+          {%- else -%}
+            {% render 'stamp', name: w.name.value, family: family, color: accent, size: 'md' %}
+          {%- endif -%}
         </a>
         {%- assign emitted = emitted | plus: 1 -%}
       {%- endfor -%}
