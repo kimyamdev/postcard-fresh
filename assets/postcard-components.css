@@ -513,6 +513,8 @@ a.pc-product-card { cursor: pointer; }
 .pc-bestsellers__grid .pc-product-card__chip { display: none; }
 .pc-bestsellers__grid .pc-product-card__world-stamp { right: auto; left: 12px; }
 .pc-bestsellers__grid .pc-product-card__world-stamp-img { filter: none; }
+/* World page ritual grids: hide the world-initials chip; stamp stays on top-right */
+.pc-ritual__grid .pc-product-card__chip { display: none; }
 .pc-bestsellers__grid .pc-product-card__badge {
   width: 80px;
   height: 80px;
