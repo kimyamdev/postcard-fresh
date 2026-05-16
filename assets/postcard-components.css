@@ -512,8 +512,9 @@ a.pc-product-card { cursor: pointer; }
 /* Bestsellers: hide the world-initials chip; stamp stays top-right; round scent badge moves to top-left */
 .pc-bestsellers__grid .pc-product-card__chip { display: none; }
 .pc-bestsellers__grid .pc-product-card__world-stamp-img { filter: none; }
-/* World page ritual grids: hide the world-initials chip; stamp stays on top-right */
+/* World page ritual grids: hide the world-initials chip; stamp stays on top-right with no drop-shadow */
 .pc-ritual__grid .pc-product-card__chip { display: none; }
+.pc-ritual__grid .pc-product-card__world-stamp-img { filter: none; }
 /* "Other postcards from <world>" grid: same treatment + drop stamp shadow */
 .pc-pw__grid .pc-product-card__chip { display: none; }
 .pc-pw__grid .pc-product-card__world-stamp-img { filter: none; }
