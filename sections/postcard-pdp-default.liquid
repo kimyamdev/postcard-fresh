@@ -76,7 +76,7 @@
       { "type": "text", "id": "subline_override", "label": "Subline override (per-template)" }
     ] },
     { "type": "title", "name": "Title", "limit": 1, "settings": [] },
-    { "type": "tags_band", "name": "Auto tags (Refillable, Subscribable, Vegan, Clean)", "limit": 1, "settings": [
+    { "type": "tags_band", "name": "Auto tags band", "limit": 1, "settings": [
       { "type": "paragraph", "content": "Pills auto-appear based on product tags + selling plans. Override labels below." },
       { "type": "text", "id": "refill_label",  "label": "Refillable label",  "default": "Refillable" },
       { "type": "text", "id": "sub_label",     "label": "Subscribable label", "default": "Subscribable" },
@@ -86,12 +86,12 @@
     { "type": "description", "name": "Description", "limit": 1, "settings": [
       { "type": "number", "id": "word_limit", "label": "Word limit", "default": 30 }
     ] },
-    { "type": "ingredients", "name": "Ingredients (from product metafield)", "limit": 1, "settings": [
+    { "type": "ingredients", "name": "Ingredients (metafield)", "limit": 1, "settings": [
       { "type": "paragraph", "content": "Reads product.metafields.custom.ingredients (richtext). Hides when empty." },
       { "type": "text", "id": "heading", "label": "Heading", "default": "Ingredients" },
       { "type": "checkbox", "id": "open_by_default", "label": "Open by default", "default": false }
     ] },
-    { "type": "benefits", "name": "Benefits (from product metafield)", "limit": 1, "settings": [
+    { "type": "benefits", "name": "Benefits (metafield)", "limit": 1, "settings": [
       { "type": "paragraph", "content": "Reads product.metafields.custom.benefits (richtext). Hides when empty." },
       { "type": "text", "id": "heading", "label": "Heading", "default": "Benefits" },
       { "type": "checkbox", "id": "open_by_default", "label": "Open by default", "default": false }
@@ -99,7 +99,7 @@
     { "type": "rating", "name": "Stars + reviews", "limit": 1, "settings": [] },
     { "type": "sizes", "name": "Size variants", "limit": 1, "settings": [
       { "type": "text", "id": "label", "label": "Label", "default": "Size" },
-      { "type": "text", "id": "demo_sizes", "label": "Demo sizes (CSV, single-variant fallback)", "default": "" },
+      { "type": "text", "id": "demo_sizes", "label": "Demo sizes (CSV, single-variant fallback)", "default": "100ml,30ml,Refill" },
       { "type": "number", "id": "demo_active_index", "label": "Active demo size (1-based)", "default": 1 }
     ] },
     { "type": "purchase_options", "name": "Purchase options", "limit": 1, "settings": [
