@@ -2,47 +2,139 @@
   "sections": {
     "main": {
       "type": "postcard-pdp-default",
-      "settings": {},
       "blocks": {
-        "ribbon":            { "type": "ribbon",            "settings": {} },
-        "title":             { "type": "title",             "settings": {} },
-        "tags_band":         { "type": "tags_band",         "settings": {} },
-        "description":       { "type": "description",       "settings": {} },
-        "rating":            { "type": "rating",            "settings": {} },
-        "sizes":             { "type": "sizes",             "settings": {} },
-        "purchase_options":  { "type": "purchase_options",  "settings": {} },
-        "qty_and_cta":       { "type": "qty_and_cta",       "settings": {} },
-        "refill_link":       { "type": "refill_link",       "settings": {} },
-        "stock_indicator":   { "type": "stock_indicator",   "settings": {} },
-        "ingredients":       { "type": "ingredients",       "settings": {} },
-        "benefits":          { "type": "benefits",          "settings": {} },
-        "trust_circles":     { "type": "trust_circles",     "settings": {} }
+        "ribbon": {
+          "type": "ribbon",
+          "settings": {
+            "subline_override": ""
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "tags_band": {
+          "type": "tags_band",
+          "settings": {
+            "refill_label": "Refillable",
+            "sub_label": "Subscribable",
+            "vegan_label": "Vegan",
+            "clean_label": "Clean"
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+            "word_limit": 30
+          }
+        },
+        "ingredients": {
+          "type": "ingredients",
+          "settings": {
+            "heading": "Ingredients",
+            "open_by_default": false
+          }
+        },
+        "benefits": {
+          "type": "benefits",
+          "settings": {
+            "heading": "Benefits",
+            "open_by_default": false
+          }
+        },
+        "use_cases": {
+          "type": "use_cases",
+          "settings": {
+            "heading": "Use case(s)",
+            "open_by_default": false
+          }
+        },
+        "rating": {
+          "type": "rating",
+          "settings": {}
+        },
+        "sizes": {
+          "type": "sizes",
+          "settings": {
+            "label": "Size",
+            "demo_sizes": "100ml,30ml,Refill",
+            "demo_active_index": 1
+          }
+        },
+        "purchase_options": {
+          "type": "purchase_options",
+          "settings": {
+            "label": "Purchase options",
+            "once_label": "One-time purchase",
+            "subscribe_label": "Subscribe & save",
+            "cadence_note": "Skip, swap world, or cancel anytime — no postcards held hostage.",
+            "about_label": "About subscriptions",
+            "about_body": ""
+          }
+        },
+        "qty_and_cta": {
+          "type": "qty_and_cta",
+          "settings": {
+            "cta_text": "Add to bag",
+            "sold_out_text": "Sold out"
+          }
+        },
+        "refill_link": {
+          "type": "refill_link",
+          "settings": {
+            "text": "Or refill in store →",
+            "link": "/pages/refill",
+            "always_show": false
+          }
+        },
+        "stock_indicator": {
+          "type": "stock_indicator",
+          "settings": {
+            "text": "• In stock · Ships in 1-2 days"
+          }
+        },
+        "trust_circles": {
+          "type": "trust_circles",
+          "settings": {
+            "label_1": "Made in SG",
+            "label_2": "Refillable",
+            "label_3": "Cruelty-free",
+            "label_4": "Vegan",
+            "always_show_refillable": false
+          }
+        }
       },
       "block_order": [
         "ribbon",
         "title",
         "tags_band",
         "description",
+        "ingredients",
+        "benefits",
+        "use_cases",
         "rating",
         "sizes",
         "purchase_options",
         "qty_and_cta",
         "refill_link",
         "stock_indicator",
-        "ingredients",
-        "benefits",
         "trust_circles"
-      ]
+      ],
+      "settings": {
+        "stamp_text_fallback": "POSTCARD<br>· SG ·"
+      }
     },
     "pairs_with": {
       "type": "postcard-pdp-pairs-with",
-      "settings": {},
-      "blocks": {},
-      "block_order": []
+      "settings": {}
     },
     "reviews": {
       "type": "postcard-pdp-reviews-section",
-      "settings": {}
+      "settings": {
+        "label": "Dispatches · Field notes from the pit",
+        "heading": "Mail from our pen-pals.",
+        "bg_color": "#fdecea"
+      }
     }
   },
   "order": [

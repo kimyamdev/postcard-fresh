@@ -273,4 +273,19 @@
     </details>
   {%- endif -%}
 
+{%- when 'use_cases' -%}
+  {%- assign uc = product.metafields.custom.use_cases -%}
+  {%- assign uc_html = '' -%}
+  {%- if uc != blank -%}
+    {%- capture uc_html -%}{{ uc | metafield_tag }}{%- endcapture -%}
+  {%- elsif block.settings.fallback_content != blank -%}
+    {%- assign uc_html = block.settings.fallback_content -%}
+  {%- endif -%}
+  {%- if uc_html != blank -%}
+    <details class="pc-pdp-collapse"{% if block.settings.open_by_default %} open{% endif %}>
+      <summary class="pc-pdp-collapse__summary">{{ block.settings.heading | default: 'Use case(s)' }}</summary>
+      <div class="pc-pdp-collapse__body rte">{{ uc_html }}</div>
+    </details>
+  {%- endif -%}
+
 {%- endcase -%}
