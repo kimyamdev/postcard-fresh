@@ -16,37 +16,69 @@
       <h2 class="h-display pc-world-neighbours__title">{{ section.settings.title }}</h2>
     {%- endif -%}
     <div class="pc-neighbours">
-      {%- assign all_worlds = shop.metaobjects.world.values -%}
-      {%- assign shown = 0 -%}
-      {%- for w in all_worlds -%}
-        {%- if shown >= limit -%}{%- break -%}{%- endif -%}
-        {%- assign w_slug = w.slug.value | default: w.handle -%}
-        {%- if w_slug == world_slug -%}{%- continue -%}{%- endif -%}
-        {%- assign w_name = w.name.value -%}
-        {%- assign w_family = w.family.value -%}
-        {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
-        {%- assign w_tagline = w.tagline.value -%}
-        {%- assign w_stamp_img = w.world_stamp.value -%}
-        <a class="pc-neighbour" href="/pages/{{ w_slug }}">
-          {%- if w_stamp_img != blank -%}
-            {%- assign stamp_alt = w_name | append: ' stamp' | escape -%}
-            <div class="pc-neighbour__stamp">
-              {{ w_stamp_img | image_url: width: 240 | image_tag: alt: stamp_alt, loading: 'lazy', class: 'pc-neighbour__stamp-img', widths: '120,180,240,360' }}
+      {%- liquid
+        assign all_worlds = shop.metaobjects.world.values
+
+        comment
+        # Build a comma-separated list of candidate slugs: tier='World', exclude current page.
+        endcomment
+        assign slugs_csv = ''
+        for w in all_worlds
+          if w.tier.value == 'World'
+            assign s = w.slug.value | default: w.handle
+            unless s == world_slug
+              assign slugs_csv = slugs_csv | append: ',' | append: s
+            endunless
+          endif
+        endfor
+        assign slugs_csv = slugs_csv | remove_first: ','
+        assign slugs_arr = slugs_csv | split: ','
+        assign candidates_count = slugs_arr.size
+
+        comment
+        # Daily-rotating offset: same combo for all visitors on the same day,
+        # different combo tomorrow.
+        endcomment
+        assign rotate_offset = 0
+        if candidates_count > 1
+          assign rotate_offset = 'now' | date: '%j' | times: 1 | modulo: candidates_count
+        endif
+
+        assign last_i = limit | minus: 1
+      -%}
+      {%- for i in (0..last_i) -%}
+        {%- if i >= candidates_count -%}{%- break -%}{%- endif -%}
+        {%- assign pos = i | plus: rotate_offset | modulo: candidates_count -%}
+        {%- assign target_slug = slugs_arr[pos] -%}
+        {%- for w in all_worlds -%}
+          {%- assign ws = w.slug.value | default: w.handle -%}
+          {%- if ws != target_slug -%}{%- continue -%}{%- endif -%}
+          {%- assign w_name = w.name.value -%}
+          {%- assign w_family = w.family.value -%}
+          {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
+          {%- assign w_tagline = w.tagline.value -%}
+          {%- assign w_stamp_img = w.world_stamp.value -%}
+          <a class="pc-neighbour" href="/pages/{{ ws }}">
+            {%- if w_stamp_img != blank -%}
+              {%- assign stamp_alt = w_name | append: ' stamp' | escape -%}
+              <div class="pc-neighbour__stamp">
+                {{ w_stamp_img | image_url: width: 240 | image_tag: alt: stamp_alt, loading: 'lazy', class: 'pc-neighbour__stamp-img', widths: '120,180,240,360' }}
+              </div>
+            {%- else -%}
+              {% render 'stamp', name: w_name, family: w_family, color: w_color, size: 'sm' %}
+            {%- endif -%}
+            <div>
+              {%- if w_family != blank -%}
+                <div class="eyebrow">{{ w_family }}</div>
+              {%- endif -%}
+              <h3 class="h-display pc-neighbour__name">{{ w_name }}</h3>
+              {%- if w_tagline != blank -%}
+                <p class="pc-neighbour__tag">{{ w_tagline }}</p>
+              {%- endif -%}
             </div>
-          {%- else -%}
-            {% render 'stamp', name: w_name, family: w_family, color: w_color, size: 'sm' %}
-          {%- endif -%}
-          <div>
-            {%- if w_family != blank -%}
-              <div class="eyebrow">{{ w_family }}</div>
-            {%- endif -%}
-            <h3 class="h-display pc-neighbour__name">{{ w_name }}</h3>
-            {%- if w_tagline != blank -%}
-              <p class="pc-neighbour__tag">{{ w_tagline }}</p>
-            {%- endif -%}
-          </div>
-        </a>
-        {%- assign shown = shown | plus: 1 -%}
+          </a>
+          {%- break -%}
+        {%- endfor -%}
       {%- endfor -%}
     </div>
   </div>
