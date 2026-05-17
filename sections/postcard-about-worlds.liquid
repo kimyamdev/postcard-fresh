@@ -26,8 +26,9 @@
         {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
         {%- assign w_family = w.family.value -%}
         {%- assign w_name = w.name.value -%}
+        {%- assign w_slug = w.slug.value | default: w.handle -%}
         {%- assign w_stamp_img = w.world_stamp.value -%}
-        <div class="pc-about-worlds__cell">
+        <a class="pc-about-worlds__cell" href="/pages/{{ w_slug }}">
           {%- if w_stamp_img != blank -%}
             {%- assign stamp_alt = w_name | append: ' stamp' | escape -%}
             <div class="pc-about-worlds__stamp">
@@ -39,7 +40,7 @@
           {%- else -%}
             {% render 'stamp', name: w_name, color: w_color, size: 'sm' %}
           {%- endif -%}
-        </div>
+        </a>
         {%- assign emitted = emitted | plus: 1 -%}
       {%- endfor -%}
     </div>
