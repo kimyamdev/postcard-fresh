@@ -215,4 +215,50 @@
     </div>
   </div>
 
+{%- when 'tags_band' -%}
+  {%- liquid
+    assign has_refill = false
+    if product.tags contains 'Refillable' or product.tags contains 'refillable' or product.tags contains 'Refill'
+      assign has_refill = true
+    endif
+    assign has_sub = false
+    if product.selling_plan_groups.size > 0
+      assign has_sub = true
+    endif
+    assign has_vegan = false
+    if product.tags contains 'Vegan' or product.tags contains 'vegan'
+      assign has_vegan = true
+    endif
+    assign has_clean = false
+    if product.tags contains 'Sulphate-free' or product.tags contains 'sulphate-free' or product.tags contains 'Clean'
+      assign has_clean = true
+    endif
+  -%}
+  {%- if has_refill or has_sub or has_vegan or has_clean -%}
+    <div class="pc-pdp-tags">
+      {%- if has_refill -%}<span class="pc-pdp-tag pc-pdp-tag--refill">{{ block.settings.refill_label | default: 'Refillable' }}</span>{%- endif -%}
+      {%- if has_sub -%}<span class="pc-pdp-tag pc-pdp-tag--sub">{{ block.settings.sub_label | default: 'Subscribable' }}</span>{%- endif -%}
+      {%- if has_vegan -%}<span class="pc-pdp-tag">{{ block.settings.vegan_label | default: 'Vegan' }}</span>{%- endif -%}
+      {%- if has_clean -%}<span class="pc-pdp-tag">{{ block.settings.clean_label | default: 'Clean' }}</span>{%- endif -%}
+    </div>
+  {%- endif -%}
+
+{%- when 'ingredients' -%}
+  {%- assign ing = product.metafields.custom.ingredients -%}
+  {%- if ing != blank -%}
+    <details class="pc-pdp-collapse"{% if block.settings.open_by_default %} open{% endif %}>
+      <summary class="pc-pdp-collapse__summary">{{ block.settings.heading | default: 'Ingredients' }}</summary>
+      <div class="pc-pdp-collapse__body rte">{{ ing | metafield_tag }}</div>
+    </details>
+  {%- endif -%}
+
+{%- when 'benefits' -%}
+  {%- assign ben = product.metafields.custom.benefits -%}
+  {%- if ben != blank -%}
+    <details class="pc-pdp-collapse"{% if block.settings.open_by_default %} open{% endif %}>
+      <summary class="pc-pdp-collapse__summary">{{ block.settings.heading | default: 'Benefits' }}</summary>
+      <div class="pc-pdp-collapse__body rte">{{ ben | metafield_tag }}</div>
+    </details>
+  {%- endif -%}
+
 {%- endcase -%}

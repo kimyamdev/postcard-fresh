@@ -1,0 +1,142 @@
+{%- liquid
+  assign world = product.metafields.postcard.world.value | default: product.metafields.custom.world.value
+  if world
+    assign world_color = world.accent_color.value
+    assign world_theme_class = world.theme_class.value
+    assign world_name = world.name.value
+  endif
+  assign world_color = world_color | default: '#E8C36A'
+  assign world_theme_class = world_theme_class | default: ''
+  assign world_name = world_name | default: ''
+
+  assign ribbon_subline = product.metafields.custom.ribbon_subline | default: product.type
+  assign stamp_text = product.metafields.custom.stamp_text | default: section.settings.stamp_text_fallback
+
+  assign current = product.selected_or_first_available_variant
+  assign default_plan_id = ''
+  assign first_sp_group = product.selling_plan_groups.first
+  if first_sp_group and first_sp_group.selling_plans.size > 0
+    assign default_plan_id = first_sp_group.selling_plans.first.id
+  endif
+
+  assign collection_breadcrumb = ''
+  if product.collections.size > 0
+    assign first_coll = product.collections.first
+    assign collection_breadcrumb = first_coll.title
+    assign collection_breadcrumb_url = first_coll.url
+  endif
+-%}
+
+<div class="{{ world_theme_class }}" style="--world-color: {{ world_color }};">
+
+  <div class="pc-breadcrumb">
+    <div class="container pc-breadcrumb__inner">
+      <a href="{{ routes.root_url }}">Home</a>
+      {%- if collection_breadcrumb != blank -%}
+        / <a href="{{ collection_breadcrumb_url }}">{{ collection_breadcrumb }}</a>
+      {%- endif -%}
+      / <span class="pc-breadcrumb__current">{{ product.title }}</span>
+    </div>
+  </div>
+
+  <section class="pc-pdp-main">
+    <div class="container pc-pdp-main__inner">
+      {% render 'pdp-gallery', product: product, world_color: world_color, stamp_text: stamp_text %}
+
+      <aside class="pc-pdp-buy" x-data='{
+        variantId: "{{ current.id }}",
+        qty: 1,
+        mode: "once",
+        cadence: "{{ default_plan_id }}",
+        subOpen: false,
+        prices: { {%- for v in product.variants -%}"{{ v.id }}": "{{ v.price | money }}"{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%} }
+      }'>
+        <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data" class="pc-pdp-buy__form">
+          <input type="hidden" name="form_type" value="product">
+          <input type="hidden" name="utf8" value="&#x2713;">
+          {%- for block in section.blocks -%}
+            {% render 'pdp-buy-block', block: block, product: product, world_color: world_color, world_name: world_name, ribbon_subline: ribbon_subline, current: current %}
+          {%- endfor -%}
+        </form>
+      </aside>
+    </div>
+  </section>
+
+</div>
+
+{% schema %}
+{
+  "name": "Default PDP",
+  "settings": [
+    { "type": "paragraph", "content": "Pulls everything possible from the product + linked World metaobject. Use product.metafields.custom.ribbon_subline to override the eyebrow per-product (defaults to product.type); product.metafields.custom.stamp_text to override the corner stamp text; product.metafields.custom.ingredients and product.metafields.custom.benefits (richtext) for the collapsible sections." },
+    { "type": "text", "id": "stamp_text_fallback", "label": "Stamp text (fallback)", "default": "POSTCARD<br>· SG ·" }
+  ],
+  "blocks": [
+    { "type": "ribbon", "name": "Eyebrow ribbon", "limit": 1, "settings": [
+      { "type": "text", "id": "subline_override", "label": "Subline override (per-template)" }
+    ] },
+    { "type": "title", "name": "Title", "limit": 1, "settings": [] },
+    { "type": "tags_band", "name": "Auto tags (Refillable, Subscribable, Vegan, Clean)", "limit": 1, "settings": [
+      { "type": "paragraph", "content": "Pills auto-appear based on product tags + selling plans. Override labels below." },
+      { "type": "text", "id": "refill_label",  "label": "Refillable label",  "default": "Refillable" },
+      { "type": "text", "id": "sub_label",     "label": "Subscribable label", "default": "Subscribable" },
+      { "type": "text", "id": "vegan_label",   "label": "Vegan label",       "default": "Vegan" },
+      { "type": "text", "id": "clean_label",   "label": "Clean label",       "default": "Clean" }
+    ] },
+    { "type": "description", "name": "Description", "limit": 1, "settings": [
+      { "type": "number", "id": "word_limit", "label": "Word limit", "default": 30 }
+    ] },
+    { "type": "ingredients", "name": "Ingredients (from product metafield)", "limit": 1, "settings": [
+      { "type": "paragraph", "content": "Reads product.metafields.custom.ingredients (richtext). Hides when empty." },
+      { "type": "text", "id": "heading", "label": "Heading", "default": "Ingredients" },
+      { "type": "checkbox", "id": "open_by_default", "label": "Open by default", "default": false }
+    ] },
+    { "type": "benefits", "name": "Benefits (from product metafield)", "limit": 1, "settings": [
+      { "type": "paragraph", "content": "Reads product.metafields.custom.benefits (richtext). Hides when empty." },
+      { "type": "text", "id": "heading", "label": "Heading", "default": "Benefits" },
+      { "type": "checkbox", "id": "open_by_default", "label": "Open by default", "default": false }
+    ] },
+    { "type": "rating", "name": "Stars + reviews", "limit": 1, "settings": [] },
+    { "type": "sizes", "name": "Size variants", "limit": 1, "settings": [
+      { "type": "text", "id": "label", "label": "Label", "default": "Size" },
+      { "type": "text", "id": "demo_sizes", "label": "Demo sizes (CSV, single-variant fallback)", "default": "" },
+      { "type": "number", "id": "demo_active_index", "label": "Active demo size (1-based)", "default": 1 }
+    ] },
+    { "type": "purchase_options", "name": "Purchase options", "limit": 1, "settings": [
+      { "type": "text", "id": "label", "label": "Label", "default": "Purchase options" },
+      { "type": "text", "id": "once_label", "label": "One-time label", "default": "One-time purchase" },
+      { "type": "text", "id": "subscribe_label", "label": "Subscribe label (auto-suffixed with discount %)", "default": "Subscribe & save" },
+      { "type": "text", "id": "cadence_note", "label": "Cadence note", "default": "Skip, swap world, or cancel anytime — no postcards held hostage." },
+      { "type": "text", "id": "about_label", "label": "About-subscriptions toggle", "default": "About subscriptions" },
+      { "type": "textarea", "id": "about_body", "label": "About-subscriptions body" }
+    ] },
+    { "type": "qty_and_cta", "name": "Quantity + Add to bag", "limit": 1, "settings": [
+      { "type": "text", "id": "cta_text", "label": "CTA text", "default": "Add to bag" },
+      { "type": "text", "id": "sold_out_text", "label": "Sold-out text", "default": "Sold out" }
+    ] },
+    { "type": "refill_link", "name": "Refill link", "limit": 1, "settings": [
+      { "type": "text", "id": "text", "label": "Text", "default": "Or refill in store →" },
+      { "type": "text", "id": "link", "label": "Link", "default": "/pages/refill" },
+      { "type": "checkbox", "id": "always_show", "label": "Show even if not refillable", "default": false }
+    ] },
+    { "type": "stock_indicator", "name": "Stock indicator", "limit": 1, "settings": [
+      { "type": "text", "id": "text", "label": "Text", "default": "• In stock · Ships in 1-2 days" }
+    ] },
+    { "type": "trust_circles", "name": "Trust circles", "limit": 1, "settings": [
+      { "type": "text", "id": "label_1", "label": "Label 1", "default": "Made in SG" },
+      { "type": "text", "id": "label_2", "label": "Label 2 (refillable, conditional)", "default": "Refillable" },
+      { "type": "text", "id": "label_3", "label": "Label 3", "default": "Cruelty-free" },
+      { "type": "text", "id": "label_4", "label": "Label 4", "default": "Vegan" },
+      { "type": "checkbox", "id": "always_show_refillable", "label": "Always show refillable", "default": false }
+    ] }
+  ],
+  "presets": [{
+    "name": "Default PDP",
+    "blocks": [
+      { "type": "ribbon" }, { "type": "title" }, { "type": "tags_band" }, { "type": "description" },
+      { "type": "rating" }, { "type": "sizes" }, { "type": "purchase_options" }, { "type": "qty_and_cta" },
+      { "type": "refill_link" }, { "type": "stock_indicator" }, { "type": "ingredients" }, { "type": "benefits" }, { "type": "trust_circles" }
+    ]
+  }]
+}
+{% endschema %}
