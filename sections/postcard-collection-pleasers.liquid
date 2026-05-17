@@ -1,0 +1,36 @@
+{%- liquid
+  assign top_count = section.settings.top_count | default: 3
+  assign min_threshold = section.settings.min_threshold | default: 3
+-%}
+{%- if collection.products.size >= min_threshold -%}
+  <section class="section--tight section">
+    <div class="container">
+      {%- if section.settings.eyebrow != blank -%}
+        {%- assign eyebrow = section.settings.eyebrow | replace: '[count]', top_count -%}
+        <div class="eyebrow">{{ eyebrow }}</div>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="h-display pc-coll-top__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+      <div class="pc-coll-top__grid">
+        {%- for p in collection.products limit: top_count -%}
+          {% render 'product-card', product: p %}
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Collection · Top picks",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Top [count] in this category", "info": "[count] is replaced with the number set below." },
+    { "type": "text", "id": "title", "label": "Title", "default": "The crowd-pleasers." },
+    { "type": "range", "id": "top_count", "label": "How many to show", "min": 1, "max": 6, "step": 1, "default": 3 },
+    { "type": "range", "id": "min_threshold", "label": "Minimum products required", "min": 1, "max": 10, "step": 1, "default": 3, "info": "Hide this section entirely if the collection has fewer than this many products." }
+  ],
+  "presets": [{ "name": "Collection · Top picks" }]
+}
+{% endschema %}

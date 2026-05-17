@@ -3046,6 +3046,18 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 }
 .pc-coll-grid__products { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .pc-coll-grid__placeholder { display: flex; align-items: center; justify-content: center; }
+.pc-coll-filters__form { display: block; }
+.pc-coll-filters__clear { display: inline-block; margin-top: 8px; font-size: 11px; }
+.pc-coll-filters__apply { margin-top: 12px; }
+.pc-coll-filter-row__count { opacity: 0.55; font-size: 11px; margin-left: auto; }
+.pc-coll-filter-row--price { gap: 8px; }
+.pc-coll-filter-row--price label { display: flex; flex-direction: column; gap: 4px; font-size: 11px; }
+.pc-coll-filter-row--price input[type="number"] { width: 80px; padding: 6px 8px; border: 1px solid var(--color-line); font-family: var(--font-body); }
+.pc-coll-grid__empty { grid-column: 1 / -1; padding: 48px 24px; text-align: center; font-size: 15px; opacity: 0.8; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.pc-coll-grid__pagination { margin-top: 32px; display: flex; justify-content: center; gap: 12px; font-family: var(--font-display); font-size: 13px; }
+.pc-coll-grid__pagination a, .pc-coll-grid__pagination span { padding: 6px 10px; border: 1px solid var(--color-line); color: inherit; text-decoration: none; }
+.pc-coll-grid__pagination .active span { background: var(--color-ink); color: var(--color-bg); border-color: var(--color-ink); }
+.pc-coll-grid__sort-form { margin: 0; }
 
 /* === COLLECTION (gifts) === */
 .pc-collgift-hero {

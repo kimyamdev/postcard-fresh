@@ -1,6 +1,8 @@
 {
   "sections": {
-    "main": { "type": "postcard-collection-type", "settings": {} }
+    "hero":     { "type": "postcard-collection-hero",     "settings": {} },
+    "pleasers": { "type": "postcard-collection-pleasers", "settings": {} },
+    "grid":     { "type": "postcard-collection-grid",     "settings": {} }
   },
-  "order": ["main"]
+  "order": ["hero", "pleasers", "grid"]
 }

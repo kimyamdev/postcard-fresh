@@ -1,0 +1,138 @@
+{%- liquid
+  assign per_page = section.settings.products_per_page | default: 16
+  assign show_filters = section.settings.show_filters
+  if show_filters == nil
+    assign show_filters = true
+  endif
+  assign show_sort = section.settings.show_sort
+  if show_sort == nil
+    assign show_sort = true
+  endif
+  assign count_text = section.settings.count_text | default: 'Showing [count] postcards'
+-%}
+<section class="section">
+  <div class="container pc-coll-grid">
+    {%- paginate collection.products by per_page -%}
+      {%- if show_filters and collection.filters.size > 0 -%}
+        <aside class="pc-coll-filters">
+          <form id="CollectionFilterForm" method="get" class="pc-coll-filters__form">
+            {%- if collection.current_type -%}
+              <input type="hidden" name="q" value="{{ collection.current_type }}">
+            {%- endif -%}
+            {%- if collection.current_vendor -%}
+              <input type="hidden" name="q" value="{{ collection.current_vendor }}">
+            {%- endif -%}
+            {%- if show_sort and collection.sort_by != blank -%}
+              <input type="hidden" name="sort_by" value="{{ collection.sort_by }}">
+            {%- endif -%}
+            {%- for filter in collection.filters -%}
+              <div class="pc-coll-filter-group{% if forloop.last %} pc-coll-filter-group--last{% endif %}">
+                <div class="eyebrow pc-coll-filter-group__title">{{ filter.label }}</div>
+                {%- case filter.type -%}
+                {%- when 'list', 'boolean' -%}
+                  {%- for value in filter.values -%}
+                    <label class="pc-coll-filter-row">
+                      <input type="checkbox"
+                        name="{{ value.param_name }}"
+                        value="{{ value.value }}"
+                        {% if value.active %}checked{% endif %}
+                        {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                        onchange="this.form.submit()">
+                      {{ value.label }} <span class="pc-coll-filter-row__count">({{ value.count }})</span>
+                    </label>
+                  {%- endfor -%}
+                {%- when 'price_range' -%}
+                  <div class="pc-coll-filter-row pc-coll-filter-row--price">
+                    <label>
+                      <span class="pc-coll-filter-row__label">Min</span>
+                      <input type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value }}" placeholder="{{ filter.range_min | money_without_currency | strip_html }}" min="0" max="{{ filter.range_max | money_without_currency | strip_html }}" onchange="this.form.submit()">
+                    </label>
+                    <label>
+                      <span class="pc-coll-filter-row__label">Max</span>
+                      <input type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value }}" placeholder="{{ filter.range_max | money_without_currency | strip_html }}" min="0" max="{{ filter.range_max | money_without_currency | strip_html }}" onchange="this.form.submit()">
+                    </label>
+                  </div>
+                {%- endcase -%}
+              </div>
+            {%- endfor -%}
+            {%- if collection.url -%}
+              <a class="tlink pc-coll-filters__clear" href="{{ collection.url }}">{{ section.settings.clear_text | default: 'Clear filters' }}</a>
+            {%- endif -%}
+            <noscript>
+              <button type="submit" class="btn btn--small pc-coll-filters__apply">Apply</button>
+            </noscript>
+          </form>
+        </aside>
+      {%- endif -%}
+
+      <div>
+        <div class="pc-coll-grid__bar">
+          {%- assign rendered_count_text = count_text | replace: '[count]', paginate.items -%}
+          <div class="pc-coll-grid__count">{{ rendered_count_text }}</div>
+          {%- if show_sort and collection.sort_options.size > 0 -%}
+            <form method="get" class="pc-coll-grid__sort-form">
+              {%- comment -%} Preserve active filter params when sort changes {%- endcomment -%}
+              {%- for filter in collection.filters -%}
+                {%- case filter.type -%}
+                {%- when 'list', 'boolean' -%}
+                  {%- for value in filter.values -%}
+                    {%- if value.active -%}
+                      <input type="hidden" name="{{ value.param_name }}" value="{{ value.value }}">
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- when 'price_range' -%}
+                  {%- if filter.min_value.value -%}
+                    <input type="hidden" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value }}">
+                  {%- endif -%}
+                  {%- if filter.max_value.value -%}
+                    <input type="hidden" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value }}">
+                  {%- endif -%}
+                {%- endcase -%}
+              {%- endfor -%}
+              <select class="pc-coll-grid__sort" name="sort_by" onchange="this.form.submit()">
+                {%- for option in collection.sort_options -%}
+                  <option value="{{ option.value }}" {% if collection.sort_by == option.value %}selected{% endif %}>{{ option.name }}</option>
+                {%- endfor -%}
+              </select>
+            </form>
+          {%- endif -%}
+        </div>
+        <div class="pc-coll-grid__products">
+          {%- for p in collection.products -%}
+            {% render 'product-card', product: p %}
+          {%- else -%}
+            <div class="pc-coll-grid__empty">
+              {{ section.settings.empty_text | default: 'No postcards match these filters.' }}
+              {%- if collection.url -%}
+                <a class="tlink" href="{{ collection.url }}">{{ section.settings.empty_clear_text | default: 'Clear filters →' }}</a>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+        {%- if paginate.pages > 1 -%}
+          <div class="pc-coll-grid__pagination">
+            {{ paginate | default_pagination }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection · Grid",
+  "tag": "section",
+  "settings": [
+    { "type": "paragraph", "content": "Uses Shopify storefront filters configured under Settings → Search & discovery → Filters. Filters and sort apply via GET form submit (no JS required, but onchange auto-submits when JS is available)." },
+    { "type": "checkbox", "id": "show_filters", "label": "Show filters sidebar", "default": true },
+    { "type": "checkbox", "id": "show_sort", "label": "Show sort dropdown", "default": true },
+    { "type": "range", "id": "products_per_page", "label": "Products per page", "min": 6, "max": 36, "step": 2, "default": 16 },
+    { "type": "text", "id": "count_text", "label": "Count text", "default": "Showing [count] postcards", "info": "[count] is replaced with the filtered total." },
+    { "type": "text", "id": "clear_text", "label": "Clear filters text", "default": "Clear filters" },
+    { "type": "text", "id": "empty_text", "label": "Empty-state text", "default": "No postcards match these filters." },
+    { "type": "text", "id": "empty_clear_text", "label": "Empty-state clear link", "default": "Clear filters →" }
+  ],
+  "presets": [{ "name": "Collection · Grid" }]
+}
+{% endschema %}

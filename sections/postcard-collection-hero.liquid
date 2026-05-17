@@ -1,0 +1,43 @@
+{%- liquid
+  assign eyebrow_meta = collection.metafields.custom.tagline
+  assign eyebrow = eyebrow_meta | default: section.settings.eyebrow
+  assign headline_meta = collection.metafields.custom.headline
+  assign headline = headline_meta | default: section.settings.title_override | default: collection.title
+  assign body_default = section.settings.body
+  if collection.description != blank
+    assign body = collection.description | strip_html | truncatewords: 35
+  else
+    assign body = body_default
+  endif
+-%}
+<section class="pc-coll-hero">
+  <div class="pc-breadcrumb">
+    <div class="container pc-breadcrumb__inner">{{ section.settings.breadcrumb_prefix | default: 'Home / Shop' }} / <span class="pc-breadcrumb__current">{{ collection.title }}</span></div>
+  </div>
+  <div class="container">
+    {%- if eyebrow != blank -%}
+      <div class="eyebrow">{{ eyebrow }}</div>
+    {%- endif -%}
+    {%- if headline != blank -%}
+      <h1 class="h-display pc-coll-hero__title">{{ headline }}</h1>
+    {%- endif -%}
+    {%- if body != blank -%}
+      <p class="pc-coll-hero__body">{{ body }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection · Hero",
+  "tag": "section",
+  "settings": [
+    { "type": "paragraph", "content": "Title pulls collection.metafields.custom.headline → section override → collection.title. Eyebrow pulls collection.metafields.custom.tagline → section value. Body pulls collection.description (truncated) → section value." },
+    { "type": "text", "id": "breadcrumb_prefix", "label": "Breadcrumb prefix", "default": "Home / Shop" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow (fallback)", "default": "For your room. Your skin. Your linens." },
+    { "type": "text", "id": "title_override", "label": "Title override", "info": "Used only when no collection.metafields.custom.headline is set. Otherwise the section uses collection.title." },
+    { "type": "textarea", "id": "body", "label": "Body (fallback)", "default": "The hero category — 14% of everything we sell. 22 worlds, one spritz at a time." }
+  ],
+  "presets": [{ "name": "Collection · Hero" }]
+}
+{% endschema %}
