@@ -218,19 +218,19 @@
 {%- when 'tags_band' -%}
   {%- liquid
     assign has_refill = false
-    if product.tags contains 'Refillable' or product.tags contains 'refillable' or product.tags contains 'Refill'
+    if product.metafields.custom.refillable.value == true or product.tags contains 'Refillable' or product.tags contains 'refillable' or product.tags contains 'Refill'
       assign has_refill = true
     endif
     assign has_sub = false
-    if product.selling_plan_groups.size > 0
+    if product.metafields.custom.subscribable.value == true or product.selling_plan_groups.size > 0 or product.tags contains 'Subscribable' or product.tags contains 'subscribable'
       assign has_sub = true
     endif
     assign has_vegan = false
-    if product.tags contains 'Vegan' or product.tags contains 'vegan'
+    if product.metafields.custom.vegan.value == true or product.tags contains 'Vegan' or product.tags contains 'vegan'
       assign has_vegan = true
     endif
     assign has_clean = false
-    if product.tags contains 'Sulphate-free' or product.tags contains 'sulphate-free' or product.tags contains 'Clean'
+    if product.metafields.custom.clean.value == true or product.tags contains 'Sulphate-free' or product.tags contains 'sulphate-free' or product.tags contains 'Clean'
       assign has_clean = true
     endif
   -%}
