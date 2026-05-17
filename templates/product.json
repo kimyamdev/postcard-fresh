@@ -3,108 +3,56 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "vendor": {
-          "type": "text",
+        "world_chip": {
+          "type": "custom_liquid",
           "settings": {
-            "text": "{{ product.vendor }}",
-            "text_style": "uppercase"
+            "custom_liquid": "{%- liquid\n  assign w = product.metafields.postcard.world.value | default: product.metafields.custom.world.value\n-%}\n{%- if w -%}\n  <div class=\"pc-pdp-chip-line\">\n    <span class=\"pc-pdp-chip\" style=\"background: {{ w.accent_color.value | default: '#E8C36A' }};\"></span>\n    <span class=\"pc-pdp-chip-name\">{{ w.name.value | upcase }}{% if product.type != blank %} &middot; {{ product.type | upcase }}{% endif %}</span>\n  </div>\n{%- endif -%}"
           }
         },
-        "title": {
-          "type": "title"
-        },
-        "caption": {
-          "type": "text",
+        "title": { "type": "title", "settings": {} },
+        "tags_band": {
+          "type": "custom_liquid",
           "settings": {
-            "text": "{{ product.metafields.descriptors.subtitle.value }}",
-            "text_style": "subtitle"
+            "custom_liquid": "{%- liquid\n  assign has_refill = false\n  if product.tags contains 'Refillable' or product.tags contains 'refillable' or product.tags contains 'Refill'\n    assign has_refill = true\n  endif\n  assign has_sub = false\n  if product.selling_plan_groups.size > 0\n    assign has_sub = true\n  endif\n  assign has_vegan = false\n  if product.tags contains 'Vegan' or product.tags contains 'vegan'\n    assign has_vegan = true\n  endif\n  assign has_clean = false\n  if product.tags contains 'Sulphate-free' or product.tags contains 'sulphate-free' or product.tags contains 'Clean'\n    assign has_clean = true\n  endif\n-%}\n{%- if has_refill or has_sub or has_vegan or has_clean -%}\n<div class=\"pc-pdp-tags\">\n  {% if has_refill %}<span class=\"pc-pdp-tag pc-pdp-tag--refill\">Refillable</span>{% endif %}\n  {% if has_sub %}<span class=\"pc-pdp-tag pc-pdp-tag--sub\">Subscribable</span>{% endif %}\n  {% if has_vegan %}<span class=\"pc-pdp-tag\">Vegan</span>{% endif %}\n  {% if has_clean %}<span class=\"pc-pdp-tag\">Clean</span>{% endif %}\n</div>\n{%- endif -%}"
           }
         },
-        "price": {
-          "type": "price"
-        },
-        "variant_picker": {
-          "type": "variant_picker",
+        "price": { "type": "price", "settings": {} },
+        "variant_picker": { "type": "variant_picker", "settings": { "picker_type": "button" } },
+        "quantity_selector": { "type": "quantity_selector", "settings": {} },
+        "buy_buttons": { "type": "buy_buttons", "settings": { "show_dynamic_checkout": true, "show_gift_card_recipient": false } },
+        "description": { "type": "description", "settings": {} },
+        "ingredients_block": {
+          "type": "custom_liquid",
           "settings": {
-            "picker_type": "button"
+            "custom_liquid": "{%- assign ing = product.metafields.custom.ingredients -%}\n{%- if ing != blank -%}\n<details class=\"pc-pdp-collapse\">\n  <summary class=\"pc-pdp-collapse__summary\">Ingredients</summary>\n  <div class=\"pc-pdp-collapse__body rte\">{{ ing | metafield_tag }}</div>\n</details>\n{%- endif -%}"
           }
         },
-        "quantity_selector": {
-          "type": "quantity_selector"
-        },
-        "buy_buttons": {
-          "type": "buy_buttons",
+        "benefits_block": {
+          "type": "custom_liquid",
           "settings": {
-            "show_dynamic_checkout": true,
-            "show_gift_card_recipient": true
+            "custom_liquid": "{%- assign ben = product.metafields.custom.benefits -%}\n{%- if ben != blank -%}\n<details class=\"pc-pdp-collapse\">\n  <summary class=\"pc-pdp-collapse__summary\">Benefits</summary>\n  <div class=\"pc-pdp-collapse__body rte\">{{ ben | metafield_tag }}</div>\n</details>\n{%- endif -%}"
           }
         },
-        "description": {
-          "type": "description"
-        },
-        "collapsible-row-0": {
-          "type": "collapsible_tab",
-          "settings": {
-            "heading": "Materials",
-            "icon": "leather",
-            "content": "",
-            "page": ""
-          }
-        },
-        "collapsible-row-1": {
-          "type": "collapsible_tab",
-          "settings": {
-            "heading": "Shipping & Returns",
-            "icon": "truck",
-            "content": "",
-            "page": ""
-          }
-        },
-        "collapsible-row-2": {
-          "type": "collapsible_tab",
-          "settings": {
-            "heading": "Dimensions",
-            "icon": "ruler",
-            "content": "",
-            "page": ""
-          }
-        },
-        "collapsible-row-3": {
-          "type": "collapsible_tab",
-          "settings": {
-            "heading": "Care Instructions",
-            "icon": "heart",
-            "content": "",
-            "page": ""
-          }
-        },
-        "share": {
-          "type": "share",
-          "settings": {
-            "share_label": "Share"
-          }
-        }
+        "share": { "type": "share", "settings": { "share_label": "Share" } }
       },
       "block_order": [
-        "vendor",
+        "world_chip",
         "title",
-        "caption",
+        "tags_band",
         "price",
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
         "description",
-        "collapsible-row-0",
-        "collapsible-row-1",
-        "collapsible-row-2",
-        "collapsible-row-3",
+        "ingredients_block",
+        "benefits_block",
         "share"
       ],
       "settings": {
         "enable_sticky_info": true,
-        "gallery_layout": "stacked",
         "media_size": "large",
         "constrain_to_viewport": true,
+        "gallery_layout": "stacked",
         "mobile_thumbnails": "hide",
         "hide_variants": true,
         "enable_video_looping": false,
@@ -112,105 +60,20 @@
         "padding_bottom": 12
       }
     },
-    "image-with-text": {
-      "type": "image-with-text",
-      "blocks": {
-        "image-with-text-0": {
-          "type": "heading",
-          "settings": {
-            "heading": "Image with text",
-            "heading_size": "h1"
-          }
-        },
-        "image-with-text-1": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
-            "text_style": "body"
-          }
-        }
-      },
-      "block_order": [
-        "image-with-text-0",
-        "image-with-text-1"
-      ],
-      "settings": {
-        "height": "small",
-        "desktop_image_width": "medium",
-        "layout": "text_first",
-        "desktop_content_position": "top",
-        "desktop_content_alignment": "left",
-        "content_layout": "no-overlap",
-        "color_scheme": "scheme-2",
-        "mobile_content_alignment": "left",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
+    "pairs_with": {
+      "type": "postcard-pdp-pairs-with",
+      "settings": {},
+      "blocks": {},
+      "block_order": []
     },
-    "multicolumn": {
-      "type": "multicolumn",
-      "blocks": {
-        "column-0": {
-          "type": "column",
-          "settings": {
-            "title": "Free Shipping",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column-1": {
-          "type": "column",
-          "settings": {
-            "title": "Hassle-Free Exchanges",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
-            "link_label": "",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "column-0",
-        "column-1"
-      ],
-      "settings": {
-        "title": "",
-        "heading_size": "h1",
-        "image_width": "full",
-        "image_ratio": "adapt",
-        "columns_desktop": 2,
-        "column_alignment": "left",
-        "background_style": "none",
-        "button_label": "",
-        "button_link": "",
-        "swipe_on_mobile": false,
-        "color_scheme": "scheme-1",
-        "columns_mobile": "1",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "related-products": {
-      "type": "related-products",
-      "settings": {
-        "heading": "You may also like",
-        "heading_size": "h2",
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
-        "image_ratio": "square",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "columns_mobile": "2",
-        "padding_top": 36,
-        "padding_bottom": 28
-      }
+    "reviews": {
+      "type": "postcard-pdp-reviews-section",
+      "settings": {}
     }
   },
   "order": [
     "main",
-    "image-with-text",
-    "multicolumn",
-    "related-products"
+    "pairs_with",
+    "reviews"
   ]
 }

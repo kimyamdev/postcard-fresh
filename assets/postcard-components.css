@@ -549,6 +549,30 @@ a.pc-product-card { cursor: pointer; }
 /* "Other postcards from <world>" grid: same treatment + drop stamp shadow */
 .pc-pw__grid .pc-product-card__chip { display: none; }
 .pc-pw__grid .pc-product-card__world-stamp-img { filter: none; }
+/* PDP default-template extras: world chip line + auto tags + collapsible sections */
+.pc-pdp-chip-line { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 6px; }
+.pc-pdp-chip { display: inline-block; width: 14px; height: 14px; border: 1.5px solid var(--color-ink); }
+.pc-pdp-chip-name { font-family: var(--font-display); font-size: 12px; letter-spacing: 0.14em; opacity: 0.85; }
+.pc-pdp-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 4px; }
+.pc-pdp-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--color-yellow);
+  border: 1.5px solid var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.pc-pdp-tag--sub { background: var(--color-bg-warm, #f6efdf); }
+.pc-pdp-tag--refill { background: var(--color-yellow); }
+.pc-pdp-collapse { border-top: 1px solid var(--color-line, rgba(33, 32, 32, 0.18)); padding: 16px 0; }
+.pc-pdp-collapse:last-of-type { border-bottom: 1px solid var(--color-line, rgba(33, 32, 32, 0.18)); }
+.pc-pdp-collapse__summary { cursor: pointer; font-family: var(--font-display); font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; list-style: none; position: relative; padding-right: 24px; }
+.pc-pdp-collapse__summary::-webkit-details-marker { display: none; }
+.pc-pdp-collapse__summary::after { content: '+'; position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 18px; }
+.pc-pdp-collapse[open] .pc-pdp-collapse__summary::after { content: '–'; }
+.pc-pdp-collapse__body { margin-top: 10px; font-size: 14px; line-height: 1.55; opacity: 0.9; }
 /* Collection page grids (top crowd-pleasers + main filterable grid): hide chip, drop stamp shadow */
 .pc-coll-top__grid .pc-product-card__chip,
 .pc-coll-grid__products .pc-product-card__chip,
