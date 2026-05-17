@@ -1,6 +1,9 @@
 {%- liquid
   assign worlds = shop.metaobjects.world.values
-  assign show_family = section.settings.show_family
+  assign show_name = section.settings.show_name
+  if show_name == nil
+    assign show_name = true
+  endif
   assign max_count = section.settings.max_count | default: 0
   assign world_total = 0
   for w in worlds
@@ -22,20 +25,19 @@
         {%- if max_count > 0 and emitted >= max_count -%}{%- break -%}{%- endif -%}
         {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
         {%- assign w_family = w.family.value -%}
+        {%- assign w_name = w.name.value -%}
         {%- assign w_stamp_img = w.world_stamp.value -%}
         <div class="pc-about-worlds__cell">
           {%- if w_stamp_img != blank -%}
-            {%- assign stamp_alt = w.name.value | append: ' stamp' | escape -%}
+            {%- assign stamp_alt = w_name | append: ' stamp' | escape -%}
             <div class="pc-about-worlds__stamp">
               {{ w_stamp_img | image_url: width: 240 | image_tag: alt: stamp_alt, loading: 'lazy', class: 'pc-about-worlds__stamp-img', widths: '120,180,240,360' }}
             </div>
-            {%- if show_family and w_family != blank -%}
-              <div class="pc-about-worlds__family">{{ w_family }}</div>
+            {%- if show_name -%}
+              <div class="pc-about-worlds__name">{{ w_name }}</div>
             {%- endif -%}
-          {%- elsif show_family and w_family != blank -%}
-            {% render 'stamp', name: w.name.value, family: w_family, color: w_color, size: 'sm' %}
           {%- else -%}
-            {% render 'stamp', name: w.name.value, color: w_color, size: 'sm' %}
+            {% render 'stamp', name: w_name, color: w_color, size: 'sm' %}
           {%- endif -%}
         </div>
         {%- assign emitted = emitted | plus: 1 -%}
@@ -51,7 +53,7 @@
   "settings": [
     { "type": "paragraph", "content": "Shows every World metaobject with tier = 'World', in admin order." },
     { "type": "text", "id": "title", "label": "Title", "default": "[count] worlds. One bathroom shelf at a time.", "info": "[count] is replaced with the live count of tier-World metaobjects." },
-    { "type": "checkbox", "id": "show_family", "label": "Show family label under each stamp", "default": true },
+    { "type": "checkbox", "id": "show_name", "label": "Show world name under each stamp", "default": true },
     { "type": "range", "id": "max_count", "label": "Max worlds to show", "min": 0, "max": 50, "step": 1, "default": 0, "info": "0 = show all tier-World worlds." }
   ],
   "presets": [{ "name": "About · Worlds index" }]
