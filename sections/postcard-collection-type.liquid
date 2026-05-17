@@ -22,7 +22,7 @@
         <h2 class="h-display pc-coll-top__title">The crowd-pleasers.</h2>
         <div class="pc-coll-top__grid">
           {%- for p in collection.products limit: 3 -%}
-            {% render 'product-card', product: p, badge: 'Top' | append: ' ' | append: forloop.index %}
+            {% render 'product-card', product: p %}
           {%- endfor -%}
         </div>
       </div>
