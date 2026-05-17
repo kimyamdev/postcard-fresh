@@ -245,19 +245,31 @@
 
 {%- when 'ingredients' -%}
   {%- assign ing = product.metafields.custom.ingredients -%}
+  {%- assign ing_html = '' -%}
   {%- if ing != blank -%}
+    {%- capture ing_html -%}{{ ing | metafield_tag }}{%- endcapture -%}
+  {%- elsif block.settings.fallback_content != blank -%}
+    {%- assign ing_html = block.settings.fallback_content -%}
+  {%- endif -%}
+  {%- if ing_html != blank -%}
     <details class="pc-pdp-collapse"{% if block.settings.open_by_default %} open{% endif %}>
       <summary class="pc-pdp-collapse__summary">{{ block.settings.heading | default: 'Ingredients' }}</summary>
-      <div class="pc-pdp-collapse__body rte">{{ ing | metafield_tag }}</div>
+      <div class="pc-pdp-collapse__body rte">{{ ing_html }}</div>
     </details>
   {%- endif -%}
 
 {%- when 'benefits' -%}
   {%- assign ben = product.metafields.custom.benefits -%}
+  {%- assign ben_html = '' -%}
   {%- if ben != blank -%}
+    {%- capture ben_html -%}{{ ben | metafield_tag }}{%- endcapture -%}
+  {%- elsif block.settings.fallback_content != blank -%}
+    {%- assign ben_html = block.settings.fallback_content -%}
+  {%- endif -%}
+  {%- if ben_html != blank -%}
     <details class="pc-pdp-collapse"{% if block.settings.open_by_default %} open{% endif %}>
       <summary class="pc-pdp-collapse__summary">{{ block.settings.heading | default: 'Benefits' }}</summary>
-      <div class="pc-pdp-collapse__body rte">{{ ben | metafield_tag }}</div>
+      <div class="pc-pdp-collapse__body rte">{{ ben_html }}</div>
     </details>
   {%- endif -%}
 
