@@ -2,6 +2,13 @@
   assign label = section.settings.label | default: 'Dispatches · Field notes from the pit'
   assign heading = section.settings.heading | default: 'Mail from our pen-pals.'
   assign bg_color = section.settings.bg_color
+  assign world_tint_alpha = section.settings.world_tint_alpha | default: 0
+  assign world = product.metafields.postcard.world.value | default: product.metafields.custom.world.value
+  assign world_accent = world.accent_color.value
+  assign computed_bg = bg_color
+  if world_tint_alpha > 0 and world_accent != blank
+    assign computed_bg = 'color-mix(in srgb, ' | append: world_accent | append: ' ' | append: world_tint_alpha | append: '%, transparent)'
+  endif
   assign sp_count = product.metafields.stamped.reviews_count.value | plus: 0
 -%}
 
@@ -11,7 +18,7 @@
   #pc-stamped-{{ section.id }} {
     padding: 96px 48px;
     border-top: 1px solid var(--color-ink);
-    background: {% if bg_color != blank %}{{ bg_color }}{% else %}var(--color-bg-warm){% endif %};
+    background: {% if computed_bg != blank %}{{ computed_bg }}{% else %}var(--color-bg-warm){% endif %};
     overflow: visible;
   }
   #pc-stamped-{{ section.id }} .pc-stamped-inner {
@@ -427,7 +434,8 @@
   "settings": [
     { "type": "text",  "id": "label",    "label": "Eyebrow label", "default": "Dispatches · Field notes from the pit" },
     { "type": "text",  "id": "heading",  "label": "Heading",       "default": "Mail from our pen-pals." },
-    { "type": "color", "id": "bg_color", "label": "Background",    "default": "#fdecea" }
+    { "type": "color", "id": "bg_color", "label": "Background",    "default": "#fdecea" },
+    { "type": "range", "id": "world_tint_alpha", "label": "World tint (%)", "min": 0, "max": 30, "step": 2, "default": 10, "unit": "%", "info": "When > 0 and the product is linked to a World metaobject, the section background uses that world's accent color at this alpha instead of the fixed Background above. 0 keeps the fixed color." }
   ],
   "presets": [{ "name": "PDP Reviews" }]
 }
