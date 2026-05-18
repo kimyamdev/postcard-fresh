@@ -1494,10 +1494,6 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   overflow: hidden;
   flex-shrink: 0;
 }
-/* Default PDP: cap the gallery column width so the main image doesn't dominate when the buy block is short. */
-.pc-pdp-default-wrap .pc-pdp-main__inner {
-  grid-template-columns: minmax(0, 560px) 1fr;
-}
 .pc-pdp-gallery__thumb-img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .pc-pdp-gallery__main {
   aspect-ratio: 1/1;
