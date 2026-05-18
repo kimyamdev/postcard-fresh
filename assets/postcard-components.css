@@ -1078,7 +1078,7 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 .pc-pdp-buy__chip { width: 28px; height: 36px; border: 1.5px solid var(--color-ink); display: inline-block; }
 .pc-pdp-buy__title { font-size: 40px; margin-top: 4px; }
 .pc-pdp-buy__sub { margin-top: 12px; font-size: 16px; opacity: 0.85; line-height: 1.6; }
-.pc-pdp-buy__form { margin-top: 24px; display: flex; flex-direction: column; gap: 18px; }
+.pc-pdp-buy__form { margin-top: 0; display: flex; flex-direction: column; gap: 18px; }
 .pc-pdp-buy__option { display: flex; flex-direction: column; gap: 8px; }
 .pc-pdp-buy__option-label { letter-spacing: 0.16em; }
 .pc-pdp-buy__option-values { display: flex; flex-wrap: wrap; gap: 8px; }
