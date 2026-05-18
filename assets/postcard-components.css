@@ -1686,8 +1686,31 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 
 @media (max-width: 800px) {
   .pc-pdp-buy { position: static; }
-  .pc-pdp-gallery__layout { grid-template-columns: 1fr; }
-  .pc-pdp-gallery__thumbs { flex-direction: row; overflow-x: auto; }
+  .pc-pdp-gallery__layout {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .pc-pdp-gallery__main {
+    order: 1;
+    width: 100%;
+    aspect-ratio: 1/1;
+  }
+  .pc-pdp-gallery__thumbs {
+    order: 2;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-height: none;
+    height: auto;
+    width: 100%;
+    align-self: stretch;
+    padding: 0 0 4px 0;
+  }
+  .pc-pdp-gallery__thumb {
+    width: 64px;
+    height: 64px;
+    flex: 0 0 64px;
+  }
   .pc-pdp-buy__cadence { padding-left: 20px; }
 }
 
