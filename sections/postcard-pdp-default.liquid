@@ -4,10 +4,16 @@
     assign world_color = world.accent_color.value
     assign world_theme_class = world.theme_class.value
     assign world_name = world.name.value
+    assign world_linked = true
   endif
   assign world_color = world_color | default: '#E8C36A'
   assign world_theme_class = world_theme_class | default: ''
   assign world_name = world_name | default: ''
+  assign bg_alpha = section.settings.bg_alpha | default: 10
+  assign tint_style = ''
+  if world_linked and bg_alpha > 0
+    assign tint_style = 'background: color-mix(in srgb, ' | append: world_color | append: ' ' | append: bg_alpha | append: '%, transparent);'
+  endif
 
   assign ribbon_subline = product.metafields.custom.ribbon_subline | default: product.type
   assign stamp_text = product.metafields.custom.stamp_text | default: section.settings.stamp_text_fallback
@@ -27,7 +33,7 @@
   endif
 -%}
 
-<div class="{{ world_theme_class }}" style="--world-color: {{ world_color }};">
+<div class="{{ world_theme_class }} pc-pdp-default-wrap" style="--world-color: {{ world_color }}; {{ tint_style }}">
 
   <div class="pc-breadcrumb">
     <div class="container pc-breadcrumb__inner">
@@ -69,7 +75,8 @@
   "name": "Default PDP",
   "settings": [
     { "type": "paragraph", "content": "Pulls everything possible from the product + linked World metaobject. Use product.metafields.custom.ribbon_subline to override the eyebrow per-product (defaults to product.type); product.metafields.custom.stamp_text to override the corner stamp text; product.metafields.custom.ingredients and product.metafields.custom.benefits (richtext) for the collapsible sections." },
-    { "type": "text", "id": "stamp_text_fallback", "label": "Stamp text (fallback)", "default": "POSTCARD<br>· SG ·" }
+    { "type": "text", "id": "stamp_text_fallback", "label": "Stamp text (fallback)", "default": "POSTCARD<br>· SG ·" },
+    { "type": "range", "id": "bg_alpha", "label": "World tint background (%)", "min": 0, "max": 30, "step": 2, "default": 10, "unit": "%", "info": "Applies the linked world's accent color as a subtle PDP background tint. 0 disables. Has no effect when no world is linked to the product." }
   ],
   "blocks": [
     { "type": "ribbon", "name": "Eyebrow ribbon", "limit": 1, "settings": [
