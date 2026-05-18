@@ -38,7 +38,7 @@
         cadence: "{{ default_plan_id }}",
         subOpen: false,
         prices: { {%- for v in product.variants -%}"{{ v.id }}": "{{ v.price | money }}"{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%} }
-      }'>
+      }' x-init="$watch('variantId', value => window.dispatchEvent(new CustomEvent('variant-change', { detail: { variantId: value } })))">
         <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data" class="pc-pdp-buy__form">
           <input type="hidden" name="form_type" value="product">
           <input type="hidden" name="utf8" value="&#x2713;">
