@@ -1499,7 +1499,11 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   aspect-ratio: 1/1;
   position: relative;
   overflow: hidden;
+  min-width: 0;
 }
+.pc-pdp-gallery { min-width: 0; }
+.pc-pdp-gallery__img { min-width: 0; }
+.pc-pdp-main__inner > * { min-width: 0; }
 .pc-pdp-gallery__pm-overlay {
   position: absolute;
   top: 24px;
