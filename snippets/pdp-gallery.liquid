@@ -24,12 +24,13 @@
         {%- unless vm_first -%},{%- endunless -%}"{{ v.id }}": {{ idx }}{%- assign vm_first = false -%}
       {%- endif -%}
     {%- endfor -%}
+  },
+  syncVariant(id) {
+    var i = this.variantMedia[id];
+    if (i !== undefined && i >= 0 && i < this.media.length) this.currentIndex = i;
   }
 }'
-@variant-change.window="
-  var i = variantMedia[$event.detail.variantId];
-  if (i !== undefined && i >= 0 && i < media.length) currentIndex = i;
-">
+@variant-change.window="syncVariant($event.detail.variantId)">
   <div class="pc-pdp-gallery__layout">
     <div class="pc-pdp-gallery__thumbs">
       {%- for m in product.media limit: 15 -%}
