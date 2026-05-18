@@ -15,8 +15,21 @@
     {%- for m in product.media limit: 5 -%}
       { src: {{ m | image_url: width: 1200 | json }}, alt: {{ m.alt | default: product.title | json }} }{%- unless forloop.last -%},{%- endunless -%}
     {%- endfor -%}
-  ]
-}'>
+  ],
+  variantMedia: {
+    {%- assign vm_first = true -%}
+    {%- for v in product.variants -%}
+      {%- if v.featured_media and v.featured_media.position <= 5 -%}
+        {%- assign idx = v.featured_media.position | minus: 1 -%}
+        {%- unless vm_first -%},{%- endunless -%}"{{ v.id }}": {{ idx }}{%- assign vm_first = false -%}
+      {%- endif -%}
+    {%- endfor -%}
+  }
+}'
+@variant-change.window="
+  var i = variantMedia[$event.detail.variantId];
+  if (i !== undefined && i >= 0 && i < media.length) currentIndex = i;
+">
   <div class="pc-pdp-gallery__layout">
     <div class="pc-pdp-gallery__thumbs">
       {%- for i in (1..5) -%}
