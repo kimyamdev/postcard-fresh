@@ -1470,10 +1470,12 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   display: grid;
   grid-template-columns: 88px 1fr;
   gap: 14px;
+  align-items: start;
 }
 .pc-pdp-gallery__thumbs {
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   gap: 10px;
   max-height: 600px;
   overflow-y: auto;
@@ -1481,6 +1483,7 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   scrollbar-width: thin;
   scrollbar-color: rgba(33, 32, 32, 0.35) transparent;
   padding-right: 4px;
+  align-self: start;
 }
 .pc-pdp-gallery__thumbs::-webkit-scrollbar { width: 4px; }
 .pc-pdp-gallery__thumbs::-webkit-scrollbar-thumb { background: rgba(33, 32, 32, 0.35); border-radius: 2px; }
