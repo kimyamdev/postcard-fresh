@@ -12,14 +12,14 @@
 <div class="pc-pdp-gallery" x-data='{
   currentIndex: 0,
   media: [
-    {%- for m in product.media limit: 5 -%}
+    {%- for m in product.media limit: 15 -%}
       { src: {{ m | image_url: width: 1200 | json }}, alt: {{ m.alt | default: product.title | json }} }{%- unless forloop.last -%},{%- endunless -%}
     {%- endfor -%}
   ],
   variantMedia: {
     {%- assign vm_first = true -%}
     {%- for v in product.variants -%}
-      {%- if v.featured_media and v.featured_media.position <= 5 -%}
+      {%- if v.featured_media and v.featured_media.position <= 15 -%}
         {%- assign idx = v.featured_media.position | minus: 1 -%}
         {%- unless vm_first -%},{%- endunless -%}"{{ v.id }}": {{ idx }}{%- assign vm_first = false -%}
       {%- endif -%}
@@ -32,24 +32,17 @@
 ">
   <div class="pc-pdp-gallery__layout">
     <div class="pc-pdp-gallery__thumbs">
-      {%- for i in (1..5) -%}
-        {%- assign media_idx = i | minus: 1 -%}
-        {%- assign m = product.media[media_idx] -%}
-        {%- if m -%}
-          <button type="button"
-            class="ph ph--world pc-pdp-gallery__thumb pc-pdp-gallery__thumb--btn"
-            style="--world-color: {{ world_color }};"
-            @click.prevent="currentIndex = {{ media_idx }}"
-            :class="{ 'pc-pdp-gallery__thumb--active': currentIndex === {{ media_idx }} }"
-            :aria-current="currentIndex === {{ media_idx }} ? 'true' : 'false'"
-            aria-label="View image {{ i }}">
-            {{ m | image_url: width: 200 | image_tag: alt: '', class: 'pc-pdp-gallery__thumb-img' }}
-          </button>
-        {%- else -%}
-          <div class="ph ph--world pc-pdp-gallery__thumb pc-pdp-gallery__thumb--empty" style="--world-color: {{ world_color }};">
-            <span>img {{ i }}</span>
-          </div>
-        {%- endif -%}
+      {%- for m in product.media limit: 15 -%}
+        {%- assign media_idx = forloop.index0 -%}
+        <button type="button"
+          class="ph ph--world pc-pdp-gallery__thumb pc-pdp-gallery__thumb--btn"
+          style="--world-color: {{ world_color }};"
+          @click.prevent="currentIndex = {{ media_idx }}"
+          :class="{ 'pc-pdp-gallery__thumb--active': currentIndex === {{ media_idx }} }"
+          :aria-current="currentIndex === {{ media_idx }} ? 'true' : 'false'"
+          aria-label="View image {{ forloop.index }}">
+          {{ m | image_url: width: 200 | image_tag: alt: '', class: 'pc-pdp-gallery__thumb-img' }}
+        </button>
       {%- endfor -%}
     </div>
     <div class="ph ph--world pc-pdp-gallery__main" style="--world-color: {{ world_color }};">
