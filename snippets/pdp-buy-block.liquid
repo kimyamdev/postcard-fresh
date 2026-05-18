@@ -21,12 +21,15 @@
 {%- case block.type -%}
 
 {%- when 'ribbon' -%}
-  {%- assign mf_ribbon = product.metafields.pdp.ribbon_subline.value -%}
-  {%- assign subline = block.settings.subline_override | default: mf_ribbon | default: ribbon_subline -%}
-  <div class="pc-pdp-buy__ribbon" {{ block.shopify_attributes }}>
-    <span class="pc-pdp-buy__chip" style="background: {{ world_color }};"></span>
-    <span class="eyebrow">{{ world_name }} &middot; {{ subline }}</span>
-  </div>
+  {%- assign world_linked = product.metafields.postcard.world.value | default: product.metafields.custom.world.value -%}
+  {%- if world_linked and world_name != blank -%}
+    {%- assign mf_ribbon = product.metafields.pdp.ribbon_subline.value -%}
+    {%- assign subline = block.settings.subline_override | default: mf_ribbon | default: ribbon_subline -%}
+    <div class="pc-pdp-buy__ribbon" {{ block.shopify_attributes }}>
+      <span class="pc-pdp-buy__chip" style="background: {{ world_color }};"></span>
+      <span class="eyebrow">{{ world_name }} &middot; {{ subline }}</span>
+    </div>
+  {%- endif -%}
 
 {%- when 'title' -%}
   <h1 class="h-typewriter pc-pdp-buy__title" {{ block.shopify_attributes }}>{{ product.title }}</h1>
