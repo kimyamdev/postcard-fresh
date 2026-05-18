@@ -1502,6 +1502,7 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   position: relative;
   overflow: hidden;
   border: 0 !important;
+  padding: 0 !important;
 }
 .pc-pdp-gallery .ph { border: 0 !important; }
 .pc-pdp-gallery__pm-overlay {
