@@ -100,26 +100,23 @@
       { "type": "number", "id": "word_limit", "label": "Word limit", "default": 30 }
     ] },
     { "type": "ingredients", "name": "Ingredients (metafield)", "limit": 1, "settings": [
-      { "type": "paragraph", "content": "First tries product.metafields.custom.ingredients (richtext, per-product). Falls back to the editor content below when blank. Hides entirely if both are empty." },
+      { "type": "paragraph", "content": "Renders only when product.metafields.custom.ingredients (richtext) is set. Hidden entirely otherwise." },
       { "type": "text", "id": "heading", "label": "Heading", "default": "Ingredients" },
-      { "type": "richtext", "id": "fallback_content", "label": "Fallback content (used when product metafield is blank)", "default": "<p>Plant-derived surfactants, food-grade fragrance accord, no sulphates, no silicones, no PEGs. Full INCI list available on request — set product.metafields.custom.ingredients to override.</p>" },
       { "type": "checkbox", "id": "open_by_default", "label": "Open by default", "default": false }
     ] },
     { "type": "benefits", "name": "Benefits (metafield)", "limit": 1, "settings": [
-      { "type": "paragraph", "content": "First tries product.metafields.custom.benefits (richtext, per-product). Falls back to the editor content below when blank. Hides entirely if both are empty." },
+      { "type": "paragraph", "content": "Renders only when product.metafields.custom.benefits (richtext) is set. Hidden entirely otherwise." },
       { "type": "text", "id": "heading", "label": "Heading", "default": "Benefits" },
-      { "type": "richtext", "id": "fallback_content", "label": "Fallback content (used when product metafield is blank)", "default": "<p>Made in Singapore, refillable bottle, vegan and cruelty-free. Per-product benefits go in product.metafields.custom.benefits to override this default.</p>" },
       { "type": "checkbox", "id": "open_by_default", "label": "Open by default", "default": false }
     ] },
     { "type": "use_cases", "name": "Use case(s) (metafield)", "limit": 1, "settings": [
-      { "type": "paragraph", "content": "First tries product.metafields.custom.use_cases (richtext, per-product). Falls back to the editor content below when blank. Hides entirely if both are empty." },
+      { "type": "paragraph", "content": "Renders only when product.metafields.custom.use_cases (richtext) is set. Hidden entirely otherwise." },
       { "type": "text", "id": "heading", "label": "Heading", "default": "Use case(s)" },
-      { "type": "richtext", "id": "fallback_content", "label": "Fallback content (used when product metafield is blank)", "default": "<p>Daily use, morning or evening. Pairs with the rest of your Postcard ritual. Per-product use-cases go in product.metafields.custom.use_cases to override this default.</p>" },
       { "type": "checkbox", "id": "open_by_default", "label": "Open by default", "default": false }
     ] },
     { "type": "rating", "name": "Stars + reviews", "limit": 1, "settings": [] },
     { "type": "sizes", "name": "Size variants", "limit": 1, "settings": [
-      { "type": "text", "id": "label", "label": "Label", "default": "Size" },
+      { "type": "text", "id": "label", "label": "Label", "default": "Size", "info": "Leave as \"Size\" to auto-use the product's first option name (e.g. \"Scent\", \"Color\"). Override here to force a custom label." },
       { "type": "text", "id": "demo_sizes", "label": "Demo sizes (CSV, single-variant fallback)", "default": "100ml,30ml,Refill" },
       { "type": "number", "id": "demo_active_index", "label": "Active demo size (1-based)", "default": 1 }
     ] },

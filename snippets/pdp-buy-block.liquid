@@ -64,7 +64,12 @@
 {%- when 'sizes' -%}
   {%- assign demo_sizes_str = block.settings.demo_sizes | default: 'Bottle 300ml,Refill 500ml,Refill 1L' -%}
   {%- assign demo_active_index = block.settings.demo_active_index | default: 2 -%}
-  {%- assign size_label = block.settings.label | default: 'Size' -%}
+  {%- comment -%} Default label to the product's first option name (e.g. "Scent", "Size", "Color") {%- endcomment -%}
+  {%- assign option_label = product.options.first | default: 'Size' -%}
+  {%- assign size_label = block.settings.label -%}
+  {%- if size_label == blank or size_label == 'Size' -%}
+    {%- assign size_label = option_label -%}
+  {%- endif -%}
   <div class="pc-pdp-buy__option" {{ block.shopify_attributes }}>
     <div class="eyebrow pc-pdp-buy__option-label">{{ size_label }}</div>
     <div class="pc-pdp-buy__sizes">
@@ -245,46 +250,28 @@
 
 {%- when 'ingredients' -%}
   {%- assign ing = product.metafields.custom.ingredients -%}
-  {%- assign ing_html = '' -%}
   {%- if ing != blank -%}
-    {%- capture ing_html -%}{{ ing | metafield_tag }}{%- endcapture -%}
-  {%- elsif block.settings.fallback_content != blank -%}
-    {%- assign ing_html = block.settings.fallback_content -%}
-  {%- endif -%}
-  {%- if ing_html != blank -%}
     <details class="pc-pdp-collapse"{% if block.settings.open_by_default %} open{% endif %}>
       <summary class="pc-pdp-collapse__summary">{{ block.settings.heading | default: 'Ingredients' }}</summary>
-      <div class="pc-pdp-collapse__body rte">{{ ing_html }}</div>
+      <div class="pc-pdp-collapse__body rte">{{ ing | metafield_tag }}</div>
     </details>
   {%- endif -%}
 
 {%- when 'benefits' -%}
   {%- assign ben = product.metafields.custom.benefits -%}
-  {%- assign ben_html = '' -%}
   {%- if ben != blank -%}
-    {%- capture ben_html -%}{{ ben | metafield_tag }}{%- endcapture -%}
-  {%- elsif block.settings.fallback_content != blank -%}
-    {%- assign ben_html = block.settings.fallback_content -%}
-  {%- endif -%}
-  {%- if ben_html != blank -%}
     <details class="pc-pdp-collapse"{% if block.settings.open_by_default %} open{% endif %}>
       <summary class="pc-pdp-collapse__summary">{{ block.settings.heading | default: 'Benefits' }}</summary>
-      <div class="pc-pdp-collapse__body rte">{{ ben_html }}</div>
+      <div class="pc-pdp-collapse__body rte">{{ ben | metafield_tag }}</div>
     </details>
   {%- endif -%}
 
 {%- when 'use_cases' -%}
   {%- assign uc = product.metafields.custom.use_cases -%}
-  {%- assign uc_html = '' -%}
   {%- if uc != blank -%}
-    {%- capture uc_html -%}{{ uc | metafield_tag }}{%- endcapture -%}
-  {%- elsif block.settings.fallback_content != blank -%}
-    {%- assign uc_html = block.settings.fallback_content -%}
-  {%- endif -%}
-  {%- if uc_html != blank -%}
     <details class="pc-pdp-collapse"{% if block.settings.open_by_default %} open{% endif %}>
       <summary class="pc-pdp-collapse__summary">{{ block.settings.heading | default: 'Use case(s)' }}</summary>
-      <div class="pc-pdp-collapse__body rte">{{ uc_html }}</div>
+      <div class="pc-pdp-collapse__body rte">{{ uc | metafield_tag }}</div>
     </details>
   {%- endif -%}
 
