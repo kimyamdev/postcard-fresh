@@ -10,9 +10,9 @@
   assign world_theme_class = world_theme_class | default: ''
   assign world_name = world_name | default: ''
   assign bg_alpha = section.settings.bg_alpha | default: 10
-  assign tint_style = ''
+  assign tint_css = ''
   if world_linked and bg_alpha > 0
-    assign tint_style = 'background: color-mix(in srgb, ' | append: world_color | append: ' ' | append: bg_alpha | append: '%, transparent);'
+    assign tint_css = 'color-mix(in srgb, ' | append: world_color | append: ' ' | append: bg_alpha | append: '%, transparent)'
   endif
 
   assign ribbon_subline = product.metafields.custom.ribbon_subline | default: product.type
@@ -33,7 +33,14 @@
   endif
 -%}
 
-<div class="{{ world_theme_class }} pc-pdp-default-wrap" style="--world-color: {{ world_color }}; {{ tint_style }}">
+{%- if tint_css != '' -%}
+  <style>
+    #MainContent { background: {{ tint_css }}; }
+    .pc-pdp-reviews { background: transparent !important; }
+  </style>
+{%- endif -%}
+
+<div class="{{ world_theme_class }} pc-pdp-default-wrap" style="--world-color: {{ world_color }};">
 
   <div class="pc-breadcrumb">
     <div class="container pc-breadcrumb__inner">
@@ -76,7 +83,7 @@
   "settings": [
     { "type": "paragraph", "content": "Pulls everything possible from the product + linked World metaobject. Use product.metafields.custom.ribbon_subline to override the eyebrow per-product (defaults to product.type); product.metafields.custom.stamp_text to override the corner stamp text; product.metafields.custom.ingredients and product.metafields.custom.benefits (richtext) for the collapsible sections." },
     { "type": "text", "id": "stamp_text_fallback", "label": "Stamp text (fallback)", "default": "POSTCARD<br>· SG ·" },
-    { "type": "range", "id": "bg_alpha", "label": "World tint background (%)", "min": 0, "max": 30, "step": 2, "default": 10, "unit": "%", "info": "Applies the linked world's accent color as a subtle PDP background tint. 0 disables. Has no effect when no world is linked to the product." }
+    { "type": "range", "id": "bg_alpha", "label": "World tint background (%)", "min": 0, "max": 30, "step": 2, "default": 10, "unit": "%", "info": "Applies the linked world's accent color as a subtle tint across the whole product page (gallery, buy block, pairs-with, reviews). 0 disables. Has no effect when no world is linked to the product." }
   ],
   "blocks": [
     { "type": "ribbon", "name": "Eyebrow ribbon", "limit": 1, "settings": [
