@@ -1501,6 +1501,7 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   aspect-ratio: 1/1;
   position: relative;
   overflow: hidden;
+  border: 0;
 }
 .pc-pdp-gallery__pm-overlay {
   position: absolute;
