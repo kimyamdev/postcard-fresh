@@ -60,6 +60,7 @@
           "settings": {
             "number": "01",
             "postmark_html": "NO FOMO",
+            "image": "shopify://shop_images/ChatGPT_Image_May_19_2026_02_26_01_PM.png",
             "image_placeholder": "postcard panel 1",
             "heading": "Bring it back.",
             "body": "Empty Postcard bottle. Any size, any world."
@@ -70,6 +71,7 @@
           "settings": {
             "number": "02",
             "postmark_html": "MADE FRESH",
+            "image": "shopify://shop_images/ChatGPT_Image_May_19_2026_02_29_45_PM.png",
             "image_placeholder": "postcard panel 2",
             "heading": "We refill it.",
             "body": "From the beauty kitchen. Same recipe, same scent."
@@ -80,6 +82,7 @@
           "settings": {
             "number": "03",
             "postmark_html": "FOREVER<br>YOURS",
+            "image": "shopify://shop_images/120ce417-7724-4de5-8451-0d7777a7740c.png",
             "image_placeholder": "postcard panel 3",
             "heading": "You go again.",
             "body": "Clean it, label it, take it home."
@@ -291,6 +294,7 @@
         "anchor_id": "refill-stores",
         "title": "Where to refill in Singapore.",
         "flagship_postmark_html": "FLAGSHIP<br>·OPEN·",
+        "flagship_image": "shopify://shop_images/WhatsApp_Image_2026-05-01_at_13.14.54.jpg",
         "flagship_image_placeholder": "Orchard storefront photo",
         "flagship_eyebrow": "Our home",
         "flagship_name": "Postcard Flagship · Orchard",
