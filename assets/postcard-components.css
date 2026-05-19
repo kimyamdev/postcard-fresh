@@ -493,12 +493,12 @@ a.pc-product-card { cursor: pointer; }
 .pc-worlds-quick__stamp-img { display: block; width: 100%; max-width: 140px; height: auto; }
 .pc-worlds-quick__badge {
   position: absolute;
-  bottom: -8px;
-  right: 8px;
+  top: -8px;
+  left: 8px;
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: var(--color-yellow);
+  background: color-mix(in srgb, var(--world-color, #E8C36A) 50%, transparent);
   border: 1.5px solid var(--color-ink);
   color: var(--color-ink);
   display: flex;

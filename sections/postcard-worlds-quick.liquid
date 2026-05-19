@@ -37,7 +37,7 @@
         {%- assign accent = w.accent_color.value | default: '#E8C36A' -%}
         {%- assign family = w.family.value -%}
         {%- assign w_stamp_img = w.world_stamp.value -%}
-        <a class="pc-worlds-quick__cell" href="/pages/{{ slug }}">
+        <a class="pc-worlds-quick__cell" href="/pages/{{ slug }}" style="--world-color: {{ accent }};">
           {%- if w_stamp_img != blank -%}
             {%- assign stamp_alt = w.name.value | append: ' stamp' | escape -%}
             <div class="pc-worlds-quick__stamp-slot">
