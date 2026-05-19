@@ -134,37 +134,43 @@
         "f1": {
           "type": "filter",
           "settings": {
-            "label": "Body & bath"
+            "label": "Body & bath",
+            "match_types": "Body Soap, Liquid Body Wash, Soap, Bar Soap, Head to Toe Cleansing Bar, Head to Toe Powder Wash, Body Balm Refill, Body Lotion, Hand Cream, Hand Sanitizer, Sun Care, Baby Care, Bath & Travel Accessories"
           }
         },
         "f2": {
           "type": "filter",
           "settings": {
-            "label": "Hair"
+            "label": "Hair",
+            "match_types": "Shampoo Bar, Liquid Shampoo, Conditioner Bar, Hair Oil, Dry Shampoo"
           }
         },
         "f3": {
           "type": "filter",
           "settings": {
-            "label": "Face"
+            "label": "Face",
+            "match_types": "Facial Bar, Facial Oil, Facial Serum, Facial Mist, Facial Moisturiser, Facial Powder Wash, Serum, Cream Mask, Lip Balm Stick, Bi-Phase Make Up Remover, Makeup, Reparative Care"
           }
         },
         "f4": {
           "type": "filter",
           "settings": {
-            "label": "Deodorant"
+            "label": "Deodorant",
+            "match_types": "Deodorant, Deodorant Stick, Refillable Stick"
           }
         },
         "f5": {
           "type": "filter",
           "settings": {
-            "label": "Home"
+            "label": "Home",
+            "match_types": "Home Scent, Home Cleaning, Diffuser Oil, Electric Diffuser, Anywhere Fragrance, Essential Oil"
           }
         },
         "f6": {
           "type": "filter",
           "settings": {
-            "label": "Other"
+            "label": "Other",
+            "match_types": ""
           }
         },
         "p1": {
@@ -275,7 +281,8 @@
       "settings": {
         "anchor_id": "refill-list",
         "eyebrow": "The catalogue",
-        "title": "Every postcard you can return."
+        "title": "Every postcard you can return.",
+        "collection": "refillable"
       }
     },
     "refill_stores": {
@@ -287,7 +294,7 @@
         "flagship_image_placeholder": "Orchard storefront photo",
         "flagship_eyebrow": "Our home",
         "flagship_name": "Postcard Flagship · Orchard",
-        "flagship_details": "391 Orchard Road, #02–14 Ngee Ann City\nMon–Thu 10am–9pm · Fri–Sat 10am–10pm · Sun 11am–8pm\n+65 6123 4567",
+        "flagship_details": "391 Orchard Road, #B2–11A\nTakashimaya Shopping Centre\nMon–Sun 10am–9.30pm\n+65 8026 8584",
         "flagship_link_1_text": "Get directions →",
         "flagship_link_1_url": "https://maps.google.com/?q=391+Orchard+Road+Singapore",
         "flagship_link_2_text": "Tour the flagship →",

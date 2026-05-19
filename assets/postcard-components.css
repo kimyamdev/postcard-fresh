@@ -2733,6 +2733,7 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 }
 .pc-refill-cat__filter--active { background: var(--color-ink); color: var(--color-bg); }
 .pc-refill-cat__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.pc-refill-cat .pc-product-card__world-stamp { display: none; }
 
 .pc-refill-stores { background: var(--color-bg-warm); }
 .pc-refill-stores__title { font-size: 44px; margin-bottom: 32px; }
