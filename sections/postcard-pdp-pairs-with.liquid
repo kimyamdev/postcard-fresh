@@ -13,7 +13,8 @@
           {%- assign p_world = p.metafields.postcard.world.value -%}
           {%- assign p_world_name = p_world.name.value | default: world_name -%}
           {%- assign p_world_color = p_world.accent_color.value | default: world_color -%}
-          {% render 'product-card', product: p, world: p_world_name, world_color: p_world_color %}
+          {%- assign p_family = p_world.family.value -%}
+          {% render 'product-card', product: p, world: p_world_name, world_color: p_world_color, badge: p_family %}
         {%- endfor -%}
       {%- else -%}
         {%- for block in section.blocks -%}
