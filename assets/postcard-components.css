@@ -2746,7 +2746,7 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   border: 1.5px solid var(--color-ink);
   position: relative;
 }
-.pc-refill-stores__pm { position: absolute; top: 20px; right: 20px; }
+.pc-refill-stores__pm { position: absolute; top: 40px; right: 40px; z-index: 3; }
 .pc-refill-stores__photo { aspect-ratio: 5/3; margin-bottom: 16px; padding: 0; overflow: hidden; }
 .pc-refill-stores__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .pc-refill-stores__name { font-size: 32px; margin-top: 6px; }
