@@ -1,35 +1,138 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "postcard-hero",
-      "settings": {}
+      "settings": {
+        "media_opacity": 100,
+        "visual_eyebrow": "Full-bleed · Postcards from our worlds",
+        "visual_tag": "Hotel Lobby · sunlit marble, brass, a vase of yellow tulips",
+        "hide_overlay_text": false,
+        "show_postmark": true,
+        "postmark_html": "POSTCARD<br>· SINGAPORE ·<br>EST. 2018",
+        "primary_cta_text": "Find your world →",
+        "primary_cta_url": "",
+        "secondary_cta_text": "Shop bestsellers",
+        "secondary_cta_url": ""
+      }
     },
     "worlds_quick": {
       "type": "postcard-worlds-quick",
-      "settings": {}
+      "settings": {
+        "eyebrow": "Six destinations",
+        "title": "Pick a world.",
+        "visible_count": 7,
+        "see_all_text": "See all [count] worlds →",
+        "see_all_url": "",
+        "more_text": "+[count] more<br>worlds →",
+        "more_url": ""
+      }
     },
     "bestsellers": {
       "type": "postcard-bestsellers",
-      "settings": {}
+      "settings": {
+        "eyebrow": "The classics",
+        "title": "Postcards we send most often.",
+        "lede": "The ones you keep coming back to. Sent 1,200+ times in the last 95 days.",
+        "collection": "current-top-picks",
+        "randomize": true,
+        "badge_1": "",
+        "badge_2": "",
+        "badge_3": "",
+        "product_1": "",
+        "product_2": "",
+        "product_3": "",
+        "see_all_text": "See all bestsellers →",
+        "see_all_url": ""
+      }
     },
     "world_of_the_month": {
       "type": "postcard-world-of-the-month",
-      "settings": {},
       "blocks": {
-        "f1": { "type": "format", "settings": { "label_override": "Anywhere Fragrance" } },
-        "f2": { "type": "format", "settings": { "label_override": "Hand & Body Wash" } },
-        "f3": { "type": "format", "settings": { "label_override": "Deodorant Spray" } },
-        "f4": { "type": "format", "settings": { "label_override": "Reed Diffuser" } }
+        "f1": {
+          "type": "format",
+          "settings": {
+            "product": "",
+            "label_override": "Anywhere Fragrance",
+            "link": ""
+          }
+        },
+        "f2": {
+          "type": "format",
+          "settings": {
+            "product": "",
+            "label_override": "Hand & Body Wash",
+            "link": ""
+          }
+        },
+        "f3": {
+          "type": "format",
+          "settings": {
+            "product": "",
+            "label_override": "Deodorant Spray",
+            "link": ""
+          }
+        },
+        "f4": {
+          "type": "format",
+          "settings": {
+            "product": "",
+            "label_override": "Reed Diffuser",
+            "link": ""
+          }
+        }
       },
-      "block_order": ["f1", "f2", "f3", "f4"]
+      "block_order": [
+        "f1",
+        "f2",
+        "f3",
+        "f4"
+      ],
+      "settings": {
+        "world_handle": "hotel-lobby",
+        "bg_alpha": 14,
+        "media_opacity": 100,
+        "media_height": 90,
+        "light_badges_mode": "auto",
+        "eyebrow": "World deep-dive · This month",
+        "family_line_override": "",
+        "body": "<p>Polished. Refined. Endlessly elegant. Hotel Lobby opens with the brightness of bergamot and orange blossom, then settles into Earl Grey tea, soft vanilla and a brushed apricot warmth — like the moment you push through a revolving door into somewhere that smells looked-after.</p>",
+        "cta_text": "",
+        "cta_url": ""
+      }
     },
     "refill_trio": {
       "type": "postcard-refill-trio",
-      "settings": {}
+      "blocks": {
+        "step_1": { "type": "step", "settings": { "number": "01", "postmark": "NO FOMO",       "image_placeholder": "illustrated postcard panel", "heading": "Bring it back.", "body": "Empty Postcard bottle. Any size, any world." } },
+        "step_2": { "type": "step", "settings": { "number": "02", "postmark": "MADE FRESH",    "image_placeholder": "illustrated postcard panel", "heading": "We refill it.",  "body": "From the beauty kitchen. Same recipe, same scent." } },
+        "step_3": { "type": "step", "settings": { "number": "03", "postmark": "FOREVER YOURS", "image_placeholder": "illustrated postcard panel", "heading": "You go again.",  "body": "Less waste, same scent. Save 20% per visit." } }
+      },
+      "block_order": ["step_1", "step_2", "step_3"],
+      "settings": {
+        "eyebrow": "Refill, repeat, rejoice",
+        "title": "Bring it back. We'll top you up.",
+        "lede": "Visit our Orchard flagship. Less waste, same scent. Save 20% on every refill.",
+        "primary_cta_text": "See the refill list →",
+        "primary_cta_url": "",
+        "secondary_cta_text": "Find a store →",
+        "secondary_cta_url": ""
+      }
     },
     "brand_belief": {
       "type": "postcard-brand-belief",
-      "settings": {}
+      "settings": {
+        "cta_text": "Read our story →",
+        "cta_url": ""
+      }
     }
   },
   "order": [

@@ -1,38 +1,45 @@
 <section class="section">
   <div class="container">
     <div class="pc-refill__intro">
-      <div class="eyebrow">Refill, repeat, rejoice</div>
-      <h2 class="h-display pc-refill__title">Bring it back. We&rsquo;ll top you up.</h2>
-      <p class="pc-refill__lede">Visit our Orchard flagship. Less waste, same scent. Save 20% on every refill.</p>
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="h-display pc-refill__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+      {%- if section.settings.lede != blank -%}
+        <p class="pc-refill__lede">{{ section.settings.lede }}</p>
+      {%- endif -%}
     </div>
     <div class="pc-refill__grid">
-      <div class="stamp-frame stamp-side pc-refill__card">
-        <div class="pc-refill__card-head">
-          <div class="h-display pc-refill__num">01</div>
-          <div class="postmark postmark--yellow"><div>NO FOMO</div></div>
-        </div>
-        <div class="ph pc-refill__panel"><span>illustrated postcard panel</span></div>
-        <h3 class="h-typewriter pc-refill__step-h">Bring it back.</h3>
-        <p class="pc-refill__step-p">Empty Postcard bottle. Any size, any world.</p>
-      </div>
-      <div class="stamp-frame stamp-side pc-refill__card">
-        <div class="pc-refill__card-head">
-          <div class="h-display pc-refill__num">02</div>
-          <div class="postmark postmark--yellow"><div>MADE FRESH</div></div>
-        </div>
-        <div class="ph pc-refill__panel"><span>illustrated postcard panel</span></div>
-        <h3 class="h-typewriter pc-refill__step-h">We refill it.</h3>
-        <p class="pc-refill__step-p">From the beauty kitchen. Same recipe, same scent.</p>
-      </div>
-      <div class="stamp-frame stamp-side pc-refill__card">
-        <div class="pc-refill__card-head">
-          <div class="h-display pc-refill__num">03</div>
-          <div class="postmark postmark--yellow"><div>FOREVER<br>YOURS</div></div>
-        </div>
-        <div class="ph pc-refill__panel"><span>illustrated postcard panel</span></div>
-        <h3 class="h-typewriter pc-refill__step-h">You go again.</h3>
-        <p class="pc-refill__step-p">Less waste, same scent. Save 20% per visit.</p>
-      </div>
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'step' -%}
+          <div class="stamp-frame stamp-side pc-refill__card" {{ block.shopify_attributes }}>
+            <div class="pc-refill__card-head">
+              {%- if block.settings.number != blank -%}
+                <div class="h-display pc-refill__num">{{ block.settings.number }}</div>
+              {%- endif -%}
+              {%- if block.settings.postmark != blank -%}
+                <div class="postmark postmark--yellow"><div>{{ block.settings.postmark }}</div></div>
+              {%- endif -%}
+            </div>
+            <div class="ph pc-refill__panel">
+              {%- if block.settings.image != blank -%}
+                {%- assign card_alt = block.settings.heading | default: 'Refill step' | escape -%}
+                {{ block.settings.image | image_url: width: 600 | image_tag: alt: card_alt, loading: 'lazy', widths: '300,450,600,900' }}
+              {%- else -%}
+                <span>{{ block.settings.image_placeholder | default: 'illustrated postcard panel' }}</span>
+              {%- endif -%}
+            </div>
+            {%- if block.settings.heading != blank -%}
+              <h3 class="h-typewriter pc-refill__step-h">{{ block.settings.heading }}</h3>
+            {%- endif -%}
+            {%- if block.settings.body != blank -%}
+              <p class="pc-refill__step-p">{{ block.settings.body }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
     </div>
     <div class="pc-refill__ctas">
       {%- if section.settings.primary_cta_text != blank -%}
@@ -49,6 +56,10 @@
 {
   "name": "Postcard Refill Trio",
   "settings": [
+    { "type": "header", "content": "Intro" },
+    { "type": "text",     "id": "eyebrow", "label": "Eyebrow", "default": "Refill, repeat, rejoice" },
+    { "type": "text",     "id": "title",   "label": "Title",   "default": "Bring it back. We'll top you up." },
+    { "type": "textarea", "id": "lede",    "label": "Lede",    "default": "Visit our Orchard flagship. Less waste, same scent. Save 20% on every refill." },
     { "type": "header", "content": "Primary CTA" },
     { "type": "text", "id": "primary_cta_text", "label": "Text", "default": "See the refill list →" },
     { "type": "url",  "id": "primary_cta_url",  "label": "Link" },
@@ -56,6 +67,27 @@
     { "type": "text", "id": "secondary_cta_text", "label": "Text", "default": "Find a store →" },
     { "type": "url",  "id": "secondary_cta_url",  "label": "Link" }
   ],
-  "presets": [{ "name": "Postcard Refill Trio" }]
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step card",
+      "settings": [
+        { "type": "text",         "id": "number",            "label": "Step number",        "default": "01" },
+        { "type": "text",         "id": "postmark",          "label": "Postmark text",      "default": "NO FOMO" },
+        { "type": "image_picker", "id": "image",             "label": "Illustration" },
+        { "type": "text",         "id": "image_placeholder", "label": "Placeholder text",   "default": "illustrated postcard panel", "info": "Shown when no image is uploaded." },
+        { "type": "text",         "id": "heading",           "label": "Heading",            "default": "Bring it back." },
+        { "type": "textarea",     "id": "body",              "label": "Body",               "default": "Empty Postcard bottle. Any size, any world." }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Postcard Refill Trio",
+    "blocks": [
+      { "type": "step", "settings": { "number": "01", "postmark": "NO FOMO",      "heading": "Bring it back.", "body": "Empty Postcard bottle. Any size, any world." } },
+      { "type": "step", "settings": { "number": "02", "postmark": "MADE FRESH",   "heading": "We refill it.",  "body": "From the beauty kitchen. Same recipe, same scent." } },
+      { "type": "step", "settings": { "number": "03", "postmark": "FOREVER YOURS","heading": "You go again.",  "body": "Less waste, same scent. Save 20% per visit." } }
+    ]
+  }]
 }
 {% endschema %}
