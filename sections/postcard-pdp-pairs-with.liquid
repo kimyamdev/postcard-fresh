@@ -2,6 +2,7 @@
   assign world = product.metafields.postcard.world.value
   assign world_name = world.name.value | default: 'this world'
   assign world_color = world.accent_color.value | default: '#E8C36A'
+  assign world_family = world.family.value
   assign mf_pairs = product.metafields.pdp.pairs_with.value
 -%}
 <section class="section pc-pw">
@@ -23,7 +24,8 @@
             world: world_name,
             world_color: world_color,
             price: block.settings.price,
-            href: block.settings.href %}
+            href: block.settings.href,
+            badge: world_family %}
         {%- endfor -%}
       {%- endif -%}
     </div>

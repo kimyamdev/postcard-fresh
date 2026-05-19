@@ -16,6 +16,7 @@
       assign card_world = world_obj.name
       assign card_world_color = world_obj.accent_color
       assign card_world_stamp = world_obj.world_stamp.value
+      assign card_world_family = world_obj.family
     endif
   endif
 
@@ -26,7 +27,7 @@
   assign card_world = world | default: card_world | default: ''
   assign card_world_color = world_color | default: card_world_color | default: '#E8C36A'
   assign card_world_stamp = world_stamp | default: card_world_stamp
-  assign card_badge = badge
+  assign card_badge = badge | default: card_world_family
 
   assign world_words = card_world | split: ' '
   assign world_initials = ''
