@@ -1,8 +1,48 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "hero":     { "type": "postcard-collection-hero",     "settings": {} },
-    "pleasers": { "type": "postcard-collection-pleasers", "settings": {} },
-    "grid":     { "type": "postcard-collection-grid",     "settings": {} }
+    "hero": {
+      "type": "postcard-collection-hero",
+      "settings": {
+        "breadcrumb_prefix": "Home / Shop",
+        "eyebrow": "For your room. Your skin. Your linens.",
+        "title_override": "",
+        "body": "The hero category — 14% of everything we sell. 22 worlds, one spritz at a time."
+      }
+    },
+    "pleasers": {
+      "type": "postcard-collection-pleasers",
+      "settings": {
+        "eyebrow": "Top [count] in this category",
+        "title": "The crowd-pleasers.",
+        "top_count": 3,
+        "min_threshold": 3
+      }
+    },
+    "grid": {
+      "type": "postcard-collection-grid",
+      "settings": {
+        "show_filters": true,
+        "show_sort": true,
+        "products_per_page": 36,
+        "count_text": "Showing [count] postcards",
+        "clear_text": "Clear filters",
+        "empty_text": "No postcards match these filters.",
+        "empty_clear_text": "Clear filters →"
+      }
+    }
   },
-  "order": ["hero", "pleasers", "grid"]
+  "order": [
+    "hero",
+    "pleasers",
+    "grid"
+  ]
 }

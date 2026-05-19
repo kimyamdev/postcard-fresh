@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -121,11 +130,43 @@
         "trust_circles"
       ],
       "settings": {
-        "stamp_text_fallback": "POSTCARD<br>· SG ·"
+        "stamp_text_fallback": "{{ product.metafields.postcard.world.value.family.value }}",
+        "bg_alpha": 10
       }
     },
     "pairs_with": {
       "type": "postcard-pdp-pairs-with",
+      "blocks": {
+        "item_CmdUbd": {
+          "type": "item",
+          "settings": {
+            "name": "",
+            "price": "",
+            "href": ""
+          }
+        },
+        "item_FfQ3QU": {
+          "type": "item",
+          "settings": {
+            "name": "",
+            "price": "",
+            "href": ""
+          }
+        },
+        "item_frh9MV": {
+          "type": "item",
+          "settings": {
+            "name": "",
+            "price": "",
+            "href": ""
+          }
+        }
+      },
+      "block_order": [
+        "item_CmdUbd",
+        "item_FfQ3QU",
+        "item_frh9MV"
+      ],
       "settings": {}
     },
     "reviews": {
@@ -133,7 +174,8 @@
       "settings": {
         "label": "Dispatches · Field notes from the pit",
         "heading": "Mail from our pen-pals.",
-        "bg_color": "#fdecea"
+        "bg_color": "#fdecea",
+        "world_tint_alpha": 10
       }
     }
   },

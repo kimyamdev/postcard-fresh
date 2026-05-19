@@ -32,7 +32,7 @@
         "visible_count": 7,
         "see_all_text": "See all [count] worlds →",
         "see_all_url": "",
-        "more_text": "+[count] more<br>worlds →",
+        "more_text": "+[count] moreworlds →",
         "more_url": ""
       }
     },
@@ -100,6 +100,8 @@
         "world_handle": "hotel-lobby",
         "bg_alpha": 14,
         "media_opacity": 100,
+        "stamp_size": 60,
+        "stamp_opacity": 100,
         "media_height": 90,
         "light_badges_mode": "auto",
         "eyebrow": "World deep-dive · This month",
@@ -112,18 +114,52 @@
     "refill_trio": {
       "type": "postcard-refill-trio",
       "blocks": {
-        "step_1": { "type": "step", "settings": { "number": "01", "postmark": "NO FOMO",       "image_placeholder": "illustrated postcard panel", "heading": "Bring it back.", "body": "Empty Postcard bottle. Any size, any world." } },
-        "step_2": { "type": "step", "settings": { "number": "02", "postmark": "MADE FRESH",    "image_placeholder": "illustrated postcard panel", "heading": "We refill it.",  "body": "From the beauty kitchen. Same recipe, same scent." } },
-        "step_3": { "type": "step", "settings": { "number": "03", "postmark": "FOREVER YOURS", "image_placeholder": "illustrated postcard panel", "heading": "You go again.",  "body": "Less waste, same scent. Save 20% per visit." } }
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "number": "01",
+            "postmark": "NO FOMO",
+            "image": "shopify://shop_images/ChatGPT_Image_May_19_2026_02_26_01_PM.png",
+            "image_placeholder": "illustrated postcard panel",
+            "heading": "Bring it back.",
+            "body": "Empty Postcard bottle. Any size, any world."
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "number": "02",
+            "postmark": "MADE FRESH",
+            "image": "shopify://shop_images/ChatGPT_Image_May_19_2026_02_29_45_PM.png",
+            "image_placeholder": "illustrated postcard panel",
+            "heading": "We refill it.",
+            "body": "From the beauty kitchen. Same recipe, same scent."
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "number": "03",
+            "postmark": "FOREVER YOURS",
+            "image": "shopify://shop_images/120ce417-7724-4de5-8451-0d7777a7740c.png",
+            "image_placeholder": "illustrated postcard panel",
+            "heading": "You reap it.",
+            "body": "Less waste, same scent. Save 20% per visit."
+          }
+        }
       },
-      "block_order": ["step_1", "step_2", "step_3"],
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3"
+      ],
       "settings": {
         "eyebrow": "Refill, repeat, rejoice",
         "title": "Bring it back. We'll top you up.",
         "lede": "Visit our Orchard flagship. Less waste, same scent. Save 20% on every refill.",
         "primary_cta_text": "See the refill list →",
         "primary_cta_url": "",
-        "secondary_cta_text": "Find a store →",
+        "secondary_cta_text": "Find our store →",
         "secondary_cta_url": ""
       }
     },
