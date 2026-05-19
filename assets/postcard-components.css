@@ -498,7 +498,7 @@ a.pc-product-card { cursor: pointer; }
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--world-color, #E8C36A) 50%, transparent);
+  background: var(--world-color, #E8C36A);
   border: 1.5px solid var(--color-ink);
   color: var(--color-ink);
   display: flex;
