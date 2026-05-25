@@ -33,7 +33,7 @@
         "show_filters": true,
         "show_sort": true,
         "products_per_page": 36,
-        "count_text": "Showing [count] postcards",
+        "count_text": "Showing [count] products",
         "clear_text": "Clear filters",
         "empty_text": "No postcards match these filters.",
         "empty_clear_text": "Clear filters →"

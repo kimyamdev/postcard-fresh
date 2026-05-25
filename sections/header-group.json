@@ -72,6 +72,7 @@
         },
         "s8": {
           "type": "shop_item",
+          "disabled": true,
           "settings": {
             "column": 1,
             "text": "Kids",
@@ -80,6 +81,7 @@
         },
         "s9": {
           "type": "shop_item",
+          "disabled": true,
           "settings": {
             "column": 1,
             "text": "Gifts",

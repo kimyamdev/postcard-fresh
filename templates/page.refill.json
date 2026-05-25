@@ -105,14 +105,14 @@
         "st1": {
           "type": "stat",
           "settings": {
-            "number": "20%",
+            "number": "up to 15%",
             "label": "off every refill"
           }
         },
         "st2": {
           "type": "stat",
           "settings": {
-            "number": "80%",
+            "number": "100%",
             "label": "less packaging per top-up"
           }
         },
@@ -283,8 +283,8 @@
       ],
       "settings": {
         "anchor_id": "refill-list",
-        "eyebrow": "The catalogue",
-        "title": "Every postcard you can return.",
+        "eyebrow": "The refill catalogue",
+        "title": "Every product you can return.",
         "collection": "refillable"
       }
     },

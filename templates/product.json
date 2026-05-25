@@ -34,7 +34,7 @@
         "description": {
           "type": "description",
           "settings": {
-            "word_limit": 30
+            "word_limit": 500
           }
         },
         "ingredients": {
