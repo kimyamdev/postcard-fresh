@@ -136,6 +136,8 @@
   display: flex; align-items: center; justify-content: center;
   flex: 0 0 auto;
 }
+.pc-world-row__stamp { width: 44px; height: 56px; flex: 0 0 auto; display: flex; align-items: center; justify-content: center; }
+.pc-world-row__stamp-img { display: block; max-width: 100% !important; max-height: 100% !important; width: auto !important; height: auto !important; }
 .pc-world-row__name { font-family: var(--font-display); font-size: 13px; }
 .pc-world-row__family { font-size: 11px; opacity: 0.6; }
 
@@ -612,6 +614,16 @@ a.pc-product-card { cursor: pointer; }
   top: 12px !important;
   left: 12px !important;
   right: auto !important;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.15;
+  font-size: 9px;
 }
 .pc-bestsellers__grid .pc-product-card__badge {
   top: 12px !important;

@@ -6,7 +6,12 @@
   assign worlds_limit = section.settings.worlds_limit | default: 7
 
   assign all_worlds = shop.metaobjects.world.values
-  assign worlds_total = all_worlds.size
+  assign worlds_total = 0
+  for w in all_worlds
+    if w.tier.value == 'World'
+      assign worlds_total = worlds_total | plus: 1
+    endif
+  endfor
 
   assign see_all_text = section.settings.worlds_see_all_text | default: 'See all [count] worlds →'
   assign see_all_text = see_all_text | replace: '[count]', worlds_total
@@ -130,6 +135,7 @@
                   {%- if w_url == blank -%}{%- assign w_url = '/pages/' | append: w_slug -%}{%- endif -%}
                   {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
                   {%- assign w_family = b.settings.subline | default: w.family.value -%}
+                  {%- assign w_stamp = w.world_stamp.value -%}
                   {%- assign words = w_name | split: ' ' -%}
                   {%- assign initials = '' -%}
                   {%- for word in words limit: 2 -%}
@@ -137,7 +143,11 @@
                     {%- assign initials = initials | append: first_letter -%}
                   {%- endfor -%}
                   <a class="pc-world-row" href="{{ w_url }}" {{ b.shopify_attributes }}>
-                    <div class="pc-world-row__chip" style="background: {{ w_color }};">{{ initials }}</div>
+                    {%- if w_stamp != blank -%}
+                      <div class="pc-world-row__stamp">{{ w_stamp | image_url: width: 160 | image_tag: alt: w_name, loading: 'lazy', class: 'pc-world-row__stamp-img' }}</div>
+                    {%- else -%}
+                      <div class="pc-world-row__chip" style="background: {{ w_color }};">{{ initials }}</div>
+                    {%- endif -%}
                     <div>
                       <div class="pc-world-row__name">{{ w_name }}</div>
                       {%- if w_family != blank -%}
@@ -146,11 +156,12 @@
                     </div>
                   </a>
                 {%- else -%}
+                  {%- assign plain_subline = b.settings.subline | replace: '[count]', worlds_total -%}
                   <a class="pc-world-row pc-world-row--plain" href="{{ b.settings.url }}" {{ b.shopify_attributes }}>
                     <div>
                       <div class="pc-world-row__name">{{ b.settings.text }}</div>
-                      {%- if b.settings.subline != blank -%}
-                        <div class="pc-world-row__family">{{ b.settings.subline }}</div>
+                      {%- if plain_subline != blank -%}
+                        <div class="pc-world-row__family">{{ plain_subline }}</div>
                       {%- endif -%}
                     </div>
                   </a>
@@ -166,6 +177,7 @@
                 {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
                 {%- assign w_name = w.name.value -%}
                 {%- assign w_family = w.family.value -%}
+                {%- assign w_stamp = w.world_stamp.value -%}
                 {%- assign words = w_name | split: ' ' -%}
                 {%- assign initials = '' -%}
                 {%- for word in words limit: 2 -%}
@@ -173,7 +185,11 @@
                   {%- assign initials = initials | append: first_letter -%}
                 {%- endfor -%}
                 <a class="pc-world-row" href="/pages/{{ w_slug }}">
-                  <div class="pc-world-row__chip" style="background: {{ w_color }};">{{ initials }}</div>
+                  {%- if w_stamp != blank -%}
+                    <div class="pc-world-row__stamp">{{ w_stamp | image_url: width: 160 | image_tag: alt: w_name, loading: 'lazy', class: 'pc-world-row__stamp-img' }}</div>
+                  {%- else -%}
+                    <div class="pc-world-row__chip" style="background: {{ w_color }};">{{ initials }}</div>
+                  {%- endif -%}
                   <div>
                     <div class="pc-world-row__name">{{ w_name }}</div>
                     {%- if w_family != blank -%}

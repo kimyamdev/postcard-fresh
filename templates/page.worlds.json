@@ -1,27 +1,51 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "postcard-worlds-index-hero",
-      "settings": {}
+      "settings": {
+        "eyebrow": "[count] Worlds",
+        "title": "One bathroom shelf at a time.",
+        "lede": "Each one a place we’d like to send you."
+      }
     },
     "worlds_rail": {
       "type": "postcard-worlds-index-list",
       "settings": {
         "eyebrow": "Worlds",
-        "tier": "World",
         "size": "md",
         "preview_mode": "none",
-        "count": 24
+        "type_limit": 4,
+        "tint_alpha": 30,
+        "tint_blend": "multiply",
+        "tier": "World",
+        "start_index": 1,
+        "count": 24,
+        "hide_if_empty": true
       }
     },
     "non_worlds_rail": {
       "type": "postcard-worlds-index-list",
+      "disabled": true,
       "settings": {
         "eyebrow": "Postscripts",
-        "tier": "Non-world",
         "size": "md",
         "preview_mode": "none",
-        "count": 24
+        "type_limit": 4,
+        "tint_alpha": 30,
+        "tint_blend": "multiply",
+        "tier": "Non-world",
+        "start_index": 1,
+        "count": 24,
+        "hide_if_empty": true
       }
     }
   },

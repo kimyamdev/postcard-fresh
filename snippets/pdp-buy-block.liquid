@@ -65,33 +65,26 @@
   {%- endif -%}
 
 {%- when 'sizes' -%}
-  {%- assign demo_sizes_str = block.settings.demo_sizes | default: 'Bottle 300ml,Refill 500ml,Refill 1L' -%}
-  {%- assign demo_active_index = block.settings.demo_active_index | default: 2 -%}
-  {%- comment -%} Default label to the product's first option name (e.g. "Scent", "Size", "Color") {%- endcomment -%}
-  {%- assign option_label = product.options.first | default: 'Size' -%}
-  {%- assign size_label = block.settings.label -%}
-  {%- if size_label == blank or size_label == 'Size' -%}
-    {%- assign size_label = option_label -%}
-  {%- endif -%}
-  <div class="pc-pdp-buy__option" {{ block.shopify_attributes }}>
-    <div class="eyebrow pc-pdp-buy__option-label">{{ size_label }}</div>
-    <div class="pc-pdp-buy__sizes">
-      {%- if product.has_only_default_variant -%}
-        <input type="hidden" name="id" value="{{ current.id }}">
-        {%- assign demo_arr = demo_sizes_str | split: ',' -%}
-        {%- for label in demo_arr -%}
-          <span class="pc-pdp-buy__size{% if forloop.index == demo_active_index %} pc-pdp-buy__size--active{% endif %}">{{ label }}</span>
-        {%- endfor -%}
-      {%- else -%}
+  {%- if product.has_only_default_variant -%}
+    <input type="hidden" name="id" value="{{ current.id }}" {{ block.shopify_attributes }}>
+  {%- else -%}
+    {%- assign option_label = product.options.first | default: 'Size' -%}
+    {%- assign size_label = block.settings.label -%}
+    {%- if size_label == blank or size_label == 'Size' -%}
+      {%- assign size_label = option_label -%}
+    {%- endif -%}
+    <div class="pc-pdp-buy__option" {{ block.shopify_attributes }}>
+      <div class="eyebrow pc-pdp-buy__option-label">{{ size_label }}</div>
+      <div class="pc-pdp-buy__sizes">
         {%- for v in product.variants -%}
           <label class="pc-pdp-buy__size-radio">
             <input type="radio" name="id" value="{{ v.id }}" {% if v == current %}checked{% endif %} @change="variantId = $event.target.value">
             <span class="pc-pdp-buy__size">{{ v.title }}</span>
           </label>
         {%- endfor -%}
-      {%- endif -%}
+      </div>
     </div>
-  </div>
+  {%- endif -%}
 
 {%- when 'purchase_options' -%}
   {%- liquid

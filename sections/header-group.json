@@ -58,8 +58,8 @@
           "type": "shop_item",
           "settings": {
             "column": 1,
-            "text": "Lip & Hand",
-            "url": "/collections/lip-and-hand"
+            "text": "Teeth & Lips",
+            "url": "/collections/teeth-and-lips"
           }
         },
         "s7": {
@@ -319,6 +319,7 @@
         },
         "wl9": {
           "type": "worlds_link",
+          "disabled": true,
           "settings": {
             "world_handle": "",
             "text": "By family",
