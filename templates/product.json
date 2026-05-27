@@ -54,7 +54,7 @@
         "use_cases": {
           "type": "use_cases",
           "settings": {
-            "heading": "Use case(s)",
+            "heading": "Directions",
             "open_by_default": false
           }
         },

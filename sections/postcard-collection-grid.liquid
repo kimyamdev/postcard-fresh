@@ -98,7 +98,13 @@
           {%- endif -%}
         </div>
         <div class="pc-coll-grid__products">
-          {%- for p in collection.products -%}
+          {%- comment -%} Default sort: group by product type when the shopper hasn't picked an explicit sort. {%- endcomment -%}
+          {%- if request.params.sort_by == blank -%}
+            {%- assign sorted_products = collection.products | sort: 'type' -%}
+          {%- else -%}
+            {%- assign sorted_products = collection.products -%}
+          {%- endif -%}
+          {%- for p in sorted_products -%}
             {% render 'product-card', product: p %}
           {%- else -%}
             <div class="pc-coll-grid__empty">

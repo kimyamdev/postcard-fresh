@@ -610,7 +610,9 @@ a.pc-product-card { cursor: pointer; }
 .pc-collgift-bestsent__grid .pc-product-card__world-stamp-img { filter: none; }
 .pc-coll-top__grid .pc-product-card__badge,
 .pc-coll-grid__products .pc-product-card__badge,
-.pc-collgift-bestsent__grid .pc-product-card__badge {
+.pc-collgift-bestsent__grid .pc-product-card__badge,
+.pc-ritual__grid .pc-product-card__badge,
+.pc-pw__grid .pc-product-card__badge {
   top: 12px !important;
   left: 12px !important;
   right: auto !important;

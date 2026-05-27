@@ -23,8 +23,8 @@
       "settings": {
         "eyebrow": "Top [count] in this category",
         "title": "The crowd-pleasers.",
-        "top_count": 1,
-        "min_threshold": 3
+        "top_count": 3,
+        "min_threshold": 1
       }
     },
     "grid": {

@@ -58,7 +58,7 @@
           "type": "shop_item",
           "settings": {
             "column": 1,
-            "text": "Teeth & Lips",
+            "text": "Oral & Lip Care",
             "url": "/collections/teeth-and-lips"
           }
         },
@@ -101,11 +101,12 @@
           "settings": {
             "column": 2,
             "text": "Hotel Lobby Anywhere Fragrance",
-            "url": "/products/hotel-lobby-anywhere-fragrance"
+            "url": "shopify://products/anywhere-fragrance-hotel-lobby"
           }
         },
         "s12": {
           "type": "shop_item",
+          "disabled": true,
           "settings": {
             "column": 2,
             "text": "Pick & Mix",
@@ -116,8 +117,8 @@
           "type": "shop_item",
           "settings": {
             "column": 2,
-            "text": "Discovery sets",
-            "url": "/collections/discovery-sets"
+            "text": "Discovery & Gift Sets",
+            "url": "/collections/discovery-gift-sets"
           }
         },
         "s14": {
@@ -125,7 +126,7 @@
           "settings": {
             "column": 2,
             "text": "Hotel Lobby Travel Box",
-            "url": "/products/hotel-lobby-travel-box"
+            "url": "/products/destination-hotel-lobby-travel-gift-box"
           }
         },
         "s15": {
@@ -133,7 +134,7 @@
           "settings": {
             "column": 3,
             "text": "POSTCARD x SOJAO",
-            "url": "/collections/postcard-x-sojao"
+            "url": "/products/oasis-x-sojao-room-and-linen-mist"
           }
         },
         "s16": {
@@ -141,7 +142,7 @@
           "settings": {
             "column": 3,
             "text": "POSTCARD x ESSE",
-            "url": "/collections/postcard-x-esse"
+            "url": "/products/forest-bathing-x-esse-anywhere-fragrance"
           }
         },
         "s17": {
@@ -149,11 +150,12 @@
           "settings": {
             "column": 3,
             "text": "POSTCARD x Anya Active",
-            "url": "/collections/postcard-x-anya-active"
+            "url": "/products/suns-down"
           }
         },
         "s18": {
           "type": "shop_item",
+          "disabled": true,
           "settings": {
             "column": 3,
             "text": "Seasonal",
@@ -162,6 +164,7 @@
         },
         "s19": {
           "type": "shop_item",
+          "disabled": true,
           "settings": {
             "column": 4,
             "text": "Pick & Mix",
@@ -173,7 +176,7 @@
           "settings": {
             "column": 4,
             "text": "Custom Hand & Body Wash",
-            "url": "/pages/custom-hand-and-body-wash"
+            "url": "/products/custom-hand-body-wash"
           }
         },
         "s21": {
@@ -181,7 +184,7 @@
           "settings": {
             "column": 4,
             "text": "Custom Shampoo",
-            "url": "/pages/custom-shampoo"
+            "url": "/products/custom-shampoo"
           }
         },
         "s22": {
@@ -189,7 +192,7 @@
           "settings": {
             "column": 4,
             "text": "Custom Conditioner",
-            "url": "/pages/custom-conditioner"
+            "url": "/products/custom-conditioner"
           }
         },
         "n1": {
@@ -379,7 +382,7 @@
         "show_shop": true,
         "shop_label": "Shop",
         "shop_col1_title": "By need",
-        "shop_col2_title": "Bestsellers",
+        "shop_col2_title": "Crowd-pleasers",
         "shop_col3_title": "New & limited",
         "shop_col4_title": "Custom",
         "show_worlds": true,
