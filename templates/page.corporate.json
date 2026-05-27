@@ -1,36 +1,147 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "corp_hero": {
       "type": "postcard-corp-hero",
       "settings": {
-        "cta_primary_url": "#enquiry"
+        "eyebrow": "Corporate & Hospitality",
+        "title": "Pamper with a postcard.",
+        "body": "Bespoke gifts, hotel amenities, and brand collaborations — made in Singapore, delivered with care.",
+        "image_alt": "",
+        "image_placeholder": "luxe hamper · top-down",
+        "cta_primary_text": "Start an enquiry →",
+        "cta_primary_url": "#enquiry",
+        "cta_secondary_text": "Download one-pager (PDF)",
+        "cta_secondary_url": ""
       }
     },
     "corp_ways": {
       "type": "postcard-corp-ways",
       "blocks": {
-        "w1": { "type": "way", "settings": { "image_placeholder": "Corporate gifts & hampers", "postmark_html": "CORPORATE", "heading": "Send a gift they'll keep.", "body": "From $80 / recipient. Bespoke wrap. Logo print available.", "cta_text": "Enquire →", "cta_url": "#enquiry" }},
-        "w2": { "type": "way", "settings": { "image_placeholder": "Hotel & spa amenities", "postmark_html": "HOTEL", "heading": "Your guests, our supplies.", "body": "Refillable formats. Custom scents. Trusted by Resorts World Sentosa.", "cta_text": "Enquire →", "cta_url": "#enquiry" }},
-        "w3": { "type": "way", "settings": { "image_placeholder": "Brand collaborations", "postmark_html": "BRAND", "heading": "Build something together.", "body": "Co-branded products. Workshops. Sustainable merch.", "cta_text": "Enquire →", "cta_url": "#enquiry" }}
+        "w1": {
+          "type": "way",
+          "settings": {
+            "image_placeholder": "Gym & Wellness Space",
+            "postmark_html": "WELLNESS",
+            "heading": "ENHANCE GUESTS EXPERIENCE.",
+            "body": "Bespoke wrap.",
+            "cta_text": "Enquire →",
+            "cta_url": "#enquiry"
+          }
+        },
+        "w2": {
+          "type": "way",
+          "settings": {
+            "image_placeholder": "Hotel & spa amenities",
+            "postmark_html": "HOTEL",
+            "heading": "Your guests, our supplies.",
+            "body": "Refillable formats. Custom scents. Trusted by Resorts World Sentosa.",
+            "cta_text": "Enquire →",
+            "cta_url": "#enquiry"
+          }
+        },
+        "w3": {
+          "type": "way",
+          "settings": {
+            "image_placeholder": "Custom Brand Scenting Collab",
+            "postmark_html": "BRAND SCENT",
+            "heading": "Build something together.",
+            "body": "Co-branded products.",
+            "cta_text": "Enquire →",
+            "cta_url": "#enquiry"
+          }
+        }
       },
-      "block_order": ["w1","w2","w3"],
-      "settings": {}
+      "block_order": [
+        "w1",
+        "w2",
+        "w3"
+      ],
+      "settings": {
+        "title": "Three ways we work together."
+      }
     },
     "corp_how": {
       "type": "postcard-corp-how",
       "blocks": {
-        "s1": { "type": "step", "settings": { "number": "01", "heading": "Tell us.", "body": "Form, volume, scent direction." }},
-        "s2": { "type": "step", "settings": { "number": "02", "heading": "We propose.", "body": "Within 2 working days." }},
-        "s3": { "type": "step", "settings": { "number": "03", "heading": "Sample.", "body": "Physical samples on orders >$1,000." }},
-        "s4": { "type": "step", "settings": { "number": "04", "heading": "We make.", "body": "Singapore beauty kitchen." }},
-        "s5": { "type": "step", "settings": { "number": "05", "heading": "We deliver.", "body": "Pickup, courier, or direct." }}
+        "s1": {
+          "type": "step",
+          "settings": {
+            "number": "01",
+            "heading": "Tell us.",
+            "body": "Form, volume, scent direction."
+          }
+        },
+        "s2": {
+          "type": "step",
+          "settings": {
+            "number": "02",
+            "heading": "We propose.",
+            "body": "Within 2 working days."
+          }
+        },
+        "s3": {
+          "type": "step",
+          "settings": {
+            "number": "03",
+            "heading": "Sample.",
+            "body": "Physical samples on orders >$1,000."
+          }
+        },
+        "s4": {
+          "type": "step",
+          "settings": {
+            "number": "04",
+            "heading": "We make.",
+            "body": "Singapore beauty kitchen."
+          }
+        },
+        "s5": {
+          "type": "step",
+          "settings": {
+            "number": "05",
+            "heading": "We deliver.",
+            "body": "Pickup, courier, or direct."
+          }
+        }
       },
-      "block_order": ["s1","s2","s3","s4","s5"],
-      "settings": {}
+      "block_order": [
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+        "s5"
+      ],
+      "settings": {
+        "title": "How it works."
+      }
     },
     "corp_form": {
       "type": "postcard-corp-form",
-      "settings": { "anchor_id": "enquiry" }
+      "settings": {
+        "anchor_id": "enquiry",
+        "eyebrow": "Tell us what you need",
+        "title": "We reply in 2 working days.",
+        "subtitle": "No bots, just Postcard humans.",
+        "signature": "— Hildra & team",
+        "label_name": "Your name *",
+        "label_company": "Company name *",
+        "label_email": "Work email *",
+        "label_phone": "Phone (optional)",
+        "label_topic": "I'm interested in *",
+        "label_body": "Tell us more",
+        "topics": "Gifts,Hospitality,Collaboration,Workshop,Other",
+        "submit_text": "Send enquiry →",
+        "contact_tag": "corporate"
+      }
     }
   },
   "order": [

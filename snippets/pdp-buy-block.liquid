@@ -67,6 +67,25 @@
 {%- when 'sizes' -%}
   {%- if product.has_only_default_variant -%}
     <input type="hidden" name="id" value="{{ current.id }}" {{ block.shopify_attributes }}>
+  {%- elsif product.options_with_values.size > 1 -%}
+    <input type="hidden" name="id" :value="variantId" value="{{ current.id }}" {{ block.shopify_attributes }}>
+    {%- for option in product.options_with_values -%}
+      <div class="pc-pdp-buy__option">
+        <div class="eyebrow pc-pdp-buy__option-label">{{ option.name }}</div>
+        <div class="pc-pdp-buy__sizes">
+          {%- for value in option.values -%}
+            <label class="pc-pdp-buy__size-radio">
+              <input type="radio"
+                     name="pc_opt_{{ forloop.parentloop.index0 }}"
+                     value="{{ value | escape }}"
+                     {% if value == option.selected_value %}checked{% endif %}
+                     @change="selectedOptions[{{ forloop.parentloop.index0 }}] = $event.target.value; updateVariant()">
+              <span class="pc-pdp-buy__size">{{ value }}</span>
+            </label>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endfor -%}
   {%- else -%}
     {%- assign option_label = product.options.first | default: 'Size' -%}
     {%- assign size_label = block.settings.label -%}

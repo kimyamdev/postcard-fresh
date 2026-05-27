@@ -204,6 +204,7 @@
         },
         "n2": {
           "type": "nav_link",
+          "disabled": true,
           "settings": {
             "text": "Subscribe",
             "url": "/pages/subscriptions"

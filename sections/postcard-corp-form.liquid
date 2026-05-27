@@ -15,7 +15,18 @@
       {%- endif -%}
     </div>
     {%- form 'contact', class: 'pc-corp-form__form' -%}
+      {%- if form.posted_successfully? -%}
+        <div class="pc-corp-form__success">
+          {{ section.settings.success_text | default: "Thanks — your message is on its way. We'll be in touch as soon as we can." }}
+        </div>
+      {%- endif -%}
+      {%- if form.errors -%}
+        <div class="pc-corp-form__errors">
+          {{ form.errors | default_errors }}
+        </div>
+      {%- endif -%}
       <input type="hidden" name="contact[tags]" value="{{ section.settings.contact_tag | default: 'corporate' }}">
+      <input type="hidden" name="contact[subject]" value="{{ section.settings.subject | default: 'Corporate inquiry — Postcard site' }}">
       <div class="pc-corp-form__field">
         <label class="eyebrow">{{ section.settings.label_name | default: 'Your name *' }}</label>
         <input type="text" name="contact[name]" required>
@@ -70,7 +81,9 @@
     { "type": "text", "id": "label_body", "label": "Message label", "default": "Tell us more" },
     { "type": "text", "id": "topics", "label": "Topic options", "default": "Gifts,Hospitality,Collaboration,Workshop,Other", "info": "Comma-separated list of radio options." },
     { "type": "text", "id": "submit_text", "label": "Submit button", "default": "Send enquiry →" },
-    { "type": "text", "id": "contact_tag", "label": "Contact tag", "default": "corporate", "info": "Tag added to the submission for filtering in admin." }
+    { "type": "text", "id": "contact_tag", "label": "Contact tag", "default": "corporate", "info": "Tag added to the submission for filtering in admin." },
+    { "type": "text", "id": "subject", "label": "Email subject line", "default": "Corporate inquiry — Postcard site", "info": "Shown in the email subject when this form is submitted, so it's easy to spot vs. the public contact form." },
+    { "type": "textarea", "id": "success_text", "label": "Success message", "default": "Thanks — your message is on its way. We'll be in touch as soon as we can.", "info": "Shown to the visitor after submitting the form." }
   ],
   "presets": [{ "name": "Corporate · Form" }]
 }

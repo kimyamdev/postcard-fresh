@@ -95,8 +95,8 @@
         "s3"
       ],
       "settings": {
-        "title": "Three steps. One coffee.",
-        "note": "Takes about 5 minutes. We'll throw in a coffee at the Orchard flagship."
+        "title": "Three steps. Forever yours.",
+        "note": "Takes about 5 minutes at our Orchard flagship. Refill, repeat, rejoice."
       }
     },
     "refill_stats": {
@@ -284,7 +284,7 @@
       "settings": {
         "anchor_id": "refill-list",
         "eyebrow": "The refill catalogue",
-        "title": "Every product you can return.",
+        "title": "Every product you can refill.",
         "collection": "refillable"
       }
     },

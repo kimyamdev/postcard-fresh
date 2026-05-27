@@ -2664,6 +2664,24 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   font-size: 14px;
   box-sizing: border-box;
 }
+.pc-corp-form__success {
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  background: var(--color-yellow);
+  border: 1.5px solid var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.pc-corp-form__errors {
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border: 1.5px solid #b3261e;
+  color: #b3261e;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.pc-corp-form__errors ul { margin: 0; padding-left: 18px; }
 .pc-corp-form__pills { display: flex; flex-wrap: wrap; gap: 8px; }
 .pc-corp-form__pill {
   padding: 8px 14px;
@@ -2756,7 +2774,29 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 }
 .pc-refill-cat__filter--active { background: var(--color-ink); color: var(--color-bg); }
 .pc-refill-cat__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-.pc-refill-cat .pc-product-card__world-stamp { display: none; }
+.pc-refill-cat .pc-product-card__world-stamp { display: block; top: 12px; right: 12px; width: 56px; }
+.pc-refill-cat .pc-product-card__world-stamp-img { filter: none; }
+.pc-refill-cat .pc-product-card__chip { display: none; }
+.pc-refill-cat .pc-product-card__badge {
+  top: 14% !important;
+  left: -36% !important;
+  right: auto !important;
+  width: 100%;
+  transform: translate(0, -50%) rotate(-45deg);
+  transform-origin: center center;
+  background: var(--color-yellow);
+  border: 1.5px solid var(--color-ink);
+  border-left: none;
+  border-right: none;
+  padding: 8px 0 8px 10%;
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  text-align: center;
+  z-index: 3;
+  pointer-events: none;
+}
 
 .pc-refill-stores { background: var(--color-bg-warm); }
 .pc-refill-stores__title { font-size: 44px; margin-bottom: 32px; }
