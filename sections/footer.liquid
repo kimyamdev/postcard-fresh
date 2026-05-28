@@ -1,82 +1,92 @@
 {{ 'postcard-components.css' | asset_url | stylesheet_tag }}
 
+{%- liquid
+  assign worlds_all = shop.metaobjects.world.values
+  assign world_total = 0
+  for w in worlds_all
+    if w.tier.value == 'World'
+      assign world_total = world_total | plus: 1
+    endif
+  endfor
+  assign worlds_visible = section.settings.worlds_visible | default: 5
+-%}
+
 <footer class="pc-footer">
   <div class="container">
     <div class="pc-footer__grid">
+      {%- comment -%} Newsletter column (always first) {%- endcomment -%}
       <div>
-        <div class="h-display pc-footer__newsletter-title">POSTCARDS<br>IN YOUR INBOX.</div>
-        <p class="pc-footer__newsletter-blurb">New worlds, refill news, occasional treats. No spam &mdash; promise.</p>
+        {%- if section.settings.nl_title != blank -%}
+          <div class="h-display pc-footer__newsletter-title">{{ section.settings.nl_title }}</div>
+        {%- endif -%}
+        {%- if section.settings.nl_blurb != blank -%}
+          <p class="pc-footer__newsletter-blurb">{{ section.settings.nl_blurb }}</p>
+        {%- endif -%}
         {%- form 'customer', class: 'pc-footer__newsletter-form' -%}
-          <input type="hidden" name="contact[tags]" value="newsletter">
-          <input type="email" name="contact[email]" placeholder="your@email.com" class="pc-footer__newsletter-input" required>
-          <button type="submit" class="btn btn--small" style="box-shadow: 3px 3px 0 var(--color-yellow);">Send &rarr;</button>
+          {%- if form.posted_successfully? -%}
+            <div class="pc-footer__newsletter-thanks">{{ section.settings.nl_success | default: 'Thanks — you’re on the list.' }}</div>
+          {%- else -%}
+            <input type="hidden" name="contact[tags]" value="{{ section.settings.nl_tag | default: 'newsletter' }}">
+            <input type="email" name="contact[email]" placeholder="{{ section.settings.nl_placeholder | default: 'your@email.com' }}" class="pc-footer__newsletter-input" required>
+            <button type="submit" class="btn btn--small" style="box-shadow: 3px 3px 0 var(--color-yellow);">{{ section.settings.nl_button | default: 'Send →' }}</button>
+          {%- endif -%}
         {%- endform -%}
-        <div class="pc-footer__newsletter-incentive">Sign up &amp; get $10 off your first $50.</div>
+        {%- if section.settings.nl_incentive != blank -%}
+          <div class="pc-footer__newsletter-incentive">{{ section.settings.nl_incentive }}</div>
+        {%- endif -%}
       </div>
-      <div>
-        <div class="eyebrow pc-footer__col-title">Shop</div>
-        <a class="pc-footer__link" href="/collections/all">All products</a>
-        <a class="pc-footer__link" href="/collections/bestsellers">Bestsellers</a>
-        <a class="pc-footer__link" href="/collections/new-and-limited">New &amp; limited</a>
-        <a class="pc-footer__link" href="/collections/gifts">Gifts</a>
-        <a class="pc-footer__link" href="/collections/discovery">Discovery</a>
-        <a class="pc-footer__link" href="/pages/custom">Custom</a>
-        <a class="pc-footer__link" href="/collections/refills">Refills</a>
-      </div>
-      {%- liquid
-        assign worlds_all = shop.metaobjects.world.values
-        assign world_total = 0
-        for w in worlds_all
-          if w.tier.value == 'World'
-            assign world_total = world_total | plus: 1
-          endif
-        endfor
-        assign worlds_visible = section.settings.worlds_visible | default: 5
-      -%}
-      <div>
-        <div class="eyebrow pc-footer__col-title">{{ section.settings.worlds_heading | default: 'Worlds' }}</div>
-        {%- assign emitted = 0 -%}
-        {%- for w in worlds_all -%}
-          {%- if w.tier.value != 'World' -%}{%- continue -%}{%- endif -%}
-          {%- if emitted >= worlds_visible -%}{%- break -%}{%- endif -%}
-          {%- assign w_slug = w.slug.value | default: w.handle -%}
-          <a class="pc-footer__link" href="/pages/{{ w_slug }}">{{ w.name.value }}</a>
-          {%- assign emitted = emitted | plus: 1 -%}
-        {%- endfor -%}
-        {%- assign see_all_text = section.settings.worlds_see_all | default: 'See all [count] →' | replace: '[count]', world_total -%}
-        <a class="pc-footer__link" href="{{ section.settings.worlds_see_all_url | default: '/pages/worlds' }}">{{ see_all_text }}</a>
-      </div>
-      <div>
-        <div class="eyebrow pc-footer__col-title">Discover</div>
-        <a class="pc-footer__link" href="/pages/about">About</a>
-        <a class="pc-footer__link" href="/pages/membership">Membership</a>
-        <a class="pc-footer__link" href="/pages/refill">Refill</a>
-        <a class="pc-footer__link" href="/pages/flagship">Visit Orchard flagship</a>
-        <a class="pc-footer__link" href="/pages/corporate">Corporate</a>
-        <a class="pc-footer__link" href="/pages/workshops">Workshops</a>
-        <a class="pc-footer__link" href="/blogs/journal">Journal</a>
-      </div>
-      <div>
-        <div class="eyebrow pc-footer__col-title">Help &amp; Legal</div>
-        <a class="pc-footer__link" href="/pages/shipping">Shipping</a>
-        <a class="pc-footer__link" href="/pages/returns">Returns</a>
-        <a class="pc-footer__link" href="/pages/refill-faq">Refill FAQ</a>
-        <a class="pc-footer__link" href="/pages/contact">Contact</a>
-        <a class="pc-footer__link" href="/policies/terms-of-service">Terms</a>
-        <a class="pc-footer__link" href="/policies/privacy-policy">Privacy</a>
-        <a class="pc-footer__link" href="/pages/accessibility">Accessibility</a>
-      </div>
+
+      {%- comment -%} Link columns + automatic Worlds column rendered inline via marker blocks {%- endcomment -%}
+      {%- assign column_open = false -%}
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'link_column' -%}
+            {%- if column_open -%}</div>{%- endif -%}
+            <div {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <div class="eyebrow pc-footer__col-title">{{ block.settings.heading }}</div>
+              {%- endif -%}
+              {%- assign column_open = true -%}
+          {%- when 'link' -%}
+            {%- if column_open -%}
+              <a class="pc-footer__link" href="{{ block.settings.url | default: '#' }}" {{ block.shopify_attributes }}>{{ block.settings.text }}</a>
+            {%- endif -%}
+          {%- when 'worlds_column' -%}
+            {%- if column_open -%}</div>{%- endif -%}
+            <div {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <div class="eyebrow pc-footer__col-title">{{ block.settings.heading }}</div>
+              {%- endif -%}
+              {%- assign emitted = 0 -%}
+              {%- for w in worlds_all -%}
+                {%- if w.tier.value != 'World' -%}{%- continue -%}{%- endif -%}
+                {%- if emitted >= worlds_visible -%}{%- break -%}{%- endif -%}
+                {%- assign w_slug = w.slug.value | default: w.handle -%}
+                <a class="pc-footer__link" href="/pages/{{ w_slug }}">{{ w.name.value }}</a>
+                {%- assign emitted = emitted | plus: 1 -%}
+              {%- endfor -%}
+              {%- if block.settings.see_all_url != blank or block.settings.see_all_text != blank -%}
+                {%- assign see_all_text = block.settings.see_all_text | default: 'See all [count] →' | replace: '[count]', world_total -%}
+                <a class="pc-footer__link" href="{{ block.settings.see_all_url | default: '/pages/worlds' }}">{{ see_all_text }}</a>
+              {%- endif -%}
+              {%- assign column_open = true -%}
+        {%- endcase -%}
+      {%- endfor -%}
+      {%- if column_open -%}</div>{%- endif -%}
     </div>
+
     <div class="pc-footer__bottom">
       <div class="pc-footer__badges">
-        <span class="pc-footer__badge">&middot; Made in Singapore &middot;</span>
-        <span class="pc-footer__badge">&middot; Refillable &middot;</span>
-        <span class="pc-footer__badge">&middot; Cruelty-free &middot;</span>
-        <span class="pc-footer__badge">&middot; Vegan-where-possible &middot;</span>
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'badge' -%}
+            <span class="pc-footer__badge" {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
+          {%- endif -%}
+        {%- endfor -%}
       </div>
-      <div class="pc-footer__copy">
-        &copy; {{ 'now' | date: '%Y' }} POSTCARD &middot; Life supplies, forever yours.
-      </div>
+      {%- if section.settings.copyright != blank -%}
+        {%- assign copyline = section.settings.copyright | replace: '[year]', 'now' | date: '%Y' -%}
+        <div class="pc-footer__copy">{{ copyline }}</div>
+      {%- endif -%}
     </div>
   </div>
 </footer>
@@ -85,11 +95,89 @@
 {
   "name": "Footer",
   "settings": [
-    { "type": "header", "content": "Worlds column" },
-    { "type": "text", "id": "worlds_heading", "label": "Heading", "default": "Worlds" },
-    { "type": "range", "id": "worlds_visible", "label": "Worlds to show", "min": 0, "max": 12, "step": 1, "default": 5, "info": "Pulls tier-World metaobjects in admin order." },
-    { "type": "text", "id": "worlds_see_all", "label": "See-all text", "default": "See all [count] →", "info": "[count] is replaced with the total tier-World worlds." },
-    { "type": "url", "id": "worlds_see_all_url", "label": "See-all URL" }
-  ]
+    { "type": "header", "content": "Newsletter" },
+    { "type": "text", "id": "nl_title", "label": "Title", "default": "POSTCARDS<br>IN YOUR INBOX." },
+    { "type": "text", "id": "nl_blurb", "label": "Blurb", "default": "New worlds, refill news, occasional treats. No spam — promise." },
+    { "type": "text", "id": "nl_placeholder", "label": "Email placeholder", "default": "your@email.com" },
+    { "type": "text", "id": "nl_button", "label": "Button text", "default": "Send →" },
+    { "type": "text", "id": "nl_tag", "label": "Tag on submission", "default": "newsletter" },
+    { "type": "text", "id": "nl_incentive", "label": "Incentive line (below form)", "default": "Sign up & get $10 off your first $50." },
+    { "type": "text", "id": "nl_success", "label": "Success message", "default": "Thanks — you’re on the list." },
+    { "type": "header", "content": "Auto-driven Worlds column" },
+    { "type": "paragraph", "content": "Lives where you place its block. The list is pulled from tier-World metaobjects in admin order." },
+    { "type": "range", "id": "worlds_visible", "label": "Worlds to show", "min": 0, "max": 12, "step": 1, "default": 5 },
+    { "type": "header", "content": "Bottom row" },
+    { "type": "text", "id": "copyright", "label": "Copyright line", "default": "© [year] POSTCARD · Life supplies, forever yours.", "info": "[year] is replaced with the current year." }
+  ],
+  "blocks": [
+    {
+      "type": "link_column",
+      "name": "Link column (heading)",
+      "settings": [
+        { "type": "paragraph", "content": "Place this block, then drag Link blocks beneath it. Links belong to the most recent column above them." },
+        { "type": "text", "id": "heading", "label": "Column heading", "default": "Shop" }
+      ]
+    },
+    {
+      "type": "link",
+      "name": "Link",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "All products" },
+        { "type": "url", "id": "url", "label": "Link" }
+      ]
+    },
+    {
+      "type": "worlds_column",
+      "name": "Auto Worlds column",
+      "limit": 1,
+      "settings": [
+        { "type": "paragraph", "content": "Auto-populated from tier-World metaobjects. Use 'Worlds to show' in the section settings to set the cap." },
+        { "type": "text", "id": "heading", "label": "Column heading", "default": "Worlds" },
+        { "type": "text", "id": "see_all_text", "label": "See-all link text", "default": "See all [count] →", "info": "[count] is replaced with the total tier-World worlds." },
+        { "type": "url", "id": "see_all_url", "label": "See-all URL" }
+      ]
+    },
+    {
+      "type": "badge",
+      "name": "Bottom badge",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "· Made in Singapore ·" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Footer",
+    "blocks": [
+      { "type": "link_column", "settings": { "heading": "Shop" }},
+      { "type": "link", "settings": { "text": "All products", "url": "/collections/all" }},
+      { "type": "link", "settings": { "text": "Bestsellers", "url": "/collections/bestsellers" }},
+      { "type": "link", "settings": { "text": "New & limited", "url": "/collections/new-and-limited" }},
+      { "type": "link", "settings": { "text": "Gifts", "url": "/collections/gifts" }},
+      { "type": "link", "settings": { "text": "Discovery", "url": "/collections/discovery" }},
+      { "type": "link", "settings": { "text": "Custom", "url": "/pages/custom" }},
+      { "type": "link", "settings": { "text": "Refills", "url": "/collections/refills" }},
+      { "type": "worlds_column", "settings": { "heading": "Worlds", "see_all_text": "See all [count] →", "see_all_url": "/pages/worlds" }},
+      { "type": "link_column", "settings": { "heading": "Discover" }},
+      { "type": "link", "settings": { "text": "About", "url": "/pages/about" }},
+      { "type": "link", "settings": { "text": "Membership", "url": "/pages/membership" }},
+      { "type": "link", "settings": { "text": "Refill", "url": "/pages/refill" }},
+      { "type": "link", "settings": { "text": "Visit Orchard flagship", "url": "/pages/flagship" }},
+      { "type": "link", "settings": { "text": "Corporate", "url": "/pages/corporate" }},
+      { "type": "link", "settings": { "text": "Workshops", "url": "/pages/workshops" }},
+      { "type": "link", "settings": { "text": "Journal", "url": "/blogs/journal" }},
+      { "type": "link_column", "settings": { "heading": "Help & Legal" }},
+      { "type": "link", "settings": { "text": "Shipping", "url": "/pages/shipping" }},
+      { "type": "link", "settings": { "text": "Returns", "url": "/pages/returns" }},
+      { "type": "link", "settings": { "text": "Refill FAQ", "url": "/pages/refill-faq" }},
+      { "type": "link", "settings": { "text": "Contact", "url": "/pages/contact" }},
+      { "type": "link", "settings": { "text": "Terms", "url": "/policies/terms-of-service" }},
+      { "type": "link", "settings": { "text": "Privacy", "url": "/policies/privacy-policy" }},
+      { "type": "link", "settings": { "text": "Accessibility", "url": "/pages/accessibility" }},
+      { "type": "badge", "settings": { "text": "· Made in Singapore ·" }},
+      { "type": "badge", "settings": { "text": "· Refillable ·" }},
+      { "type": "badge", "settings": { "text": "· Cruelty-free ·" }},
+      { "type": "badge", "settings": { "text": "· Vegan-where-possible ·" }}
+    ]
+  }]
 }
 {% endschema %}

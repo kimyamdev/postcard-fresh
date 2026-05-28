@@ -1,22 +1,67 @@
-<section class="pc-mem-hero">
-  <div class="container">
-    {%- if section.settings.eyebrow != blank -%}
-      <div class="eyebrow">{{ section.settings.eyebrow }}</div>
-    {%- endif -%}
-    {%- if section.settings.title != blank -%}
-      <h1 class="h-display pc-mem-hero__title">{{ section.settings.title }}</h1>
-    {%- endif -%}
-    {%- if section.settings.body != blank -%}
-      <p class="pc-mem-hero__body">{{ section.settings.body }}</p>
-    {%- endif -%}
-    <div class="pc-mem-hero__ctas">
-      {%- if section.settings.cta_primary_text != blank -%}
-        <a class="btn" href="{{ section.settings.cta_primary_url | default: routes.account_register_url }}">{{ section.settings.cta_primary_text }}</a>
+{%- liquid
+  assign gif = section.settings.gif
+  assign vfile = section.settings.video
+  assign vurl = section.settings.video_url
+  assign has_video = false
+  if gif != blank or vfile != blank or vurl != blank
+    assign has_video = true
+  endif
+-%}
+<section class="pc-mem-hero{% if has_video %} pc-mem-hero--split{% endif %}">
+  <div class="container pc-mem-hero__inner">
+    <div class="pc-mem-hero__copy">
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="eyebrow">{{ section.settings.eyebrow }}</div>
       {%- endif -%}
-      {%- if section.settings.cta_secondary_text != blank -%}
-        <a class="tlink" href="{{ section.settings.cta_secondary_url | default: routes.account_login_url }}">{{ section.settings.cta_secondary_text }}</a>
+      {%- if section.settings.title != blank -%}
+        <h1 class="h-display pc-mem-hero__title">{{ section.settings.title }}</h1>
       {%- endif -%}
+      {%- if section.settings.body != blank -%}
+        <p class="pc-mem-hero__body">{{ section.settings.body }}</p>
+      {%- endif -%}
+      <div class="pc-mem-hero__ctas">
+        {%- if section.settings.cta_primary_text != blank -%}
+          <a class="btn" href="{{ section.settings.cta_primary_url | default: routes.account_register_url }}">{{ section.settings.cta_primary_text }}</a>
+        {%- endif -%}
+        {%- if section.settings.cta_secondary_text != blank -%}
+          <a class="tlink" href="{{ section.settings.cta_secondary_url | default: routes.account_login_url }}">{{ section.settings.cta_secondary_text }}</a>
+        {%- endif -%}
+      </div>
     </div>
+    {%- if has_video -%}
+      <div class="pc-mem-hero__media">
+        {%- if gif != blank -%}
+          {{ gif | image_url: width: 1200 | image_tag: alt: section.settings.title, loading: 'lazy', widths: '600,900,1200' }}
+        {%- elsif vfile != blank -%}
+          {{
+            vfile
+            | video_tag:
+              autoplay: true,
+              loop: true,
+              muted: true,
+              controls: section.settings.show_controls,
+              playsinline: true,
+              image_size: '1200x'
+          }}
+        {%- elsif vurl.type == 'youtube' -%}
+          <iframe
+            src="https://www.youtube.com/embed/{{ vurl.id }}?autoplay=1&mute=1&loop=1&playlist={{ vurl.id }}&controls={% if section.settings.show_controls %}1{% else %}0{% endif %}&modestbranding=1&playsinline=1&rel=0"
+            title="{{ section.settings.title | escape }}"
+            frameborder="0"
+            loading="lazy"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            allowfullscreen></iframe>
+        {%- elsif vurl.type == 'vimeo' -%}
+          <iframe
+            src="https://player.vimeo.com/video/{{ vurl.id }}?autoplay=1&muted=1&loop=1&background={% if section.settings.show_controls %}0{% else %}1{% endif %}"
+            title="{{ section.settings.title | escape }}"
+            frameborder="0"
+            loading="lazy"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowfullscreen></iframe>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
   </div>
 </section>
 
@@ -28,6 +73,11 @@
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Postcard Membership" },
     { "type": "text", "id": "title", "label": "Title", "default": "Your self-care passport." },
     { "type": "textarea", "id": "body", "label": "Body", "default": "Earn coins on every order. Unlock perks the more you visit." },
+    { "type": "header", "content": "Media (right side)" },
+    { "type": "image_picker", "id": "gif", "label": "GIF (or image)", "info": "Upload an animated GIF or any image. Highest priority — takes precedence over video below." },
+    { "type": "video", "id": "video", "label": "Shopify-hosted video", "info": "Upload a video via Shopify Files. Used when no GIF is set." },
+    { "type": "video_url", "id": "video_url", "label": "External video URL", "accept": ["youtube", "vimeo"], "info": "Used when no GIF or Shopify-hosted video is set. Paste a YouTube or Vimeo link." },
+    { "type": "checkbox", "id": "show_controls", "label": "Show player controls", "default": false, "info": "Off = clean autoplay loop, no chrome." },
     { "type": "header", "content": "Primary CTA" },
     { "type": "text", "id": "cta_primary_text", "label": "Text", "default": "Join free →" },
     { "type": "url", "id": "cta_primary_url", "label": "Link" },

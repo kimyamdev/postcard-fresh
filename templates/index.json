@@ -27,7 +27,7 @@
     "worlds_quick": {
       "type": "postcard-worlds-quick",
       "settings": {
-        "eyebrow": "Six destinations",
+        "eyebrow": "Destinations",
         "title": "Pick a world.",
         "visible_count": 7,
         "see_all_text": "See all [count] worlds →",

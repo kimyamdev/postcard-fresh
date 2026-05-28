@@ -2508,7 +2508,8 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 .pc-about-story__title { font-size: 56px; margin-top: 8px; }
 .pc-about-story__p { margin-top: 18px; font-size: 16px; line-height: 1.7; }
 .pc-about-story__p + .pc-about-story__p { margin-top: 14px; }
-.pc-about-story__image { aspect-ratio: 4/5; }
+.pc-about-story__image { aspect-ratio: 4/5; padding: 0; overflow: hidden; }
+.pc-about-story__image img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 .pc-about-beliefs { background: var(--color-bg-warm); }
 .pc-about-beliefs__title { font-size: 56px; margin-bottom: 36px; }
@@ -2556,6 +2557,18 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 .pc-mem-hero__title { font-size: clamp(56px, 8vw, 96px); margin-top: 12px; }
 .pc-mem-hero__body { margin-top: 16px; font-size: 18px; opacity: 0.8; }
 .pc-mem-hero__ctas { margin-top: 28px; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+.pc-mem-hero--split { text-align: left; }
+.pc-mem-hero--split .pc-mem-hero__inner { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.pc-mem-hero--split .pc-mem-hero__ctas { justify-content: flex-start; }
+.pc-mem-hero__media {
+  position: relative;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  background: transparent;
+}
+.pc-mem-hero__media iframe,
+.pc-mem-hero__media video,
+.pc-mem-hero__media img { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; object-fit: contain; background: transparent; }
 
 .pc-mem-tiers__title { font-size: 48px; margin-bottom: 32px; text-align: center; }
 .pc-mem-tiers__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
@@ -3271,6 +3284,9 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 
   /* Membership */
   .pc-mem-hero__title { font-size: 48px; }
+  .pc-mem-hero--split .pc-mem-hero__inner { grid-template-columns: 1fr; gap: 32px; }
+  .pc-mem-hero--split { text-align: center; }
+  .pc-mem-hero--split .pc-mem-hero__ctas { justify-content: center; }
   .pc-mem-tiers__grid,
   .pc-mem-earn__grid { grid-template-columns: 1fr; }
 

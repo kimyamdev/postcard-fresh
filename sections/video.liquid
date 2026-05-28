@@ -21,6 +21,10 @@
   assign alt = 'sections.video.load_video' | t: description: video_alt | escape
   assign poster = section.settings.video.preview_image | default: section.settings.cover_image
 
+  assign vid_ratio = section.settings.video.aspect_ratio | default: poster.aspect_ratio | default: 1.778
+  assign max_h = section.settings.max_height | default: 0
+  assign max_w_px = max_h | times: vid_ratio | round
+
   if section.settings.video != null
     assign ratio_diff = section.settings.video.aspect_ratio | minus: poster.aspect_ratio | abs
     if ratio_diff < 0.01 and ratio_diff > 0
@@ -54,9 +58,7 @@
     <deferred-media
       class="video-section__media deferred-media gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if fix_ratio %} media-fit-cover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
       data-media-id="{{ video_id }}"
-      {% if poster != null %}
-        style="--ratio-percent: {{ 1 | divided_by: poster.aspect_ratio | times: 100 }}%;"
-      {% endif %}
+      style="{% if poster != null %}--ratio-percent: {{ 1 | divided_by: poster.aspect_ratio | times: 100 }}%;{% endif %}{% if max_h > 0 %} max-width: {{ max_w_px }}px; margin-left: auto; margin-right: auto;{% endif %}"
     >
       <button
         id="Deferred-Poster-Modal-{{ video_id }}"
@@ -214,6 +216,17 @@
       "id": "full_width",
       "label": "t:sections.video.settings.full_width.label",
       "default": false
+    },
+    {
+      "type": "range",
+      "id": "max_height",
+      "label": "Max height (px)",
+      "min": 0,
+      "max": 900,
+      "step": 20,
+      "default": 0,
+      "unit": "px",
+      "info": "0 = no cap. Caps the rendered height in pixels; width auto-adjusts to keep the source aspect ratio."
     },
     {
       "type": "color_scheme",
