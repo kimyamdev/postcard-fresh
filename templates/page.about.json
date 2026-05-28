@@ -12,6 +12,7 @@
     "about_hero": {
       "type": "postcard-about-hero",
       "settings": {
+        "image": "shopify://shop_images/WhatsApp_Image_2026-05-28_at_14.56.39.jpg",
         "image_alt": "",
         "image_placeholder": "Hildra · in the beauty kitchen, mid-formulation",
         "eyebrow": "Made by humans, in Singapore.",
@@ -37,7 +38,7 @@
         "p3": {
           "type": "paragraph",
           "settings": {
-            "text": "<p>Postcard was born in 2019 — first as a refillery in Everton Park, then as a brand built around a question: <em>what if self-care was simpler, kinder, and a little bit playful?</em></p>"
+            "text": "<p>Postcard (F.K.A Oasis Beauty Kitchen) was born in 2018 — as a beauty refillery in Everton Park, and as a brand built around a question: <em>what if self-care was simpler, kinder, and a little bit playful?</em></p>"
           }
         }
       },
@@ -49,7 +50,7 @@
       "settings": {
         "eyebrow": "The beginning",
         "title": "It started with a face that wouldn't behave.",
-        "image": "shopify://shop_images/WhatsApp_Image_2026-05-28_at_09.22.48.jpg",
+        "image": "shopify://shop_images/ChatGPT_Image_May_28_2026_05_18_15_PM.png",
         "image_alt": "",
         "image_placeholder": "cookie-jar refillery, 2019"
       }

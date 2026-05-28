@@ -1,0 +1,146 @@
+{%- liquid
+  assign topics_str = section.settings.topics | default: 'General,Order help,Refills,Press,Other'
+  assign topics = topics_str | split: ','
+-%}
+<section class="section pc-contact-form" id="{{ section.settings.anchor_id | default: 'contact' }}">
+  <div class="container pc-contact-form__inner">
+    <div class="pc-contact-form__panel">
+      {%- if section.settings.form_title != blank -%}
+        <h2 class="h-display pc-contact-form__title">{{ section.settings.form_title }}</h2>
+      {%- endif -%}
+      {%- if section.settings.form_sub != blank -%}
+        <p class="pc-contact-form__sub">{{ section.settings.form_sub }}</p>
+      {%- endif -%}
+      {%- form 'contact', class: 'pc-contact-form__form' -%}
+        {%- if form.posted_successfully? -%}
+          <div class="pc-corp-form__success">
+            {{ section.settings.success_text | default: "Thanks — your message is on its way. We'll be in touch as soon as we can." }}
+          </div>
+        {%- endif -%}
+        {%- if form.errors -%}
+          <div class="pc-corp-form__errors">
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+        <input type="hidden" name="contact[tags]" value="{{ section.settings.contact_tag | default: 'contact' }}">
+        <input type="hidden" name="contact[subject]" value="{{ section.settings.subject | default: 'Contact form — Postcard site' }}">
+        <div class="pc-corp-form__field">
+          <label class="eyebrow">{{ section.settings.label_name | default: 'Your name *' }}</label>
+          <input type="text" name="contact[name]" required>
+        </div>
+        <div class="pc-corp-form__field">
+          <label class="eyebrow">{{ section.settings.label_email | default: 'Email *' }}</label>
+          <input type="email" name="contact[email]" required>
+        </div>
+        {%- if topics.size > 0 -%}
+          <div class="pc-corp-form__field">
+            <label class="eyebrow">{{ section.settings.label_topic | default: "What's it about? *" }}</label>
+            <div class="pc-corp-form__pills">
+              {%- for t in topics -%}
+                {%- assign t_clean = t | strip -%}
+                <label class="pc-corp-form__pill"><input type="radio" name="contact[topic]" value="{{ t_clean }}"> {{ t_clean }}</label>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+        <div class="pc-corp-form__field">
+          <label class="eyebrow">{{ section.settings.label_order | default: 'Order number (if any)' }}</label>
+          <input type="text" name="contact[order_number]">
+        </div>
+        <div class="pc-corp-form__field">
+          <label class="eyebrow">{{ section.settings.label_body | default: 'Your message *' }}</label>
+          <textarea name="contact[body]" rows="5" required></textarea>
+        </div>
+        <button class="btn" type="submit">{{ section.settings.submit_text | default: 'Send message →' }}</button>
+      {%- endform -%}
+    </div>
+
+    <aside class="pc-contact-form__info">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'info' -%}
+            <div class="pc-contact-info" {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <div class="eyebrow pc-contact-info__heading">{{ block.settings.heading }}</div>
+              {%- endif -%}
+              {%- if block.settings.body != blank -%}
+                <div class="pc-contact-info__body">{{ block.settings.body | newline_to_br }}</div>
+              {%- endif -%}
+              {%- if block.settings.link_text != blank -%}
+                <a class="tlink pc-contact-info__link" href="{{ block.settings.link_url | default: '#' }}">{{ block.settings.link_text }}</a>
+              {%- endif -%}
+            </div>
+          {%- when 'social' -%}
+            <div class="pc-contact-social" {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <div class="eyebrow pc-contact-info__heading">{{ block.settings.heading }}</div>
+              {%- endif -%}
+              <div class="pc-contact-social__row">
+                {%- if block.settings.instagram_url != blank -%}<a class="tlink" href="{{ block.settings.instagram_url }}">Instagram</a>{%- endif -%}
+                {%- if block.settings.tiktok_url != blank -%}<a class="tlink" href="{{ block.settings.tiktok_url }}">TikTok</a>{%- endif -%}
+                {%- if block.settings.facebook_url != blank -%}<a class="tlink" href="{{ block.settings.facebook_url }}">Facebook</a>{%- endif -%}
+                {%- if block.settings.youtube_url != blank -%}<a class="tlink" href="{{ block.settings.youtube_url }}">YouTube</a>{%- endif -%}
+              </div>
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </aside>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact · Form",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Anchor ID", "default": "contact" },
+    { "type": "header", "content": "Form copy" },
+    { "type": "text", "id": "form_title", "label": "Form title", "default": "Send us a note." },
+    { "type": "textarea", "id": "form_sub", "label": "Subtitle", "default": "Reach us at hello@postcard.sg — or fill the form below." },
+    { "type": "text", "id": "label_name", "label": "Name label", "default": "Your name *" },
+    { "type": "text", "id": "label_email", "label": "Email label", "default": "Email *" },
+    { "type": "text", "id": "label_topic", "label": "Topic label", "default": "What's it about? *" },
+    { "type": "textarea", "id": "topics", "label": "Topic options (comma-separated)", "default": "General,Order help,Refills,Press,Other" },
+    { "type": "text", "id": "label_order", "label": "Order number label", "default": "Order number (if any)" },
+    { "type": "text", "id": "label_body", "label": "Message label", "default": "Your message *" },
+    { "type": "text", "id": "submit_text", "label": "Submit button text", "default": "Send message →" },
+    { "type": "header", "content": "Email routing" },
+    { "type": "text", "id": "contact_tag", "label": "Contact tag", "default": "contact", "info": "Tag added to the submission for filtering in admin." },
+    { "type": "text", "id": "subject", "label": "Email subject line", "default": "Contact form — Postcard site" },
+    { "type": "textarea", "id": "success_text", "label": "Success message", "default": "Thanks — your message is on its way. We'll be in touch as soon as we can." }
+  ],
+  "blocks": [
+    {
+      "type": "info",
+      "name": "Info block",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Email" },
+        { "type": "textarea", "id": "body", "label": "Body", "default": "hello@postcard.sg" },
+        { "type": "text", "id": "link_text", "label": "Link text (optional)" },
+        { "type": "url", "id": "link_url", "label": "Link URL" }
+      ]
+    },
+    {
+      "type": "social",
+      "name": "Social links",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Find us elsewhere" },
+        { "type": "url", "id": "instagram_url", "label": "Instagram URL" },
+        { "type": "url", "id": "tiktok_url", "label": "TikTok URL" },
+        { "type": "url", "id": "facebook_url", "label": "Facebook URL" },
+        { "type": "url", "id": "youtube_url", "label": "YouTube URL" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Contact · Form",
+    "blocks": [
+      { "type": "info", "settings": { "heading": "Email", "body": "hello@postcard.sg" }},
+      { "type": "info", "settings": { "heading": "Phone", "body": "+65 6123 4567\nMon–Fri 10am–6pm" }},
+      { "type": "info", "settings": { "heading": "Visit", "body": "Postcard Flagship · Orchard\n391 Orchard Road, #B2–11A\nTakashimaya Shopping Centre", "link_text": "Get directions →", "link_url": "https://maps.google.com/?q=391+Orchard+Road+Singapore" }},
+      { "type": "social", "settings": { "heading": "Find us elsewhere" }}
+    ]
+  }]
+}
+{% endschema %}

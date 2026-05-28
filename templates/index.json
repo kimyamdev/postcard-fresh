@@ -40,7 +40,7 @@
       "type": "postcard-bestsellers",
       "settings": {
         "eyebrow": "The classics",
-        "title": "Postcards we send most often.",
+        "title": "Products we send most often.",
         "lede": "The ones you keep coming back to. Sent 1,200+ times in the last 95 days.",
         "collection": "current-top-picks",
         "randomize": true,
@@ -169,7 +169,7 @@
         "p1": {
           "type": "paragraph",
           "settings": {
-            "text": "<p>Postcard started in 2019 — first as a refillery in Everton Park, then as a brand built around a question: what if self-care was simpler, kinder, and a little bit playful?</p>"
+            "text": "<p>Postcard (F.K.A. Oasis Beauty Kitchen) started in 2018 — as a refillery in Everton Park, and as a brand built around a question: what if self-care was simpler, kinder, and a little bit playful?</p>"
           }
         },
         "p2": {
@@ -184,7 +184,7 @@
         "p2"
       ],
       "settings": {
-        "photo": "shopify://shop_images/WhatsApp_Image_2026-05-28_at_09.22.48.jpg",
+        "photo": "shopify://shop_images/ChatGPT_Image_May_28_2026_05_18_15_PM.png",
         "photo_alt": "",
         "photo_placeholder": "Hildra · in the beauty kitchen",
         "eyebrow": "Made by humans, in Singapore.",

@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "name": "t:sections.footer.name",
   "type": "footer",
@@ -5,35 +14,214 @@
     "footer": {
       "type": "footer",
       "blocks": {
-        "shop_col": { "type": "link_column", "settings": { "heading": "Shop" } },
-        "shop_l1": { "type": "link", "settings": { "text": "All products", "url": "/collections/all" } },
-        "shop_l2": { "type": "link", "settings": { "text": "Bestsellers", "url": "/collections/bestsellers" } },
-        "shop_l3": { "type": "link", "settings": { "text": "New & limited", "url": "/collections/new-and-limited" } },
-        "shop_l4": { "type": "link", "settings": { "text": "Gifts", "url": "/collections/gifts" } },
-        "shop_l5": { "type": "link", "settings": { "text": "Discovery", "url": "/collections/discovery" } },
-        "shop_l6": { "type": "link", "settings": { "text": "Custom", "url": "/pages/custom" } },
-        "shop_l7": { "type": "link", "settings": { "text": "Refills", "url": "/collections/refills" } },
-        "worlds_col": { "type": "worlds_column", "settings": { "heading": "Worlds", "see_all_text": "See all [count] →", "see_all_url": "/pages/worlds" } },
-        "discover_col": { "type": "link_column", "settings": { "heading": "Discover" } },
-        "disc_l1": { "type": "link", "settings": { "text": "About", "url": "/pages/about" } },
-        "disc_l2": { "type": "link", "settings": { "text": "Membership", "url": "/pages/membership" } },
-        "disc_l3": { "type": "link", "settings": { "text": "Refill", "url": "/pages/refill" } },
-        "disc_l4": { "type": "link", "settings": { "text": "Visit Orchard flagship", "url": "/pages/flagship" } },
-        "disc_l5": { "type": "link", "settings": { "text": "Corporate", "url": "/pages/corporate" } },
-        "disc_l6": { "type": "link", "settings": { "text": "Workshops", "url": "/pages/workshops" } },
-        "disc_l7": { "type": "link", "settings": { "text": "Journal", "url": "/blogs/journal" } },
-        "help_col": { "type": "link_column", "settings": { "heading": "Help & Legal" } },
-        "help_l1": { "type": "link", "settings": { "text": "Shipping", "url": "/pages/shipping" } },
-        "help_l2": { "type": "link", "settings": { "text": "Returns", "url": "/pages/returns" } },
-        "help_l3": { "type": "link", "settings": { "text": "Refill FAQ", "url": "/pages/refill-faq" } },
-        "help_l4": { "type": "link", "settings": { "text": "Contact", "url": "/pages/contact" } },
-        "help_l5": { "type": "link", "settings": { "text": "Terms", "url": "/policies/terms-of-service" } },
-        "help_l6": { "type": "link", "settings": { "text": "Privacy", "url": "/policies/privacy-policy" } },
-        "help_l7": { "type": "link", "settings": { "text": "Accessibility", "url": "/pages/accessibility" } },
-        "badge_1": { "type": "badge", "settings": { "text": "· Made in Singapore ·" } },
-        "badge_2": { "type": "badge", "settings": { "text": "· Refillable ·" } },
-        "badge_3": { "type": "badge", "settings": { "text": "· Cruelty-free ·" } },
-        "badge_4": { "type": "badge", "settings": { "text": "· Vegan-where-possible ·" } }
+        "shop_col": {
+          "type": "link_column",
+          "settings": {
+            "heading": "Shop"
+          }
+        },
+        "shop_l1": {
+          "type": "link",
+          "settings": {
+            "text": "All products",
+            "url": "/collections/all"
+          }
+        },
+        "shop_l2": {
+          "type": "link",
+          "settings": {
+            "text": "Crowd-pleasers",
+            "url": "/collections/bestsellers"
+          }
+        },
+        "shop_l3": {
+          "type": "link",
+          "disabled": true,
+          "settings": {
+            "text": "New & limited",
+            "url": "/collections/new-and-limited"
+          }
+        },
+        "shop_l4": {
+          "type": "link",
+          "disabled": true,
+          "settings": {
+            "text": "Gifts",
+            "url": "/collections/gifts"
+          }
+        },
+        "shop_l5": {
+          "type": "link",
+          "disabled": true,
+          "settings": {
+            "text": "Discovery",
+            "url": "/collections/discovery"
+          }
+        },
+        "shop_l6": {
+          "type": "link",
+          "disabled": true,
+          "settings": {
+            "text": "Custom",
+            "url": "/pages/custom"
+          }
+        },
+        "shop_l7": {
+          "type": "link",
+          "disabled": true,
+          "settings": {
+            "text": "Refills",
+            "url": "/collections/refills"
+          }
+        },
+        "worlds_col": {
+          "type": "worlds_column",
+          "settings": {
+            "heading": "Worlds",
+            "see_all_text": "See all [count] →",
+            "see_all_url": "/pages/worlds"
+          }
+        },
+        "discover_col": {
+          "type": "link_column",
+          "settings": {
+            "heading": "Discover"
+          }
+        },
+        "disc_l1": {
+          "type": "link",
+          "settings": {
+            "text": "About",
+            "url": "/pages/about"
+          }
+        },
+        "disc_l2": {
+          "type": "link",
+          "settings": {
+            "text": "Membership",
+            "url": "/pages/membership"
+          }
+        },
+        "disc_l3": {
+          "type": "link",
+          "settings": {
+            "text": "Refill",
+            "url": "/pages/refill"
+          }
+        },
+        "disc_l4": {
+          "type": "link",
+          "settings": {
+            "text": "Visit Orchard flagship",
+            "url": "/pages/flagship"
+          }
+        },
+        "disc_l5": {
+          "type": "link",
+          "settings": {
+            "text": "Corporate",
+            "url": "/pages/corporate"
+          }
+        },
+        "disc_l6": {
+          "type": "link",
+          "disabled": true,
+          "settings": {
+            "text": "Workshops",
+            "url": "/pages/workshops"
+          }
+        },
+        "disc_l7": {
+          "type": "link",
+          "disabled": true,
+          "settings": {
+            "text": "Journal",
+            "url": "/blogs/journal"
+          }
+        },
+        "help_col": {
+          "type": "link_column",
+          "settings": {
+            "heading": "Help & Legal"
+          }
+        },
+        "help_l1": {
+          "type": "link",
+          "disabled": true,
+          "settings": {
+            "text": "Shipping",
+            "url": "/pages/shipping"
+          }
+        },
+        "help_l2": {
+          "type": "link",
+          "disabled": true,
+          "settings": {
+            "text": "Returns",
+            "url": "/pages/returns"
+          }
+        },
+        "help_l3": {
+          "type": "link",
+          "disabled": true,
+          "settings": {
+            "text": "Refill FAQ",
+            "url": "/pages/refill-faq"
+          }
+        },
+        "help_l4": {
+          "type": "link",
+          "settings": {
+            "text": "Contact",
+            "url": "/pages/contact"
+          }
+        },
+        "help_l5": {
+          "type": "link",
+          "settings": {
+            "text": "Terms",
+            "url": "/policies/terms-of-service"
+          }
+        },
+        "help_l6": {
+          "type": "link",
+          "settings": {
+            "text": "Privacy",
+            "url": "/policies/privacy-policy"
+          }
+        },
+        "help_l7": {
+          "type": "link",
+          "disabled": true,
+          "settings": {
+            "text": "Accessibility",
+            "url": "/pages/accessibility"
+          }
+        },
+        "badge_1": {
+          "type": "badge",
+          "settings": {
+            "text": "· Made in Singapore ·"
+          }
+        },
+        "badge_2": {
+          "type": "badge",
+          "settings": {
+            "text": "· Refillable ·"
+          }
+        },
+        "badge_3": {
+          "type": "badge",
+          "settings": {
+            "text": "· Cruelty-free ·"
+          }
+        },
+        "badge_4": {
+          "type": "badge",
+          "settings": {
+            "text": "· Vegan-where-possible ·"
+          }
+        }
       },
       "block_order": [
         "shop_col",
@@ -66,7 +254,17 @@
         "badge_3",
         "badge_4"
       ],
-      "settings": {}
+      "settings": {
+        "nl_title": "POSTCARDS IN YOUR INBOX.",
+        "nl_blurb": "New worlds, refill news, occasional treats. No spam — promise.",
+        "nl_placeholder": "your@email.com",
+        "nl_button": "Send →",
+        "nl_tag": "newsletter",
+        "nl_incentive": "Sign up & get 10% off your first order.",
+        "nl_success": "Thanks — you’re on the list.",
+        "worlds_visible": 5,
+        "copyright": "© [year] POSTCARD · Life supplies, forever yours."
+      }
     }
   },
   "order": [

@@ -1,0 +1,44 @@
+{%- liquid
+  assign image = section.settings.image
+-%}
+<section class="pc-contact-hero">
+  <div class="container pc-contact-hero__inner">
+    <div class="pc-contact-hero__copy">
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h1 class="h-display pc-contact-hero__title">{{ section.settings.title }}</h1>
+      {%- endif -%}
+      {%- if section.settings.body != blank -%}
+        <p class="pc-contact-hero__body">{{ section.settings.body }}</p>
+      {%- endif -%}
+    </div>
+    {%- if image != blank or section.settings.image_placeholder != blank -%}
+      <div class="ph pc-contact-hero__image">
+        {%- if image != blank -%}
+          {{ image | image_url: width: 1200 | image_tag: alt: section.settings.image_alt | default: 'Contact Postcard', loading: 'eager', widths: '600,900,1200' }}
+        {%- else -%}
+          <span>{{ section.settings.image_placeholder }}</span>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact · Hero",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Say hi" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Drop us a postcard." },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "Questions, custom orders, press, hellos — we read every message. We aim to reply within two working days." },
+    { "type": "header", "content": "Right-side image (optional)" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text" },
+    { "type": "text", "id": "image_placeholder", "label": "Placeholder text", "default": "Our team · in the beauty kitchen" }
+  ],
+  "presets": [{ "name": "Contact · Hero" }]
+}
+{% endschema %}

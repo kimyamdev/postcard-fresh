@@ -1,25 +1,90 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "main": {
-      "type": "main-page",
+    "contact_hero": {
+      "type": "postcard-contact-hero",
       "settings": {
-        "padding_top": 36,
-        "padding_bottom": 36
+        "eyebrow": "Say hi",
+        "title": "Drop us a postcard.",
+        "body": "Questions, custom orders, press, hellos — we read every message. We aim to reply within two working days.",
+        "image_alt": "",
+        "image_placeholder": "Our team · in the beauty kitchen"
       }
     },
-    "form": {
-      "type": "contact-form",
+    "contact_form": {
+      "type": "postcard-contact-form",
+      "blocks": {
+        "info_email": {
+          "type": "info",
+          "settings": {
+            "heading": "Email",
+            "body": "hello@wearepostcard.com",
+            "link_text": "",
+            "link_url": ""
+          }
+        },
+        "info_phone": {
+          "type": "info",
+          "settings": {
+            "heading": "Phone",
+            "body": "+65 6738 1111 (Orchard Flagship)\nMon–Sun 10am–9.30pm\n+65 8923 3765 (Delta House HQ)\nMon–Fri 9.30am–6pm",
+            "link_text": "",
+            "link_url": ""
+          }
+        },
+        "info_visit": {
+          "type": "info",
+          "settings": {
+            "heading": "Visit",
+            "body": "Postcard Flagship · Orchard\n391 Orchard Road, #B2–11A\nTakashimaya Shopping Centre",
+            "link_text": "Get directions →",
+            "link_url": "https://maps.google.com/?q=391+Orchard+Road+Singapore"
+          }
+        },
+        "social": {
+          "type": "social",
+          "settings": {
+            "heading": "Find us elsewhere",
+            "instagram_url": "",
+            "tiktok_url": "",
+            "facebook_url": "",
+            "youtube_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "info_email",
+        "info_phone",
+        "info_visit",
+        "social"
+      ],
       "settings": {
-        "heading": "",
-        "heading_size": "h1",
-        "color_scheme": "scheme-1",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "anchor_id": "contact",
+        "form_title": "Send us a note.",
+        "form_sub": "Reach us at hello@wearepostcard.com — or fill the form below.",
+        "label_name": "Your name *",
+        "label_email": "Email *",
+        "label_topic": "What's it about? *",
+        "topics": "General,Order help,Refills,Press,Other",
+        "label_order": "Order number (if any)",
+        "label_body": "Your message *",
+        "submit_text": "Send message →",
+        "contact_tag": "contact",
+        "subject": "Contact form — Postcard site",
+        "success_text": "Thanks — your message is on its way. We'll be in touch as soon as we can."
       }
     }
   },
   "order": [
-    "main",
-    "form"
+    "contact_hero",
+    "contact_form"
   ]
 }
