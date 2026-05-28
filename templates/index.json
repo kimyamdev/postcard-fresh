@@ -165,7 +165,30 @@
     },
     "brand_belief": {
       "type": "postcard-brand-belief",
+      "blocks": {
+        "p1": {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>Postcard started in 2019 — first as a refillery in Everton Park, then as a brand built around a question: what if self-care was simpler, kinder, and a little bit playful?</p>"
+          }
+        },
+        "p2": {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>We mix, pour, and pack everything ourselves. Refill where we can. Source from local farms and distilleries. Painstakingly fuss until it's perfect.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2"
+      ],
       "settings": {
+        "photo": "shopify://shop_images/WhatsApp_Image_2026-05-28_at_09.22.48.jpg",
+        "photo_alt": "",
+        "photo_placeholder": "Hildra · in the beauty kitchen",
+        "eyebrow": "Made by humans, in Singapore.",
+        "title": "Do more with less.",
         "cta_text": "Read our story →",
         "cta_url": ""
       }

@@ -717,7 +717,8 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 /* === Home: brand belief === */
 .pc-belief { background: var(--color-bg-warm); }
 .pc-belief__inner { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
-.pc-belief__photo { aspect-ratio: 4/5; }
+.pc-belief__photo { aspect-ratio: 4/5; padding: 0; overflow: hidden; }
+.pc-belief__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .pc-belief__title { font-size: 64px; margin-top: 8px; }
 .pc-belief__p { margin-top: 24px; font-size: 17px; line-height: 1.65; }
 .pc-belief__p + .pc-belief__p { margin-top: 16px; }

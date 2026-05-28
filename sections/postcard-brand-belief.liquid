@@ -1,15 +1,28 @@
+{%- liquid
+  assign photo = section.settings.photo
+  assign photo_alt = section.settings.photo_alt | default: 'Hildra · in the beauty kitchen' | escape
+-%}
 <section class="section pc-belief">
   <div class="container pc-belief__inner">
-    <div class="ph pc-belief__photo"><span>Hildra &middot; in the beauty kitchen</span></div>
+    <div class="ph pc-belief__photo">
+      {%- if photo != blank -%}
+        {{ photo | image_url: width: 1200 | image_tag: alt: photo_alt, loading: 'lazy', widths: '600,900,1200' }}
+      {%- else -%}
+        <span>{{ section.settings.photo_placeholder | default: 'Hildra · in the beauty kitchen' }}</span>
+      {%- endif -%}
+    </div>
     <div>
-      <div class="eyebrow">Made by humans, in Singapore.</div>
-      <h2 class="h-display pc-belief__title">Do more with less.</h2>
-      <p class="pc-belief__p">
-        Postcard started in 2019 &mdash; first as a refillery in Everton Park, then as a brand built around a question: what if self-care was simpler, kinder, and a little bit playful?
-      </p>
-      <p class="pc-belief__p">
-        We mix, pour, and pack everything ourselves. Refill where we can. Source from local farms and distilleries. Painstakingly fuss until it&rsquo;s perfect.
-      </p>
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="h-display pc-belief__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'paragraph' -%}
+          <p class="pc-belief__p" {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
+        {%- endif -%}
+      {%- endfor -%}
       {%- if section.settings.cta_text != blank -%}
         <div class="pc-belief__cta">
           <a class="tlink" href="{{ section.settings.cta_url | default: '/pages/about' }}">{{ section.settings.cta_text }}</a>
@@ -23,10 +36,32 @@
 {
   "name": "Postcard Brand Belief",
   "settings": [
+    { "type": "header", "content": "Photo" },
+    { "type": "image_picker", "id": "photo", "label": "Photo" },
+    { "type": "text", "id": "photo_alt", "label": "Photo alt text" },
+    { "type": "text", "id": "photo_placeholder", "label": "Placeholder text", "default": "Hildra · in the beauty kitchen" },
+    { "type": "header", "content": "Copy" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Made by humans, in Singapore." },
+    { "type": "text", "id": "title", "label": "Title", "default": "Do more with less." },
     { "type": "header", "content": "CTA" },
     { "type": "text", "id": "cta_text", "label": "Text", "default": "Read our story →" },
     { "type": "url",  "id": "cta_url",  "label": "Link" }
   ],
-  "presets": [{ "name": "Postcard Brand Belief" }]
+  "blocks": [
+    {
+      "type": "paragraph",
+      "name": "Paragraph",
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "Paragraph text", "default": "<p>Postcard started in 2019 — first as a refillery in Everton Park, then as a brand built around a question: what if self-care was simpler, kinder, and a little bit playful?</p>" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Postcard Brand Belief",
+    "blocks": [
+      { "type": "paragraph", "settings": { "text": "<p>Postcard started in 2019 — first as a refillery in Everton Park, then as a brand built around a question: what if self-care was simpler, kinder, and a little bit playful?</p>" }},
+      { "type": "paragraph", "settings": { "text": "<p>We mix, pour, and pack everything ourselves. Refill where we can. Source from local farms and distilleries. Painstakingly fuss until it's perfect.</p>" }}
+    ]
+  }]
 }
 {% endschema %}
