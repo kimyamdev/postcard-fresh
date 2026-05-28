@@ -15,6 +15,7 @@
         "eyebrow": "Corporate & Hospitality",
         "title": "Pamper with a postcard.",
         "body": "Bespoke gifts, hotel amenities, and brand collaborations — made in Singapore, delivered with care.",
+        "image": "shopify://shop_images/wellness_studio_sg.png",
         "image_alt": "",
         "image_placeholder": "luxe hamper · top-down",
         "cta_primary_text": "Start an enquiry →",
@@ -29,10 +30,11 @@
         "w1": {
           "type": "way",
           "settings": {
+            "image": "shopify://shop_images/spa_mbs.png",
             "image_placeholder": "Gym & Wellness Space",
             "postmark_html": "WELLNESS",
             "heading": "ENHANCE GUESTS EXPERIENCE.",
-            "body": "Bespoke wrap.",
+            "body": "Bespoke wrap. Refillable formats. Trusted by several prominent gyms and wellness studios.",
             "cta_text": "Enquire →",
             "cta_url": "#enquiry"
           }
@@ -40,10 +42,11 @@
         "w2": {
           "type": "way",
           "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_May_28_2026_08_31_14_AM.png",
             "image_placeholder": "Hotel & spa amenities",
             "postmark_html": "HOTEL",
             "heading": "Your guests, our supplies.",
-            "body": "Refillable formats. Custom scents. Trusted by Resorts World Sentosa.",
+            "body": "Refillable formats. Trusted by Resorts World Sentosa.",
             "cta_text": "Enquire →",
             "cta_url": "#enquiry"
           }
@@ -51,10 +54,11 @@
         "w3": {
           "type": "way",
           "settings": {
+            "image": "shopify://shop_images/law_scent.png",
             "image_placeholder": "Custom Brand Scenting Collab",
             "postmark_html": "BRAND SCENT",
             "heading": "Build something together.",
-            "body": "Co-branded products.",
+            "body": "Co-branded custom scented products. We work with law firms, medical clinics, retail outlets.",
             "cta_text": "Enquire →",
             "cta_url": "#enquiry"
           }
@@ -140,7 +144,9 @@
         "label_body": "Tell us more",
         "topics": "Gifts,Hospitality,Collaboration,Workshop,Other",
         "submit_text": "Send enquiry →",
-        "contact_tag": "corporate"
+        "contact_tag": "corporate",
+        "subject": "Corporate inquiry — Postcard site",
+        "success_text": "Thanks — your message is on its way. We'll be in touch as soon as we can."
       }
     }
   },

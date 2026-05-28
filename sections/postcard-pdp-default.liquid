@@ -67,6 +67,32 @@
         updateVariant() {
           var key = (this.selectedOptions[0] || "") + "|" + (this.selectedOptions[1] || "") + "|" + (this.selectedOptions[2] || "");
           if (this.variantMap[key]) this.variantId = this.variantMap[key];
+        },
+        pickOption(idx) {
+          var key = this.selectedOptions.join("|");
+          if (this.variantMap[key]) { this.variantId = this.variantMap[key]; return; }
+          var picked = this.selectedOptions[idx];
+          for (var k in this.variantMap) {
+            var parts = k.split("|");
+            if (parts[idx] === picked) {
+              for (var p = 0; p < this.selectedOptions.length; p++) this.selectedOptions[p] = parts[p];
+              this.variantId = this.variantMap[k];
+              return;
+            }
+          }
+        },
+        valueAvailable(idx, val) {
+          for (var k in this.variantMap) {
+            var parts = k.split("|");
+            if (parts[idx] !== val) continue;
+            var ok = true;
+            for (var p = 0; p < this.selectedOptions.length; p++) {
+              if (p === idx) continue;
+              if (this.selectedOptions[p] && parts[p] !== this.selectedOptions[p]) { ok = false; break; }
+            }
+            if (ok) return true;
+          }
+          return false;
         }
       }' x-init="$watch('variantId', value => window.dispatchEvent(new CustomEvent('variant-change', { detail: { variantId: value } })))">
         <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data" class="pc-pdp-buy__form">

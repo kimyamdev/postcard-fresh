@@ -14,12 +14,28 @@
     "header": {
       "type": "header",
       "blocks": {
-        "s1": {
+        "s4": {
           "type": "shop_item",
           "settings": {
             "column": 1,
-            "text": "Body",
-            "url": "/collections/body"
+            "text": "Deodorants",
+            "url": "/collections/deodorant"
+          }
+        },
+        "shop_item_VTzD9z": {
+          "type": "shop_item",
+          "settings": {
+            "column": 1,
+            "text": "Anywhere Fragrance",
+            "url": "shopify://collections/anywhere-fragrance"
+          }
+        },
+        "s5": {
+          "type": "shop_item",
+          "settings": {
+            "column": 1,
+            "text": "Home Scenting",
+            "url": "/collections/home-fragrance"
           }
         },
         "s2": {
@@ -30,28 +46,20 @@
             "url": "shopify://collections/hair"
           }
         },
+        "s1": {
+          "type": "shop_item",
+          "settings": {
+            "column": 1,
+            "text": "Body",
+            "url": "/collections/body"
+          }
+        },
         "s3": {
           "type": "shop_item",
           "settings": {
             "column": 1,
             "text": "Face",
             "url": "/collections/face"
-          }
-        },
-        "s4": {
-          "type": "shop_item",
-          "settings": {
-            "column": 1,
-            "text": "Deodorants",
-            "url": "/collections/deodorant"
-          }
-        },
-        "s5": {
-          "type": "shop_item",
-          "settings": {
-            "column": 1,
-            "text": "Home Fragrance",
-            "url": "/collections/home-fragrance"
           }
         },
         "s6": {
@@ -333,11 +341,12 @@
         }
       },
       "block_order": [
-        "s1",
-        "s2",
-        "s3",
         "s4",
+        "shop_item_VTzD9z",
         "s5",
+        "s2",
+        "s1",
+        "s3",
         "s6",
         "s7",
         "s8",

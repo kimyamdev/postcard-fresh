@@ -70,16 +70,19 @@
   {%- elsif product.options_with_values.size > 1 -%}
     <input type="hidden" name="id" :value="variantId" value="{{ current.id }}" {{ block.shopify_attributes }}>
     {%- for option in product.options_with_values -%}
+      {%- assign opt_idx = forloop.index0 -%}
       <div class="pc-pdp-buy__option">
         <div class="eyebrow pc-pdp-buy__option-label">{{ option.name }}</div>
         <div class="pc-pdp-buy__sizes">
           {%- for value in option.values -%}
-            <label class="pc-pdp-buy__size-radio">
+            {%- assign value_js = value | replace: '\', '\\' | replace: "'", "\'" -%}
+            <label class="pc-pdp-buy__size-radio" x-show="valueAvailable({{ opt_idx }}, '{{ value_js }}')">
               <input type="radio"
-                     name="pc_opt_{{ forloop.parentloop.index0 }}"
+                     name="pc_opt_{{ opt_idx }}"
                      value="{{ value | escape }}"
                      {% if value == option.selected_value %}checked{% endif %}
-                     @change="selectedOptions[{{ forloop.parentloop.index0 }}] = $event.target.value; updateVariant()">
+                     x-model="selectedOptions[{{ opt_idx }}]"
+                     @change="pickOption({{ opt_idx }})">
               <span class="pc-pdp-buy__size">{{ value }}</span>
             </label>
           {%- endfor -%}

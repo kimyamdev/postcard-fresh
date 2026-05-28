@@ -16,7 +16,7 @@
         "image_placeholder": "Hildra · in the beauty kitchen, mid-formulation",
         "eyebrow": "Made by humans, in Singapore.",
         "title": "Do more with less.",
-        "body": "Postcard is a self-care destination, made in our beauty kitchen in Singapore. Effective natural recipes, simple ingredients, the least wasteful packaging we can manage. We're here to make care personal again."
+        "body": "Postcard is a self-care destination, made in our beauty kitchen in Singapore. Effective non-toxic formulations, simple ingredients, the least wasteful packaging we can manage. We're here to make care personal again."
       }
     },
     "about_story": {
@@ -126,6 +126,7 @@
       "type": "postcard-about-worlds",
       "settings": {
         "title": "[count] worlds. One bathroom shelf at a time.",
+        "show_name": true,
         "max_count": 0
       }
     }
