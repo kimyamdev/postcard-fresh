@@ -9,6 +9,9 @@
     {%- else -%}
       <span>{{ section.settings.image_placeholder | default: 'Hildra · in the beauty kitchen, mid-formulation' }}</span>
     {%- endif -%}
+    {%- if section.settings.legend != blank -%}
+      <div class="pc-image-legend">{{ section.settings.legend }}</div>
+    {%- endif -%}
   </div>
   <div class="pc-about-hero__copy">
     {%- if section.settings.eyebrow != blank -%}
@@ -31,6 +34,7 @@
     { "type": "image_picker", "id": "image", "label": "Hero image" },
     { "type": "text", "id": "image_alt", "label": "Image alt text" },
     { "type": "text", "id": "image_placeholder", "label": "Placeholder text", "default": "Hildra · in the beauty kitchen, mid-formulation" },
+    { "type": "text", "id": "legend", "label": "Image legend (bottom-left caption)", "info": "Typewriter-style caption overlaid on the image." },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Made by humans, in Singapore." },
     { "type": "text", "id": "title", "label": "Title", "default": "Do more with less." },
     { "type": "textarea", "id": "body", "label": "Body", "default": "Postcard is a self-care destination, made in our beauty kitchen in Singapore. Effective natural recipes, simple ingredients, the least wasteful packaging we can manage. We're here to make care personal again." }

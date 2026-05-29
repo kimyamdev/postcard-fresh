@@ -23,6 +23,9 @@
       {%- else -%}
         <span>{{ section.settings.image_placeholder | default: 'cookie-jar refillery, 2019' }}</span>
       {%- endif -%}
+      {%- if section.settings.legend != blank -%}
+        <div class="pc-image-legend">{{ section.settings.legend }}</div>
+      {%- endif -%}
     </div>
   </div>
 </section>
@@ -36,7 +39,8 @@
     { "type": "text", "id": "title", "label": "Title", "default": "It started with a face that wouldn't behave." },
     { "type": "image_picker", "id": "image", "label": "Image" },
     { "type": "text", "id": "image_alt", "label": "Image alt text" },
-    { "type": "text", "id": "image_placeholder", "label": "Placeholder text", "default": "cookie-jar refillery, 2019" }
+    { "type": "text", "id": "image_placeholder", "label": "Placeholder text", "default": "cookie-jar refillery, 2019" },
+    { "type": "text", "id": "legend", "label": "Image legend (bottom-left caption)", "info": "Typewriter-style caption overlaid on the image." }
   ],
   "blocks": [
     {

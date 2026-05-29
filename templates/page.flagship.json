@@ -15,9 +15,10 @@
         "eyebrow": "The flagship store",
         "title_override": "Postcard Orchard",
         "italic_title": true,
+        "use_custom_title_font": false,
         "title_font": "assistant_n4",
-        "body_override": "<p>Every Postcard product, all in one place.</p><p>Our team is here seven days a week — talk through your routine in person, or refill and customise your body washes and shampoos right at the counter.</p>",
-        "media_image": "shopify://shop_images/WhatsApp_Image_2026-05-01_at_13.14.54.jpg",
+        "body_override": "<p>Every Postcard product, all in one place.</p><p>Our team is here seven days a week — talk through your routine in person, or refill and customise your deodorants, body washes and shampoos right at the counter.</p>",
+        "media_image": "shopify://shop_images/ChatGPT_Image_May_29_2026_09_34_22_AM.png",
         "padding_top": 36,
         "padding_bottom": 36
       }
