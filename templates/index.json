@@ -11,10 +11,89 @@
   "sections": {
     "hero": {
       "type": "postcard-hero",
+      "blocks": {
+        "slide_L3nrtC": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/citrus_circus_solid_shampoo_shower_foam.png",
+            "eyebrow": "",
+            "tag": "",
+            "stamp_1": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Citrus_Circus_d79903a6-9d38-4229-a96d-6564e3817381.png"
+          }
+        },
+        "slide_MrQF3G": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/IMG-1889.png",
+            "eyebrow": "",
+            "tag": ""
+          }
+        },
+        "slide_HJcpjm": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/IMG-1859.png",
+            "eyebrow": "",
+            "tag": ""
+          }
+        },
+        "slide_RhiCVG": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/IMG-1923.png",
+            "eyebrow": "",
+            "tag": ""
+          }
+        },
+        "slide_yWCwxr": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/IMG-1872_f15eb88d-b600-4577-8c6f-1b75ef0fa9cd.png",
+            "eyebrow": "",
+            "tag": ""
+          }
+        },
+        "slide_dNEmwg": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/tennis_-_deodorant.png",
+            "eyebrow": "",
+            "tag": ""
+          }
+        },
+        "slide_XKmj8Q": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/IMG-1872_f15eb88d-b600-4577-8c6f-1b75ef0fa9cd.png",
+            "eyebrow": "",
+            "tag": ""
+          }
+        },
+        "slide_tXfdBB": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/IMG-1885.png",
+            "eyebrow": "",
+            "tag": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_L3nrtC",
+        "slide_MrQF3G",
+        "slide_HJcpjm",
+        "slide_RhiCVG",
+        "slide_yWCwxr",
+        "slide_dNEmwg",
+        "slide_XKmj8Q",
+        "slide_tXfdBB"
+      ],
       "settings": {
+        "slide_duration_ms": 3500,
+        "media_image": "shopify://shop_images/IMG-1885.png",
         "media_opacity": 100,
-        "visual_eyebrow": "Full-bleed · Postcards from our worlds",
-        "visual_tag": "Hotel Lobby · sunlit marble, brass, a vase of yellow tulips",
+        "visual_eyebrow": "",
+        "visual_tag": "",
         "hide_overlay_text": false,
         "show_postmark": true,
         "postmark_html": "POSTCARD<br>· SINGAPORE ·<br>EST. 2018",

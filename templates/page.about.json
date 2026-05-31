@@ -16,8 +16,8 @@
         "image_alt": "",
         "image_placeholder": "Hildra · in the beauty kitchen, mid-formulation",
         "legend": "EDNA AND SOPHIA, leading production of postcard products",
-        "eyebrow": "Made by humans, in Singapore.",
-        "title": "Do more with less.",
+        "eyebrow": "Formulated and made fresh in Singapore.",
+        "title": "Made in-house.",
         "body": "Postcard is a self-care destination, made in our beauty kitchen in Singapore. Effective non-toxic formulations, simple ingredients, the least wasteful packaging we can manage. We're here to make care personal again."
       }
     },
@@ -92,8 +92,8 @@
           "settings": {
             "color": "#c7a8d6",
             "postmark_html": "MADE",
-            "heading": "Made by humans",
-            "body": "Mixed, poured, packed in Singapore."
+            "heading": "Made in-house",
+            "body": "Mixed, poured, packed in our own facility."
           }
         },
         "b5": {
@@ -120,7 +120,7 @@
     "about_why": {
       "type": "postcard-about-why",
       "settings": {
-        "eyebrow": "Why postcards?",
+        "eyebrow": "Why postcard?",
         "title": "Every product is a moment of arrival.",
         "body": "Every world a destination. Every refill a return trip. The postcard is what you send when you wish someone could feel what you're feeling.",
         "signature": "life supplies, forever yours."

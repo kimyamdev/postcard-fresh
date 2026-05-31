@@ -2,42 +2,91 @@
   assign media_image = section.settings.media_image
   assign media_video = section.settings.media_video
   assign media_opacity = section.settings.media_opacity | default: 100
-  assign overlay_eyebrow = section.settings.visual_eyebrow | default: 'Full-bleed · Postcards from our worlds'
-  assign overlay_tag = section.settings.visual_tag | default: 'Hotel Lobby · sunlit marble, brass, a vase of yellow tulips'
+  assign overlay_eyebrow = section.settings.visual_eyebrow
+  assign overlay_tag = section.settings.visual_tag
   assign hide_overlay_text = section.settings.hide_overlay_text
+  assign slide_duration_ms = section.settings.slide_duration_ms | default: 5000
+
+  assign slides = section.blocks | where: 'type', 'slide'
+  assign slide_count = slides.size
 -%}
 <section class="pc-hero">
-  <div class="ph ph--world world-hotel-lobby pc-hero__visual">
-    {%- if media_video != blank -%}
-      <div class="pc-hero__media" style="opacity: {{ media_opacity }}%;">
+  <div class="ph ph--world world-hotel-lobby pc-hero__visual"
+       style="--hero-media-opacity: {{ media_opacity }}%;"
+       {%- if slide_count > 1 %} x-data="{ i: 0, n: {{ slide_count }} }"
+       x-init="setInterval(() => i = (i + 1) % n, {{ slide_duration_ms }})"{%- endif -%}
+       >
+    {%- if slide_count > 0 -%}
+      {%- for block in slides -%}
+        {%- assign s_idx = forloop.index0 -%}
+        {%- assign s_video = block.settings.video -%}
+        {%- assign s_image = block.settings.image -%}
+        <div class="pc-hero__media pc-hero__slide{% if slide_count == 1 %} pc-hero__slide--active{% endif %}"
+             {%- if slide_count > 1 %} :class="{ 'pc-hero__slide--active': i === {{ s_idx }} }"{%- endif -%}
+             {{ block.shopify_attributes }}>
+          {%- if s_video != blank -%}
+            {{ s_video | video_tag: image_size: '1600x', autoplay: true, loop: true, muted: true, controls: false, class: 'pc-hero__media-vid' }}
+          {%- elsif s_image != blank -%}
+            {%- assign s_alt = s_image.alt | default: block.settings.eyebrow | default: 'Hero slide' | escape -%}
+            {{ s_image | image_url: width: 1600 | image_tag: alt: s_alt, loading: 'eager', class: 'pc-hero__media-img', widths: '600,900,1200,1600,2000' }}
+          {%- endif -%}
+          {%- if block.settings.stamp_1 != blank -%}
+            <div class="pc-hero__stamp pc-hero__stamp--1">{{ block.settings.stamp_1 | image_url: width: 320 | image_tag: alt: '', loading: 'lazy' }}</div>
+          {%- endif -%}
+          {%- if block.settings.stamp_2 != blank -%}
+            <div class="pc-hero__stamp pc-hero__stamp--2">{{ block.settings.stamp_2 | image_url: width: 320 | image_tag: alt: '', loading: 'lazy' }}</div>
+          {%- endif -%}
+          {%- if block.settings.stamp_3 != blank -%}
+            <div class="pc-hero__stamp pc-hero__stamp--3">{{ block.settings.stamp_3 | image_url: width: 320 | image_tag: alt: '', loading: 'lazy' }}</div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    {%- elsif media_video != blank -%}
+      <div class="pc-hero__media">
         {{ media_video | video_tag: image_size: '1600x', autoplay: true, loop: true, muted: true, controls: false, class: 'pc-hero__media-vid' }}
       </div>
     {%- elsif media_image != blank -%}
       {%- assign media_alt = media_image.alt | default: 'Hero' | escape -%}
-      <div class="pc-hero__media" style="opacity: {{ media_opacity }}%;">
+      <div class="pc-hero__media">
         {{ media_image | image_url: width: 1600 | image_tag: alt: media_alt, loading: 'eager', class: 'pc-hero__media-img', widths: '600,900,1200,1600,2000' }}
       </div>
     {%- endif -%}
 
     {%- unless hide_overlay_text -%}
-      <div class="pc-hero__visual-text">
-        {%- if overlay_eyebrow != blank -%}
-          <div class="pc-hero__visual-eyebrow">{{ overlay_eyebrow }}</div>
-        {%- endif -%}
-        {%- if overlay_tag != blank -%}
-          <div class="pc-hero__visual-tag">{{ overlay_tag }}</div>
-        {%- endif -%}
-      </div>
+      {%- if slide_count > 0 -%}
+        {%- for block in slides -%}
+          {%- assign s_idx = forloop.index0 -%}
+          {%- assign s_eyebrow = block.settings.eyebrow | default: overlay_eyebrow -%}
+          {%- assign s_tag = block.settings.tag | default: overlay_tag -%}
+          {%- if s_eyebrow != blank or s_tag != blank -%}
+            <div class="pc-hero__visual-text pc-hero__visual-text--slide{% if slide_count == 1 %} pc-hero__visual-text--active{% endif %}"
+                 {%- if slide_count > 1 %} :class="{ 'pc-hero__visual-text--active': i === {{ s_idx }} }"{%- endif -%}
+                 >
+              {%- if s_eyebrow != blank -%}<div class="pc-hero__visual-eyebrow">{{ s_eyebrow }}</div>{%- endif -%}
+              {%- if s_tag != blank -%}<div class="pc-hero__visual-tag">{{ s_tag }}</div>{%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        <div class="pc-hero__visual-text">
+          {%- if overlay_eyebrow != blank -%}<div class="pc-hero__visual-eyebrow">{{ overlay_eyebrow }}</div>{%- endif -%}
+          {%- if overlay_tag != blank -%}<div class="pc-hero__visual-tag">{{ overlay_tag }}</div>{%- endif -%}
+        </div>
+      {%- endif -%}
     {%- endunless -%}
 
-    {%- if section.settings.show_postmark -%}
-      <div class="pc-hero__postmark-wrap">
-        <div class="postmark postmark--ink" style="width: 110px; height: 110px; font-size: 10px;">
-          <div>{{ section.settings.postmark_html | default: 'POSTCARD<br>· SINGAPORE ·<br>EST. 2019' }}</div>
-        </div>
-      </div>
-    {%- endif -%}
   </div>
+  {%- if section.settings.show_postmark -%}
+    {%- assign pm_top = section.settings.postmark_top | default: 2 -%}
+    {%- assign pm_right = section.settings.postmark_right | default: 2 -%}
+    {%- assign pm_rotate = section.settings.postmark_rotate | default: 0 -%}
+    {%- assign pm_size = section.settings.postmark_size | default: 110 -%}
+    <div class="pc-hero__postmark-wrap" style="top: {{ pm_top }}%; right: {{ pm_right }}%; transform: rotate({{ pm_rotate }}deg);">
+      <div class="postmark postmark--ink" style="width: {{ pm_size }}px; height: {{ pm_size }}px; font-size: 10px;">
+        <div>{{ section.settings.postmark_html | default: 'POSTCARD<br>· SINGAPORE ·<br>EST. 2019' }}</div>
+      </div>
+    </div>
+  {%- endif -%}
   <div class="pc-hero__copy">
     <div class="eyebrow">You&rsquo;ve reached</div>
     <h1 class="h-display pc-hero__headline">
@@ -61,16 +110,26 @@
 {% schema %}
 {
   "name": "Postcard Hero",
+  "max_blocks": 10,
   "settings": [
-    { "type": "header", "content": "Visual side (left)" },
-    { "type": "image_picker", "id": "media_image", "label": "Image", "info": "Fills the left half. PNG/JPG/WebP/SVG accepted." },
-    { "type": "video",        "id": "media_video", "label": "Video", "info": "Auto-plays muted + loops. Takes priority over the image if both are set." },
+    { "type": "header", "content": "Slideshow" },
+    { "type": "paragraph", "content": "Add up to 10 Slide blocks below to make the left side rotate. The Image/Video settings further down are only used as a fallback when no Slide blocks are present." },
+    { "type": "range", "id": "slide_duration_ms", "label": "Time per slide", "min": 2000, "max": 9500, "step": 500, "default": 5000, "unit": "ms" },
+
+    { "type": "header", "content": "Visual side (left) — fallback" },
+    { "type": "image_picker", "id": "media_image", "label": "Image", "info": "Used only when no Slide blocks are present." },
+    { "type": "video",        "id": "media_video", "label": "Video", "info": "Used only when no Slide blocks are present. Takes priority over the image." },
     { "type": "range",        "id": "media_opacity", "label": "Media opacity", "min": 20, "max": 100, "step": 5, "default": 100, "unit": "%" },
-    { "type": "text",     "id": "visual_eyebrow", "label": "Overlay eyebrow", "default": "Full-bleed · Postcards from our worlds" },
-    { "type": "text",     "id": "visual_tag",     "label": "Overlay tag",     "default": "Hotel Lobby · sunlit marble, brass, a vase of yellow tulips" },
+    { "type": "text",     "id": "visual_eyebrow", "label": "Default overlay eyebrow", "info": "Used when a slide doesn't set its own eyebrow. Leave blank to hide." },
+    { "type": "text",     "id": "visual_tag",     "label": "Default overlay tag",     "info": "Used when a slide doesn't set its own tag. Leave blank to hide." },
     { "type": "checkbox", "id": "hide_overlay_text", "label": "Hide overlay text", "default": false, "info": "Useful when the image/video already carries the message." },
+    { "type": "header",   "content": "Postmark" },
     { "type": "checkbox", "id": "show_postmark", "label": "Show postmark", "default": true },
     { "type": "html",     "id": "postmark_html", "label": "Postmark text (HTML)", "default": "POSTCARD<br>· SINGAPORE ·<br>EST. 2019" },
+    { "type": "range", "id": "postmark_top",   "label": "Top position",    "min": 0,   "max": 95, "step": 1, "default": 2,   "unit": "%", "info": "% from top of the visual panel." },
+    { "type": "range", "id": "postmark_right", "label": "Right position",  "min": -10, "max": 90, "step": 1, "default": -5,  "unit": "%", "info": "% from right edge. Negative = overhang into the copy column." },
+    { "type": "range", "id": "postmark_rotate","label": "Rotation",        "min": -45, "max": 45, "step": 1, "default": 0,   "unit": "deg" },
+    { "type": "range", "id": "postmark_size",  "label": "Size",            "min": 60,  "max": 180,"step": 5, "default": 110, "unit": "px" },
 
     { "type": "header", "content": "Primary CTA" },
     { "type": "text", "id": "primary_cta_text", "label": "Text", "default": "Find your world →" },
@@ -78,6 +137,22 @@
     { "type": "header", "content": "Secondary CTA" },
     { "type": "text", "id": "secondary_cta_text", "label": "Text", "default": "Shop bestsellers" },
     { "type": "url",  "id": "secondary_cta_url",  "label": "Link" }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "PNG/JPG/WebP/SVG accepted." },
+        { "type": "video",        "id": "video", "label": "Video", "info": "Takes priority over image if both are set. Auto-plays muted + loops." },
+        { "type": "text",         "id": "eyebrow", "label": "Overlay eyebrow", "info": "Leave blank to use the section-level default." },
+        { "type": "text",         "id": "tag", "label": "Overlay tag", "info": "Leave blank to use the section-level default." },
+        { "type": "header",       "content": "Stamps (superimposed)" },
+        { "type": "image_picker", "id": "stamp_1", "label": "Stamp 1 (top-left)" },
+        { "type": "image_picker", "id": "stamp_2", "label": "Stamp 2 (mid-right)" },
+        { "type": "image_picker", "id": "stamp_3", "label": "Stamp 3 (bottom-left)" }
+      ]
+    }
   ],
   "presets": [{ "name": "Postcard Hero" }]
 }
