@@ -1,0 +1,477 @@
+{%- comment -%}
+  Postcard mobile nav drawer — left-sliding, multi-view (root/shop/worlds/
+  account/search). Fully block-driven. Listens for window event
+  'pc-mobile-nav:open' (dispatched from the header hamburger). Visible on
+  mobile only — kept in DOM on desktop but display:none via CSS.
+{%- endcomment -%}
+
+{%- liquid
+  assign brand_label = section.settings.brand_label | default: 'POSTCARD'
+  assign search_placeholder = section.settings.search_placeholder | default: 'Search worlds, products, ingredients…'
+  assign search_view_placeholder = section.settings.search_view_placeholder | default: 'Search…'
+  assign close_label = section.settings.close_label | default: '×'
+  assign back_label = section.settings.back_label | default: '← BACK'
+  assign cancel_label = section.settings.cancel_label | default: 'CANCEL'
+
+  assign shop_view_title = section.settings.shop_view_title | default: 'SHOP'
+  assign shop_types_eyebrow = section.settings.shop_types_eyebrow | default: 'Browse by type'
+  assign shop_quick_eyebrow = section.settings.shop_quick_eyebrow | default: 'Quick links'
+
+  assign worlds_view_title = section.settings.worlds_view_title | default: '[count] WORLDS'
+  assign worlds_hint = section.settings.worlds_hint | default: 'Tap a world to enter'
+
+  assign account_signedin_back_label = section.settings.account_signedin_back_label | default: '← BACK'
+  assign account_greeting_label = section.settings.account_greeting_label | default: 'Hello,'
+  assign account_signedout_eyebrow = section.settings.account_signedout_eyebrow | default: 'Not yet a member'
+  assign account_signedout_title = section.settings.account_signedout_title | default: 'JOIN<br>POSTCARD.'
+  assign account_signedout_body = section.settings.account_signedout_body | default: 'Earn coins on every order. Free birthday gift. First dibs on new worlds. Skip the queue at the Orchard flagship.'
+  assign account_create_label = section.settings.account_create_label | default: 'CREATE ACCOUNT →'
+  assign account_signin_label = section.settings.account_signin_label | default: 'SIGN IN'
+  assign account_signedout_quick_eyebrow = section.settings.account_signedout_quick_eyebrow | default: 'Quick access'
+  assign account_signedin_quick_eyebrow = section.settings.account_signedin_quick_eyebrow | default: ''
+  assign account_signout_label = section.settings.account_signout_label | default: 'SIGN OUT'
+
+  assign footer_hello_label = section.settings.footer_hello_label | default: 'HELLO,'
+  assign footer_signedout_link = section.settings.footer_signedout_link | default: 'SIGN IN · JOIN POSTCARD'
+  assign footer_bag_label = section.settings.footer_bag_label | default: 'BAG'
+
+  assign search_pill_eyebrow = section.settings.search_pill_eyebrow | default: 'Popular searches'
+  assign search_empty = section.settings.search_empty | default: 'No matches yet — try a world name or product type.'
+
+  assign worlds = shop.metaobjects.world.values
+-%}
+
+<div
+  class="pc-mn"
+  x-data="{
+    open: false,
+    view: 'root',
+    query: '',
+    results: { products: [], collections: [], pages: [] },
+    searching: false,
+    _t: null,
+    close() { this.open = false; this.view = 'root'; this.query = ''; this.results = {products:[],collections:[],pages:[]}; },
+    setView(v) { this.view = v; },
+    runSearch(q) {
+      clearTimeout(this._t);
+      if (!q || q.length < 2) { this.results = {products:[],collections:[],pages:[]}; this.searching = false; return; }
+      this.searching = true;
+      this._t = setTimeout(async () => {
+        try {
+          const r = await fetch('/search/suggest.json?q=' + encodeURIComponent(q) + '&resources[type]=product,collection,page&resources[limit]=5');
+          const d = await r.json();
+          this.results = d.resources && d.resources.results || {products:[],collections:[],pages:[]};
+        } catch (e) { /* ignore */ } finally { this.searching = false; }
+      }, 200);
+    }
+  }"
+  @pc-mobile-nav:open.window="open = true; view = 'root'"
+  @keydown.escape.window="if (open) close()"
+  :class="{ 'pc-mn--open': open }"
+  x-cloak
+>
+  <div class="pc-mn__overlay" @click="close()"></div>
+  <aside class="pc-mn__panel" role="dialog" aria-modal="true" aria-label="Site navigation">
+
+    {%- comment -%} ============ ROOT VIEW ============ {%- endcomment -%}
+    <div x-show="view === 'root'" class="pc-mn__view">
+      <div class="pc-mn__hdr pc-mn__hdr--bg">
+        <div class="h-display pc-mn__hdr-title">{{ brand_label }}</div>
+        <button class="pc-mn__close" @click="close()" aria-label="Close menu">{{ close_label }}</button>
+      </div>
+
+      <div class="pc-mn__search-box">
+        <button class="pc-mn__search-trigger" @click="setView('search')" type="button">
+          <span>{{ search_placeholder }}</span>
+          <span class="pc-mn__search-icon" aria-hidden="true">&#8981;</span>
+        </button>
+      </div>
+
+      <nav class="pc-mn__list">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'root_item' -%}
+            {%- assign target = block.settings.target_view -%}
+            {%- if target != blank and target != 'none' -%}
+              <button type="button" class="pc-mn__item" @click="setView('{{ target }}')" {{ block.shopify_attributes }}>
+                <div>
+                  <div class="h-display pc-mn__item-label">{{ block.settings.label }}</div>
+                  {%- if block.settings.sub != blank -%}
+                    <div class="pc-mn__item-sub">{{ block.settings.sub }}</div>
+                  {%- endif -%}
+                </div>
+                <span class="pc-mn__item-arrow">&rarr;</span>
+              </button>
+            {%- else -%}
+              <a class="pc-mn__item" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
+                <div>
+                  <div class="h-display pc-mn__item-label">{{ block.settings.label }}</div>
+                  {%- if block.settings.sub != blank -%}
+                    <div class="pc-mn__item-sub">{{ block.settings.sub }}</div>
+                  {%- endif -%}
+                </div>
+                <span class="pc-mn__item-arrow">&rarr;</span>
+              </a>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </nav>
+
+      <div class="pc-mn__ftr">
+        {%- if customer -%}
+          <a href="{{ routes.account_url }}" class="tlink pc-mn__ftr-action">{{ footer_hello_label }} {{ customer.first_name | default: customer.email | upcase }}</a>
+        {%- else -%}
+          <button class="tlink pc-mn__ftr-action" @click="setView('account')" type="button">{{ footer_signedout_link }}</button>
+        {%- endif -%}
+        <a href="{{ routes.cart_url }}" class="pc-mn__ftr-bag" x-data="{ count: {{ cart.item_count }} }" @cart:updated.window="count = $event.detail.cart.item_count">
+          <span>{{ footer_bag_label }} · </span><span x-text="count"></span>
+        </a>
+      </div>
+    </div>
+
+    {%- comment -%} ============ SHOP VIEW ============ {%- endcomment -%}
+    <div x-show="view === 'shop'" x-cloak class="pc-mn__view">
+      <div class="pc-mn__hdr pc-mn__hdr--bg">
+        <button class="tlink pc-mn__back" @click="setView('root')" type="button">{{ back_label }}</button>
+        <div class="h-display pc-mn__hdr-title pc-mn__hdr-title--right">{{ shop_view_title }}</div>
+        <button class="pc-mn__close" @click="close()" aria-label="Close menu">{{ close_label }}</button>
+      </div>
+      <div class="pc-mn__scroll">
+        {%- assign has_shop_types = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'shop_type' -%}{%- assign has_shop_types = true -%}{%- break -%}{%- endif -%}
+        {%- endfor -%}
+        {%- if has_shop_types -%}
+          <div class="pc-mn__section-eyebrow">{{ shop_types_eyebrow }}</div>
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'shop_type' -%}
+              <a class="pc-mn__type-row" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
+                <span class="h-typewriter pc-mn__type-name">{{ block.settings.label }}</span>
+                <span class="pc-mn__type-arrow">&rarr;</span>
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+
+        {%- assign has_quick_tiles = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'quick_tile' -%}{%- assign has_quick_tiles = true -%}{%- break -%}{%- endif -%}
+        {%- endfor -%}
+        {%- if has_quick_tiles -%}
+          <div class="pc-mn__section-eyebrow pc-mn__section-eyebrow--gap">{{ shop_quick_eyebrow }}</div>
+          <div class="pc-mn__quick-grid">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'quick_tile' -%}
+                {%- assign tile_color = block.settings.color | default: '#E8C36A' -%}
+                {%- assign tile_text = block.settings.text_color | default: '' -%}
+                <a class="pc-mn__quick-tile" href="{{ block.settings.link | default: '#' }}"
+                   style="background: {{ tile_color }};{% if tile_text != blank %} color: {{ tile_text }};{% endif %}"
+                   {{ block.shopify_attributes }}>
+                  <div class="h-typewriter pc-mn__quick-name">{{ block.settings.label }}</div>
+                  <div class="pc-mn__quick-arrow">&rarr;</div>
+                </a>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- comment -%} ============ WORLDS VIEW ============ {%- endcomment -%}
+    <div x-show="view === 'worlds'" x-cloak class="pc-mn__view">
+      {%- assign w_title = worlds_view_title | replace: '[count]', worlds.size -%}
+      <div class="pc-mn__hdr pc-mn__hdr--bg">
+        <button class="tlink pc-mn__back" @click="setView('root')" type="button">{{ back_label }}</button>
+        <div class="h-display pc-mn__hdr-title pc-mn__hdr-title--right">{{ w_title }}</div>
+        <button class="pc-mn__close" @click="close()" aria-label="Close menu">{{ close_label }}</button>
+      </div>
+      <div class="pc-mn__scroll pc-mn__worlds-wrap">
+        <div class="pc-mn__section-eyebrow pc-mn__worlds-hint">{{ worlds_hint }}</div>
+        <div class="pc-mn__worlds-grid">
+          {%- for w in worlds -%}
+            {%- assign accent = w.accent_color.value | default: '#E8C36A' -%}
+            {%- assign slug = w.slug.value | default: w.handle -%}
+            <a class="pc-mn__world-card" href="/pages/{{ slug }}">
+              <div class="pc-mn__world-chip" style="background: {{ accent }};"></div>
+              <div class="h-typewriter pc-mn__world-name">{{ w.name.value }}</div>
+            </a>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} ============ ACCOUNT VIEW ============ {%- endcomment -%}
+    <div x-show="view === 'account'" x-cloak class="pc-mn__view">
+      {%- if customer -%}
+        <div class="pc-mn__hdr pc-mn__hdr--bg">
+          <button class="tlink pc-mn__back" @click="setView('root')" type="button">{{ account_signedin_back_label }}</button>
+          <button class="pc-mn__close" @click="close()" aria-label="Close menu">{{ close_label }}</button>
+        </div>
+        <div class="pc-mn__acct-greet">
+          <div class="eyebrow">{{ account_greeting_label }}</div>
+          <div class="h-display pc-mn__acct-name">{{ customer.first_name | default: customer.email | upcase }}</div>
+          <div class="pc-mn__acct-meta">{{ customer.orders_count }} orders &middot; {{ customer.total_spent | money }} lifetime</div>
+        </div>
+        <div class="pc-mn__scroll">
+          {%- if account_signedin_quick_eyebrow != blank -%}
+            <div class="pc-mn__section-eyebrow">{{ account_signedin_quick_eyebrow }}</div>
+          {%- endif -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'account_link' -%}
+              {%- assign render_when = block.settings.render_when | default: 'always' -%}
+              {%- if render_when == 'always' or render_when == 'signed_in' -%}
+                <a class="pc-mn__acct-row" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
+                  <div>
+                    <div class="h-typewriter">{{ block.settings.label }}</div>
+                    {%- if block.settings.sub != blank -%}
+                      <div class="pc-mn__acct-row-sub">{{ block.settings.sub }}</div>
+                    {%- endif -%}
+                  </div>
+                  <span>&rarr;</span>
+                </a>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        <div class="pc-mn__acct-foot">
+          <a class="tlink pc-mn__acct-signout" href="{{ routes.account_logout_url }}">{{ account_signout_label }}</a>
+        </div>
+      {%- else -%}
+        <div class="pc-mn__hdr pc-mn__hdr--ink">
+          <button class="tlink pc-mn__back pc-mn__back--ink" @click="setView('root')" type="button">{{ back_label }}</button>
+          <div class="h-display pc-mn__hdr-title pc-mn__hdr-title--right pc-mn__hdr-title--ink">ACCOUNT</div>
+          <button class="pc-mn__close pc-mn__close--ink" @click="close()" aria-label="Close menu">{{ close_label }}</button>
+        </div>
+        <div class="pc-mn__acct-out">
+          <div class="eyebrow pc-mn__acct-out-eyebrow">{{ account_signedout_eyebrow }}</div>
+          <div class="h-display pc-mn__acct-out-title">{{ account_signedout_title }}</div>
+          <p class="pc-mn__acct-out-body">{{ account_signedout_body }}</p>
+          <a class="btn pc-mn__acct-out-cta" href="{{ routes.account_register_url }}" target="_blank" rel="noopener">{{ account_create_label }}</a>
+          <a class="btn btn--ghost pc-mn__acct-out-cta" href="{{ routes.account_login_url }}" target="_blank" rel="noopener">{{ account_signin_label }}</a>
+
+          <div class="pc-mn__acct-out-quick">
+            <div class="eyebrow">{{ account_signedout_quick_eyebrow }}</div>
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'account_link' -%}
+                {%- assign render_when = block.settings.render_when | default: 'always' -%}
+                {%- if render_when == 'always' or render_when == 'signed_out' -%}
+                  <a class="pc-mn__acct-row" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
+                    <span class="h-typewriter">{{ block.settings.label }}</span><span>&rarr;</span>
+                  </a>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ============ SEARCH VIEW ============ {%- endcomment -%}
+    <div x-show="view === 'search'" x-cloak class="pc-mn__view">
+      <div class="pc-mn__search-bar">
+        <button class="tlink pc-mn__back" @click="setView('root'); query=''" type="button">{{ cancel_label }}</button>
+        <form class="pc-mn__search-form" action="{{ routes.search_url }}" method="get" role="search">
+          <input
+            type="search"
+            name="q"
+            class="pc-mn__search-input"
+            placeholder="{{ search_view_placeholder }}"
+            x-model="query"
+            @input="runSearch(query)"
+            x-init="$nextTick(() => $el.focus())"
+            autocomplete="off">
+          <button type="button" class="pc-mn__search-clear" x-show="query.length > 0" @click="query=''; results={products:[],collections:[],pages:[]}" aria-label="Clear">{{ close_label }}</button>
+        </form>
+      </div>
+      <div class="pc-mn__scroll">
+        <template x-if="query.length >= 2 && results.collections && results.collections.length > 0">
+          <div>
+            <div class="pc-mn__section-eyebrow">Collections</div>
+            <template x-for="c in results.collections" :key="c.id">
+              <a class="pc-mn__search-row" :href="c.url">
+                <div class="pc-mn__search-row-text">
+                  <div class="h-typewriter pc-mn__search-row-title" x-text="c.title"></div>
+                </div>
+                <span class="pc-mn__search-row-arrow">&rarr;</span>
+              </a>
+            </template>
+          </div>
+        </template>
+        <template x-if="query.length >= 2 && results.products && results.products.length > 0">
+          <div>
+            <div class="pc-mn__section-eyebrow">Products</div>
+            <template x-for="p in results.products" :key="p.id">
+              <a class="pc-mn__search-row pc-mn__search-row--product" :href="p.url">
+                <div class="pc-mn__search-row-text">
+                  <div class="h-typewriter pc-mn__search-row-title" x-text="p.title"></div>
+                </div>
+                <div class="pc-mn__search-row-price" x-text="p.price"></div>
+              </a>
+            </template>
+          </div>
+        </template>
+        <template x-if="query.length >= 2 && !searching && results.products.length === 0 && results.collections.length === 0">
+          <div class="pc-mn__search-empty">{{ search_empty }}</div>
+        </template>
+        <template x-if="query.length < 2">
+          <div class="pc-mn__search-hint">
+            <div class="eyebrow">{{ search_pill_eyebrow }}</div>
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'search_pill' -%}
+                <a href="{{ routes.search_url }}?q={{ block.settings.query | url_encode }}" class="pc-mn__search-pill" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </template>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+{% schema %}
+{
+  "name": "Mobile nav",
+  "settings": [
+    { "type": "header", "content": "Brand + chrome" },
+    { "type": "text", "id": "brand_label", "label": "Brand label", "default": "POSTCARD" },
+    { "type": "text", "id": "close_label", "label": "Close button text", "default": "×" },
+    { "type": "text", "id": "back_label", "label": "Back button text", "default": "← BACK" },
+    { "type": "text", "id": "cancel_label", "label": "Cancel button text (search)", "default": "CANCEL" },
+
+    { "type": "header", "content": "Search" },
+    { "type": "text", "id": "search_placeholder", "label": "Search trigger placeholder", "default": "Search worlds, products, ingredients…" },
+    { "type": "text", "id": "search_view_placeholder", "label": "Search input placeholder", "default": "Search…" },
+    { "type": "text", "id": "search_pill_eyebrow", "label": "Popular searches eyebrow", "default": "Popular searches" },
+    { "type": "text", "id": "search_empty", "label": "Empty results message", "default": "No matches yet — try a world name or product type." },
+
+    { "type": "header", "content": "Shop view" },
+    { "type": "text", "id": "shop_view_title", "label": "View title", "default": "SHOP" },
+    { "type": "text", "id": "shop_types_eyebrow", "label": "Type list eyebrow", "default": "Browse by type" },
+    { "type": "text", "id": "shop_quick_eyebrow", "label": "Quick tiles eyebrow", "default": "Quick links" },
+
+    { "type": "header", "content": "Worlds view" },
+    { "type": "text", "id": "worlds_view_title", "label": "View title", "default": "[count] WORLDS", "info": "[count] is replaced with the number of worlds." },
+    { "type": "text", "id": "worlds_hint", "label": "Hint text", "default": "Tap a world to enter" },
+
+    { "type": "header", "content": "Account — signed in" },
+    { "type": "text", "id": "account_signedin_back_label", "label": "Back button", "default": "← BACK" },
+    { "type": "text", "id": "account_greeting_label", "label": "Greeting label", "default": "Hello," },
+    { "type": "text", "id": "account_signedin_quick_eyebrow", "label": "Section eyebrow (above links)", "info": "Leave blank to hide the eyebrow." },
+    { "type": "text", "id": "account_signout_label", "label": "Sign out link", "default": "SIGN OUT" },
+
+    { "type": "header", "content": "Account — signed out" },
+    { "type": "text", "id": "account_signedout_eyebrow", "label": "Eyebrow", "default": "Not yet a member" },
+    { "type": "text", "id": "account_signedout_title", "label": "Title (HTML)", "default": "JOIN<br>POSTCARD." },
+    { "type": "textarea", "id": "account_signedout_body", "label": "Body", "default": "Earn coins on every order. Free birthday gift. First dibs on new worlds. Skip the queue at the Orchard flagship." },
+    { "type": "text", "id": "account_create_label", "label": "Create account CTA", "default": "CREATE ACCOUNT →" },
+    { "type": "text", "id": "account_signin_label", "label": "Sign in CTA", "default": "SIGN IN" },
+    { "type": "text", "id": "account_signedout_quick_eyebrow", "label": "Quick access eyebrow", "default": "Quick access" },
+
+    { "type": "header", "content": "Root footer" },
+    { "type": "text", "id": "footer_hello_label", "label": "Signed-in greeting prefix", "default": "HELLO," },
+    { "type": "text", "id": "footer_signedout_link", "label": "Signed-out link", "default": "SIGN IN · JOIN POSTCARD" },
+    { "type": "text", "id": "footer_bag_label", "label": "Bag label", "default": "BAG" }
+  ],
+  "blocks": [
+    {
+      "type": "root_item",
+      "name": "Root menu item",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Shop" },
+        { "type": "text", "id": "sub", "label": "Sub-line (under label)", "default": "browse by type, world, refills →" },
+        { "type": "select", "id": "target_view", "label": "Behaviour", "default": "none",
+          "options": [
+            { "value": "none",    "label": "Link to URL" },
+            { "value": "shop",    "label": "Open Shop sub-view" },
+            { "value": "worlds",  "label": "Open Worlds sub-view" },
+            { "value": "account", "label": "Open Account sub-view" }
+          ]
+        },
+        { "type": "url", "id": "link", "label": "URL (used when Behaviour = Link to URL)" }
+      ]
+    },
+    {
+      "type": "shop_type",
+      "name": "Shop type row",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Hand & body wash" },
+        { "type": "url",  "id": "link",  "label": "Link" }
+      ]
+    },
+    {
+      "type": "quick_tile",
+      "name": "Shop quick tile",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "New & limited" },
+        { "type": "url",  "id": "link",  "label": "Link" },
+        { "type": "color","id": "color", "label": "Tile color", "default": "#FFB233" },
+        { "type": "color","id": "text_color", "label": "Text color (leave blank for default)" }
+      ]
+    },
+    {
+      "type": "account_link",
+      "name": "Account link",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "MY ORDERS" },
+        { "type": "text", "id": "sub",   "label": "Sub-line", "info": "Leave blank to omit." },
+        { "type": "url",  "id": "link",  "label": "Link" },
+        { "type": "select","id": "render_when", "label": "Show when", "default": "always",
+          "options": [
+            { "value": "always",     "label": "Always" },
+            { "value": "signed_in",  "label": "Signed in only" },
+            { "value": "signed_out", "label": "Signed out only" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "search_pill",
+      "name": "Popular search pill",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Pill label", "default": "Hotel Lobby" },
+        { "type": "text", "id": "query", "label": "Search query", "default": "hotel lobby" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Mobile nav",
+    "blocks": [
+      { "type": "root_item",   "settings": { "label": "Shop",       "sub": "browse by type, world, refills →", "target_view": "shop" }},
+      { "type": "root_item",   "settings": { "label": "Worlds",     "sub": "all scent + skin worlds →",         "target_view": "worlds" }},
+      { "type": "root_item",   "settings": { "label": "Story",      "sub": "about, journal, Orchard flagship →", "target_view": "none", "link": "/pages/about" }},
+      { "type": "root_item",   "settings": { "label": "Membership", "sub": "earn coins, unlock perks →",         "target_view": "none", "link": "/pages/membership" }},
+      { "type": "root_item",   "settings": { "label": "Refill",     "sub": "come in. send back. save 30% →",     "target_view": "none", "link": "/pages/refill" }},
+      { "type": "root_item",   "settings": { "label": "Corporate",  "sub": "gifting & B2B →",                    "target_view": "none", "link": "/pages/corporate" }},
+      { "type": "root_item",   "settings": { "label": "Account",    "sub": "sign in · join Postcard →",          "target_view": "account" }},
+
+      { "type": "shop_type",   "settings": { "label": "Hand & body wash",    "link": "/collections/body-wash" }},
+      { "type": "shop_type",   "settings": { "label": "Shampoo & conditioner","link": "/collections/hair" }},
+      { "type": "shop_type",   "settings": { "label": "Soap bars",           "link": "/collections/bars" }},
+      { "type": "shop_type",   "settings": { "label": "Deodorant",           "link": "/collections/deodorants" }},
+      { "type": "shop_type",   "settings": { "label": "Anywhere fragrance",  "link": "/collections/anywhere-fragrance" }},
+      { "type": "shop_type",   "settings": { "label": "Treatment & actives", "link": "/collections/face" }},
+      { "type": "shop_type",   "settings": { "label": "Gift sets",           "link": "/collections/gifts" }},
+
+      { "type": "quick_tile",  "settings": { "label": "New & limited",   "link": "/collections/new",            "color": "#FFB233" }},
+      { "type": "quick_tile",  "settings": { "label": "Bestsellers",     "link": "/collections/bestsellers",    "color": "#E8C36A" }},
+      { "type": "quick_tile",  "settings": { "label": "Subscribe & save","link": "/pages/subscriptions",        "color": "#B07A4E", "text_color": "#FFFDF4" }},
+      { "type": "quick_tile",  "settings": { "label": "Refills",         "link": "/pages/refill",               "color": "#6E8B5C", "text_color": "#FFFDF4" }},
+      { "type": "quick_tile",  "settings": { "label": "Gift cards",      "link": "/products/postcard-gift-card","color": "#C7A8D6" }},
+      { "type": "quick_tile",  "settings": { "label": "Discovery sets",  "link": "/collections/discovery-sets", "color": "#9CC4D6" }},
+
+      { "type": "account_link","settings": { "label": "MY ORDERS",            "sub": "tracking & history",                 "link": "/account",                "render_when": "signed_in" }},
+      { "type": "account_link","settings": { "label": "SUBSCRIPTIONS",        "sub": "manage cadence, skip, swap",         "link": "/account#subscriptions",  "render_when": "signed_in" }},
+      { "type": "account_link","settings": { "label": "REFILL CARD",          "sub": "find a refill station",              "link": "/pages/refill",           "render_when": "signed_in" }},
+      { "type": "account_link","settings": { "label": "ADDRESSES & PAYMENT",  "sub": "saved billing + delivery details",   "link": "/account/addresses",      "render_when": "signed_in" }},
+      { "type": "account_link","settings": { "label": "Order tracking",       "sub": "",                                   "link": "/pages/order-tracking",   "render_when": "signed_out" }},
+      { "type": "account_link","settings": { "label": "Help & contact",       "sub": "",                                   "link": "/pages/contact",          "render_when": "signed_out" }},
+      { "type": "account_link","settings": { "label": "Find a refill station","sub": "",                                   "link": "/pages/refill",           "render_when": "signed_out" }},
+
+      { "type": "search_pill", "settings": { "label": "Hotel Lobby", "query": "hotel lobby" }},
+      { "type": "search_pill", "settings": { "label": "Shampoo",     "query": "shampoo" }},
+      { "type": "search_pill", "settings": { "label": "Refill",      "query": "refill" }},
+      { "type": "search_pill", "settings": { "label": "Gift",        "query": "gift" }}
+    ]
+  }]
+}
+{% endschema %}

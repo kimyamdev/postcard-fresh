@@ -406,9 +406,14 @@
         "account_label": "Account",
         "bag_label": "Bag"
       }
+    },
+    "mobile-nav": {
+      "type": "postcard-mobile-nav",
+      "settings": {}
     }
   },
   "order": [
-    "header"
+    "header",
+    "mobile-nav"
   ]
 }
