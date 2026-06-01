@@ -53,6 +53,9 @@
     {%- endif -%}
 
     {%- unless hide_overlay_text -%}
+      {%- assign ov_left = section.settings.overlay_left | default: 50 -%}
+      {%- assign ov_top = section.settings.overlay_top | default: 50 -%}
+      {%- assign ov_left_mobile = section.settings.overlay_left_mobile | default: ov_left -%}
       {%- if slide_count > 0 -%}
         {%- for block in slides -%}
           {%- assign s_idx = forloop.index0 -%}
@@ -60,6 +63,7 @@
           {%- assign s_tag = block.settings.tag | default: overlay_tag -%}
           {%- if s_eyebrow != blank or s_tag != blank -%}
             <div class="pc-hero__visual-text pc-hero__visual-text--slide{% if slide_count == 1 %} pc-hero__visual-text--active{% endif %}"
+                 style="left: {{ ov_left }}%; top: {{ ov_top }}%; --ov-left-mobile: {{ ov_left_mobile }}%;"
                  {%- if slide_count > 1 %} :class="{ 'pc-hero__visual-text--active': i === {{ s_idx }} }"{%- endif -%}
                  >
               {%- if s_eyebrow != blank -%}<div class="pc-hero__visual-eyebrow">{{ s_eyebrow }}</div>{%- endif -%}
@@ -81,7 +85,11 @@
     {%- assign pm_right = section.settings.postmark_right | default: 2 -%}
     {%- assign pm_rotate = section.settings.postmark_rotate | default: 0 -%}
     {%- assign pm_size = section.settings.postmark_size | default: 110 -%}
-    <div class="pc-hero__postmark-wrap" style="top: {{ pm_top }}%; right: {{ pm_right }}%; transform: rotate({{ pm_rotate }}deg);">
+    {%- assign pm_top_m = section.settings.postmark_top_mobile | default: pm_top -%}
+    {%- assign pm_right_m = section.settings.postmark_right_mobile | default: pm_right -%}
+    {%- assign pm_rotate_m = section.settings.postmark_rotate_mobile | default: pm_rotate -%}
+    {%- assign pm_size_m = section.settings.postmark_size_mobile | default: pm_size -%}
+    <div class="pc-hero__postmark-wrap" style="top: {{ pm_top }}%; right: {{ pm_right }}%; transform: rotate({{ pm_rotate }}deg); --pm-top-m: {{ pm_top_m }}%; --pm-right-m: {{ pm_right_m }}%; --pm-rotate-m: {{ pm_rotate_m }}deg; --pm-size-m: {{ pm_size_m }}px;">
       <div class="postmark postmark--ink" style="width: {{ pm_size }}px; height: {{ pm_size }}px; font-size: 10px;">
         <div>{{ section.settings.postmark_html | default: 'POSTCARD<br>· SINGAPORE ·<br>EST. 2019' }}</div>
       </div>
@@ -122,14 +130,24 @@
     { "type": "range",        "id": "media_opacity", "label": "Media opacity", "min": 20, "max": 100, "step": 5, "default": 100, "unit": "%" },
     { "type": "text",     "id": "visual_eyebrow", "label": "Default overlay eyebrow", "info": "Used when a slide doesn't set its own eyebrow. Leave blank to hide." },
     { "type": "text",     "id": "visual_tag",     "label": "Default overlay tag",     "info": "Used when a slide doesn't set its own tag. Leave blank to hide." },
+    { "type": "range",    "id": "overlay_left",   "label": "Overlay horizontal position", "min": 0, "max": 100, "step": 1, "default": 50, "unit": "%", "info": "Center of the overlay text, measured from the left of the visual panel. 50 = centered, 100 = anchored at the right edge." },
+    { "type": "range",    "id": "overlay_top",    "label": "Overlay vertical position",   "min": 0, "max": 100, "step": 1, "default": 50, "unit": "%", "info": "Center of the overlay text, measured from the top." },
+    { "type": "range",    "id": "overlay_left_mobile", "label": "Overlay horizontal position (mobile)", "min": 0, "max": 100, "step": 1, "default": 50, "unit": "%", "info": "Mobile-only override; ignored on desktop." },
     { "type": "checkbox", "id": "hide_overlay_text", "label": "Hide overlay text", "default": false, "info": "Useful when the image/video already carries the message." },
     { "type": "header",   "content": "Postmark" },
     { "type": "checkbox", "id": "show_postmark", "label": "Show postmark", "default": true },
     { "type": "html",     "id": "postmark_html", "label": "Postmark text (HTML)", "default": "POSTCARD<br>· SINGAPORE ·<br>EST. 2019" },
+    { "type": "header",   "content": "Postmark — desktop" },
     { "type": "range", "id": "postmark_top",   "label": "Top position",    "min": 0,   "max": 95, "step": 1, "default": 2,   "unit": "%", "info": "% from top of the visual panel." },
-    { "type": "range", "id": "postmark_right", "label": "Right position",  "min": -10, "max": 90, "step": 1, "default": -5,  "unit": "%", "info": "% from right edge. Negative = overhang into the copy column." },
+    { "type": "range", "id": "postmark_right", "label": "Right position",  "min": -30, "max": 70, "step": 1, "default": -5,  "unit": "%", "info": "% from right edge. Negative = overhang past the right edge." },
     { "type": "range", "id": "postmark_rotate","label": "Rotation",        "min": -45, "max": 45, "step": 1, "default": 0,   "unit": "deg" },
     { "type": "range", "id": "postmark_size",  "label": "Size",            "min": 60,  "max": 180,"step": 5, "default": 110, "unit": "px" },
+    { "type": "header",   "content": "Postmark — mobile" },
+    { "type": "paragraph", "content": "Mobile-only values (≤720 px). Leave at default to inherit the desktop value." },
+    { "type": "range", "id": "postmark_top_mobile",   "label": "Top position (mobile)",   "min": 0,   "max": 95, "step": 1, "default": 2,  "unit": "%" },
+    { "type": "range", "id": "postmark_right_mobile", "label": "Right position (mobile)", "min": -30, "max": 70, "step": 1, "default": -5, "unit": "%" },
+    { "type": "range", "id": "postmark_rotate_mobile","label": "Rotation (mobile)",       "min": -45, "max": 45, "step": 1, "default": 0,  "unit": "deg" },
+    { "type": "range", "id": "postmark_size_mobile",  "label": "Size (mobile)",           "min": 40,  "max": 140,"step": 5, "default": 80, "unit": "px" },
 
     { "type": "header", "content": "Primary CTA" },
     { "type": "text", "id": "primary_cta_text", "label": "Text", "default": "Find your world →" },

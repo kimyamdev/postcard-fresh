@@ -24,7 +24,7 @@
         "slide_dkhfFf": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/IMG-1866.png",
+            "image": "shopify://shop_images/Pickleball_Java_Jungle_Powder_Wash.png",
             "eyebrow": "",
             "tag": "",
             "stamp_3": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Java_Jungle.png"
@@ -120,13 +120,16 @@
         "media_opacity": 100,
         "visual_eyebrow": "",
         "visual_tag": "",
+        "overlay_left": 50,
+        "overlay_top": 50,
+        "overlay_left_mobile": 50,
         "hide_overlay_text": false,
         "show_postmark": true,
         "postmark_html": "POSTCARD<br>· SINGAPORE ·<br>EST. 2018",
-        "postmark_top": 3,
-        "postmark_right": 38,
+        "postmark_top": 38,
+        "postmark_right": 8,
         "postmark_rotate": 0,
-        "postmark_size": 110,
+        "postmark_size": 130,
         "primary_cta_text": "Find your world →",
         "primary_cta_url": "",
         "secondary_cta_text": "Shop bestsellers",

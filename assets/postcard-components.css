@@ -485,6 +485,25 @@ a.pc-product-card { cursor: pointer; }
 .pc-hero__stamp--1 { top: 8%;  left: 6%;   width: 130px; transform: rotate(-7deg); }
 .pc-hero__stamp--2 { top: 42%; right: 6%;  width: 150px; transform: rotate(6deg); }
 .pc-hero__stamp--3 { bottom: 8%; left: 18%; width: 120px; transform: rotate(-12deg); }
+@media (max-width: 720px) {
+  .pc-hero__stamp--1 { width: 72px; }
+  .pc-hero__stamp--2 { width: 84px; }
+  .pc-hero__stamp--3 { width: 66px; }
+  .pc-hero__visual-eyebrow { font-size: 12px; margin-bottom: 6px; letter-spacing: 0.12em; }
+  .pc-hero__visual-tag { font-size: 13px; }
+  .pc-hero__visual-text { max-width: 240px; }
+  .pc-hero__visual-text--slide { left: var(--ov-left-mobile, 50%) !important; }
+  .pc-hero__postmark-wrap {
+    top: var(--pm-top-m, 2%) !important;
+    right: var(--pm-right-m, -5%) !important;
+    transform: rotate(var(--pm-rotate-m, 0deg)) !important;
+  }
+  .pc-hero__postmark-wrap .postmark {
+    width: var(--pm-size-m, 80px) !important;
+    height: var(--pm-size-m, 80px) !important;
+    font-size: 8px;
+  }
+}
 .pc-hero__visual-text--slide { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.6s ease-in-out; }
 .pc-hero__visual-text--slide.pc-hero__visual-text--active { opacity: 1; }
 .pc-hero__visual-text { text-align: center; max-width: 320px; }
@@ -746,21 +765,28 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   max-width: 1200px;
   margin-inline: auto;
 }
-@media (max-width: 720px) {
-  .pc-worlds-index__core { grid-template-columns: 1fr; gap: 18px; padding: 0 16px; }
-  .pc-worlds-index__card { min-height: 240px; box-shadow: 4px 5px 0 rgba(33,32,32,0.10); }
-  .pc-worlds-index__card-resting { padding: 22px; }
-  .pc-worlds-index__resting-name { font-size: clamp(26px, 8vw, 36px); }
-  .pc-worlds-index__card-badge { width: 60px; height: 60px; font-size: 9px; padding: 6px; top: 12px; right: 12px; }
-  .pc-worlds-index__card-hover { grid-template-columns: 1.1fr 0.9fr; gap: 14px; padding: 18px; }
-  .pc-worlds-index__card-hover .pc-worlds-index__card-name { font-size: 22px; }
-  .pc-worlds-index__card-hover .pc-worlds-index__card-tag { font-size: 13px; line-height: 1.4; }
-  .pc-worlds-index__card-hover .pc-worlds-index__chip { font-size: 11px; padding: 4px 8px; }
-  .pc-worlds-index__card-hover .pc-worlds-index__to-label { font-size: 10px; }
-  .pc-worlds-index__card-hover .pc-worlds-index__to-list { font-size: 12px; line-height: 1.5; }
-  .pc-worlds-index__card-left { padding-right: 12px; }
-  .pc-worlds-index__card-right { gap: 12px; }
-  .pc-worlds-index__card-stamp-img { width: 64px; }
+@media (max-width: 900px) {
+  .pc-worlds-list .container { padding: 0 12px; }
+  .pc-worlds-index__core { grid-template-columns: 1fr; gap: 16px; }
+  .pc-worlds-index__card {
+    aspect-ratio: 3 / 2 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    box-shadow: 4px 5px 0 rgba(33,32,32,0.10);
+  }
+  .pc-worlds-index__card-resting { padding: 18px; }
+  .pc-worlds-index__resting-name { font-size: clamp(22px, 6.5vw, 32px); }
+  .pc-worlds-index__card-badge { width: 56px; height: 56px; font-size: 9px; padding: 5px; top: 10px; right: 10px; }
+  .pc-worlds-index__card-hover { grid-template-columns: 1fr 0.85fr; gap: 10px; padding: 14px; }
+  .pc-worlds-index__card-hover .pc-worlds-index__card-name { font-size: 18px; line-height: 1.05; }
+  .pc-worlds-index__card-hover .pc-worlds-index__card-tag { font-size: 12px; line-height: 1.35; }
+  .pc-worlds-index__card-hover .pc-worlds-index__chip { font-size: 10px; padding: 3px 7px; }
+  .pc-worlds-index__card-hover .pc-worlds-index__chips-label { font-size: 9px; }
+  .pc-worlds-index__card-hover .pc-worlds-index__to-label { font-size: 9px; }
+  .pc-worlds-index__card-hover .pc-worlds-index__to-list { font-size: 11px; line-height: 1.4; }
+  .pc-worlds-index__card-left { padding-right: 10px; }
+  .pc-worlds-index__card-right { gap: 10px; }
+  .pc-worlds-index__card-stamp-img { width: 52px; }
 }
 .pc-worlds-index__card {
   --tilt: 0deg;
