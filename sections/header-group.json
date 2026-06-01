@@ -409,7 +409,474 @@
     },
     "mobile-nav": {
       "type": "postcard-mobile-nav",
-      "settings": {}
+      "blocks": {
+        "r_shop": {
+          "type": "root_item",
+          "settings": {
+            "label": "Shop",
+            "sub": "browse by type, world, refills →",
+            "target_view": "shop",
+            "link": ""
+          }
+        },
+        "r_worlds": {
+          "type": "root_item",
+          "settings": {
+            "label": "Worlds",
+            "sub": "all scent + skin worlds →",
+            "target_view": "worlds",
+            "link": ""
+          }
+        },
+        "r_refill": {
+          "type": "root_item",
+          "settings": {
+            "label": "Refill",
+            "sub": "come in. send back. save up to 15% →",
+            "target_view": "none",
+            "link": "/pages/refill"
+          }
+        },
+        "r_members": {
+          "type": "root_item",
+          "settings": {
+            "label": "Members",
+            "sub": "earn coins, unlock perks →",
+            "target_view": "none",
+            "link": "/pages/membership"
+          }
+        },
+        "r_about": {
+          "type": "root_item",
+          "settings": {
+            "label": "About",
+            "sub": "story, journal, Orchard flagship →",
+            "target_view": "none",
+            "link": "/pages/about"
+          }
+        },
+        "r_corporate": {
+          "type": "root_item",
+          "settings": {
+            "label": "Corporate",
+            "sub": "gifting & B2B →",
+            "target_view": "none",
+            "link": "/pages/corporate"
+          }
+        },
+        "r_account": {
+          "type": "root_item",
+          "settings": {
+            "label": "Account",
+            "sub": "sign in · join Postcard →",
+            "target_view": "account",
+            "link": ""
+          }
+        },
+        "sh_byneed": {
+          "type": "shop_heading",
+          "settings": {
+            "label": "By need"
+          }
+        },
+        "st_deo": {
+          "type": "shop_type",
+          "settings": {
+            "label": "Deodorants",
+            "link": "/collections/deodorant"
+          }
+        },
+        "st_anywhere": {
+          "type": "shop_type",
+          "settings": {
+            "label": "Anywhere Fragrance",
+            "link": "/collections/anywhere-fragrance"
+          }
+        },
+        "st_home": {
+          "type": "shop_type",
+          "settings": {
+            "label": "Home Scenting",
+            "link": "/collections/home-fragrance"
+          }
+        },
+        "st_hair": {
+          "type": "shop_type",
+          "settings": {
+            "label": "Hair",
+            "link": "/collections/hair"
+          }
+        },
+        "st_body": {
+          "type": "shop_type",
+          "settings": {
+            "label": "Body",
+            "link": "/collections/body"
+          }
+        },
+        "st_face": {
+          "type": "shop_type",
+          "settings": {
+            "label": "Face",
+            "link": "/collections/face"
+          }
+        },
+        "st_oral": {
+          "type": "shop_type",
+          "settings": {
+            "label": "Oral & Lip Care",
+            "link": "/collections/teeth-and-lips"
+          }
+        },
+        "st_pets": {
+          "type": "shop_type",
+          "settings": {
+            "label": "Pets",
+            "link": "/collections/pets-postcard"
+          }
+        },
+        "st_kids": {
+          "type": "shop_type",
+          "settings": {
+            "label": "Kids",
+            "link": "/collections/kids"
+          }
+        },
+        "st_gifts": {
+          "type": "shop_type",
+          "settings": {
+            "label": "Gifts",
+            "link": "/collections/gifts"
+          }
+        },
+        "st_accessories": {
+          "type": "shop_type",
+          "settings": {
+            "label": "Accessories",
+            "link": "/collections/accessories"
+          }
+        },
+        "sh_pleasers": {
+          "type": "shop_heading",
+          "settings": {
+            "label": "Crowd-pleasers"
+          }
+        },
+        "st_hl_any": {
+          "type": "shop_type",
+          "settings": {
+            "label": "Hotel Lobby Anywhere Fragrance",
+            "link": "/products/anywhere-fragrance-hotel-lobby"
+          }
+        },
+        "st_pickmix": {
+          "type": "shop_type",
+          "settings": {
+            "label": "Pick & Mix",
+            "link": "/pages/pick-and-mix"
+          }
+        },
+        "st_disc": {
+          "type": "shop_type",
+          "settings": {
+            "label": "Discovery & Gift Sets",
+            "link": "/collections/discovery-gift-sets"
+          }
+        },
+        "st_hl_travel": {
+          "type": "shop_type",
+          "settings": {
+            "label": "Hotel Lobby Travel Box",
+            "link": "/products/destination-hotel-lobby-travel-gift-box"
+          }
+        },
+        "sh_new": {
+          "type": "shop_heading",
+          "settings": {
+            "label": "New & limited"
+          }
+        },
+        "st_sojao": {
+          "type": "shop_type",
+          "settings": {
+            "label": "POSTCARD x SOJAO",
+            "link": "/products/oasis-x-sojao-room-and-linen-mist"
+          }
+        },
+        "st_esse": {
+          "type": "shop_type",
+          "settings": {
+            "label": "POSTCARD x ESSE",
+            "link": "/products/forest-bathing-x-esse-anywhere-fragrance"
+          }
+        },
+        "st_anya": {
+          "type": "shop_type",
+          "settings": {
+            "label": "POSTCARD x Anya Active",
+            "link": "/products/suns-down"
+          }
+        },
+        "st_seasonal": {
+          "type": "shop_type",
+          "settings": {
+            "label": "Seasonal",
+            "link": "/collections/seasonal"
+          }
+        },
+        "sh_custom": {
+          "type": "shop_heading",
+          "settings": {
+            "label": "Custom"
+          }
+        },
+        "st_custom_wash": {
+          "type": "shop_type",
+          "settings": {
+            "label": "Custom Hand & Body Wash",
+            "link": "/products/custom-hand-body-wash"
+          }
+        },
+        "st_custom_sh": {
+          "type": "shop_type",
+          "settings": {
+            "label": "Custom Shampoo",
+            "link": "/products/custom-shampoo"
+          }
+        },
+        "st_custom_co": {
+          "type": "shop_type",
+          "settings": {
+            "label": "Custom Conditioner",
+            "link": "/products/custom-conditioner"
+          }
+        },
+        "qt_new": {
+          "type": "quick_tile",
+          "settings": {
+            "label": "New & limited",
+            "link": "/collections/new",
+            "color": "#ffb233",
+            "text_color": ""
+          }
+        },
+        "qt_best": {
+          "type": "quick_tile",
+          "settings": {
+            "label": "Bestsellers",
+            "link": "/collections/bestsellers",
+            "color": "#e8c36a",
+            "text_color": ""
+          }
+        },
+        "qt_sub": {
+          "type": "quick_tile",
+          "settings": {
+            "label": "Subscribe & save",
+            "link": "/pages/subscriptions",
+            "color": "#b07a4e",
+            "text_color": "#fffdf4"
+          }
+        },
+        "qt_refill": {
+          "type": "quick_tile",
+          "settings": {
+            "label": "Refills",
+            "link": "/pages/refill",
+            "color": "#6e8b5c",
+            "text_color": "#fffdf4"
+          }
+        },
+        "qt_gift": {
+          "type": "quick_tile",
+          "settings": {
+            "label": "Gift cards",
+            "link": "/products/postcard-gift-card",
+            "color": "#c7a8d6",
+            "text_color": ""
+          }
+        },
+        "qt_disc": {
+          "type": "quick_tile",
+          "settings": {
+            "label": "Discovery sets",
+            "link": "/collections/discovery-sets",
+            "color": "#9cc4d6",
+            "text_color": ""
+          }
+        },
+        "al_orders": {
+          "type": "account_link",
+          "settings": {
+            "label": "MY ORDERS",
+            "sub": "tracking & history",
+            "link": "/account",
+            "render_when": "signed_in"
+          }
+        },
+        "al_subs": {
+          "type": "account_link",
+          "settings": {
+            "label": "SUBSCRIPTIONS",
+            "sub": "manage cadence, skip, swap",
+            "link": "/account#subscriptions",
+            "render_when": "signed_in"
+          }
+        },
+        "al_card": {
+          "type": "account_link",
+          "settings": {
+            "label": "REFILL CARD",
+            "sub": "find a refill station",
+            "link": "/pages/refill",
+            "render_when": "signed_in"
+          }
+        },
+        "al_addr": {
+          "type": "account_link",
+          "settings": {
+            "label": "ADDRESSES & PAYMENT",
+            "sub": "saved billing + delivery details",
+            "link": "/account/addresses",
+            "render_when": "signed_in"
+          }
+        },
+        "al_track": {
+          "type": "account_link",
+          "settings": {
+            "label": "Order tracking",
+            "sub": "",
+            "link": "/pages/order-tracking",
+            "render_when": "signed_out"
+          }
+        },
+        "al_help": {
+          "type": "account_link",
+          "settings": {
+            "label": "Help & contact",
+            "sub": "",
+            "link": "/pages/contact",
+            "render_when": "signed_out"
+          }
+        },
+        "al_refill": {
+          "type": "account_link",
+          "settings": {
+            "label": "Find a refill station",
+            "sub": "",
+            "link": "/pages/refill",
+            "render_when": "signed_out"
+          }
+        },
+        "sp_hl": {
+          "type": "search_pill",
+          "settings": {
+            "label": "Hotel Lobby",
+            "query": "hotel lobby"
+          }
+        },
+        "sp_sh": {
+          "type": "search_pill",
+          "settings": {
+            "label": "Shampoo",
+            "query": "shampoo"
+          }
+        },
+        "sp_refill": {
+          "type": "search_pill",
+          "settings": {
+            "label": "Refill",
+            "query": "refill"
+          }
+        },
+        "sp_gift": {
+          "type": "search_pill",
+          "settings": {
+            "label": "Gift",
+            "query": "gift"
+          }
+        }
+      },
+      "block_order": [
+        "r_shop",
+        "r_worlds",
+        "r_refill",
+        "r_members",
+        "r_about",
+        "r_corporate",
+        "r_account",
+        "sh_byneed",
+        "st_deo",
+        "st_anywhere",
+        "st_home",
+        "st_hair",
+        "st_body",
+        "st_face",
+        "st_oral",
+        "st_pets",
+        "st_kids",
+        "st_gifts",
+        "st_accessories",
+        "sh_pleasers",
+        "st_hl_any",
+        "st_pickmix",
+        "st_disc",
+        "st_hl_travel",
+        "sh_new",
+        "st_sojao",
+        "st_esse",
+        "st_anya",
+        "st_seasonal",
+        "sh_custom",
+        "st_custom_wash",
+        "st_custom_sh",
+        "st_custom_co",
+        "qt_new",
+        "qt_best",
+        "qt_sub",
+        "qt_refill",
+        "qt_gift",
+        "qt_disc",
+        "al_orders",
+        "al_subs",
+        "al_card",
+        "al_addr",
+        "al_track",
+        "al_help",
+        "al_refill",
+        "sp_hl",
+        "sp_sh",
+        "sp_refill",
+        "sp_gift"
+      ],
+      "settings": {
+        "brand_label": "POSTCARD",
+        "close_label": "×",
+        "back_label": "← BACK",
+        "cancel_label": "CANCEL",
+        "search_placeholder": "Search worlds, products, ingredients…",
+        "search_view_placeholder": "Search…",
+        "search_pill_eyebrow": "Popular searches",
+        "search_empty": "No matches yet — try a world name or product type.",
+        "shop_view_title": "SHOP",
+        "shop_types_eyebrow": "Browse by type",
+        "shop_quick_eyebrow": "Quick links",
+        "worlds_view_title": "[count] WORLDS",
+        "worlds_hint": "Tap a world to enter",
+        "account_signedin_back_label": "← BACK",
+        "account_greeting_label": "Hello,",
+        "account_signedin_quick_eyebrow": "",
+        "account_signout_label": "SIGN OUT",
+        "account_signedout_eyebrow": "Not yet a member",
+        "account_signedout_title": "JOINPOSTCARD.",
+        "account_signedout_body": "Earn coins on every order. Free birthday gift. First dibs on new worlds. Skip the queue at the Orchard flagship.",
+        "account_create_label": "CREATE ACCOUNT →",
+        "account_signin_label": "SIGN IN",
+        "account_signedout_quick_eyebrow": "Quick access",
+        "footer_hello_label": "HELLO,",
+        "footer_signedout_link": "SIGN IN · JOIN POSTCARD",
+        "footer_bag_label": "BAG"
+      }
     }
   },
   "order": [

@@ -137,13 +137,20 @@
       </div>
       <div class="pc-mn__scroll">
         {%- assign has_shop_types = false -%}
+        {%- assign has_shop_headings = false -%}
         {%- for block in section.blocks -%}
-          {%- if block.type == 'shop_type' -%}{%- assign has_shop_types = true -%}{%- break -%}{%- endif -%}
+          {%- if block.type == 'shop_type' -%}{%- assign has_shop_types = true -%}{%- endif -%}
+          {%- if block.type == 'shop_heading' -%}{%- assign has_shop_headings = true -%}{%- endif -%}
         {%- endfor -%}
         {%- if has_shop_types -%}
-          <div class="pc-mn__section-eyebrow">{{ shop_types_eyebrow }}</div>
+          {%- comment -%} If no shop_heading blocks at all, show the default "Browse by type" eyebrow once. {%- endcomment -%}
+          {%- unless has_shop_headings -%}
+            <div class="pc-mn__section-eyebrow">{{ shop_types_eyebrow }}</div>
+          {%- endunless -%}
           {%- for block in section.blocks -%}
-            {%- if block.type == 'shop_type' -%}
+            {%- if block.type == 'shop_heading' -%}
+              <div class="pc-mn__section-eyebrow{% unless forloop.first %} pc-mn__section-eyebrow--gap{% endunless %}" {{ block.shopify_attributes }}>{{ block.settings.label }}</div>
+            {%- elsif block.type == 'shop_type' -%}
               <a class="pc-mn__type-row" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
                 <span class="h-typewriter pc-mn__type-name">{{ block.settings.label }}</span>
                 <span class="pc-mn__type-arrow">&rarr;</span>
@@ -375,7 +382,7 @@
   "blocks": [
     {
       "type": "root_item",
-      "name": "Root menu item",
+      "name": "Root · Menu item",
       "settings": [
         { "type": "text", "id": "label", "label": "Label", "default": "Shop" },
         { "type": "text", "id": "sub", "label": "Sub-line (under label)", "default": "browse by type, world, refills →" },
@@ -391,8 +398,15 @@
       ]
     },
     {
+      "type": "shop_heading",
+      "name": "Shop · Column heading",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Heading", "default": "By need" }
+      ]
+    },
+    {
       "type": "shop_type",
-      "name": "Shop type row",
+      "name": "Shop · Type row",
       "settings": [
         { "type": "text", "id": "label", "label": "Label", "default": "Hand & body wash" },
         { "type": "url",  "id": "link",  "label": "Link" }
@@ -400,7 +414,7 @@
     },
     {
       "type": "quick_tile",
-      "name": "Shop quick tile",
+      "name": "Shop · Quick tile",
       "settings": [
         { "type": "text", "id": "label", "label": "Label", "default": "New & limited" },
         { "type": "url",  "id": "link",  "label": "Link" },
@@ -410,7 +424,7 @@
     },
     {
       "type": "account_link",
-      "name": "Account link",
+      "name": "Account · Link",
       "settings": [
         { "type": "text", "id": "label", "label": "Label", "default": "MY ORDERS" },
         { "type": "text", "id": "sub",   "label": "Sub-line", "info": "Leave blank to omit." },
@@ -426,7 +440,7 @@
     },
     {
       "type": "search_pill",
-      "name": "Popular search pill",
+      "name": "Search · Popular pill",
       "settings": [
         { "type": "text", "id": "label", "label": "Pill label", "default": "Hotel Lobby" },
         { "type": "text", "id": "query", "label": "Search query", "default": "hotel lobby" }

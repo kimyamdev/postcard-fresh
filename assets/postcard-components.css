@@ -637,6 +637,21 @@ a.pc-product-card { cursor: pointer; }
 .pc-coll-top__grid .pc-product-card__world-stamp-img,
 .pc-coll-grid__products .pc-product-card__world-stamp-img,
 .pc-collgift-bestsent__grid .pc-product-card__world-stamp-img { filter: none; }
+@media (max-width: 720px) {
+  .pc-product-card__world-stamp { width: 40px; top: 8px; right: 8px; }
+  .pc-coll-top__grid .pc-product-card__badge,
+  .pc-coll-grid__products .pc-product-card__badge,
+  .pc-collgift-bestsent__grid .pc-product-card__badge,
+  .pc-ritual__grid .pc-product-card__badge,
+  .pc-pw__grid .pc-product-card__badge {
+    width: 52px !important;
+    height: 52px !important;
+    padding: 4px !important;
+    font-size: 7px !important;
+    top: 8px !important;
+    left: 8px !important;
+  }
+}
 .pc-coll-top__grid .pc-product-card__badge,
 .pc-coll-grid__products .pc-product-card__badge,
 .pc-collgift-bestsent__grid .pc-product-card__badge,
@@ -1261,14 +1276,23 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   .pc-worlds-quick__grid { grid-template-columns: repeat(3, 1fr); }
   .pc-bestsellers__grid { grid-template-columns: 1fr; }
   .pc-bestsellers__title { font-size: 40px; }
-  .pc-wotm__inner { grid-template-columns: 1fr; gap: 32px; }
+  .pc-wotm__inner { grid-template-columns: 1fr; gap: 24px; }
+  .pc-wotm__inner > .pc-wotm__stamp-wrap + div { display: contents; }
+  .pc-wotm__inner .eyebrow                 { order: 1; }
+  .pc-wotm__inner .pc-wotm__title          { order: 2; }
+  .pc-wotm__inner .pc-wotm__family-line    { order: 3; }
+  .pc-wotm__inner .pc-wotm__body           { order: 4; }
+  .pc-wotm__inner .pc-wotm__stamp-wrap     { order: 5; }
+  .pc-wotm__inner .pc-wotm__formats        { order: 6; }
+  .pc-wotm__inner .pc-wotm__cta            { order: 7; }
   .pc-wotm__formats { grid-template-columns: repeat(2, 1fr); }
   .pc-refill__grid { grid-template-columns: 1fr; }
   .pc-belief__inner { grid-template-columns: 1fr; gap: 32px; }
   .pc-worlds-index__minor { grid-template-columns: repeat(3, 1fr); }
   .pc-world-hero__inner { grid-template-columns: 1fr; gap: 32px; }
   .pc-world-hero__title { font-size: 56px; }
-  .pc-scent__row { grid-template-columns: 1fr; gap: 4px; }
+  .pc-scent__row { grid-template-columns: 1fr; gap: 6px; padding: 18px 18px; text-align: left; align-items: start; justify-items: start; }
+  .pc-world-scent--no-desc .pc-scent__row { grid-template-columns: 1fr; }
   .pc-ritual__grid { grid-template-columns: 1fr 1fr; }
   .pc-neighbours { grid-template-columns: 1fr; }
   .pc-pdp-main__inner { grid-template-columns: 1fr; }
