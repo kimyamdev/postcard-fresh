@@ -38,6 +38,14 @@
             "url": "/collections/home-fragrance"
           }
         },
+        "shop_item_G6xjeU": {
+          "type": "shop_item",
+          "settings": {
+            "column": 1,
+            "text": "Powder Washes",
+            "url": "shopify://collections/powder-washes"
+          }
+        },
         "s2": {
           "type": "shop_item",
           "settings": {
@@ -344,6 +352,7 @@
         "s4",
         "shop_item_VTzD9z",
         "s5",
+        "shop_item_G6xjeU",
         "s2",
         "s1",
         "s3",
@@ -405,6 +414,15 @@
         "show_account": true,
         "account_label": "Account",
         "bag_label": "Bag"
+      }
+    },
+    "mobile-search": {
+      "type": "postcard-mobile-search",
+      "settings": {
+        "show": true,
+        "placeholder": "Search worlds, products, ingredients…",
+        "button_label": "Search",
+        "aria_label": "Search the store"
       }
     },
     "mobile-nav": {
@@ -881,6 +899,7 @@
   },
   "order": [
     "header",
+    "mobile-search",
     "mobile-nav"
   ]
 }

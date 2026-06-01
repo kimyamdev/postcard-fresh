@@ -38,7 +38,18 @@
   assign search_pill_eyebrow = section.settings.search_pill_eyebrow | default: 'Popular searches'
   assign search_empty = section.settings.search_empty | default: 'No matches yet — try a world name or product type.'
 
-  assign worlds = shop.metaobjects.world.values
+  comment
+    Limit the Worlds sub-view to tier='World' (the 12 core worlds), sorted by
+    popularity. Other tiers (e.g. wellness, speciality) are reachable through
+    the full Worlds index page.
+  endcomment
+  assign worlds = shop.metaobjects.world.values | sort: 'popularity_rank'
+  assign core_worlds_count = 0
+  for w in worlds
+    if w.tier.value == 'World'
+      assign core_worlds_count = core_worlds_count | plus: 1
+    endif
+  endfor
 -%}
 
 <div
@@ -185,7 +196,7 @@
 
     {%- comment -%} ============ WORLDS VIEW ============ {%- endcomment -%}
     <div x-show="view === 'worlds'" x-cloak class="pc-mn__view">
-      {%- assign w_title = worlds_view_title | replace: '[count]', worlds.size -%}
+      {%- assign w_title = worlds_view_title | replace: '[count]', core_worlds_count -%}
       <div class="pc-mn__hdr pc-mn__hdr--bg">
         <button class="tlink pc-mn__back" @click="setView('root')" type="button">{{ back_label }}</button>
         <div class="h-display pc-mn__hdr-title pc-mn__hdr-title--right">{{ w_title }}</div>
@@ -195,6 +206,7 @@
         <div class="pc-mn__section-eyebrow pc-mn__worlds-hint">{{ worlds_hint }}</div>
         <div class="pc-mn__worlds-grid">
           {%- for w in worlds -%}
+            {%- if w.tier.value != 'World' -%}{%- continue -%}{%- endif -%}
             {%- assign accent = w.accent_color.value | default: '#E8C36A' -%}
             {%- assign slug = w.slug.value | default: w.handle -%}
             <a class="pc-mn__world-card" href="/pages/{{ slug }}">

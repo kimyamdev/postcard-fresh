@@ -45,7 +45,8 @@
       <span style="opacity: 0.55;">product · {{ card_world }}</span>
     {%- endif -%}
     {%- if card_badge != blank -%}
-      <div class="pc-product-card__badge">{{ card_badge }}</div>
+      {%- assign card_family_slug = card_world_family | handle -%}
+      <div class="pc-product-card__badge" data-family="{{ card_family_slug }}">{{ card_badge }}</div>
     {%- endif -%}
     {%- if card_world != blank -%}
       <div class="pc-product-card__chip" style="background: {{ card_world_color }};">{{ world_initials }}</div>

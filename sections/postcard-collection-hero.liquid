@@ -5,7 +5,7 @@
   assign headline = headline_meta | default: section.settings.title_override | default: collection.title
   assign body_default = section.settings.body
   if collection.description != blank
-    assign body = collection.description | strip_html | truncatewords: 35
+    assign body = collection.description | strip_html
   else
     assign body = body_default
   endif
@@ -32,7 +32,7 @@
   "name": "Collection · Hero",
   "tag": "section",
   "settings": [
-    { "type": "paragraph", "content": "Title pulls collection.metafields.custom.headline → section override → collection.title. Eyebrow pulls collection.metafields.custom.tagline → section value. Body pulls collection.description (truncated) → section value." },
+    { "type": "paragraph", "content": "Title pulls collection.metafields.custom.headline → section override → collection.title. Eyebrow pulls collection.metafields.custom.tagline → section value. Body pulls collection.description (full, no truncation) → section value." },
     { "type": "text", "id": "breadcrumb_prefix", "label": "Breadcrumb prefix", "default": "Home / Shop" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow (fallback)", "default": "For your room. Your skin. Your linens." },
     { "type": "text", "id": "title_override", "label": "Title override", "info": "Used only when no collection.metafields.custom.headline is set. Otherwise the section uses collection.title." },

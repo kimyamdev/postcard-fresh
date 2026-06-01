@@ -12,10 +12,10 @@
     "hero": {
       "type": "postcard-collection-hero",
       "settings": {
-        "breadcrumb_prefix": "Home / Shop",
-        "eyebrow": "For your room. Your skin. Your linens.",
+        "breadcrumb_prefix": "",
+        "eyebrow": "",
         "title_override": "",
-        "body": "The hero category — 14% of everything we sell. 22 worlds, one spritz at a time."
+        "body": ""
       }
     },
     "pleasers": {

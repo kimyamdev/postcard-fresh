@@ -9,18 +9,6 @@
  */
 {
   "sections": {
-    "about_hero": {
-      "type": "postcard-about-hero",
-      "settings": {
-        "image": "shopify://shop_images/Edna_Sophia_Delta_landscape.jpg",
-        "image_alt": "",
-        "image_placeholder": "Hildra · in the beauty kitchen, mid-formulation",
-        "legend": "EDNA AND SOPHIA, leading production of postcard products",
-        "eyebrow": "Formulated and made fresh in Singapore.",
-        "title": "Made in-house.",
-        "body": "Postcard is a self-care destination, made in our beauty kitchen in Singapore. Effective non-toxic formulations, simple ingredients, the least wasteful packaging we can manage. We're here to make care personal again."
-      }
-    },
     "about_story": {
       "type": "postcard-about-story",
       "blocks": {
@@ -55,6 +43,18 @@
         "image_alt": "",
         "image_placeholder": "cookie-jar refillery, 2019",
         "legend": "Our founder Hildra at OASIS @ EVERTON IN 2019"
+      }
+    },
+    "about_hero": {
+      "type": "postcard-about-hero",
+      "settings": {
+        "image": "shopify://shop_images/Edna_Sophia_Delta_landscape.jpg",
+        "image_alt": "",
+        "image_placeholder": "Hildra · in the beauty kitchen, mid-formulation",
+        "legend": "EDNA AND SOPHIA, leading production of postcard products",
+        "eyebrow": "Formulated and made fresh in Singapore.",
+        "title": "Made in-house.",
+        "body": "Postcard is a self-care destination, made in our beauty kitchen in Singapore. Effective non-toxic formulations, simple ingredients, the least wasteful packaging we can manage. We're here to make care personal again."
       }
     },
     "about_beliefs": {
@@ -136,10 +136,10 @@
     }
   },
   "order": [
-    "about_hero",
     "about_story",
-    "about_beliefs",
+    "about_hero",
     "about_why",
+    "about_beliefs",
     "about_worlds"
   ]
 }

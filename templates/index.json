@@ -155,11 +155,11 @@
     "bestsellers": {
       "type": "postcard-bestsellers",
       "settings": {
-        "eyebrow": "The classics",
+        "eyebrow": "Best-sellers",
         "title": "Products we send most often.",
-        "lede": "The ones you keep coming back to. Sent 1,200+ times in the last 95 days.",
-        "collection": "current-top-picks",
-        "randomize": true,
+        "lede": "The ones most people keep coming back to.",
+        "collection": "bestsellers-postcard",
+        "randomize": false,
         "badge_1": "",
         "badge_2": "",
         "badge_3": "",

@@ -1,0 +1,36 @@
+{%- comment -%}
+  Mobile-only inline search bar that sits below the sticky header on every
+  page. Hidden on desktop (≥720px) via CSS. Submits to {{ routes.search_url }}.
+  Editor exposes placeholder, button label, and a show/hide toggle.
+{%- endcomment -%}
+
+{%- if section.settings.show -%}
+<div class="pc-msearch" role="search">
+  <form class="pc-msearch__form" action="{{ routes.search_url }}" method="get">
+    <input
+      type="search"
+      name="q"
+      class="pc-msearch__input"
+      placeholder="{{ section.settings.placeholder | default: 'Search worlds, products, ingredients…' }}"
+      autocomplete="off"
+      aria-label="{{ section.settings.aria_label | default: 'Search the store' }}">
+    <button type="submit" class="pc-msearch__submit" aria-label="{{ section.settings.button_label | default: 'Search' }}">
+      <span aria-hidden="true">&#8981;</span>
+    </button>
+  </form>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Mobile search bar",
+  "settings": [
+    { "type": "paragraph", "content": "Visible on mobile only (≤720 px), pinned below the sticky header on every page. Submits to /search." },
+    { "type": "checkbox", "id": "show", "label": "Show the bar", "default": true },
+    { "type": "text", "id": "placeholder", "label": "Placeholder", "default": "Search worlds, products, ingredients…" },
+    { "type": "text", "id": "button_label", "label": "Submit button label (aria)", "default": "Search" },
+    { "type": "text", "id": "aria_label", "label": "Input aria-label", "default": "Search the store" }
+  ],
+  "presets": [{ "name": "Mobile search bar" }]
+}
+{% endschema %}
