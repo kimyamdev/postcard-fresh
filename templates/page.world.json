@@ -1,50 +1,109 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "postcard-world-card-hero",
-      "settings": {}
+      "settings": {
+        "from_address": "Postcard SG / Orchard\nSingapore 238867",
+        "postmark_label": "SINGAPORE · 2026 · POSTCARD",
+        "greeting": "greetings from the [world]",
+        "body_text": "",
+        "to_label": "TO · THE WEARER",
+        "watch_label": "▶ WATCH",
+        "watch_duration": "",
+        "cta_text": "LISTEN TO [WORLD]'S PLAYLIST →",
+        "cta_url": "",
+        "no_total_format": "POSTCARD NO. [n] OF [total]",
+        "flip_hint": "TAP TO FLIP · OR SCROLL TO READ"
+      }
     },
     "scent": {
       "type": "postcard-world-scent",
-      "settings": {}
+      "settings": {
+        "eyebrow": "How it's built",
+        "title": "The scent breakdown.",
+        "bg_alpha": 8,
+        "show_descriptions": false,
+        "top_label": "Top",
+        "top_notes_override": "",
+        "top_desc": "{{ page.metafields.custom.world.value.top_description.value }}",
+        "heart_label": "Heart",
+        "heart_notes_override": "",
+        "heart_desc": "Warm tea steam, soft fruit.",
+        "base_label": "Base",
+        "base_notes_override": "",
+        "base_desc": "The settled, skin-like finish.",
+        "character_label": "Character",
+        "character_notes_override": "",
+        "character_desc_override": "",
+        "show_wear_notes": true,
+        "wear_notes_override": "",
+        "wear_notes_label": "WEARNOTES"
+      }
     },
     "ritual_skin": {
       "type": "postcard-world-ritual",
       "settings": {
         "title": "On your skin.",
+        "lede": "",
         "zone": "skin",
-        "view_all_text": "View all →",
+        "source_collection": "",
         "product_limit": 4,
-        "hide_if_empty": true
+        "hide_if_empty": true,
+        "view_all_text": "View all →",
+        "view_all_url": ""
       }
     },
     "ritual_room": {
       "type": "postcard-world-ritual",
       "settings": {
         "title": "In the room.",
+        "lede": "",
         "zone": "room",
-        "view_all_text": "View all →",
+        "source_collection": "",
         "product_limit": 4,
-        "hide_if_empty": true
+        "hide_if_empty": true,
+        "view_all_text": "View all →",
+        "view_all_url": ""
       }
     },
     "ritual_travel": {
       "type": "postcard-world-ritual",
       "settings": {
         "title": "Travel-size.",
+        "lede": "",
         "zone": "travel",
-        "view_all_text": "View all →",
+        "source_collection": "",
         "product_limit": 4,
-        "hide_if_empty": true
+        "hide_if_empty": true,
+        "view_all_text": "View all →",
+        "view_all_url": ""
       }
     },
     "neighbours": {
       "type": "postcard-world-neighbours",
-      "settings": {}
+      "settings": {
+        "eyebrow": "If you love [world]",
+        "title": "…send yourself a postcard from:",
+        "neighbour_limit": 3
+      }
     },
     "refill": {
       "type": "postcard-world-refill",
-      "settings": {}
+      "settings": {
+        "title": "Refill your [world] in store.",
+        "body": "",
+        "cta_text": "Visit our Orchard flagship →",
+        "cta_url": ""
+      }
     }
   },
   "order": [

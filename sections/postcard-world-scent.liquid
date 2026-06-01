@@ -66,13 +66,39 @@
   assign heart_arr = heart_arr | default: 'Earl Grey Tea, Apricot'
   assign base_arr = base_arr | default: 'Vanilla, White Musk'
 
+  comment
+    Editor overrides win over both the metaobject's notes lists and the scent_notes fallback.
+    Newlines and commas both accepted; we normalise to a comma-separated string.
+  endcomment
+  if section.settings.top_notes_override != blank
+    assign top_arr = section.settings.top_notes_override | newline_to_br | replace: '<br />', ', ' | replace: '<br>', ', '
+  endif
+  if section.settings.heart_notes_override != blank
+    assign heart_arr = section.settings.heart_notes_override | newline_to_br | replace: '<br />', ', ' | replace: '<br>', ', '
+  endif
+  if section.settings.base_notes_override != blank
+    assign base_arr = section.settings.base_notes_override | newline_to_br | replace: '<br />', ', ' | replace: '<br>', ', '
+  endif
+
   assign top_desc = world.top_description.value | default: section.settings.top_desc | default: 'The bright doorway moment.'
   assign heart_desc = world.heart_description.value | default: section.settings.heart_desc | default: 'Warm tea steam, soft fruit.'
   assign base_desc = world.base_description.value | default: section.settings.base_desc | default: 'The settled, skin-like finish.'
+
+  if section.settings.character_notes_override != blank
+    assign world_character_label = section.settings.character_notes_override
+  endif
+  if section.settings.character_desc_override != blank
+    assign world_character_desc = section.settings.character_desc_override
+  endif
+  if section.settings.wear_notes_override != blank
+    assign world_wear_notes = section.settings.wear_notes_override
+  endif
 -%}
 
+{%- assign show_descriptions = section.settings.show_descriptions -%}
+{%- if show_descriptions == nil -%}{%- assign show_descriptions = true -%}{%- endif -%}
 {%- if world -%}
-<section class="section section--tight pc-world-scent" style="--world-color: {{ world_color }}; background: color-mix(in srgb, {{ world_color }} {{ bg_alpha }}%, transparent);">
+<section class="section section--tight pc-world-scent{% unless show_descriptions %} pc-world-scent--no-desc{% endunless %}" style="--world-color: {{ world_color }}; background: color-mix(in srgb, {{ world_color }} {{ bg_alpha }}%, transparent);">
   <div class="container">
     <div class="pc-scent__head">
       {%- if section.settings.eyebrow != blank -%}
@@ -124,16 +150,23 @@
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "How it's built" },
     { "type": "text", "id": "title",   "label": "Title",   "default": "The scent breakdown." },
     { "type": "range", "id": "bg_alpha", "label": "Background tint (%)", "min": 0, "max": 30, "step": 2, "default": 8, "unit": "%", "info": "How strongly the world's accent color tints the section background." },
+    { "type": "checkbox", "id": "show_descriptions", "label": "Show description column", "default": true, "info": "When off, hides the third column (the per-layer descriptions) so only Layer + Notes are shown." },
     { "type": "header", "content": "Layer rows" },
     { "type": "text", "id": "top_label",       "label": "Top label",       "default": "Top" },
+    { "type": "textarea", "id": "top_notes_override", "label": "Top notes (override)", "info": "Comma-separated or one per line. Leave blank to use the world metaobject's notes_top (or scent_notes fallback)." },
     { "type": "text", "id": "top_desc",        "label": "Top description", "default": "The bright doorway moment." },
     { "type": "text", "id": "heart_label",     "label": "Heart label",     "default": "Heart" },
+    { "type": "textarea", "id": "heart_notes_override", "label": "Heart notes (override)", "info": "Comma-separated or one per line. Leave blank to use the world metaobject's notes_heart." },
     { "type": "text", "id": "heart_desc",      "label": "Heart description","default": "Warm tea steam, soft fruit." },
     { "type": "text", "id": "base_label",      "label": "Base label",      "default": "Base" },
+    { "type": "textarea", "id": "base_notes_override", "label": "Base notes (override)", "info": "Comma-separated or one per line. Leave blank to use the world metaobject's notes_base." },
     { "type": "text", "id": "base_desc",       "label": "Base description","default": "The settled, skin-like finish." },
     { "type": "text", "id": "character_label", "label": "Character label", "default": "Character" },
+    { "type": "text", "id": "character_notes_override", "label": "Character (override)", "info": "Leave blank to use the world metaobject's character_label (e.g. 'Unisex · Year-round')." },
+    { "type": "text", "id": "character_desc_override", "label": "Character description (override)", "info": "Leave blank to use the world metaobject's character_description." },
     { "type": "header", "content": "Wear-notes quote" },
     { "type": "checkbox", "id": "show_wear_notes", "label": "Show wear-notes quote", "default": true },
+    { "type": "textarea", "id": "wear_notes_override", "label": "Wear notes quote (override)", "info": "Leave blank to use the world metaobject's wear_notes_quote." },
     { "type": "text", "id": "wear_notes_label", "label": "Postmark label (HTML)", "default": "WEAR<br>NOTES" }
   ],
   "presets": [{ "name": "World page · Scent" }]

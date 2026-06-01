@@ -12,6 +12,33 @@
     "hero": {
       "type": "postcard-hero",
       "blocks": {
+        "slide_XKmj8Q": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Hotel_Lobby.png",
+            "eyebrow": "",
+            "tag": "",
+            "stamp_1": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Hotel_Lobby.png"
+          }
+        },
+        "slide_dkhfFf": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/IMG-1866.png",
+            "eyebrow": "",
+            "tag": "",
+            "stamp_3": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Java_Jungle.png"
+          }
+        },
+        "slide_bWnp7a": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/body_oil.png",
+            "eyebrow": "",
+            "tag": "",
+            "stamp_1": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Coconut_Beach_1fc28cdc-bc43-45f2-b798-491a405bf495.png"
+          }
+        },
         "slide_L3nrtC": {
           "type": "slide",
           "settings": {
@@ -24,17 +51,19 @@
         "slide_MrQF3G": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/IMG-1889.png",
+            "image": "shopify://shop_images/woman_padel_court_from_back.jpg",
             "eyebrow": "",
-            "tag": ""
+            "tag": "",
+            "stamp_2": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Coconut_Beach_1fc28cdc-bc43-45f2-b798-491a405bf495.png"
           }
         },
         "slide_HJcpjm": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/IMG-1859.png",
+            "image": "shopify://shop_images/IMG-1861.png",
             "eyebrow": "",
-            "tag": ""
+            "tag": "",
+            "stamp_1": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Wild_Flowers_8756d0ee-916f-4d81-8fce-9b21ec0b0fa4.png"
           }
         },
         "slide_RhiCVG": {
@@ -50,7 +79,8 @@
           "settings": {
             "image": "shopify://shop_images/IMG-1872_f15eb88d-b600-4577-8c6f-1b75ef0fa9cd.png",
             "eyebrow": "",
-            "tag": ""
+            "tag": "",
+            "stamp_1": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Moon_Bloom.png"
           }
         },
         "slide_dNEmwg": {
@@ -58,15 +88,8 @@
           "settings": {
             "image": "shopify://shop_images/tennis_-_deodorant.png",
             "eyebrow": "",
-            "tag": ""
-          }
-        },
-        "slide_XKmj8Q": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/IMG-1872_f15eb88d-b600-4577-8c6f-1b75ef0fa9cd.png",
-            "eyebrow": "",
-            "tag": ""
+            "tag": "",
+            "stamp_2": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Icy_Peaks.png"
           }
         },
         "slide_tXfdBB": {
@@ -74,18 +97,21 @@
           "settings": {
             "image": "shopify://shop_images/IMG-1885.png",
             "eyebrow": "",
-            "tag": ""
+            "tag": "",
+            "stamp_3": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Woodland_Retreat_e6f4b29d-5e77-49da-92f5-5434f992df77.png"
           }
         }
       },
       "block_order": [
+        "slide_XKmj8Q",
+        "slide_dkhfFf",
+        "slide_bWnp7a",
         "slide_L3nrtC",
         "slide_MrQF3G",
         "slide_HJcpjm",
         "slide_RhiCVG",
         "slide_yWCwxr",
         "slide_dNEmwg",
-        "slide_XKmj8Q",
         "slide_tXfdBB"
       ],
       "settings": {
@@ -97,6 +123,10 @@
         "hide_overlay_text": false,
         "show_postmark": true,
         "postmark_html": "POSTCARD<br>· SINGAPORE ·<br>EST. 2018",
+        "postmark_top": 3,
+        "postmark_right": 38,
+        "postmark_rotate": 0,
+        "postmark_size": 110,
         "primary_cta_text": "Find your world →",
         "primary_cta_url": "",
         "secondary_cta_text": "Shop bestsellers",
@@ -267,7 +297,7 @@
         "photo_alt": "",
         "photo_placeholder": "Hildra · in the beauty kitchen",
         "eyebrow": "Made by humans, in Singapore.",
-        "title": "Do more with less.",
+        "title": "FORMULATING AND MAKING SINCE 2018.",
         "cta_text": "About Us →",
         "cta_url": ""
       }

@@ -747,7 +747,20 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   margin-inline: auto;
 }
 @media (max-width: 720px) {
-  .pc-worlds-index__core { grid-template-columns: 1fr; gap: 24px; }
+  .pc-worlds-index__core { grid-template-columns: 1fr; gap: 18px; padding: 0 16px; }
+  .pc-worlds-index__card { min-height: 240px; box-shadow: 4px 5px 0 rgba(33,32,32,0.10); }
+  .pc-worlds-index__card-resting { padding: 22px; }
+  .pc-worlds-index__resting-name { font-size: clamp(26px, 8vw, 36px); }
+  .pc-worlds-index__card-badge { width: 60px; height: 60px; font-size: 9px; padding: 6px; top: 12px; right: 12px; }
+  .pc-worlds-index__card-hover { grid-template-columns: 1.1fr 0.9fr; gap: 14px; padding: 18px; }
+  .pc-worlds-index__card-hover .pc-worlds-index__card-name { font-size: 22px; }
+  .pc-worlds-index__card-hover .pc-worlds-index__card-tag { font-size: 13px; line-height: 1.4; }
+  .pc-worlds-index__card-hover .pc-worlds-index__chip { font-size: 11px; padding: 4px 8px; }
+  .pc-worlds-index__card-hover .pc-worlds-index__to-label { font-size: 10px; }
+  .pc-worlds-index__card-hover .pc-worlds-index__to-list { font-size: 12px; line-height: 1.5; }
+  .pc-worlds-index__card-left { padding-right: 12px; }
+  .pc-worlds-index__card-right { gap: 12px; }
+  .pc-worlds-index__card-stamp-img { width: 64px; }
 }
 .pc-worlds-index__card {
   --tilt: 0deg;
@@ -915,6 +928,7 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   align-self: flex-end;
   transform: rotate(2.5deg);
 }
+.pc-worlds-index__card-stamp-img { display: block; width: 88px; max-width: 100%; height: auto; }
 .pc-worlds-index__card-eyebrow { margin-bottom: 8px; }
 
 /* TO: list (right column under stamp) */
@@ -1075,6 +1089,8 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 .pc-scent__layer { font-size: 22px; }
 .pc-scent__notes { font-family: var(--font-display); font-size: 14px; }
 .pc-scent__desc { font-size: 15px; opacity: 0.78; }
+.pc-world-scent--no-desc .pc-scent__row { grid-template-columns: 180px 1fr; }
+.pc-world-scent--no-desc .pc-scent__desc { display: none; }
 
 .pc-world-quote { padding: 64px 0; background: var(--color-bg-warm); }
 .pc-world-quote__inner { text-align: center; }

@@ -47,6 +47,7 @@
     {%- assign w_slug = w.slug.value | default: w.handle -%}
     {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
     {%- assign w_name = w.name.value -%}
+    {%- assign w_stamp_img = w.world_stamp.value -%}
     {%- assign w_family = w.family.value -%}
     {%- assign w_tagline = w.tagline.value -%}
     {%- assign w_featured = w.featured_products.value -%}
@@ -139,8 +140,13 @@
           {{ preview_html }}
         </div>
         <div class="pc-worlds-index__card-right">
-          <div class="pc-worlds-index__card-stamp">
-            {% render 'stamp', name: w_name, family: w_family, color: w_color, size: size, monogram_only: true %}
+          <div class="pc-worlds-index__card-stamp" style="opacity: {{ section.settings.stamp_opacity | default: 100 }}%;">
+            {%- if w_stamp_img != blank -%}
+              {%- assign w_stamp_alt = w_name | append: ' stamp' | escape -%}
+              {{ w_stamp_img | image_url: width: 320 | image_tag: alt: w_stamp_alt, loading: 'lazy', class: 'pc-worlds-index__card-stamp-img' }}
+            {%- else -%}
+              {% render 'stamp', name: w_name, family: w_family, color: w_color, size: size, monogram_only: true %}
+            {%- endif -%}
           </div>
           {%- if w_best_for and w_best_for.size > 0 -%}
             <div class="pc-worlds-index__to-block">
@@ -220,7 +226,10 @@
     { "type": "header", "content": "Range (within filtered tier)" },
     { "type": "range", "id": "start_index", "label": "Start at #", "min": 1, "max": 30, "step": 1, "default": 1 },
     { "type": "range", "id": "count",       "label": "How many",   "min": 1, "max": 24, "step": 1, "default": 24 },
-    { "type": "checkbox", "id": "hide_if_empty", "label": "Hide section if no worlds in range", "default": true }
+    { "type": "checkbox", "id": "hide_if_empty", "label": "Hide section if no worlds in range", "default": true },
+    { "type": "header", "content": "Stamp graphic" },
+    { "type": "paragraph", "content": "When a world has a world_stamp image uploaded on its metaobject, the card uses that image instead of the monogram fallback. Adjust opacity below." },
+    { "type": "range", "id": "stamp_opacity", "label": "Stamp opacity", "min": 10, "max": 100, "step": 5, "default": 100, "unit": "%" }
   ],
   "presets": [{ "name": "Worlds index · List" }]
 }

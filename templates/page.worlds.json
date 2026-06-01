@@ -21,15 +21,16 @@
       "type": "postcard-worlds-index-list",
       "settings": {
         "eyebrow": "Worlds",
-        "size": "md",
+        "size": "sm",
         "preview_mode": "none",
         "type_limit": 4,
-        "tint_alpha": 30,
+        "tint_alpha": 40,
         "tint_blend": "multiply",
         "tier": "World",
         "start_index": 1,
         "count": 24,
-        "hide_if_empty": true
+        "hide_if_empty": true,
+        "stamp_opacity": 100
       }
     },
     "non_worlds_rail": {
@@ -45,7 +46,8 @@
         "tier": "Non-world",
         "start_index": 1,
         "count": 24,
-        "hide_if_empty": true
+        "hide_if_empty": true,
+        "stamp_opacity": 100
       }
     }
   },
