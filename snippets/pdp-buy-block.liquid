@@ -42,8 +42,24 @@
 
 {%- when 'rating' -%}
   {%- liquid
-    assign sp_count = product.metafields.stamped.reviews_count.value | plus: 0
-    assign sp_avg_raw = product.metafields.stamped.reviews_average.value | default: 0
+    comment
+      Pull review count + average from Stamped (older integration) OR from
+      Shopify Product Reviews (reviews.rating / reviews.rating_count). The
+      shop has switched from one to the other across products, so we read
+      whichever is set. Stamped's legacy metafields can render as direct
+      drops, while Shopify's standard rating metafield exposes .value.rating.
+    endcomment
+    assign sp_count_raw = product.metafields.stamped.reviews_count.value | default: product.metafields.stamped.reviews_count | default: product.metafields.reviews.rating_count.value | default: product.metafields.reviews.rating_count
+    assign sp_count = sp_count_raw | default: 0 | plus: 0
+
+    assign sp_avg_raw = product.metafields.stamped.reviews_average.value | default: product.metafields.stamped.reviews_average
+    if sp_avg_raw == nil or sp_avg_raw == 0
+      assign sr_rating = product.metafields.reviews.rating.value.rating | default: product.metafields.reviews.rating.value
+      if sr_rating != nil
+        assign sp_avg_raw = sr_rating
+      endif
+    endif
+    assign sp_avg_raw = sp_avg_raw | default: 0 | plus: 0.0
     assign sp_tenths = sp_avg_raw | times: 10 | round
     assign sp_int = sp_tenths | divided_by: 10
     assign sp_dec = sp_tenths | modulo: 10
@@ -51,15 +67,15 @@
   -%}
   {%- if sp_count > 0 -%}
     <div class="pc-pdp-buy__rating" {{ block.shopify_attributes }}>
-      <span class="pc-pdp-buy__stars" aria-label="Rated {{ sp_int }}.{{ sp_dec }} out of 5">
+      <span class="pc-pdp-buy__stars" data-pc-review-stars aria-label="Rated {{ sp_int }}.{{ sp_dec }} out of 5">
         {%- for i in (1..5) -%}
           {%- if i <= sp_filled -%}&#9733;{%- else -%}&#9734;{%- endif -%}
         {%- endfor -%}
       </span>
       <span class="pc-pdp-buy__rating-text">
-        <span class="pc-pdp-buy__rating-score">{{ sp_int }}.{{ sp_dec }}</span>
+        <span class="pc-pdp-buy__rating-score" data-pc-review-score>{{ sp_int }}.{{ sp_dec }}</span>
         &middot;
-        <a class="pc-pdp-buy__rating-link" href="#pc-stamped-reviews">{{ sp_count }} review{% if sp_count != 1 %}s{% endif %}</a>
+        <a class="pc-pdp-buy__rating-link" href="#pc-stamped-reviews" data-pc-rating-link><span data-pc-review-count>{{ sp_count }}</span> <span data-pc-review-word>{% if sp_count == 1 %}review{% else %}reviews{% endif %}</span></a>
       </span>
     </div>
   {%- endif -%}

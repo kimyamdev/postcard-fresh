@@ -3,39 +3,255 @@
   assign world_name = world.name.value | default: 'this world'
   assign world_color = world.accent_color.value | default: '#E8C36A'
   assign world_family = world.family.value
-  assign mf_pairs = product.metafields.pdp.pairs_with.value
+  assign world_slug = world.slug.value | default: world.handle
+
+  assign manual_pairs = product.metafields.pdp.pairs_with.value
+  assign auto_mode = section.settings.auto_mode | default: 'world_then_type'
+  assign limit_count = section.settings.limit | default: 3
+  assign hide_if_empty = section.settings.hide_if_empty
+  if hide_if_empty == nil
+    assign hide_if_empty = true
+  endif
+  assign type_source_handle = section.settings.type_source | default: 'all'
+
+  assign current_type = product.type
+
+  assign selected_ids = '|'
+  assign selected_count = 0
+
+  comment
+    1) Manual curation. Dedupe + skip self.
+  endcomment
+  if manual_pairs and manual_pairs.size > 0
+    for p in manual_pairs
+      if selected_count >= limit_count
+        break
+      endif
+      if p.id == product.id
+        continue
+      endif
+      assign needle = '|' | append: p.id | append: '|'
+      unless selected_ids contains needle
+        assign selected_ids = selected_ids | append: p.id | append: '|'
+        assign selected_count = selected_count | plus: 1
+      endunless
+    endfor
+  endif
+
+  comment
+    2) Auto-fill from {world_slug}-collection.
+    Pass A (when world_type or world_then_type): same world + same type first.
+    Pass B: same world, any type.
+  endcomment
+  assign world_collection_handle = world_slug | append: '-collection'
+  assign world_collection = collections[world_collection_handle]
+
+  if selected_count < limit_count and auto_mode != 'off' and world_collection.id
+    if auto_mode == 'world_type' or auto_mode == 'world_then_type'
+      if current_type != blank
+        for p in world_collection.products
+          if selected_count >= limit_count
+            break
+          endif
+          if p.id == product.id
+            continue
+          endif
+          if p.type != current_type
+            continue
+          endif
+          assign needle = '|' | append: p.id | append: '|'
+          unless selected_ids contains needle
+            assign selected_ids = selected_ids | append: p.id | append: '|'
+            assign selected_count = selected_count | plus: 1
+          endunless
+        endfor
+      endif
+    endif
+
+    if auto_mode == 'world' or auto_mode == 'world_type' or auto_mode == 'world_then_type'
+      for p in world_collection.products
+        if selected_count >= limit_count
+          break
+        endif
+        if p.id == product.id
+          continue
+        endif
+        assign needle = '|' | append: p.id | append: '|'
+        unless selected_ids contains needle
+          assign selected_ids = selected_ids | append: p.id | append: '|'
+          assign selected_count = selected_count | plus: 1
+        endunless
+      endfor
+    endif
+  endif
+
+  comment
+    3) Same type across the broader catalogue (auto_mode contains _type fallback).
+    Uses the editor-picked "type source collection" (defaults to the storefront "all" collection).
+  endcomment
+  assign type_source = collections[type_source_handle]
+  if selected_count < limit_count and auto_mode != 'off' and auto_mode contains 'type' and current_type != blank and type_source.id
+    for p in type_source.products
+      if selected_count >= limit_count
+        break
+      endif
+      if p.id == product.id
+        continue
+      endif
+      if p.type != current_type
+        continue
+      endif
+      assign needle = '|' | append: p.id | append: '|'
+      unless selected_ids contains needle
+        assign selected_ids = selected_ids | append: p.id | append: '|'
+        assign selected_count = selected_count | plus: 1
+      endunless
+    endfor
+  endif
+
+  comment
+    4) Same scent family (world.family) across the broader catalogue.
+    Useful when the world is small. E.g. when current product's world.family
+    is "Active Skincare", surface other products from any Active-Skincare world.
+    Capped at 250 product iterations for performance.
+  endcomment
+  if selected_count < limit_count and auto_mode != 'off' and auto_mode contains 'family' and world_family != blank and type_source.id
+    for p in type_source.products limit: 250
+      if selected_count >= limit_count
+        break
+      endif
+      if p.id == product.id
+        continue
+      endif
+      assign p_world = p.metafields.postcard.world.value
+      if p_world == blank
+        continue
+      endif
+      assign p_family_str = p_world.family.value | default: p_world.family
+      if p_family_str != world_family
+        continue
+      endif
+      assign needle = '|' | append: p.id | append: '|'
+      unless selected_ids contains needle
+        assign selected_ids = selected_ids | append: p.id | append: '|'
+        assign selected_count = selected_count | plus: 1
+      endunless
+    endfor
+  endif
+
+  comment
+    Resolve the actual list of products to render by re-iterating the
+    combined pool in the order they were selected.
+  endcomment
+  assign ids_pipe = selected_ids
+  assign rendered_title = section.settings.title | default: 'Other postcards from [world].' | replace: '[world]', world_name
+
+  assign has_fallback_blocks = false
+  for block in section.blocks
+    if block.type == 'item' and block.settings.name != blank
+      assign has_fallback_blocks = true
+      break
+    endif
+  endfor
+
+  assign should_render = true
+  if selected_count == 0 and has_fallback_blocks == false and hide_if_empty
+    assign should_render = false
+  endif
 -%}
+
+{%- if should_render -%}
 <section class="section pc-pw">
   <div class="container">
-    <h2 class="h-display pc-pw__title">Other postcards from {{ world_name }}.</h2>
+    <h2 class="h-display pc-pw__title">{{ rendered_title }}</h2>
     <div class="pc-pw__grid">
-      {%- if mf_pairs and mf_pairs.size > 0 -%}
-        {%- for p in mf_pairs limit: 3 -%}
-          {%- assign p_world = p.metafields.postcard.world.value -%}
-          {%- assign p_world_name = p_world.name.value | default: world_name -%}
-          {%- assign p_world_color = p_world.accent_color.value | default: world_color -%}
-          {%- assign p_family = p_world.family.value -%}
-          {% render 'product-card', product: p, world: p_world_name, world_color: p_world_color, badge: p_family %}
-        {%- endfor -%}
+      {%- if selected_count > 0 -%}
+        {%- assign emitted = 0 -%}
+
+        {%- if manual_pairs and manual_pairs.size > 0 -%}
+          {%- for p in manual_pairs -%}
+            {%- if emitted >= selected_count -%}{%- break -%}{%- endif -%}
+            {%- assign needle = '|' | append: p.id | append: '|' -%}
+            {%- unless ids_pipe contains needle -%}{%- continue -%}{%- endunless -%}
+            {%- assign p_world = p.metafields.postcard.world.value -%}
+            {%- assign p_world_name = p_world.name.value | default: world_name -%}
+            {%- assign p_world_color = p_world.accent_color.value | default: world_color -%}
+            {%- assign p_family = p_world.family.value -%}
+            {% render 'product-card', product: p, world: p_world_name, world_color: p_world_color, badge: p_family %}
+            {%- assign emitted = emitted | plus: 1 -%}
+            {%- assign ids_pipe = ids_pipe | replace: needle, '|' -%}
+          {%- endfor -%}
+        {%- endif -%}
+
+        {%- if world_collection.id -%}
+          {%- for p in world_collection.products -%}
+            {%- if emitted >= selected_count -%}{%- break -%}{%- endif -%}
+            {%- assign needle = '|' | append: p.id | append: '|' -%}
+            {%- unless ids_pipe contains needle -%}{%- continue -%}{%- endunless -%}
+            {%- assign p_world = p.metafields.postcard.world.value -%}
+            {%- assign p_world_name = p_world.name.value | default: world_name -%}
+            {%- assign p_world_color = p_world.accent_color.value | default: world_color -%}
+            {%- assign p_family = p_world.family.value -%}
+            {% render 'product-card', product: p, world: p_world_name, world_color: p_world_color, badge: p_family %}
+            {%- assign emitted = emitted | plus: 1 -%}
+            {%- assign ids_pipe = ids_pipe | replace: needle, '|' -%}
+          {%- endfor -%}
+        {%- endif -%}
+
+        {%- if type_source.id -%}
+          {%- for p in type_source.products limit: 250 -%}
+            {%- if emitted >= selected_count -%}{%- break -%}{%- endif -%}
+            {%- assign needle = '|' | append: p.id | append: '|' -%}
+            {%- unless ids_pipe contains needle -%}{%- continue -%}{%- endunless -%}
+            {%- assign p_world = p.metafields.postcard.world.value -%}
+            {%- assign p_world_name = p_world.name.value | default: world_name -%}
+            {%- assign p_world_color = p_world.accent_color.value | default: world_color -%}
+            {%- assign p_family = p_world.family.value -%}
+            {% render 'product-card', product: p, world: p_world_name, world_color: p_world_color, badge: p_family %}
+            {%- assign emitted = emitted | plus: 1 -%}
+            {%- assign ids_pipe = ids_pipe | replace: needle, '|' -%}
+          {%- endfor -%}
+        {%- endif -%}
       {%- else -%}
         {%- for block in section.blocks -%}
-          {% render 'product-card',
-            name: block.settings.name,
-            world: world_name,
-            world_color: world_color,
-            price: block.settings.price,
-            href: block.settings.href,
-            badge: world_family %}
+          {%- if block.type == 'item' and block.settings.name != blank -%}
+            {% render 'product-card',
+              name: block.settings.name,
+              world: world_name,
+              world_color: world_color,
+              price: block.settings.price,
+              href: block.settings.href,
+              badge: world_family %}
+          {%- endif -%}
         {%- endfor -%}
       {%- endif -%}
     </div>
   </div>
 </section>
+{%- endif -%}
 
 {% schema %}
 {
   "name": "Pairs with",
-  "settings": [],
+  "settings": [
+    { "type": "header", "content": "Auto-fill" },
+    { "type": "paragraph", "content": "Order of preference: 1) the product's manual pdp.pairs_with metafield (self-refs filtered), 2) same world (and optionally same type first) from '{world-slug}-collection', 3) same type from the fallback collection below." },
+    { "type": "select", "id": "auto_mode", "label": "Auto-fill rule", "default": "world_then_family",
+      "options": [
+        { "value": "off",                  "label": "Off — manual + blocks only" },
+        { "value": "world",                 "label": "Same world only" },
+        { "value": "world_type",            "label": "Same world + same type first" },
+        { "value": "world_then_type",       "label": "Same world, then same type elsewhere" },
+        { "value": "world_then_family",     "label": "Same world, then same family elsewhere" },
+        { "value": "world_then_type_family","label": "Same world → same type → same family" }
+      ]
+    },
+    { "type": "range", "id": "limit", "label": "Max cards", "min": 1, "max": 6, "step": 1, "default": 3 },
+    { "type": "collection", "id": "type_source", "label": "Same-type fallback collection", "info": "Used by 'Same world, then same type elsewhere' when the current world doesn't have enough products. Defaults to the storefront 'all' collection." },
+    { "type": "checkbox", "id": "hide_if_empty", "label": "Hide section when there's nothing to show", "default": true },
+    { "type": "header", "content": "Title" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Other postcards from [world].", "info": "[world] is replaced with the current product's world name." }
+  ],
   "blocks": [
     {
       "type": "item",
@@ -50,11 +266,7 @@
   "presets": [
     {
       "name": "Pairs with",
-      "blocks": [
-        { "type": "item", "settings": { "name": "Body Lotion", "price": "$32" } },
-        { "type": "item", "settings": { "name": "Anywhere Fragrance", "price": "$42" } },
-        { "type": "item", "settings": { "name": "Reed Diffuser", "price": "$48" } }
-      ]
+      "blocks": []
     }
   ]
 }

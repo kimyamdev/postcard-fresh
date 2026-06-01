@@ -9,7 +9,8 @@
   if world_tint_alpha > 0 and world_accent != blank
     assign computed_bg = 'color-mix(in srgb, ' | append: world_accent | append: ' ' | append: world_tint_alpha | append: '%, transparent)'
   endif
-  assign sp_count = product.metafields.stamped.reviews_count.value | plus: 0
+  assign sp_count_raw = product.metafields.stamped.reviews_count.value | default: product.metafields.stamped.reviews_count | default: product.metafields.reviews.rating_count.value | default: product.metafields.reviews.rating_count
+  assign sp_count = sp_count_raw | default: 0 | plus: 0
 -%}
 
 {%- if sp_count == 0 -%}{%- comment -%} Hide entirely when product has no reviews {%- endcomment -%}{%- else -%}

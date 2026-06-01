@@ -167,7 +167,13 @@
         "item_FfQ3QU",
         "item_frh9MV"
       ],
-      "settings": {}
+      "settings": {
+        "auto_mode": "world_then_type_family",
+        "limit": 3,
+        "type_source": "",
+        "hide_if_empty": true,
+        "title": "Other things worth packing."
+      }
     },
     "reviews": {
       "type": "postcard-pdp-reviews-section",
