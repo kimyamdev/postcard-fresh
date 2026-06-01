@@ -1,5 +1,5 @@
 {%- liquid
-  assign worlds = shop.metaobjects.world.values
+  assign worlds = shop.metaobjects.world.values | sort: 'popularity_rank'
   assign show_name = section.settings.show_name
   if show_name == nil
     assign show_name = true

@@ -1,5 +1,5 @@
 {%- liquid
-  assign worlds_all = shop.metaobjects.world.values
+  assign worlds_all = shop.metaobjects.world.values | sort: 'popularity_rank'
   assign visible_count = section.settings.visible_count | default: 7
   assign total_count = 0
   for w in worlds_all

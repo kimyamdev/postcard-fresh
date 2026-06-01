@@ -13,7 +13,7 @@
 {%- endcomment -%}
 
 {%- liquid
-  assign all_worlds = shop.metaobjects.world.values
+  assign all_worlds = shop.metaobjects.world.values | sort: 'popularity_rank'
   assign size = section.settings.size | default: 'md'
   assign tier_filter = section.settings.tier
   assign start_index = section.settings.start_index | default: 1

@@ -5,7 +5,7 @@
   assign show_worlds = section.settings.show_worlds
   assign worlds_limit = section.settings.worlds_limit | default: 7
 
-  assign all_worlds = shop.metaobjects.world.values
+  assign all_worlds = shop.metaobjects.world.values | sort: 'popularity_rank'
   assign worlds_total = 0
   for w in all_worlds
     if w.tier.value == 'World'
