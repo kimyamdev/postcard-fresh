@@ -20,6 +20,7 @@
     },
     "pleasers": {
       "type": "postcard-collection-pleasers",
+      "disabled": true,
       "settings": {
         "eyebrow": "Top [count] in this category",
         "title": "The crowd-pleasers.",
@@ -33,6 +34,7 @@
         "show_filters": true,
         "show_sort": true,
         "products_per_page": 36,
+        "max_products": 0,
         "count_text": "Showing [count] products",
         "clear_text": "Clear filters",
         "empty_text": "No postcards match these filters.",

@@ -1,0 +1,30 @@
+{
+  "sections": {
+    "hero": {
+      "type": "postcard-collection-hero",
+      "settings": {
+        "breadcrumb_prefix": "Home / Shop",
+        "eyebrow": "Most sent",
+        "title_override": "Bestsellers.",
+        "body": "The postcards we send most often."
+      }
+    },
+    "grid": {
+      "type": "postcard-collection-grid",
+      "settings": {
+        "show_filters": false,
+        "show_sort": false,
+        "products_per_page": 16,
+        "max_products": 15,
+        "count_text": "Top [count] postcards",
+        "clear_text": "Clear filters",
+        "empty_text": "No bestsellers yet.",
+        "empty_clear_text": "Browse all →"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "grid"
+  ]
+}

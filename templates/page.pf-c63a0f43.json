@@ -1,0 +1,22 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "pf-c63a0f43": {
+      "type": "pf-c63a0f43",
+      "settings": {
+        "pf_5b0808d7_value": "Recipes"
+      }
+    }
+  },
+  "order": [
+    "pf-c63a0f43"
+  ]
+}

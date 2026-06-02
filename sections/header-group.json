@@ -392,7 +392,7 @@
         "wl9"
       ],
       "settings": {
-        "announcement_html": "Free SG shipping over $60 · Refill at our Orchard flagship · <span class=\"pc-announce__accent\">Postcards in your inbox →</span>",
+        "announcement_html": "Free SG shipping over $60 · Refill at our Orchard flagship",
         "logo": "shopify://shop_images/Postcard_Logo_Suite_RGB_Horizontal_R_v1.png",
         "logo_width": 140,
         "logo_mobile_width": 140,

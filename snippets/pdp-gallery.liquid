@@ -57,7 +57,7 @@
       {%- else -%}
         <span>product &middot; in its world</span>
       {%- endif -%}
-      <div class="pc-pdp-gallery__pm-overlay">
+      <div class="pc-pdp-gallery__pm-overlay" x-show="currentIndex === 0" x-transition.opacity>
         <span class="postmark pc-pdp-gallery__pm"><div>{{ stamp_text }}</div></span>
       </div>
     </div>

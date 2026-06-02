@@ -52,7 +52,7 @@
   assign greeting = greeting | replace: '[world]', world_name | downcase
   assign body_text = section.settings.body_text | default: world_tagline | default: 'A bright, sparkling citrus opening that warms into something soft, sweet, and skin-like.'
   assign postmark_label = section.settings.postmark_label | default: 'SINGAPORE · 2026 · POSTCARD'
-  assign flip_hint = section.settings.flip_hint | default: 'TAP TO FLIP · OR SCROLL TO READ'
+  assign flip_hint = section.settings.flip_hint
   assign watch_label = section.settings.watch_label | default: '▶ WATCH'
   assign watch_duration = section.settings.watch_duration
 
@@ -152,7 +152,9 @@
 
     <div class="pc-wcard__foot">
       <div class="pc-wcard__foot-no">· {{ no_total_text }} ·</div>
-      <div class="pc-wcard__foot-hint">{{ flip_hint }}</div>
+      {%- if flip_hint != blank -%}
+        <div class="pc-wcard__foot-hint">{{ flip_hint }}</div>
+      {%- endif -%}
     </div>
   </div>
 
@@ -215,7 +217,7 @@
     { "type": "url",      "id": "cta_url",        "label": "CTA link (fallback)", "info": "Used only if the World metaobject has no spotify_url set. Leave blank to hide the CTA when no Spotify URL." },
     { "type": "header", "content": "Footer" },
     { "type": "text",     "id": "no_total_format", "label": "Postcard counter format", "default": "POSTCARD NO. [n] OF [total]", "info": "[n] = this world's order in the metaobject list; [total] = total worlds." },
-    { "type": "text",     "id": "flip_hint",      "label": "Flip hint", "default": "TAP TO FLIP · OR SCROLL TO READ" }
+    { "type": "text",     "id": "flip_hint",      "label": "Flip hint", "info": "Leave blank to hide." }
   ],
   "presets": [{ "name": "World page header (card)" }]
 }

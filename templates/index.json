@@ -137,7 +137,7 @@
         "primary_cta_text": "Find your world →",
         "primary_cta_url": "",
         "secondary_cta_text": "Shop bestsellers",
-        "secondary_cta_url": ""
+        "secondary_cta_url": "shopify://collections/bestsellers-postcard"
       }
     },
     "worlds_quick": {

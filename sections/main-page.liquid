@@ -26,12 +26,12 @@
     }
   }
 
-  .pc-page { display: block; }
+  .pc-page { display: block; padding-left: 24px; padding-right: 24px; }
   .pc-page__grid { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: stretch; }
   .pc-page__copy { display: flex; flex-direction: column; justify-content: center; min-width: 0; }
   .pc-page-head { max-width: 720px; margin: 0 0 28px; }
-  .pc-page-head__eyebrow { margin-bottom: 12px; opacity: 0.7; }
-  .pc-page-head__title { margin: 0; font-size: clamp(28px, 4vw, 44px);
+  .pc-page-head__eyebrow { margin-bottom: 12px; opacity: 0.7; font-family: var(--font-display); }
+  .pc-page-head__title { margin: 0; font-size: clamp(32px, 6vw, 56px); font-family: var(--font-headline); letter-spacing: 0.02em; text-transform: uppercase;
     {%- if use_custom_font and title_font -%}
       font-family: {{ title_font.family }}, {{ title_font.fallback_families }};
       font-style: {{ title_font.style }};
@@ -39,8 +39,13 @@
     {%- endif -%}
   }
   .pc-page-head__title--italic { font-style: italic; }
-  .pc-page-rte { font-size: 17px; line-height: 1.55; opacity: 0.85; }
+  .pc-page-rte { font-size: 16px; line-height: 1.7; font-family: var(--font-display); color: var(--color-ink); opacity: 1; }
   .pc-page-rte > :first-child { margin-top: 0; }
+  .pc-page-rte p, .pc-page-rte li { font-family: var(--font-display); }
+  .pc-page-rte strong { font-weight: 700; }
+  @media screen and (min-width: 750px) {
+    .pc-page { padding-left: 48px; padding-right: 48px; }
+  }
   @media screen and (min-width: 750px) {
     .pc-page-head { margin-bottom: 40px; }
   }
