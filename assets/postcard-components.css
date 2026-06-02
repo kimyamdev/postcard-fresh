@@ -3482,7 +3482,12 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   /* About */
   .pc-about-hero { grid-template-columns: 1fr; }
   .pc-about-hero__copy { padding: 40px 24px; }
-  .pc-about-story { grid-template-columns: 1fr; gap: 32px; }
+  .pc-about-story { grid-template-columns: 1fr; gap: 20px; min-height: 0; }
+  .pc-about-story > div:first-child { display: contents; }
+  .pc-about-story .eyebrow             { order: 1; }
+  .pc-about-story .pc-about-story__title { order: 2; }
+  .pc-about-story .pc-about-story__image { order: 3; aspect-ratio: 4/5; }
+  .pc-about-story .pc-about-story__p    { order: 4; }
   .pc-about-story__title { font-size: 36px; }
   .pc-about-beliefs__grid { grid-template-columns: 1fr 1fr; }
   .pc-about-beliefs__title,
