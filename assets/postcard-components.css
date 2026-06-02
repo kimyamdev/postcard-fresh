@@ -344,6 +344,20 @@ a.pc-product-card { cursor: pointer; }
   z-index: 3;
 }
 .pc-product-card__badge[data-family="active-skincare"] { background: #B6D3E6; }
+.pc-product-card__badge[data-family="unscented"] { background: var(--color-bg-card); color: var(--color-ink); }
+.pc-product-card__media--no-world,
+.pc-coll-top__grid .pc-product-card__media--no-world,
+.pc-coll-grid__products .pc-product-card__media--no-world,
+.pc-collgift-bestsent__grid .pc-product-card__media--no-world,
+.pc-ritual__grid .pc-product-card__media--no-world,
+.pc-pw__grid .pc-product-card__media--no-world,
+.pc-bestsellers__grid .pc-product-card__media--no-world,
+.pc-search__products .pc-product-card__media--no-world,
+.pc-refill-cat .pc-product-card__media--no-world {
+  background:
+    repeating-linear-gradient(135deg, rgba(33,32,32,0.03) 0 8px, rgba(33,32,32,0.05) 8px 16px),
+    var(--color-bg-card) !important;
+}
 .pc-product-card__chip {
   position: absolute;
   top: 12px; left: 12px;
@@ -629,6 +643,10 @@ a.pc-product-card { cursor: pointer; }
 /* Bestsellers: hide the world-initials chip; stamp stays top-right; round scent badge moves to top-left */
 .pc-bestsellers__grid .pc-product-card__chip { display: none; }
 .pc-bestsellers__grid .pc-product-card__world-stamp-img { filter: none; }
+.pc-bestsellers__grid .pc-product-card__world-stamp { width: 100px; top: 14px; right: 14px; }
+@media (max-width: 720px) {
+  .pc-bestsellers__grid .pc-product-card__world-stamp { width: 64px; top: 10px; right: 10px; }
+}
 /* World page ritual grids: hide the world-initials chip; stamp stays on top-right with no drop-shadow */
 .pc-ritual__grid .pc-product-card__chip { display: none; }
 .pc-ritual__grid .pc-product-card__world-stamp-img { filter: none; }
@@ -2673,6 +2691,10 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 .pc-about-story__title { font-size: 56px; margin-top: 8px; }
 .pc-about-story__p { margin-top: 18px; font-size: 16px; line-height: 1.7; }
 .pc-about-story__p + .pc-about-story__p { margin-top: 14px; }
+.pc-about-story__sig { margin-top: 28px; font-size: clamp(36px, 4vw, 52px); line-height: 1; color: var(--color-ink); opacity: 0.92; }
+@media (max-width: 720px) {
+  .pc-about-story__sig { margin-top: 20px; font-size: 40px; }
+}
 .pc-about-story__p > :first-child { margin-top: 0; }
 .pc-about-story__p > :last-child { margin-bottom: 0; }
 .pc-about-story__image { grid-area: image; aspect-ratio: auto; padding: 0; overflow: hidden; }

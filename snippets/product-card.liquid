@@ -25,6 +25,10 @@
   assign card_price = price | default: card_price
   assign card_compare_at = compare_at | default: card_compare_at
   assign card_world = world | default: card_world | default: ''
+  assign card_has_world = false
+  if card_world != blank or card_world_color != blank or world_obj
+    assign card_has_world = true
+  endif
   assign card_world_color = world_color | default: card_world_color | default: '#E8C36A'
   assign card_world_stamp = world_stamp | default: card_world_stamp
   assign card_badge = badge | default: card_world_family
@@ -37,7 +41,7 @@
   endfor
 -%}
 <a class="pc-product-card" href="{{ card_url }}">
-  <div class="ph ph--world pc-product-card__media" style="--world-color: {{ card_world_color }};">
+  <div class="ph ph--world pc-product-card__media{% unless card_has_world %} pc-product-card__media--no-world{% endunless %}" style="--world-color: {{ card_world_color }};">
     {%- if product.featured_image -%}
       {%- assign card_alt = product.featured_image.alt | default: product.title -%}
       {{ product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: card_alt, class: 'pc-product-card__img' }}

@@ -28,6 +28,9 @@
           <div class="pc-about-story__p" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
         {%- endif -%}
       {%- endfor -%}
+      {%- if section.settings.signature != blank -%}
+        <div class="script pc-about-story__sig">{{ section.settings.signature }}</div>
+      {%- endif -%}
     </div>
   </div>
 </section>
@@ -42,7 +45,8 @@
     { "type": "image_picker", "id": "image", "label": "Image" },
     { "type": "text", "id": "image_alt", "label": "Image alt text" },
     { "type": "text", "id": "image_placeholder", "label": "Placeholder text", "default": "cookie-jar refillery, 2019" },
-    { "type": "text", "id": "legend", "label": "Image legend (bottom-left caption)", "info": "Typewriter-style caption overlaid on the image." }
+    { "type": "text", "id": "legend", "label": "Image legend (bottom-left caption)", "info": "Typewriter-style caption overlaid on the image." },
+    { "type": "text", "id": "signature", "label": "Letter signature", "info": "Renders at the end in the brand cursive (Caveat). E.g. — Hildra" }
   ],
   "blocks": [
     {
