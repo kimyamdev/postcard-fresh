@@ -56,7 +56,7 @@
         "lede": "",
         "zone": "skin",
         "source_collection": "",
-        "product_limit": 4,
+        "product_limit": 12,
         "hide_if_empty": true,
         "view_all_text": "View all →",
         "view_all_url": ""
@@ -82,7 +82,7 @@
         "lede": "",
         "zone": "travel",
         "source_collection": "",
-        "product_limit": 4,
+        "product_limit": 12,
         "hide_if_empty": true,
         "view_all_text": "View all →",
         "view_all_url": ""

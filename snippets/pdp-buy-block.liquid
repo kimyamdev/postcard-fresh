@@ -36,8 +36,7 @@
 
 {%- when 'description' -%}
   {%- if product.description != blank -%}
-    {%- assign limit = block.settings.word_limit | default: 30 -%}
-    <p class="pc-pdp-buy__sub" {{ block.shopify_attributes }}>{{ product.description | strip_html | truncatewords: limit }}</p>
+    <div class="pc-pdp-buy__sub rte" {{ block.shopify_attributes }}>{{ product.description }}</div>
   {%- endif -%}
 
 {%- when 'rating' -%}

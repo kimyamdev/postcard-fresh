@@ -9,20 +9,40 @@
   else
     assign body = body_default
   endif
+  assign body_mobile = collection.metafields.custom.hero_body_mobile | default: section.settings.body_mobile
+  assign hero_image = collection.metafields.custom.hero_image.value | default: section.settings.image
+  assign has_image = false
+  if hero_image != blank
+    assign has_image = true
+  endif
 -%}
-<section class="pc-coll-hero">
+<section class="pc-coll-hero{% if has_image %} pc-coll-hero--with-image{% endif %}">
   <div class="pc-breadcrumb">
     <div class="container pc-breadcrumb__inner">{{ section.settings.breadcrumb_prefix | default: 'Home / Shop' }} / <span class="pc-breadcrumb__current">{{ collection.title }}</span></div>
   </div>
-  <div class="container">
-    {%- if eyebrow != blank -%}
-      <div class="eyebrow">{{ eyebrow }}</div>
-    {%- endif -%}
-    {%- if headline != blank -%}
-      <h1 class="h-display pc-coll-hero__title">{{ headline }}</h1>
-    {%- endif -%}
-    {%- if body != blank -%}
-      <p class="pc-coll-hero__body">{{ body }}</p>
+  <div class="container pc-coll-hero__inner">
+    <div class="pc-coll-hero__copy">
+      {%- if eyebrow != blank -%}
+        <div class="eyebrow">{{ eyebrow }}</div>
+      {%- endif -%}
+      {%- if headline != blank -%}
+        <h1 class="h-display pc-coll-hero__title">{{ headline }}</h1>
+      {%- endif -%}
+      {%- if body != blank -%}
+        <p class="pc-coll-hero__body pc-coll-hero__body--desktop">{{ body }}</p>
+      {%- endif -%}
+      {%- if body_mobile != blank -%}
+        <p class="pc-coll-hero__body pc-coll-hero__body--mobile">{{ body_mobile }}</p>
+      {%- elsif body != blank -%}
+        {%- comment -%} No mobile override → still render the desktop body on mobile {%- endcomment -%}
+        <p class="pc-coll-hero__body pc-coll-hero__body--mobile pc-coll-hero__body--fallback">{{ body }}</p>
+      {%- endif -%}
+    </div>
+    {%- if has_image -%}
+      {%- assign img_alt = section.settings.image_alt | default: collection.title | escape -%}
+      <div class="pc-coll-hero__image">
+        {{ hero_image | image_url: width: 1400 | image_tag: alt: img_alt, loading: 'eager', widths: '600,900,1200,1400,1800', sizes: '(min-width: 900px) 50vw, 100vw', class: 'pc-coll-hero__img' }}
+      </div>
     {%- endif -%}
   </div>
 </section>
@@ -36,7 +56,12 @@
     { "type": "text", "id": "breadcrumb_prefix", "label": "Breadcrumb prefix", "default": "Home / Shop" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow (fallback)", "default": "For your room. Your skin. Your linens." },
     { "type": "text", "id": "title_override", "label": "Title override", "info": "Used only when no collection.metafields.custom.headline is set. Otherwise the section uses collection.title." },
-    { "type": "textarea", "id": "body", "label": "Body (fallback)", "default": "The hero category — 14% of everything we sell. 22 worlds, one spritz at a time." }
+    { "type": "textarea", "id": "body", "label": "Body (fallback)", "default": "The hero category — 14% of everything we sell. 22 worlds, one spritz at a time." },
+    { "type": "textarea", "id": "body_mobile", "label": "Body (mobile only, fallback)", "info": "Used when the collection has no custom.hero_body_mobile metafield. Renders only on screens ≤720px." },
+    { "type": "header", "content": "Landscape image (desktop only) — fallback" },
+    { "type": "paragraph", "content": "Each collection should set its own image at Shopify admin → Collections → <collection> → Metafields → Hero image. The section image here is only used as a fallback when the collection metafield is empty." },
+    { "type": "image_picker", "id": "image", "label": "Fallback image" },
+    { "type": "text", "id": "image_alt", "label": "Fallback image alt text" }
   ],
   "presets": [{ "name": "Collection · Hero" }]
 }

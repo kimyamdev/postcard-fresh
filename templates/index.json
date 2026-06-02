@@ -18,6 +18,7 @@
             "image": "shopify://shop_images/Hotel_Lobby.png",
             "eyebrow": "",
             "tag": "",
+            "legend": "Anywhere Fragrance Hotel Lobby",
             "stamp_1": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Hotel_Lobby.png"
           }
         },
@@ -27,7 +28,8 @@
             "image": "shopify://shop_images/Pickleball_Java_Jungle_Powder_Wash.png",
             "eyebrow": "",
             "tag": "",
-            "stamp_3": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Java_Jungle.png"
+            "legend": "Head-to-toe Powder Wash Java Jungle",
+            "stamp_1": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Java_Jungle_21adf1ed-2209-4ae5-8d65-1dd52ae6b764.png"
           }
         },
         "slide_bWnp7a": {
@@ -36,25 +38,8 @@
             "image": "shopify://shop_images/body_oil.png",
             "eyebrow": "",
             "tag": "",
+            "legend": "Body Oil Coconut Beach",
             "stamp_1": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Coconut_Beach_1fc28cdc-bc43-45f2-b798-491a405bf495.png"
-          }
-        },
-        "slide_L3nrtC": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/citrus_circus_solid_shampoo_shower_foam.png",
-            "eyebrow": "",
-            "tag": "",
-            "stamp_1": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Citrus_Circus_d79903a6-9d38-4229-a96d-6564e3817381.png"
-          }
-        },
-        "slide_MrQF3G": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/woman_padel_court_from_back.jpg",
-            "eyebrow": "",
-            "tag": "",
-            "stamp_2": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Coconut_Beach_1fc28cdc-bc43-45f2-b798-491a405bf495.png"
           }
         },
         "slide_HJcpjm": {
@@ -63,7 +48,8 @@
             "image": "shopify://shop_images/IMG-1861.png",
             "eyebrow": "",
             "tag": "",
-            "stamp_1": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Wild_Flowers_8756d0ee-916f-4d81-8fce-9b21ec0b0fa4.png"
+            "legend": "BODY BALM LAUREL GARDEN",
+            "stamp_1": "shopify://shop_images/Untitled_design_65.png"
           }
         },
         "slide_RhiCVG": {
@@ -71,7 +57,8 @@
           "settings": {
             "image": "shopify://shop_images/IMG-1923.png",
             "eyebrow": "",
-            "tag": ""
+            "tag": "",
+            "legend": "DESTINATION BOX"
           }
         },
         "slide_yWCwxr": {
@@ -80,7 +67,18 @@
             "image": "shopify://shop_images/IMG-1872_f15eb88d-b600-4577-8c6f-1b75ef0fa9cd.png",
             "eyebrow": "",
             "tag": "",
+            "legend": "Hand & Body Wash Moon Bloom",
             "stamp_1": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Moon_Bloom.png"
+          }
+        },
+        "slide_L3nrtC": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/citrus_circus_solid_shampoo_shower_foam.png",
+            "eyebrow": "",
+            "tag": "",
+            "legend": "Shampoo Bar Citrus Circus",
+            "stamp_1": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Citrus_Circus_d79903a6-9d38-4229-a96d-6564e3817381.png"
           }
         },
         "slide_dNEmwg": {
@@ -89,7 +87,18 @@
             "image": "shopify://shop_images/tennis_-_deodorant.png",
             "eyebrow": "",
             "tag": "",
-            "stamp_2": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Icy_Peaks.png"
+            "legend": "DEODORANT SPRAY ICY PEAKS",
+            "stamp_1": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Icy_Peaks.png"
+          }
+        },
+        "slide_MrQF3G": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/woman_padel_court_from_back.jpg",
+            "eyebrow": "",
+            "tag": "",
+            "legend": "DEODORANT SPRAY COCONUT BEACH",
+            "stamp_2": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Coconut_Beach_1fc28cdc-bc43-45f2-b798-491a405bf495.png"
           }
         },
         "slide_tXfdBB": {
@@ -98,7 +107,8 @@
             "image": "shopify://shop_images/IMG-1885.png",
             "eyebrow": "",
             "tag": "",
-            "stamp_3": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Woodland_Retreat_e6f4b29d-5e77-49da-92f5-5434f992df77.png"
+            "legend": "Deodorant Spray Wildflowers",
+            "stamp_1": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Wild_Flowers_8756d0ee-916f-4d81-8fce-9b21ec0b0fa4.png"
           }
         }
       },
@@ -106,12 +116,12 @@
         "slide_XKmj8Q",
         "slide_dkhfFf",
         "slide_bWnp7a",
-        "slide_L3nrtC",
-        "slide_MrQF3G",
         "slide_HJcpjm",
         "slide_RhiCVG",
         "slide_yWCwxr",
+        "slide_L3nrtC",
         "slide_dNEmwg",
+        "slide_MrQF3G",
         "slide_tXfdBB"
       ],
       "settings": {
@@ -131,7 +141,7 @@
         "postmark_rotate": 0,
         "postmark_size": 100,
         "postmark_top_mobile": 37,
-        "postmark_right_mobile": 18,
+        "postmark_right_mobile": 4,
         "postmark_rotate_mobile": -10,
         "postmark_size_mobile": 90,
         "primary_cta_text": "Find your world →",
@@ -272,7 +282,7 @@
       "settings": {
         "eyebrow": "Refill, repeat, rejoice",
         "title": "Bring it back. We'll top you up.",
-        "lede": "Visit our Orchard flagship. Less waste, same scent. Save 20% on every refill.",
+        "lede": "Visit our Orchard flagship. Less waste, same scent. Save up to 15% on every refill.",
         "primary_cta_text": "See the refill list →",
         "primary_cta_url": "",
         "secondary_cta_text": "Find our store →",

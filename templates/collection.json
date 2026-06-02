@@ -15,7 +15,9 @@
         "breadcrumb_prefix": "",
         "eyebrow": "",
         "title_override": "",
-        "body": ""
+        "body": "",
+        "body_mobile": "Clean, refillable freshness in Postcard’s transportive scents.",
+        "image_alt": ""
       }
     },
     "pleasers": {
@@ -32,6 +34,8 @@
       "type": "postcard-collection-grid",
       "settings": {
         "show_filters": true,
+        "show_type_buttons": true,
+        "all_button_label": "All",
         "show_sort": true,
         "products_per_page": 36,
         "max_products": 0,

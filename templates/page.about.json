@@ -15,26 +15,12 @@
         "p1": {
           "type": "paragraph",
           "settings": {
-            "text": "<p>Hi, I’m Hildra.<br/><br/>I didn’t start POSTCARD to build a beauty brand—I started it because of my eczema.<br/><br/>For a long time, I relied on steroid creams just to keep things under control. Personal care didn’t feel like something I could enjoy—it felt clinical, something I had to manage carefully.<br/><br/>At some point, I knew I wanted to step away from that cycle.<br/>I wanted something simpler. Gentler. Safer.<br/><br/>So I began making my own.<br/></p>"
-          }
-        },
-        "p2": {
-          "type": "paragraph",
-          "settings": {
-            "text": "<p>Formulations that focus only on what the skin truly needs—nothing excessive, nothing harsh. But just as importantly, I wanted to bring back the experience. To turn something routine into something you could actually enjoy.<br/><br/>That’s where Postcard moments come in—small, sensorial pauses in your day. An everyday touch of luxury that everyone deserves to enjoy, designed to transport you through the world of scent.</p>"
-          }
-        },
-        "p3": {
-          "type": "paragraph",
-          "settings": {
-            "text": "<p>And as we create, we think beyond just the product. Through refills and reusable bottles, we’re always working to reduce single-use waste—because care should extend to the world around us too.<br/><br/>Everything we create is considered—from the ingredients we choose to the way it feels in your hands—because we want to leave the world a little more postcard perfect than we found it.<br/><br/>—Hildra</p>"
+            "text": "<p>Hi, I’m Hildra.<br/><br/>I didn’t start POSTCARD to build a beauty brand—I started it because of my eczema.<br/><br/>For a long time, I relied on steroid creams just to keep things under control. Personal care didn’t feel like something I could enjoy—it felt clinical, something I had to manage carefully.<br/><br/>At some point, I knew I wanted to step away from that cycle. I wanted something simpler. Gentler. Safer.<br/><br/>So I began making my own.<br/><br/>Formulations that focus only on what the skin truly needs—nothing excessive, nothing harsh. But just as importantly, I wanted to bring back the experience. To turn something routine into something you could actually enjoy.<br/><br/>That’s where Postcard moments come in—small, sensorial pauses in your day. An everyday touch of luxury that everyone deserves to enjoy, designed to transport you through the world of scent.</p><p>And as we create, we think beyond just the product. Through refills and reusable bottles, we’re always working to reduce single-use waste—because care should extend to the world around us too.<br/><br/>Everything we create is considered—from the ingredients we choose to the way it feels in your hands—because we want to leave the world a little more postcard perfect than we found it.<br/><br/>—Hildra</p>"
           }
         }
       },
       "block_order": [
-        "p1",
-        "p2",
-        "p3"
+        "p1"
       ],
       "settings": {
         "eyebrow": "Origins and mission",
@@ -55,15 +41,6 @@
         "eyebrow": "Formulated and made fresh in Singapore.",
         "title": "Made in-house.",
         "body": "Postcard is a self-care destination, made in our beauty kitchen in Singapore. Effective non-toxic formulations, simple ingredients, the least wasteful packaging we can manage. We're here to make care personal again."
-      }
-    },
-    "about_why": {
-      "type": "postcard-about-why",
-      "settings": {
-        "eyebrow": "Why postcard?",
-        "title": "Every product is a moment of arrival.",
-        "body": "Every world a destination. Every refill a return trip. The postcard is what you send when you wish someone could feel what you're feeling.",
-        "signature": "life supplies, forever yours."
       }
     },
     "about_beliefs": {
@@ -124,6 +101,15 @@
       ],
       "settings": {
         "title": "Sensorial and SUSTAINABLE SIMPLICITY MADE PERSONAL."
+      }
+    },
+    "about_why": {
+      "type": "postcard-about-why",
+      "settings": {
+        "eyebrow": "Why postcard?",
+        "title": "Every product is a moment of arrival.",
+        "body": "Every world a destination. Every refill a return trip. The postcard is what you send when you wish someone could feel what you're feeling.",
+        "signature": "life supplies, forever yours."
       }
     },
     "about_worlds": {

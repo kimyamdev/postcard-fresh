@@ -26,6 +26,30 @@
 -%}
 
 <div class="pc-announce">
+  {%- liquid
+    assign show_google = section.settings.show_google_rating
+    if show_google == nil
+      assign show_google = true
+    endif
+    assign g_rating = shop.metafields.google_review.rating | default: section.settings.google_rating_override
+    assign g_count  = shop.metafields.google_review.count  | default: section.settings.google_count_override
+    assign g_label  = section.settings.google_label | default: 'Postcard Orchard'
+    assign g_link   = section.settings.google_link
+  -%}
+  {%- if show_google and g_rating != blank -%}
+    {%- assign g_full = g_rating | times: 1 | round -%}
+    <span class="pc-announce__google">
+      {%- if g_link != blank -%}<a href="{{ g_link }}" target="_blank" rel="noopener">{%- endif -%}
+        <span class="pc-announce__google-label">{{ g_label }}</span>
+        <span class="pc-announce__google-stars" aria-hidden="true">
+          {%- for i in (1..5) -%}{%- if i <= g_full -%}&#9733;{%- else -%}&#9734;{%- endif -%}{%- endfor -%}
+        </span>
+        <span class="pc-announce__google-rating">{{ g_rating }}</span>
+        {%- if g_count != blank -%}<span class="pc-announce__google-count">&middot; {{ g_count }} Google reviews</span>{%- endif -%}
+      {%- if g_link != blank -%}</a>{%- endif -%}
+    </span>
+    <span class="pc-announce__sep">&middot;</span>
+  {%- endif -%}
   {{ section.settings.announcement_html }}
 </div>
 
@@ -234,6 +258,12 @@
   "name": "Header",
   "settings": [
     { "type": "html", "id": "announcement_html", "label": "Announcement bar HTML", "default": "Free SG shipping over $80 &middot; Refill at our Orchard flagship &middot; <span class=\"pc-announce__accent\">Postcards in your inbox &rarr;</span>" },
+    { "type": "header", "content": "Google rating" },
+    { "type": "checkbox", "id": "show_google_rating", "label": "Show Google rating", "default": true },
+    { "type": "text", "id": "google_label", "label": "Label", "default": "Postcard Orchard" },
+    { "type": "text", "id": "google_rating_override", "label": "Average rating (override)", "info": "Fallback when shop.metafields.google_review.rating isn't set. E.g. 4.8" },
+    { "type": "text", "id": "google_count_override", "label": "Review count (override)", "info": "Fallback when shop.metafields.google_review.count isn't set. E.g. 324" },
+    { "type": "url", "id": "google_link", "label": "Link to Google reviews" },
 
     { "type": "header", "content": "Logo" },
     { "type": "image_picker", "id": "logo",          "label": "Logo image", "info": "PNG, JPG, SVG, WebP. SVG renders at native resolution; raster files are auto-served at 2× retina up to widths 120/240/360/480." },

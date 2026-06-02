@@ -39,6 +39,9 @@
           {%- if block.settings.stamp_3 != blank -%}
             <div class="pc-hero__stamp pc-hero__stamp--3">{{ block.settings.stamp_3 | image_url: width: 320 | image_tag: alt: '', loading: 'lazy' }}</div>
           {%- endif -%}
+          {%- if block.settings.legend != blank -%}
+            <div class="pc-image-legend pc-hero__legend">{{ block.settings.legend }}</div>
+          {%- endif -%}
         </div>
       {%- endfor -%}
     {%- elsif media_video != blank -%}
@@ -165,6 +168,7 @@
         { "type": "video",        "id": "video", "label": "Video", "info": "Takes priority over image if both are set. Auto-plays muted + loops." },
         { "type": "text",         "id": "eyebrow", "label": "Overlay eyebrow", "info": "Leave blank to use the section-level default." },
         { "type": "text",         "id": "tag", "label": "Overlay tag", "info": "Leave blank to use the section-level default." },
+        { "type": "text",         "id": "legend", "label": "Image legend (bottom-left)", "info": "Typewriter caption overlaid on the slide image. Leave blank to hide." },
         { "type": "header",       "content": "Stamps (superimposed)" },
         { "type": "image_picker", "id": "stamp_1", "label": "Stamp 1 (top-left)" },
         { "type": "image_picker", "id": "stamp_2", "label": "Stamp 2 (mid-right)" },

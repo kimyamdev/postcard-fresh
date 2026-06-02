@@ -468,7 +468,7 @@
           "type": "root_item",
           "settings": {
             "label": "About",
-            "sub": "story, journal, Orchard flagship →",
+            "sub": "story, in-house, values, mission →",
             "target_view": "none",
             "link": "/pages/about"
           }
