@@ -226,7 +226,10 @@
 
   .mm-group__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    /* Fixed-width columns (not 1fr) so every card is the same size regardless of
+       how many choices a group has; centered so short rows aren't left-heavy. */
+    grid-template-columns: repeat(auto-fit, minmax(220px, 260px));
+    justify-content: center;
     gap: 18px;
   }
 
