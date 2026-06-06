@@ -256,10 +256,21 @@
     position: relative;
     aspect-ratio: 1 / 1;
     flex: 0 0 auto;
+    min-height: 0;
+    overflow: hidden;
     background: var(--color-bg-warm);
     border-bottom: 1.5px solid var(--color-ink);
   }
-  .mm-card__media img, .mm-card__placeholder { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* Absolutely positioned so the image can't dictate the frame height —
+     aspect-ratio alone controls it, keeping every frame an equal square. */
+  .mm-card__media img, .mm-card__placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
   .mm-card__check {
     position: absolute;
     top: 10px;
