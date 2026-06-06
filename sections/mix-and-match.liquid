@@ -1,0 +1,546 @@
+{%- comment -%}
+  Mix and Match — build-a-bundle of N items, one chosen from each manually
+  curated group. Each "group" block hand-picks its products via a product list.
+  On add-to-cart, every chosen variant is added as its own line item and an
+  optional discount code is auto-applied via /cart/update.js. Cart refresh +
+  drawer open reuse the global window.PostcardCart helper (assets/postcard-cart.js).
+{%- endcomment -%}
+
+{%- liquid
+  assign groups = section.blocks | where: 'type', 'group'
+  assign group_count = groups.size
+  assign discount_code = section.settings.discount_code | strip
+  assign cta_label = section.settings.cta_label | default: 'Add bundle to cart'
+-%}
+
+<section
+  class="section mix-and-match color-{{ section.settings.color_scheme }} gradient"
+  data-section-id="{{ section.id }}"
+>
+  {%- style -%}
+    .mix-and-match {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  {%- endstyle -%}
+
+  <mix-and-match
+    class="container mm"
+    data-discount-code="{{ discount_code | escape }}"
+    data-group-count="{{ group_count }}"
+    data-money-format="{{ shop.money_format | escape }}"
+  >
+    <header class="mm__head">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow mm__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h1 class="mm__title">{{ section.settings.heading }}</h1>
+      {%- endif -%}
+      {%- if section.settings.intro != blank -%}
+        <div class="mm__intro rte">{{ section.settings.intro }}</div>
+      {%- endif -%}
+    </header>
+
+    {%- for block in groups -%}
+      {%- liquid
+        assign gi = forloop.index
+        assign products = block.settings.products
+      -%}
+      <div class="mm-group" data-mm-group="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+        <div class="mm-group__head">
+          <span class="mm-group__step">{{ gi }}</span>
+          <div>
+            <h2 class="mm-group__title">{{ block.settings.title | default: 'Choose an item' }}</h2>
+            {%- if block.settings.subtitle != blank -%}
+              <p class="mm-group__subtitle">{{ block.settings.subtitle }}</p>
+            {%- endif -%}
+          </div>
+          <span class="mm-group__status" data-mm-group-status>Not selected</span>
+        </div>
+
+        {%- if products.size == 0 -%}
+          <p class="mm-group__empty">No products added to this group yet. Edit this block in the theme editor to pick products.</p>
+        {%- else -%}
+          <div class="mm-group__grid">
+            {%- for product in products -%}
+              {%- liquid
+                assign first_available = product.selected_or_first_available_variant
+                assign multi_variant = false
+                if product.variants.size > 1
+                  assign multi_variant = true
+                endif
+              -%}
+              <article
+                class="mm-card{% unless product.available %} mm-card--soldout{% endunless %}"
+                data-mm-card
+                data-product-id="{{ product.id }}"
+                data-product-title="{{ product.title | escape }}"
+                data-product-url="{{ product.url }}"
+                data-variant-id="{{ first_available.id }}"
+                data-price="{{ first_available.price }}"
+                data-available="{% if product.available %}true{% else %}false{% endif %}"
+                {% unless product.available %}aria-disabled="true"{% endunless %}
+                tabindex="0"
+                role="button"
+                aria-pressed="false"
+              >
+                <div class="mm-card__media">
+                  {%- if product.featured_image -%}
+                    {{
+                      product.featured_image
+                      | image_url: width: 360
+                      | image_tag:
+                        loading: 'lazy',
+                        widths: '180, 360, 540',
+                        sizes: '(min-width: 750px) 220px, 45vw',
+                        alt: product.featured_image.alt | default: product.title
+                    }}
+                  {%- else -%}
+                    {{ 'product-apparel-1' | placeholder_svg_tag: 'mm-card__placeholder' }}
+                  {%- endif -%}
+                  <span class="mm-card__check" aria-hidden="true">
+                    <svg viewBox="0 0 16 16" width="16" height="16" focusable="false"><path d="M13.5 4.5 6 12 2.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                  {%- unless product.available -%}
+                    <span class="mm-card__soldout">Sold out</span>
+                  {%- endunless -%}
+                </div>
+
+                <div class="mm-card__body">
+                  <h3 class="mm-card__title">{{ product.title }}</h3>
+                  <p class="mm-card__price" data-mm-card-price>
+                    {%- render 'price', product: product, use_variant: true -%}
+                  </p>
+
+                  {%- if multi_variant -%}
+                    <label class="mm-card__variant">
+                      <span class="visually-hidden">Choose an option for {{ product.title }}</span>
+                      <select data-mm-variant-select>
+                        {%- for variant in product.variants -%}
+                          <option
+                            value="{{ variant.id }}"
+                            data-price="{{ variant.price }}"
+                            data-available="{% if variant.available %}true{% else %}false{% endif %}"
+                            {% if variant == first_available %}selected{% endif %}
+                            {% unless variant.available %}disabled{% endunless %}
+                          >
+                            {{ variant.title }}{% unless variant.available %} — Sold out{% endunless %}
+                          </option>
+                        {%- endfor -%}
+                      </select>
+                    </label>
+                  {%- endif -%}
+
+                  <span class="mm-card__select" data-mm-select-label>Select</span>
+                </div>
+              </article>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+
+    <div class="mm-summary" data-mm-summary>
+      <div class="mm-summary__slots" data-mm-slots>
+        {%- for block in groups -%}
+          <div class="mm-summary__slot" data-mm-slot="{{ forloop.index0 }}">
+            <span class="mm-summary__slot-label">{{ block.settings.title | default: 'Item' }}</span>
+            <span class="mm-summary__slot-value" data-mm-slot-value>—</span>
+          </div>
+        {%- endfor -%}
+      </div>
+      <div class="mm-summary__total">
+        <span class="mm-summary__total-label">Total</span>
+        <span class="mm-summary__total-value" data-mm-total>—</span>
+        {%- if discount_code != blank -%}
+          <span class="mm-summary__discount-note">Discount <strong>{{ discount_code }}</strong> applied at cart</span>
+        {%- endif -%}
+      </div>
+      <button type="button" class="button mm-summary__cta" data-mm-add disabled>
+        <span data-mm-cta-text>{{ cta_label }}</span>
+      </button>
+      <p class="mm-summary__error" data-mm-error hidden></p>
+    </div>
+  </mix-and-match>
+</section>
+
+{%- stylesheet -%}
+{%- endstylesheet -%}
+
+<style>
+  .mm { display: block; }
+  .mm__head { text-align: center; max-width: 46rem; margin: 0 auto 3rem; }
+  .mm__title { margin: 0.4rem 0; }
+  .mm__intro { color: rgba(var(--color-foreground), 0.75); }
+
+  .mm-group { margin-bottom: 3rem; }
+  .mm-group__head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1.4rem;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.12);
+  }
+  .mm-group__step {
+    flex: 0 0 auto;
+    width: 2.4rem;
+    height: 2.4rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgb(var(--color-foreground));
+    color: rgb(var(--color-background));
+    font-weight: 600;
+    font-size: 1.3rem;
+  }
+  .mm-group__title { margin: 0; font-size: 1.8rem; }
+  .mm-group__subtitle { margin: 0.2rem 0 0; font-size: 1.3rem; color: rgba(var(--color-foreground), 0.7); }
+  .mm-group__status { margin-left: auto; font-size: 1.2rem; color: rgba(var(--color-foreground), 0.55); }
+  .mm-group.is-complete .mm-group__status { color: rgb(var(--color-foreground)); font-weight: 600; }
+  .mm-group__empty { font-size: 1.3rem; color: rgba(var(--color-foreground), 0.6); }
+
+  .mm-group__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 1.2rem;
+  }
+
+  .mm-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid rgba(var(--color-foreground), 0.12);
+    border-radius: 1rem;
+    overflow: hidden;
+    background: rgb(var(--color-background));
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+  }
+  .mm-card:hover { border-color: rgba(var(--color-foreground), 0.35); }
+  .mm-card:focus-visible { outline: 2px solid rgb(var(--color-foreground)); outline-offset: 2px; }
+  .mm-card.is-selected { border-color: rgb(var(--color-foreground)); box-shadow: 0 0 0 1px rgb(var(--color-foreground)); }
+  .mm-card--soldout { opacity: 0.55; cursor: not-allowed; }
+
+  .mm-card__media { position: relative; aspect-ratio: 1 / 1; background: rgba(var(--color-foreground), 0.04); }
+  .mm-card__media img, .mm-card__placeholder { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .mm-card__check {
+    position: absolute;
+    top: 0.7rem;
+    right: 0.7rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgb(var(--color-foreground));
+    color: rgb(var(--color-background));
+    opacity: 0;
+    transform: scale(0.6);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+  .mm-card.is-selected .mm-card__check { opacity: 1; transform: scale(1); }
+  .mm-card__soldout {
+    position: absolute;
+    inset: auto 0 0 0;
+    text-align: center;
+    background: rgba(var(--color-foreground), 0.8);
+    color: rgb(var(--color-background));
+    font-size: 1.1rem;
+    padding: 0.3rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .mm-card__body { padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; flex: 1 1 auto; }
+  .mm-card__title { margin: 0; font-size: 1.4rem; line-height: 1.25; }
+  .mm-card__price { margin: 0; font-size: 1.3rem; }
+  .mm-card__price .price { font-size: inherit; }
+  .mm-card__variant select {
+    width: 100%;
+    padding: 0.5rem 0.6rem;
+    font-size: 1.2rem;
+    border: 1px solid rgba(var(--color-foreground), 0.25);
+    border-radius: 0.6rem;
+    background: rgb(var(--color-background));
+    color: inherit;
+  }
+  .mm-card__select {
+    margin-top: auto;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.6rem;
+    border-radius: 0.6rem;
+    border: 1px solid rgba(var(--color-foreground), 0.25);
+  }
+  .mm-card.is-selected .mm-card__select { background: rgb(var(--color-foreground)); color: rgb(var(--color-background)); border-color: rgb(var(--color-foreground)); }
+  .mm-card.is-selected .mm-card__select::after { content: 'ed'; }
+
+  .mm-summary {
+    position: sticky;
+    bottom: 0;
+    z-index: 3;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.2rem 2rem;
+    margin-top: 2rem;
+    padding: 1.4rem 1.8rem;
+    border-radius: 1rem;
+    background: rgb(var(--color-background));
+    border: 1px solid rgba(var(--color-foreground), 0.15);
+    box-shadow: 0 -6px 24px rgba(0,0,0,0.08);
+  }
+  .mm-summary__slots { display: flex; flex-wrap: wrap; gap: 1.4rem; flex: 1 1 auto; }
+  .mm-summary__slot { display: flex; flex-direction: column; min-width: 9rem; }
+  .mm-summary__slot-label { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.04em; color: rgba(var(--color-foreground), 0.55); }
+  .mm-summary__slot-value { font-size: 1.3rem; font-weight: 600; }
+  .mm-summary__slot.is-filled .mm-summary__slot-value { color: rgb(var(--color-foreground)); }
+  .mm-summary__total { display: flex; flex-direction: column; text-align: right; }
+  .mm-summary__total-label { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.04em; color: rgba(var(--color-foreground), 0.55); }
+  .mm-summary__total-value { font-size: 1.8rem; font-weight: 700; }
+  .mm-summary__discount-note { font-size: 1.05rem; color: rgba(var(--color-foreground), 0.6); }
+  .mm-summary__cta { white-space: nowrap; }
+  .mm-summary__cta[disabled] { opacity: 0.45; cursor: not-allowed; }
+  .mm-summary__error { flex-basis: 100%; margin: 0; color: rgb(var(--color-error, 200 0 0)); font-size: 1.2rem; }
+
+  @media (max-width: 749px) {
+    .mm-summary { flex-direction: column; align-items: stretch; text-align: left; }
+    .mm-summary__total { text-align: left; }
+    .mm-summary__cta { width: 100%; }
+  }
+</style>
+
+<script>
+  (function () {
+    if (window.customElements.get('mix-and-match')) return;
+
+    function formatMoney(cents, format) {
+      var value = (cents / 100);
+      var str;
+      if (/no_decimals/.test(format)) {
+        str = Math.round(value).toLocaleString('en');
+      } else {
+        str = value.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+      if (format && /\{\{\s*amount/.test(format)) {
+        return format.replace(/\{\{\s*amount[^}]*\}\}/, str);
+      }
+      return '$' + str;
+    }
+
+    class MixAndMatch extends HTMLElement {
+      constructor() {
+        super();
+        this.discountCode = this.dataset.discountCode || '';
+        this.moneyFormat = this.dataset.moneyFormat || ('$' + '{' + '{amount}}');
+        this.groupCount = parseInt(this.dataset.groupCount, 10) || 0;
+        this.selections = {}; // groupIndex -> {variantId, price, title}
+        this.addBtn = this.querySelector('[data-mm-add]');
+        this.totalEl = this.querySelector('[data-mm-total]');
+        this.errorEl = this.querySelector('[data-mm-error]');
+        this.ctaText = this.querySelector('[data-mm-cta-text]');
+        this.defaultCta = this.ctaText ? this.ctaText.textContent : 'Add bundle to cart';
+
+        this.bindCards();
+        this.addBtn.addEventListener('click', () => this.addBundle());
+      }
+
+      bindCards() {
+        this.querySelectorAll('[data-mm-group]').forEach((group) => {
+          const gi = group.dataset.mmGroup;
+          group.querySelectorAll('[data-mm-card]').forEach((card) => {
+            if (card.dataset.available !== 'true') return;
+
+            const select = card.querySelector('[data-mm-variant-select]');
+            if (select) {
+              select.addEventListener('change', () => this.onVariantChange(card, select, gi));
+              select.addEventListener('click', (e) => e.stopPropagation());
+            }
+            const choose = () => this.selectCard(group, card, gi);
+            card.addEventListener('click', choose);
+            card.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choose(); }
+            });
+          });
+        });
+      }
+
+      onVariantChange(card, select, gi) {
+        const opt = select.options[select.selectedIndex];
+        if (!opt) return;
+        card.dataset.variantId = opt.value;
+        card.dataset.price = opt.dataset.price || card.dataset.price;
+        const priceEl = card.querySelector('[data-mm-card-price]');
+        if (priceEl) priceEl.textContent = formatMoney(parseInt(card.dataset.price, 10), this.moneyFormat);
+        // If this card is the active selection for its group, refresh the summary.
+        if (this.selections[gi] && card.classList.contains('is-selected')) {
+          this.selections[gi].variantId = opt.value;
+          this.selections[gi].price = parseInt(card.dataset.price, 10);
+          this.render();
+        }
+      }
+
+      selectCard(group, card, gi) {
+        if (card.dataset.available !== 'true') return;
+        group.querySelectorAll('[data-mm-card]').forEach((c) => {
+          c.classList.remove('is-selected');
+          c.setAttribute('aria-pressed', 'false');
+        });
+        card.classList.add('is-selected');
+        card.setAttribute('aria-pressed', 'true');
+
+        this.selections[gi] = {
+          variantId: card.dataset.variantId,
+          price: parseInt(card.dataset.price, 10) || 0,
+          title: card.dataset.productTitle || '',
+        };
+
+        const status = group.querySelector('[data-mm-group-status]');
+        if (status) status.textContent = card.dataset.productTitle || 'Selected';
+        group.classList.add('is-complete');
+
+        this.render();
+      }
+
+      render() {
+        // Per-slot summary values
+        this.querySelectorAll('[data-mm-slot]').forEach((slot) => {
+          const gi = slot.dataset.mmSlot;
+          const valueEl = slot.querySelector('[data-mm-slot-value]');
+          const sel = this.selections[gi];
+          if (sel) {
+            valueEl.textContent = sel.title;
+            slot.classList.add('is-filled');
+          } else {
+            valueEl.textContent = '—';
+            slot.classList.remove('is-filled');
+          }
+        });
+
+        const chosen = Object.keys(this.selections).length;
+        const complete = chosen === this.groupCount && this.groupCount > 0;
+
+        if (complete) {
+          let total = 0;
+          Object.keys(this.selections).forEach((k) => { total += this.selections[k].price; });
+          this.totalEl.textContent = formatMoney(total, this.moneyFormat);
+        } else {
+          this.totalEl.textContent = '—';
+        }
+
+        this.addBtn.disabled = !complete;
+        if (this.ctaText) {
+          this.ctaText.textContent = complete
+            ? this.defaultCta
+            : (this.defaultCta + ' (' + chosen + '/' + this.groupCount + ')');
+        }
+        this.setError('');
+      }
+
+      setError(msg) {
+        if (!this.errorEl) return;
+        if (msg) { this.errorEl.textContent = msg; this.errorEl.hidden = false; }
+        else { this.errorEl.textContent = ''; this.errorEl.hidden = true; }
+      }
+
+      async addBundle() {
+        const items = Object.keys(this.selections).map((k) => ({
+          id: this.selections[k].variantId,
+          quantity: 1,
+        }));
+        if (items.length !== this.groupCount) return;
+
+        this.addBtn.disabled = true;
+        if (this.ctaText) this.ctaText.textContent = 'Adding…';
+
+        try {
+          const addRes = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/javascript' },
+            body: JSON.stringify({ items: items }),
+          });
+          const addData = await addRes.json();
+          if (!addRes.ok) {
+            throw new Error((addData && (addData.description || addData.message)) || 'Could not add bundle to cart.');
+          }
+
+          if (this.discountCode) {
+            try {
+              await fetch('/cart/update.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ discount: this.discountCode }),
+              });
+            } catch (e) { /* non-fatal: discount can still be entered at checkout */ }
+          }
+
+          if (window.PostcardCart) {
+            await Promise.all([
+              window.PostcardCart.refreshDrawer(),
+              window.PostcardCart.refreshBag(),
+            ]);
+            const drawer = document.querySelector('cart-drawer');
+            if (drawer && typeof drawer.open === 'function') drawer.open();
+            else window.location.assign('/cart');
+          } else {
+            window.location.assign('/cart');
+          }
+        } catch (err) {
+          this.setError(err.message || 'Something went wrong. Please try again.');
+        } finally {
+          this.addBtn.disabled = false;
+          if (this.ctaText) this.ctaText.textContent = this.defaultCta;
+        }
+      }
+    }
+
+    window.customElements.define('mix-and-match', MixAndMatch);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Mix and Match",
+  "tag": "section",
+  "class": "section-mix-and-match",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Build your set" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Mix and Match" },
+    { "type": "richtext", "id": "intro", "label": "Intro text", "default": "<p>Pick one from each group to build your bundle of three.</p>" },
+    { "type": "text", "id": "cta_label", "label": "Add-to-cart button label", "default": "Add bundle to cart" },
+    { "type": "text", "id": "discount_code", "label": "Discount code to auto-apply", "info": "Create the code in Shopify admin → Discounts. It is applied to the cart after the bundle is added. Leave blank for full price." },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Top padding", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Bottom padding", "default": 48 }
+  ],
+  "blocks": [
+    {
+      "type": "group",
+      "name": "Product group",
+      "limit": 3,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Group title", "default": "Choose an item" },
+        { "type": "text", "id": "subtitle", "label": "Group subtitle" },
+        { "type": "product_list", "id": "products", "label": "Products in this group", "limit": 24 }
+      ]
+    }
+  ],
+  "max_blocks": 3,
+  "presets": [
+    {
+      "name": "Mix and Match",
+      "blocks": [
+        { "type": "group", "settings": { "title": "Choose your first item" } },
+        { "type": "group", "settings": { "title": "Choose your second item" } },
+        { "type": "group", "settings": { "title": "Choose your third item" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
