@@ -145,7 +145,81 @@
       </div>
 
       <div class="pc-cart-drawer__body">
+        {%- assign rendered_bundles = '' -%}
         {%- for item in cart.items -%}
+          {%- assign bundle_id = item.properties._bundle_id -%}
+
+          {%- comment -%} Mix & Match bundle: 3 lines sharing a _bundle_id render as one locked group. {%- endcomment -%}
+          {%- if bundle_id != blank -%}
+            {%- assign bid_token = bundle_id | append: '|||' -%}
+            {%- unless rendered_bundles contains bid_token -%}
+              {%- assign rendered_bundles = rendered_bundles | append: bid_token -%}
+              {%- liquid
+                assign b_label = item.properties._bundle | default: 'Mix & Match'
+                assign b_keys = ''
+                assign b_qty = 0
+                assign b_final = 0
+                assign b_orig = 0
+                for it in cart.items
+                  if it.properties._bundle_id == bundle_id
+                    assign b_keys = b_keys | append: it.key | append: ','
+                    assign b_qty = it.quantity
+                    assign b_final = b_final | plus: it.final_line_price
+                    assign b_orig = b_orig | plus: it.original_line_price
+                  endif
+                endfor
+              -%}
+              <div class="pc-cart-bundle" data-bundle-id="{{ bundle_id | escape }}">
+                <div class="pc-cart-bundle__head">
+                  <span class="pc-cart-line__badge pc-cart-line__badge--bundle">&#10022; {{ b_label }} bundle</span>
+                  <div class="pc-cart-bundle__price">
+                    <span class="h-display pc-cart-line__price-now">{{ b_final | money }}</span>
+                    {%- if b_orig > b_final -%}
+                      <span class="pc-cart-line__price-was">{{ b_orig | money }}</span>
+                    {%- endif -%}
+                  </div>
+                </div>
+                <div class="pc-cart-bundle__items">
+                  {%- for it in cart.items -%}
+                    {%- if it.properties._bundle_id == bundle_id -%}
+                      {%- liquid
+                        assign it_size = it.variant.title
+                        if it_size == 'Default Title'
+                          assign it_size = ''
+                        endif
+                      -%}
+                      <div class="pc-cart-bundle__item">
+                        <span class="pc-cart-bundle__thumb">
+                          {%- if it.image -%}
+                            <img src="{{ it.image | image_url: width: 120 }}" alt="" loading="lazy" width="40" height="48">
+                          {%- endif -%}
+                        </span>
+                        <span class="pc-cart-bundle__item-text">
+                          <span class="pc-cart-bundle__item-title">{{ it.product.title }}</span>
+                          {%- if it_size != blank -%}
+                            <span class="pc-cart-bundle__item-size">{{ it_size }}</span>
+                          {%- endif -%}
+                        </span>
+                      </div>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+                <div class="pc-cart-line__qty-row">
+                  <div class="pc-cart-line__qty">
+                    <button type="button" class="pc-cart-line__qty-btn" aria-label="Decrease bundle quantity"
+                      {% if b_qty <= 1 %}disabled{% endif %}
+                      onclick="window.PostcardCart && window.PostcardCart.updateBundle('{{ b_keys }}', {{ b_qty | minus: 1 }})">&minus;</button>
+                    <span class="pc-cart-line__qty-value" data-cart-qty>{{ b_qty }}</span>
+                    <button type="button" class="pc-cart-line__qty-btn" aria-label="Increase bundle quantity"
+                      onclick="window.PostcardCart && window.PostcardCart.updateBundle('{{ b_keys }}', {{ b_qty | plus: 1 }})">+</button>
+                  </div>
+                  <button type="button" class="pc-cart-line__remove tlink"
+                    onclick="window.PostcardCart && window.PostcardCart.updateBundle('{{ b_keys }}', 0)">Remove bundle</button>
+                </div>
+              </div>
+            {%- endunless -%}
+
+          {%- else -%}
           {%- liquid
             assign world = item.product.metafields.postcard.world.value
             assign world_color = '#E8C36A'
@@ -226,6 +300,7 @@
               {%- endif -%}
             </div>
           </div>
+          {%- endif -%}
         {%- endfor -%}
       </div>
 

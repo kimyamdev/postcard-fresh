@@ -506,10 +506,21 @@
       }
 
       async addBundle() {
-        const items = Object.keys(this.selections).map((k) => ({
+        const keys = Object.keys(this.selections);
+        // Stable id for this exact combo: identical combos merge (= bundle qty up),
+        // different combos stay as separate groups in the cart.
+        const bundleId = keys
+          .map((k) => String(this.selections[k].variantId))
+          .sort()
+          .join('-');
+        const items = keys.map((k) => ({
           id: this.selections[k].variantId,
           quantity: 1,
-          properties: { '_bundle': this.bundleLabel },
+          properties: {
+            '_bundle': this.bundleLabel,
+            '_bundle_id': bundleId,
+            '_bundle_pos': String(parseInt(k, 10) + 1),
+          },
         }));
         if (items.length !== this.groupCount) return;
 

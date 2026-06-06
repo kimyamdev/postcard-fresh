@@ -83,6 +83,25 @@
     await Promise.all([refreshDrawer(), refreshBag()]);
   }
 
+  // Set the same quantity on every line of a Mix & Match bundle in one request,
+  // so the 3 items move together. keysCsv is a comma-separated list of line keys.
+  async function updateBundle(keysCsv, qty) {
+    const keys = String(keysCsv).split(',').map((s) => s.trim()).filter(Boolean);
+    if (!keys.length) return;
+    const updates = {};
+    keys.forEach((k) => { updates[k] = qty; });
+    const r = await fetch('/cart/update.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ updates: updates })
+    });
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({}));
+      throw new Error(err.description || 'Cart update failed');
+    }
+    await Promise.all([refreshDrawer(), refreshBag()]);
+  }
+
   document.addEventListener('submit', async (e) => {
     const form = e.target;
     if (!(form instanceof HTMLFormElement)) return;
@@ -136,5 +155,5 @@
     tryApplyVillaShipping();
   }
 
-  window.PostcardCart = { addItem, updateLine, refreshDrawer, refreshBag, tryApplyVillaShipping };
+  window.PostcardCart = { addItem, updateLine, updateBundle, refreshDrawer, refreshBag, tryApplyVillaShipping };
 })();
