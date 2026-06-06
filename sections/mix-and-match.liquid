@@ -69,7 +69,9 @@
         {%- if products.size == 0 -%}
           <p class="mm-group__empty">No products in this group yet. Edit this block in the theme editor to pick products or choose a collection.</p>
         {%- else -%}
-          <div class="mm-group__grid">
+          <div class="mm-group__carousel">
+            <button type="button" class="mm-group__arrow mm-group__arrow--prev" data-mm-prev aria-label="Scroll left" hidden>&lsaquo;</button>
+            <div class="mm-group__track" data-mm-track>
             {%- for product in products limit: 48 -%}
               {%- liquid
                 assign first_available = product.selected_or_first_available_variant
@@ -146,6 +148,8 @@
                 </div>
               </article>
             {%- endfor -%}
+            </div>
+            <button type="button" class="mm-group__arrow mm-group__arrow--next" data-mm-next aria-label="Scroll right" hidden>&rsaquo;</button>
           </div>
         {%- endif -%}
       </div>
@@ -224,17 +228,49 @@
   .mm-group.is-complete .mm-group__status::before { content: '✓ '; color: var(--color-ink); }
   .mm-group__empty { font-family: var(--font-body); font-size: 14px; opacity: 0.6; }
 
-  .mm-group__grid {
-    display: grid;
-    /* Fixed-width columns (not 1fr) so every card is the same size regardless of
-       how many choices a group has; centered so short rows aren't left-heavy. */
-    grid-template-columns: repeat(auto-fit, minmax(220px, 260px));
-    justify-content: center;
+  /* Horizontal carousel per group — swipe / scroll instead of vertical wrapping */
+  .mm-group__carousel { display: flex; align-items: center; gap: 8px; }
+  .mm-group__track {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
     gap: 18px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    justify-content: safe center;
+    padding: 6px 2px;            /* room so the selected stamp shadow isn't clipped */
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .mm-group__track::-webkit-scrollbar { display: none; }
+  .mm-group__arrow {
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border: 1.5px solid var(--color-ink);
+    background: var(--color-bg-card);
+    box-shadow: 2px 2px 0 var(--color-ink);
+    font-family: var(--font-display);
+    font-size: 22px;
+    line-height: 1;
+    color: var(--color-ink);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+  .mm-group__arrow:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--color-ink); }
+  .mm-group__arrow[hidden] { display: none; }
+  .mm-group__arrow:disabled { opacity: 0.3; cursor: not-allowed; box-shadow: none; transform: none; }
+  @media (max-width: 749px) {
+    /* Arrows hidden on touch — swipe instead */
+    .mm-group__arrow { display: none; }
   }
 
   .mm-card {
     position: relative;
+    flex: 0 0 240px;
+    scroll-snap-align: start;
     display: flex;
     flex-direction: column;
     border: 1.5px solid var(--color-ink);
@@ -450,8 +486,37 @@
         this.defaultCta = this.ctaText ? this.ctaText.textContent : 'Add bundle to cart';
 
         this.bindCards();
+        this.bindCarousels();
         this.querySelectorAll('[data-mm-card]').forEach((card) => this.updateCardPrice(card));
         this.addBtn.addEventListener('click', () => this.addBundle());
+      }
+
+      bindCarousels() {
+        this.querySelectorAll('.mm-group__carousel').forEach((car) => {
+          const track = car.querySelector('[data-mm-track]');
+          const prev = car.querySelector('[data-mm-prev]');
+          const next = car.querySelector('[data-mm-next]');
+          if (!track) return;
+
+          const update = () => {
+            const overflow = track.scrollWidth - track.clientWidth > 4;
+            [prev, next].forEach((b) => { if (b) b.hidden = !overflow; });
+            if (overflow) {
+              if (prev) prev.disabled = track.scrollLeft <= 2;
+              if (next) next.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2;
+            }
+          };
+          const step = () => Math.max(220, Math.round(track.clientWidth * 0.85));
+          if (prev) prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+          if (next) next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+          track.addEventListener('scroll', update, { passive: true });
+          window.addEventListener('resize', update);
+          // Images may finish loading after first paint and change scrollWidth.
+          track.querySelectorAll('img').forEach((img) => {
+            if (!img.complete) img.addEventListener('load', update, { once: true });
+          });
+          update();
+        });
       }
 
       bindCards() {
