@@ -225,7 +225,7 @@
 
   .mm-group__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 18px;
   }
 
@@ -255,6 +255,7 @@
   .mm-card__media {
     position: relative;
     aspect-ratio: 1 / 1;
+    flex: 0 0 auto;
     background: var(--color-bg-warm);
     border-bottom: 1.5px solid var(--color-ink);
   }
@@ -291,7 +292,18 @@
   }
 
   .mm-card__body { padding: 14px; display: flex; flex-direction: column; gap: 8px; flex: 1 1 auto; }
-  .mm-card__title { margin: 0; font-family: var(--font-display); font-size: 14px; line-height: 1.25; }
+  .mm-card__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 14px;
+    line-height: 1.25;
+    /* Reserve two lines so price/variant/select align across cards regardless of title length */
+    min-height: calc(14px * 1.25 * 2);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
   .mm-card__price { margin: 0; font-family: var(--font-display); font-size: 14px; }
   .mm-card__price .price { font-size: inherit; font-family: inherit; }
   .mm-card__variant select {
