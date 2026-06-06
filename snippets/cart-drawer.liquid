@@ -23,7 +23,25 @@
   if pct > 100
     assign pct = 100
   endif
-  assign sub_savings_cents = cart.original_total_price | minus: cart.total_price
+  comment
+    Total savings = original (pre-discount) minus final. Split out the
+    Mix & Match bundle portion: bundle lines carry a `_bundle` property
+    (set by the mix-and-match section), so their line-level discount
+    allocations are the bundle discount. Whatever remains is subscription /
+    other savings and keeps the existing label.
+  endcomment
+  assign total_savings_cents = cart.original_total_price | minus: cart.total_price
+  assign mm_savings_cents = 0
+  assign bundle_name = ''
+  for item in cart.items
+    if item.properties._bundle != blank
+      assign bundle_name = item.properties._bundle
+      for alloc in item.line_level_discount_allocations
+        assign mm_savings_cents = mm_savings_cents | plus: alloc.amount
+      endfor
+    endif
+  endfor
+  assign sub_savings_cents = total_savings_cents | minus: mm_savings_cents
 
   comment
     Smile VIP tier integration. Customer's tier name is read from
@@ -217,6 +235,9 @@
             <div class="pc-cart-drawer__total-row"><span>Subtotal</span><span>{{ cart.original_total_price | money }}</span></div>
             {%- if sub_savings_cents > 0 -%}
               <div class="pc-cart-drawer__total-row pc-cart-drawer__total-row--savings"><span>Subscription savings</span><span>&minus;{{ sub_savings_cents | money }}</span></div>
+            {%- endif -%}
+            {%- if mm_savings_cents > 0 -%}
+              <div class="pc-cart-drawer__total-row pc-cart-drawer__total-row--savings"><span>{{ bundle_name | default: 'Mix & Match' }} savings</span><span>&minus;{{ mm_savings_cents | money }}</span></div>
             {%- endif -%}
             <div class="pc-cart-drawer__total-row"><span>Shipping</span><span>
               {%- if is_villa -%}Free &middot; Villa tier
