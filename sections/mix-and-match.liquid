@@ -11,6 +11,9 @@
   assign group_count = groups.size
   assign discount_code = section.settings.discount_code | strip
   assign cta_label = section.settings.cta_label | default: 'Add bundle to cart'
+  assign bundle_label = section.settings.bundle_label | default: 'Mix & Match'
+  assign discount_type = section.settings.discount_type | default: 'none'
+  assign discount_value = section.settings.discount_value | default: '0'
 -%}
 
 <section
@@ -27,6 +30,9 @@
   <mix-and-match
     class="container mm"
     data-discount-code="{{ discount_code | escape }}"
+    data-discount-type="{{ discount_type }}"
+    data-discount-value="{{ discount_value | escape }}"
+    data-bundle-label="{{ bundle_label | escape }}"
     data-group-count="{{ group_count }}"
     data-money-format="{{ shop.money_format | escape }}"
   >
@@ -142,6 +148,7 @@
     {%- endfor -%}
 
     <div class="mm-summary" data-mm-summary>
+      <span class="mm-summary__tag">{{ bundle_label }} bundle</span>
       <div class="mm-summary__slots" data-mm-slots>
         {%- for block in groups -%}
           <div class="mm-summary__slot" data-mm-slot="{{ forloop.index0 }}">
@@ -151,10 +158,14 @@
         {%- endfor -%}
       </div>
       <div class="mm-summary__total">
-        <span class="mm-summary__total-label">Total</span>
-        <span class="mm-summary__total-value" data-mm-total>—</span>
+        <span class="mm-summary__total-label">Bundle total</span>
+        <span class="mm-summary__total-line">
+          <span class="mm-summary__total-was" data-mm-was hidden></span>
+          <span class="mm-summary__total-value" data-mm-total>—</span>
+        </span>
+        <span class="mm-summary__save" data-mm-save hidden></span>
         {%- if discount_code != blank -%}
-          <span class="mm-summary__discount-note">Discount <strong>{{ discount_code }}</strong> applied at cart</span>
+          <span class="mm-summary__discount-note">Discount <strong>{{ discount_code }}</strong> applied automatically</span>
         {%- endif -%}
       </div>
       <button type="button" class="button mm-summary__cta" data-mm-add disabled>
@@ -295,6 +306,22 @@
     border: 1px solid rgba(var(--color-foreground), 0.15);
     box-shadow: 0 -6px 24px rgba(0,0,0,0.08);
   }
+  .mm-summary__tag {
+    flex-basis: 100%;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    align-self: flex-start;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    background: rgb(var(--color-foreground));
+    color: rgb(var(--color-background));
+  }
+  .mm-summary__tag::before { content: '✦'; }
   .mm-summary__slots { display: flex; flex-wrap: wrap; gap: 1.4rem; flex: 1 1 auto; }
   .mm-summary__slot { display: flex; flex-direction: column; min-width: 9rem; }
   .mm-summary__slot-label { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.04em; color: rgba(var(--color-foreground), 0.55); }
@@ -302,7 +329,10 @@
   .mm-summary__slot.is-filled .mm-summary__slot-value { color: rgb(var(--color-foreground)); }
   .mm-summary__total { display: flex; flex-direction: column; text-align: right; }
   .mm-summary__total-label { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.04em; color: rgba(var(--color-foreground), 0.55); }
+  .mm-summary__total-line { display: inline-flex; align-items: baseline; gap: 0.6rem; justify-content: flex-end; }
+  .mm-summary__total-was { font-size: 1.3rem; text-decoration: line-through; color: rgba(var(--color-foreground), 0.5); }
   .mm-summary__total-value { font-size: 1.8rem; font-weight: 700; }
+  .mm-summary__save { font-size: 1.15rem; font-weight: 600; color: rgb(var(--color-foreground)); }
   .mm-summary__discount-note { font-size: 1.05rem; color: rgba(var(--color-foreground), 0.6); }
   .mm-summary__cta { white-space: nowrap; }
   .mm-summary__cta[disabled] { opacity: 0.45; cursor: not-allowed; }
@@ -337,11 +367,16 @@
       constructor() {
         super();
         this.discountCode = this.dataset.discountCode || '';
+        this.discountType = this.dataset.discountType || 'none';
+        this.discountValue = parseFloat(this.dataset.discountValue) || 0;
+        this.bundleLabel = this.dataset.bundleLabel || 'Mix & Match';
         this.moneyFormat = this.dataset.moneyFormat || ('$' + '{' + '{amount}}');
         this.groupCount = parseInt(this.dataset.groupCount, 10) || 0;
         this.selections = {}; // groupIndex -> {variantId, price, title}
         this.addBtn = this.querySelector('[data-mm-add]');
         this.totalEl = this.querySelector('[data-mm-total]');
+        this.wasEl = this.querySelector('[data-mm-was]');
+        this.saveEl = this.querySelector('[data-mm-save]');
         this.errorEl = this.querySelector('[data-mm-error]');
         this.ctaText = this.querySelector('[data-mm-cta-text]');
         this.defaultCta = this.ctaText ? this.ctaText.textContent : 'Add bundle to cart';
@@ -428,9 +463,31 @@
         if (complete) {
           let total = 0;
           Object.keys(this.selections).forEach((k) => { total += this.selections[k].price; });
-          this.totalEl.textContent = formatMoney(total, this.moneyFormat);
+
+          let discounted = total;
+          if (this.discountType === 'percentage' && this.discountValue > 0) {
+            discounted = Math.round(total * (100 - this.discountValue) / 100);
+          } else if (this.discountType === 'fixed' && this.discountValue > 0) {
+            discounted = Math.max(0, total - Math.round(this.discountValue * 100));
+          }
+
+          const saved = total - discounted;
+          this.totalEl.textContent = formatMoney(discounted, this.moneyFormat);
+
+          if (saved > 0) {
+            this.wasEl.textContent = formatMoney(total, this.moneyFormat);
+            this.wasEl.hidden = false;
+            const pct = Math.round(saved / total * 100);
+            this.saveEl.textContent = 'You save ' + formatMoney(saved, this.moneyFormat) + ' (' + pct + '%)';
+            this.saveEl.hidden = false;
+          } else {
+            this.wasEl.hidden = true;
+            this.saveEl.hidden = true;
+          }
         } else {
           this.totalEl.textContent = '—';
+          this.wasEl.hidden = true;
+          this.saveEl.hidden = true;
         }
 
         this.addBtn.disabled = !complete;
@@ -452,6 +509,7 @@
         const items = Object.keys(this.selections).map((k) => ({
           id: this.selections[k].variantId,
           quantity: 1,
+          properties: { '_bundle': this.bundleLabel },
         }));
         if (items.length !== this.groupCount) return;
 
@@ -514,6 +572,9 @@
     { "type": "richtext", "id": "intro", "label": "Intro text", "default": "<p>Pick one from each group to build your bundle of three.</p>" },
     { "type": "text", "id": "cta_label", "label": "Add-to-cart button label", "default": "Add bundle to cart" },
     { "type": "text", "id": "discount_code", "label": "Discount code to auto-apply", "info": "Create the code in Shopify admin → Discounts. It is applied to the cart after the bundle is added. Leave blank for full price." },
+    { "type": "select", "id": "discount_type", "label": "Discount type (for display)", "options": [ { "value": "none", "label": "None" }, { "value": "percentage", "label": "Percentage off" }, { "value": "fixed", "label": "Fixed amount off (whole bundle)" } ], "default": "percentage", "info": "Used to show the discounted total and savings on the page. Must match the actual discount code above." },
+    { "type": "text", "id": "discount_value", "label": "Discount value", "default": "15", "info": "For percentage enter e.g. 15 (= 15% off). For fixed amount enter the amount off the whole bundle in your store currency, e.g. 10." },
+    { "type": "text", "id": "bundle_label", "label": "Bundle label", "default": "Mix & Match", "info": "Shown on the page and as a tag on each item in the cart." },
     { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
     { "type": "header", "content": "Spacing" },
     { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Top padding", "default": 48 },

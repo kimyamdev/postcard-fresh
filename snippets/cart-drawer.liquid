@@ -185,6 +185,10 @@
                 <div class="pc-cart-line__badge pc-cart-line__badge--gift">&#127873; GIFT &middot; note attached</div>
               {%- endif -%}
 
+              {%- if item.properties._bundle != blank -%}
+                <div class="pc-cart-line__badge pc-cart-line__badge--bundle">&#10022; {{ item.properties._bundle }} bundle</div>
+              {%- endif -%}
+
               <div class="pc-cart-line__qty-row">
                 <div class="pc-cart-line__qty">
                   <button type="button" class="pc-cart-line__qty-btn" aria-label="Decrease quantity"

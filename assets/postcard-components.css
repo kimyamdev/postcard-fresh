@@ -3841,6 +3841,7 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 }
 .pc-cart-line__badge--sub { background: rgba(176, 122, 78, 0.13); }
 .pc-cart-line__badge--gift { background: var(--color-ink); color: var(--color-bg); border-color: var(--color-ink); }
+.pc-cart-line__badge--bundle { background: rgba(232, 195, 106, 0.22); border-color: var(--color-ink); }
 .pc-cart-line__badge-dot {
   width: 6px; height: 6px;
   border-radius: 50%;
