@@ -52,6 +52,9 @@
       {%- liquid
         assign gi = forloop.index
         assign products = block.settings.products
+        if products.size == 0 and block.settings.collection != blank
+          assign products = block.settings.collection.products
+        endif
       -%}
       <div class="mm-group" data-mm-group="{{ forloop.index0 }}" data-mm-group-title="{{ block.settings.title | default: 'Choose an item' | escape }}" {{ block.shopify_attributes }}>
         <div class="mm-group__head">
@@ -66,10 +69,10 @@
         </div>
 
         {%- if products.size == 0 -%}
-          <p class="mm-group__empty">No products added to this group yet. Edit this block in the theme editor to pick products.</p>
+          <p class="mm-group__empty">No products in this group yet. Edit this block in the theme editor to pick products or choose a collection.</p>
         {%- else -%}
           <div class="mm-group__grid">
-            {%- for product in products -%}
+            {%- for product in products limit: 48 -%}
               {%- liquid
                 assign first_available = product.selected_or_first_available_variant
                 assign multi_variant = false
@@ -116,7 +119,8 @@
                 <div class="mm-card__body">
                   <h3 class="mm-card__title">{{ product.title }}</h3>
                   <p class="mm-card__price" data-mm-card-price>
-                    {%- render 'price', product: product, use_variant: true -%}
+                    <span class="mm-card__price-now" data-mm-price-now></span>
+                    <span class="mm-card__price-was" data-mm-price-was hidden></span>
                   </p>
 
                   {%- if multi_variant -%}
@@ -124,10 +128,12 @@
                       <span class="visually-hidden">Choose an option for {{ product.title }}</span>
                       <select data-mm-variant-select>
                         {%- for variant in product.variants -%}
+                          {%- assign v_img = variant.featured_image | default: product.featured_image -%}
                           <option
                             value="{{ variant.id }}"
                             data-price="{{ variant.price }}"
                             data-available="{% if variant.available %}true{% else %}false{% endif %}"
+                            data-image="{% if v_img %}{{ v_img | image_url: width: 600 }}{% endif %}"
                             {% if variant == first_available %}selected{% endif %}
                             {% unless variant.available %}disabled{% endunless %}
                           >
@@ -164,9 +170,6 @@
           <span class="mm-summary__total-value" data-mm-total>—</span>
         </span>
         <span class="mm-summary__save" data-mm-save hidden></span>
-        {%- if discount_code != blank -%}
-          <span class="mm-summary__discount-note">Discount <strong>{{ discount_code }}</strong> applied automatically</span>
-        {%- endif -%}
       </div>
       <button type="button" class="btn mm-summary__cta" data-mm-add disabled>
         <span data-mm-cta-text>{{ cta_label }}</span>
@@ -315,8 +318,9 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  .mm-card__price { margin: 0; font-family: var(--font-display); font-size: 14px; }
-  .mm-card__price .price { font-size: inherit; font-family: inherit; }
+  .mm-card__price { margin: 0; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .mm-card__price-now { font-family: var(--font-display); font-size: 15px; }
+  .mm-card__price-was { font-family: var(--font-display); font-size: 12px; text-decoration: line-through; opacity: 0.5; }
   .mm-card__variant select {
     width: 100%;
     padding: 8px 10px;
@@ -446,6 +450,7 @@
         this.defaultCta = this.ctaText ? this.ctaText.textContent : 'Add bundle to cart';
 
         this.bindCards();
+        this.querySelectorAll('[data-mm-card]').forEach((card) => this.updateCardPrice(card));
         this.addBtn.addEventListener('click', () => this.addBundle());
       }
 
@@ -474,13 +479,39 @@
         if (!opt) return;
         card.dataset.variantId = opt.value;
         card.dataset.price = opt.dataset.price || card.dataset.price;
-        const priceEl = card.querySelector('[data-mm-card-price]');
-        if (priceEl) priceEl.textContent = formatMoney(parseInt(card.dataset.price, 10), this.moneyFormat);
+        this.updateCardPrice(card);
+        // Swap the card image to the chosen variant's image, if it has one.
+        const img = card.querySelector('.mm-card__media img');
+        if (img && opt.dataset.image) {
+          img.src = opt.dataset.image;
+          img.removeAttribute('srcset');
+          img.removeAttribute('sizes');
+        }
         // If this card is the active selection for its group, refresh the summary.
         if (this.selections[gi] && card.classList.contains('is-selected')) {
           this.selections[gi].variantId = opt.value;
           this.selections[gi].price = parseInt(card.dataset.price, 10);
           this.render();
+        }
+      }
+
+      // Render a single Special-Elite price per card: the after-discount price,
+      // with the original struck through when a percentage discount is set.
+      updateCardPrice(card) {
+        const cents = parseInt(card.dataset.price, 10) || 0;
+        const nowEl = card.querySelector('[data-mm-price-now]');
+        const wasEl = card.querySelector('[data-mm-price-was]');
+        if (!nowEl) return;
+        const hasPct = this.discountType === 'percentage' && this.discountValue > 0;
+        const now = hasPct ? Math.round(cents * (100 - this.discountValue) / 100) : cents;
+        nowEl.textContent = formatMoney(now, this.moneyFormat);
+        if (wasEl) {
+          if (hasPct && now < cents) {
+            wasEl.textContent = formatMoney(cents, this.moneyFormat);
+            wasEl.hidden = false;
+          } else {
+            wasEl.hidden = true;
+          }
         }
       }
 
@@ -673,7 +704,8 @@
       "settings": [
         { "type": "text", "id": "title", "label": "Group title", "default": "Choose an item" },
         { "type": "text", "id": "subtitle", "label": "Group subtitle" },
-        { "type": "product_list", "id": "products", "label": "Products in this group", "limit": 24 }
+        { "type": "product_list", "id": "products", "label": "Products in this group", "limit": 24 },
+        { "type": "collection", "id": "collection", "label": "…or pull from a collection", "info": "Used only when no products are hand-picked above. Shows up to 48 of the collection's products." }
       ]
     }
   ],
