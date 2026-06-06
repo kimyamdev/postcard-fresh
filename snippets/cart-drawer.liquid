@@ -34,8 +34,8 @@
   assign mm_savings_cents = 0
   assign bundle_name = ''
   for item in cart.items
-    if item.properties._bundle != blank
-      assign bundle_name = item.properties._bundle
+    if item.properties._bundle_id != blank
+      assign bundle_name = item.properties.Bundle | default: item.properties._bundle | default: 'Mix & Match'
       for alloc in item.line_level_discount_allocations
         assign mm_savings_cents = mm_savings_cents | plus: alloc.amount
       endfor
@@ -155,7 +155,7 @@
             {%- unless rendered_bundles contains bid_token -%}
               {%- assign rendered_bundles = rendered_bundles | append: bid_token -%}
               {%- liquid
-                assign b_label = item.properties._bundle | default: 'Mix & Match'
+                assign b_label = item.properties.Bundle | default: item.properties._bundle | default: 'Mix & Match'
                 assign b_keys = ''
                 assign b_qty = 0
                 assign b_final = 0
@@ -277,8 +277,9 @@
                 <div class="pc-cart-line__badge pc-cart-line__badge--gift">&#127873; GIFT &middot; note attached</div>
               {%- endif -%}
 
-              {%- if item.properties._bundle != blank -%}
-                <div class="pc-cart-line__badge pc-cart-line__badge--bundle">&#10022; {{ item.properties._bundle }} bundle</div>
+              {%- assign legacy_bundle = item.properties.Bundle | default: item.properties._bundle -%}
+              {%- if legacy_bundle != blank -%}
+                <div class="pc-cart-line__badge pc-cart-line__badge--bundle">&#10022; {{ legacy_bundle }} bundle</div>
               {%- endif -%}
 
               <div class="pc-cart-line__qty-row">

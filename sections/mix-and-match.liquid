@@ -517,7 +517,9 @@
           id: this.selections[k].variantId,
           quantity: 1,
           properties: {
-            '_bundle': this.bundleLabel,
+            // Visible at checkout / on the order (no leading underscore).
+            'Bundle': this.bundleLabel,
+            // Hidden technical fields used only for cart grouping.
             '_bundle_id': bundleId,
             '_bundle_pos': String(parseInt(k, 10) + 1),
           },
