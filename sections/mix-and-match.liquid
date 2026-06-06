@@ -513,17 +513,22 @@
           .map((k) => String(this.selections[k].variantId))
           .sort()
           .join('-');
-        const items = keys.map((k) => ({
-          id: this.selections[k].variantId,
-          quantity: 1,
-          properties: {
-            // Visible at checkout / on the order (no leading underscore).
-            'Bundle': this.bundleLabel,
-            // Hidden technical fields used only for cart grouping.
-            '_bundle_id': bundleId,
-            '_bundle_pos': String(parseInt(k, 10) + 1),
-          },
-        }));
+        const total = keys.length;
+        const items = keys.map((k) => {
+          const pos = parseInt(k, 10) + 1;
+          return {
+            id: this.selections[k].variantId,
+            quantity: 1,
+            properties: {
+              // Visible at checkout / on the order (no leading underscore).
+              // Slot number is appended so each line shows its place in the bundle.
+              'Bundle': this.bundleLabel + ' (Item ' + pos + ' of ' + total + ')',
+              // Hidden technical fields used only for cart grouping.
+              '_bundle_id': bundleId,
+              '_bundle_pos': String(pos),
+            },
+          };
+        });
         if (items.length !== this.groupCount) return;
 
         this.addBtn.disabled = true;
