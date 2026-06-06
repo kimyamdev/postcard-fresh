@@ -53,7 +53,7 @@
         assign gi = forloop.index
         assign products = block.settings.products
       -%}
-      <div class="mm-group" data-mm-group="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+      <div class="mm-group" data-mm-group="{{ forloop.index0 }}" data-mm-group-title="{{ block.settings.title | default: 'Choose an item' | escape }}" {{ block.shopify_attributes }}>
         <div class="mm-group__head">
           <span class="mm-group__step">{{ gi }}</span>
           <div>
@@ -433,6 +433,7 @@
           variantId: card.dataset.variantId,
           price: parseInt(card.dataset.price, 10) || 0,
           title: card.dataset.productTitle || '',
+          groupTitle: group.dataset.mmGroupTitle || '',
         };
 
         const status = group.querySelector('[data-mm-group-status]');
@@ -513,19 +514,21 @@
           .map((k) => String(this.selections[k].variantId))
           .sort()
           .join('-');
-        const total = keys.length;
         const items = keys.map((k) => {
           const pos = parseInt(k, 10) + 1;
+          const sel = this.selections[k];
+          const slot = sel.groupTitle || ('Item ' + pos);
           return {
-            id: this.selections[k].variantId,
+            id: sel.variantId,
             quantity: 1,
             properties: {
               // Visible at checkout / on the order (no leading underscore).
-              // Slot number is appended so each line shows its place in the bundle.
-              'Bundle': this.bundleLabel + ' (Item ' + pos + ' of ' + total + ')',
-              // Hidden technical fields used only for cart grouping.
+              // The group title is appended so each line shows which group it came from.
+              'Bundle': this.bundleLabel + ' (' + slot + ')',
+              // Hidden technical fields used only for cart grouping / display.
               '_bundle_id': bundleId,
               '_bundle_pos': String(pos),
+              '_bundle_slot': slot,
             },
           };
         });

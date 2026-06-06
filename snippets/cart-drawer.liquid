@@ -36,7 +36,7 @@
   for item in cart.items
     if item.properties._bundle_id != blank
       assign bundle_name_raw = item.properties.Bundle | default: item.properties._bundle | default: 'Mix & Match'
-      assign bundle_name = bundle_name_raw | split: ' (Item ' | first
+      assign bundle_name = bundle_name_raw | split: ' (' | first
       for alloc in item.line_level_discount_allocations
         assign mm_savings_cents = mm_savings_cents | plus: alloc.amount
       endfor
@@ -157,7 +157,7 @@
               {%- assign rendered_bundles = rendered_bundles | append: bid_token -%}
               {%- liquid
                 assign b_label_raw = item.properties.Bundle | default: item.properties._bundle | default: 'Mix & Match'
-                assign b_label = b_label_raw | split: ' (Item ' | first
+                assign b_label = b_label_raw | split: ' (' | first
                 assign b_keys = ''
                 assign b_qty = 0
                 assign b_final = 0
@@ -197,8 +197,14 @@
                           {%- endif -%}
                         </span>
                         <span class="pc-cart-bundle__item-text">
-                          {%- if it.properties._bundle_pos != blank -%}
-                            <span class="pc-cart-bundle__item-slot">Item {{ it.properties._bundle_pos }}</span>
+                          {%- liquid
+                            assign it_slot = it.properties._bundle_slot
+                            if it_slot == blank and it.properties._bundle_pos != blank
+                              assign it_slot = 'Item ' | append: it.properties._bundle_pos
+                            endif
+                          -%}
+                          {%- if it_slot != blank -%}
+                            <span class="pc-cart-bundle__item-slot">{{ it_slot }}</span>
                           {%- endif -%}
                           <span class="pc-cart-bundle__item-title">{{ it.product.title }}</span>
                           {%- if it_size != blank -%}
@@ -282,7 +288,7 @@
                 <div class="pc-cart-line__badge pc-cart-line__badge--gift">&#127873; GIFT &middot; note attached</div>
               {%- endif -%}
 
-              {%- assign legacy_bundle = item.properties.Bundle | default: item.properties._bundle | split: ' (Item ' | first -%}
+              {%- assign legacy_bundle = item.properties.Bundle | default: item.properties._bundle | split: ' (' | first -%}
               {%- if legacy_bundle != blank -%}
                 <div class="pc-cart-line__badge pc-cart-line__badge--bundle">&#10022; {{ legacy_bundle }} bundle</div>
               {%- endif -%}
