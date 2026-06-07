@@ -53,6 +53,23 @@
         if products.size == 0 and block.settings.collection != blank
           assign products = block.settings.collection.products
         endif
+        comment
+          Optional variant-level curation: paste variant IDs (newline or comma
+          separated). When set, the group shows exactly those variants (one card
+          each, no dropdown) drawn from the products/collection above.
+        endcomment
+        assign allowed_raw = block.settings.variant_ids | newline_to_br | replace: '<br />', ',' | replace: ' ', ''
+        assign allowed_list = allowed_raw | split: ','
+        assign allowed_str = ''
+        for av in allowed_list
+          if av != blank
+            assign allowed_str = allowed_str | append: ',' | append: av | append: ','
+          endif
+        endfor
+        assign variant_mode = false
+        if allowed_str != ''
+          assign variant_mode = true
+        endif
       -%}
       <div class="mm-group" data-mm-group="{{ forloop.index0 }}" data-mm-group-title="{{ block.settings.title | default: 'Choose an item' | escape }}" {{ block.shopify_attributes }}>
         <div class="mm-group__head">
@@ -72,82 +89,20 @@
           <div class="mm-group__carousel">
             <button type="button" class="mm-group__arrow mm-group__arrow--prev" data-mm-prev aria-label="Scroll left" hidden>&lsaquo;</button>
             <div class="mm-group__track" data-mm-track>
-            {%- for product in products limit: 48 -%}
-              {%- liquid
-                assign first_available = product.selected_or_first_available_variant
-                assign multi_variant = false
-                if product.variants.size > 1
-                  assign multi_variant = true
-                endif
-              -%}
-              <article
-                class="mm-card{% unless product.available %} mm-card--soldout{% endunless %}"
-                data-mm-card
-                data-product-id="{{ product.id }}"
-                data-product-title="{{ product.title | escape }}"
-                data-product-url="{{ product.url }}"
-                data-variant-id="{{ first_available.id }}"
-                data-price="{{ first_available.price }}"
-                data-available="{% if product.available %}true{% else %}false{% endif %}"
-                {% unless product.available %}aria-disabled="true"{% endunless %}
-                tabindex="0"
-                role="button"
-                aria-pressed="false"
-              >
-                <div class="mm-card__media">
-                  {%- if product.featured_image -%}
-                    {{
-                      product.featured_image
-                      | image_url: width: 360
-                      | image_tag:
-                        loading: 'lazy',
-                        widths: '180, 360, 540',
-                        sizes: '(min-width: 750px) 220px, 45vw',
-                        alt: product.featured_image.alt | default: product.title
-                    }}
-                  {%- else -%}
-                    {{ 'product-apparel-1' | placeholder_svg_tag: 'mm-card__placeholder' }}
+            {%- if variant_mode -%}
+              {%- for product in products limit: 48 -%}
+                {%- for variant in product.variants -%}
+                  {%- assign vtoken = ',' | append: variant.id | append: ',' -%}
+                  {%- if allowed_str contains vtoken -%}
+                    {%- render 'mix-and-match-card', product: product, variant: variant -%}
                   {%- endif -%}
-                  <span class="mm-card__check" aria-hidden="true">
-                    <svg viewBox="0 0 16 16" width="16" height="16" focusable="false"><path d="M13.5 4.5 6 12 2.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </span>
-                  {%- unless product.available -%}
-                    <span class="mm-card__soldout">Sold out</span>
-                  {%- endunless -%}
-                </div>
-
-                <div class="mm-card__body">
-                  <h3 class="mm-card__title">{{ product.title }}</h3>
-                  <p class="mm-card__price" data-mm-card-price>
-                    <span class="mm-card__price-now" data-mm-price-now></span>
-                    <span class="mm-card__price-was" data-mm-price-was hidden></span>
-                  </p>
-
-                  {%- if multi_variant -%}
-                    <label class="mm-card__variant">
-                      <span class="visually-hidden">Choose an option for {{ product.title }}</span>
-                      <select data-mm-variant-select>
-                        {%- for variant in product.variants -%}
-                          {%- assign v_img = variant.featured_image | default: product.featured_image -%}
-                          <option
-                            value="{{ variant.id }}"
-                            data-price="{{ variant.price }}"
-                            data-available="{% if variant.available %}true{% else %}false{% endif %}"
-                            data-image="{% if v_img %}{{ v_img | image_url: width: 600 }}{% endif %}"
-                            {% if variant == first_available %}selected{% endif %}
-                            {% unless variant.available %}disabled{% endunless %}
-                          >
-                            {{ variant.title }}{% unless variant.available %} — Sold out{% endunless %}
-                          </option>
-                        {%- endfor -%}
-                      </select>
-                    </label>
-                  {%- endif -%}
-
-                  <span class="mm-card__select" data-mm-select-label>Select</span>
-                </div>
-              </article>
-            {%- endfor -%}
+                {%- endfor -%}
+              {%- endfor -%}
+            {%- else -%}
+              {%- for product in products limit: 48 -%}
+                {%- render 'mix-and-match-card', product: product -%}
+              {%- endfor -%}
+            {%- endif -%}
             </div>
             <button type="button" class="mm-group__arrow mm-group__arrow--next" data-mm-next aria-label="Scroll right" hidden>&rsaquo;</button>
           </div>
@@ -355,6 +310,7 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  .mm-card__variant-label { margin: -2px 0 0; font-family: var(--font-display); font-size: 12px; opacity: 0.6; }
   .mm-card__price { margin: 0; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
   .mm-card__price-now { font-family: var(--font-display); font-size: 15px; }
   .mm-card__price-was { font-family: var(--font-display); font-size: 12px; text-decoration: line-through; opacity: 0.5; }
@@ -764,7 +720,9 @@
         { "type": "text", "id": "title", "label": "Group title", "default": "Choose an item" },
         { "type": "text", "id": "subtitle", "label": "Group subtitle" },
         { "type": "product_list", "id": "products", "label": "Products in this group", "limit": 24 },
-        { "type": "collection", "id": "collection", "label": "…or pull from a collection", "info": "Used only when no products are hand-picked above. Shows up to 48 of the collection's products." }
+        { "type": "collection", "id": "collection", "label": "…or pull from a collection", "info": "Used only when no products are hand-picked above. Shows up to 48 of the collection's products." },
+        { "type": "header", "content": "Variant-level curation (optional)" },
+        { "type": "textarea", "id": "variant_ids", "label": "Show only these variants", "info": "Paste variant IDs (one per line, or comma-separated) to show exactly those variants as separate cards (no dropdown). Their products must be added above (or in the collection). Find a variant ID in Admin → Products → the product → click a variant → the number at the end of the URL. Leave blank to show whole products with a dropdown." }
       ]
     }
   ],

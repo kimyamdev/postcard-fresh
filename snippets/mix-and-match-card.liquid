@@ -1,0 +1,110 @@
+{%- comment -%}
+  Renders one selectable Mix & Match card.
+
+  Accepts:
+  - product: {Object} Shopify product (required)
+  - variant: {Object} a specific variant (optional). When set, the card represents
+      exactly that variant — no dropdown — and the title includes the variant name.
+      When omitted, the card represents the whole product with a variant dropdown.
+{%- endcomment -%}
+
+{%- liquid
+  if variant
+    assign current = variant
+    assign show_dropdown = false
+    assign is_available = variant.available
+    assign sub_label = variant.title
+    if sub_label == 'Default Title'
+      assign sub_label = ''
+    endif
+    assign card_img = variant.featured_image | default: product.featured_image
+    assign display_title = product.title
+    if sub_label != blank
+      assign cart_title = product.title | append: ' — ' | append: sub_label
+    else
+      assign cart_title = product.title
+    endif
+  else
+    assign current = product.selected_or_first_available_variant
+    assign show_dropdown = false
+    if product.variants.size > 1
+      assign show_dropdown = true
+    endif
+    assign is_available = product.available
+    assign sub_label = ''
+    assign card_img = product.featured_image
+    assign display_title = product.title
+    assign cart_title = product.title
+  endif
+-%}
+
+<article
+  class="mm-card{% unless is_available %} mm-card--soldout{% endunless %}"
+  data-mm-card
+  data-product-id="{{ product.id }}"
+  data-product-title="{{ cart_title | escape }}"
+  data-product-url="{{ product.url }}"
+  data-variant-id="{{ current.id }}"
+  data-price="{{ current.price }}"
+  data-available="{% if is_available %}true{% else %}false{% endif %}"
+  {% unless is_available %}aria-disabled="true"{% endunless %}
+  tabindex="0"
+  role="button"
+  aria-pressed="false"
+>
+  <div class="mm-card__media">
+    {%- if card_img -%}
+      {{
+        card_img
+        | image_url: width: 360
+        | image_tag:
+          loading: 'lazy',
+          widths: '180, 360, 540',
+          sizes: '(min-width: 750px) 220px, 45vw',
+          alt: card_img.alt | default: product.title
+      }}
+    {%- else -%}
+      {{ 'product-apparel-1' | placeholder_svg_tag: 'mm-card__placeholder' }}
+    {%- endif -%}
+    <span class="mm-card__check" aria-hidden="true">
+      <svg viewBox="0 0 16 16" width="16" height="16" focusable="false"><path d="M13.5 4.5 6 12 2.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </span>
+    {%- unless is_available -%}
+      <span class="mm-card__soldout">Sold out</span>
+    {%- endunless -%}
+  </div>
+
+  <div class="mm-card__body">
+    <h3 class="mm-card__title">{{ display_title }}</h3>
+    {%- if sub_label != blank -%}
+      <p class="mm-card__variant-label">{{ sub_label }}</p>
+    {%- endif -%}
+    <p class="mm-card__price" data-mm-card-price>
+      <span class="mm-card__price-now" data-mm-price-now></span>
+      <span class="mm-card__price-was" data-mm-price-was hidden></span>
+    </p>
+
+    {%- if show_dropdown -%}
+      <label class="mm-card__variant">
+        <span class="visually-hidden">Choose an option for {{ product.title }}</span>
+        <select data-mm-variant-select>
+          {%- for v in product.variants -%}
+            {%- assign v_img = v.featured_image | default: product.featured_image -%}
+            <option
+              value="{{ v.id }}"
+              data-price="{{ v.price }}"
+              data-available="{% if v.available %}true{% else %}false{% endif %}"
+              data-image="{% if v_img %}{{ v_img | image_url: width: 600 }}{% endif %}"
+              {% if v == current %}selected{% endif %}
+              {% unless v.available %}disabled{% endunless %}
+            >
+              {{ v.title }}{% unless v.available %} — Sold out{% endunless %}
+            </option>
+          {%- endfor -%}
+        </select>
+      </label>
+    {%- endif -%}
+
+    <span class="mm-card__select" data-mm-select-label>Select</span>
+  </div>
+</article>
