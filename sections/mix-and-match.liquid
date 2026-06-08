@@ -550,17 +550,25 @@
       }
 
       // Render a single Special-Elite price per card: the after-discount price,
-      // with the original struck through when a percentage discount is set.
+      // with the original struck through.
+      //  - percentage: each item shown at (100 - value)%
+      //  - fixed: the whole-bundle amount is split evenly across the groups, so
+      //    each card is shown at price minus (amount / number of groups)
       updateCardPrice(card) {
         const cents = parseInt(card.dataset.price, 10) || 0;
         const nowEl = card.querySelector('[data-mm-price-now]');
         const wasEl = card.querySelector('[data-mm-price-was]');
         if (!nowEl) return;
-        const hasPct = this.discountType === 'percentage' && this.discountValue > 0;
-        const now = hasPct ? Math.round(cents * (100 - this.discountValue) / 100) : cents;
+        let now = cents;
+        if (this.discountType === 'percentage' && this.discountValue > 0) {
+          now = Math.round(cents * (100 - this.discountValue) / 100);
+        } else if (this.discountType === 'fixed' && this.discountValue > 0 && this.groupCount > 0) {
+          const perItemCents = Math.round(this.discountValue * 100 / this.groupCount);
+          now = Math.max(0, cents - perItemCents);
+        }
         nowEl.textContent = formatMoney(now, this.moneyFormat);
         if (wasEl) {
-          if (hasPct && now < cents) {
+          if (now < cents) {
             wasEl.textContent = formatMoney(cents, this.moneyFormat);
             wasEl.hidden = false;
           } else {
