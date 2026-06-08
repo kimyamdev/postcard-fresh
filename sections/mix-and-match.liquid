@@ -247,14 +247,6 @@
   .mm-card:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-stamp); }
   .mm-card:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 3px; }
   .mm-card.is-selected { box-shadow: var(--shadow-stamp); transform: translate(-2px, -2px); }
-  .mm-card.is-selected::before {
-    content: '';
-    position: absolute;
-    inset: 3px;
-    border: 1.5px solid var(--color-yellow);
-    pointer-events: none;
-    z-index: 1;
-  }
   .mm-card--soldout { opacity: 0.5; cursor: not-allowed; }
   .mm-card--soldout:hover { transform: none; box-shadow: none; }
 
