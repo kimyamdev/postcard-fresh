@@ -41,6 +41,7 @@
   assign world = product.metafields.postcard.world.value | default: product.metafields.custom.world.value
   assign world_name = ''
   assign world_color = '#E8C36A'
+  assign world_stamp = nil
   if world
     assign wn = world.name.value
     if wn != blank
@@ -50,6 +51,7 @@
     if wc != blank
       assign world_color = wc
     endif
+    assign world_stamp = world.world_stamp.value
   endif
   assign world_initials = ''
   if world_name != blank
@@ -92,7 +94,12 @@
     <span class="mm-card__check" aria-hidden="true">
       <svg viewBox="0 0 16 16" width="16" height="16" focusable="false"><path d="M13.5 4.5 6 12 2.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </span>
-    {%- if world_name != blank -%}
+    {%- if world_stamp != blank -%}
+      {%- assign ws_alt = world_name | append: ' stamp' | escape -%}
+      <span class="mm-card__world mm-card__world--img" title="{{ world_name | escape }}">
+        {{ world_stamp | image_url: width: 180 | image_tag: alt: ws_alt, loading: 'lazy', class: 'mm-card__world-img', widths: '90, 180, 270' }}
+      </span>
+    {%- elsif world_name != blank -%}
       <span class="mm-card__world" style="--world-c: {{ world_color }};" title="{{ world_name | escape }}" aria-label="World: {{ world_name | escape }}">{{ world_initials }}</span>
     {%- endif -%}
     {%- unless is_available -%}

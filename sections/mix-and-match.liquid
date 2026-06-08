@@ -306,6 +306,17 @@
     text-align: center;
     transform: rotate(-8deg);
   }
+  /* When the world has an uploaded stamp image, show it as-is (no circle/accent) */
+  .mm-card__world--img {
+    width: auto;
+    height: auto;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    transform: rotate(-6deg);
+  }
+  .mm-card__world-img { display: block; width: 56px; height: auto; }
   .mm-card__soldout {
     position: absolute;
     inset: auto 0 0 0;
