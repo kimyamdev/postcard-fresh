@@ -42,6 +42,7 @@
   assign world_name = ''
   assign world_color = '#E8C36A'
   assign world_stamp = blank
+  assign world_family = ''
   assign world_handle = ''
   if world
     assign wn = world.name.value | default: world.name
@@ -55,6 +56,10 @@
     assign wc = world.accent_color.value | default: world.accent_color
     if wc != blank
       assign world_color = wc
+    endif
+    assign wf = world.family.value | default: world.family
+    if wf != blank
+      assign world_family = wf
     endif
     assign world_stamp = world.world_stamp.value | default: world.world_stamp | default: world.stamp_image.value | default: world.stamp_image | default: world.stamp.value | default: world.stamp
   endif
@@ -70,9 +75,14 @@
       if wc != blank
         assign world_color = wc
       endif
+      assign wf = world_lookup.family.value | default: world_lookup.family
+      if wf != blank
+        assign world_family = wf
+      endif
       assign world_stamp = world_lookup.world_stamp.value | default: world_lookup.world_stamp | default: world_lookup.stamp_image.value | default: world_lookup.stamp_image | default: world_lookup.stamp.value | default: world_lookup.stamp | default: world_stamp
     endif
   endif
+  assign world_family = world_family | default: product.metafields.postcard.family.value | default: product.metafields.custom.family.value | default: product.metafields.custom.scent_family.value
   assign stamp_mod = product.id | modulo: 7
   assign stamp_rot = -4
   case stamp_mod
@@ -108,6 +118,7 @@
   data-variant-id="{{ current.id }}"
   data-world-name="{{ world_name | escape }}"
   data-world-stamp="{% if world_stamp != blank %}true{% else %}false{% endif %}"
+  data-world-family="{{ world_family | escape }}"
   data-price="{{ current.price }}"
   data-available="{% if is_available %}true{% else %}false{% endif %}"
   {% unless is_available %}aria-disabled="true"{% endunless %}
@@ -128,6 +139,9 @@
       }}
     {%- else -%}
       {{ 'product-apparel-1' | placeholder_svg_tag: 'mm-card__placeholder' }}
+    {%- endif -%}
+    {%- if world_family != blank -%}
+      <span class="mm-card__family" style="--world-c: {{ world_color }};" title="{{ world_family | escape }}">{{ world_family }}</span>
     {%- endif -%}
     <span class="mm-card__check" aria-hidden="true">
       <svg viewBox="0 0 16 16" width="16" height="16" focusable="false"><path d="M13.5 4.5 6 12 2.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
