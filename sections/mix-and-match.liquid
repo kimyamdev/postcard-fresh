@@ -115,6 +115,11 @@
       <button type="button" class="mm-summary__toggle" data-mm-summary-toggle aria-expanded="true">
         <span data-mm-summary-toggle-text>Minimize</span>
       </button>
+      <div class="mm-summary__progress" aria-label="Selected groups">
+        {%- for block in groups -%}
+          <span class="mm-summary__dot" data-mm-summary-dot="{{ forloop.index0 }}" aria-label="{{ block.settings.title | default: 'Group' | escape }} not selected"></span>
+        {%- endfor -%}
+      </div>
       <div class="mm-summary__slots" data-mm-slots>
         {%- for block in groups -%}
           <div class="mm-summary__slot" data-mm-slot="{{ forloop.index0 }}">
@@ -422,9 +427,9 @@
     justify-content: center;
     min-height: 28px;
     padding: 4px 10px;
-    border: 1.5px solid var(--color-bg);
-    background: transparent;
-    color: var(--color-bg);
+    border: 1.5px solid var(--color-ink);
+    background: var(--color-bg-card);
+    color: var(--color-ink);
     font-family: var(--font-display);
     font-size: 10px;
     line-height: 1;
@@ -432,7 +437,7 @@
     text-transform: uppercase;
     cursor: pointer;
   }
-  .mm-summary__toggle:hover { background: var(--color-bg); color: var(--color-ink); }
+  .mm-summary__toggle:hover { background: var(--color-ink); color: var(--color-bg); }
   .mm-summary__tag {
     flex-basis: 100%;
     display: inline-flex;
@@ -446,9 +451,25 @@
     padding: 4px 12px;
     background: var(--color-ink);
     color: var(--color-bg);
-    padding-right: 104px;
+    padding-right: 12px;
   }
   .mm-summary__tag::before { content: '✦'; color: var(--color-yellow); }
+  .mm-summary__progress {
+    display: none;
+    align-items: center;
+    gap: 6px;
+  }
+  .mm-summary__dot {
+    width: 18px;
+    height: 18px;
+    display: block;
+    border: 1.5px solid var(--color-ink);
+    background: var(--color-bg);
+    box-shadow: 1px 1px 0 var(--color-ink);
+  }
+  .mm-summary__dot.is-filled {
+    background: #6E8B5C;
+  }
   .mm-summary__slots { display: flex; flex-wrap: wrap; gap: 18px; flex: 1 1 auto; }
   .mm-summary__slot { display: flex; flex-direction: row; align-items: center; min-width: 120px; gap: 10px; }
   .mm-summary__slot-thumb {
@@ -521,9 +542,14 @@
     flex-basis: auto;
     padding-right: 12px;
   }
+  .mm-summary.is-collapsed .mm-summary__progress {
+    display: inline-flex;
+    order: 2;
+    flex: 0 0 auto;
+  }
   .mm-summary.is-collapsed .mm-summary__toggle {
     position: static;
-    order: 3;
+    order: 4;
     flex: 0 0 auto;
     border-color: var(--color-ink);
     color: var(--color-ink);
@@ -535,7 +561,7 @@
     display: none;
   }
   .mm-summary.is-collapsed .mm-summary__total {
-    order: 2;
+    order: 3;
     flex: 0 0 auto;
   }
   .mm-summary.is-collapsed .mm-summary__total-label,
@@ -547,20 +573,21 @@
   @media (max-width: 749px) {
     .mm-summary { flex-direction: column; align-items: stretch; text-align: left; bottom: 0; padding: 16px; }
     .mm-summary__toggle { top: 16px; right: 16px; }
-    .mm-summary__tag { padding-right: 98px; }
+    .mm-summary__tag { padding-right: 12px; }
     .mm-summary__slots { gap: 12px; }
     .mm-summary__total { text-align: left; }
     .mm-summary__save { align-self: flex-start; }
     .mm-summary__cta { width: 100%; justify-content: center; }
     .mm-summary.is-collapsed {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-columns: minmax(0, 1fr) auto auto;
       gap: 8px 12px;
       padding: 10px 12px;
     }
     .mm-summary.is-collapsed .mm-summary__tag { grid-column: 1; grid-row: 1; }
     .mm-summary.is-collapsed .mm-summary__total { grid-column: 1; grid-row: 2; }
-    .mm-summary.is-collapsed .mm-summary__toggle { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+    .mm-summary.is-collapsed .mm-summary__progress { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+    .mm-summary.is-collapsed .mm-summary__toggle { grid-column: 3; grid-row: 1 / span 2; align-self: center; }
   }
 </style>
 
@@ -779,15 +806,27 @@
           const gi = slot.dataset.mmSlot;
           const valueEl = slot.querySelector('[data-mm-slot-value]');
           const thumbEl = slot.querySelector('[data-mm-slot-thumb]');
+          const dotEl = this.querySelector('[data-mm-summary-dot="' + gi + '"]');
           const sel = this.selections[gi];
           if (sel) {
             valueEl.textContent = sel.title;
             if (thumbEl) thumbEl.innerHTML = this.slotThumbHTML(sel);
             slot.classList.add('is-filled');
+            if (dotEl) {
+              dotEl.classList.add('is-filled');
+              var selectedLabel = slot.querySelector('[data-mm-slot-value]');
+              dotEl.setAttribute('aria-label', ((selectedLabel && selectedLabel.textContent) || 'Group') + ' selected');
+            }
           } else {
             valueEl.textContent = '—';
             if (thumbEl) thumbEl.innerHTML = '';
             slot.classList.remove('is-filled');
+            if (dotEl) {
+              dotEl.classList.remove('is-filled');
+              var labelEl = slot.querySelector('.mm-summary__slot-label');
+              const label = (labelEl && labelEl.textContent) || 'Group';
+              dotEl.setAttribute('aria-label', label + ' not selected');
+            }
           }
         });
 
