@@ -252,6 +252,7 @@
 
   .mm-card__media {
     position: relative;
+    isolation: isolate;
     aspect-ratio: 1 / 1;
     flex: 0 0 auto;
     min-height: 0;
@@ -261,9 +262,10 @@
   }
   /* Absolutely positioned so the image can't dictate the frame height —
      aspect-ratio alone controls it, keeping every frame an equal square. */
-  .mm-card__media img, .mm-card__placeholder {
+  .mm-card__media > img, .mm-card__placeholder {
     position: absolute;
     inset: 0;
+    z-index: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -273,7 +275,7 @@
     position: absolute;
     top: 10px;
     left: 10px;
-    z-index: 2;
+    z-index: 4;
     width: 28px;
     height: 28px;
     display: grid;
@@ -290,9 +292,9 @@
   /* World stamp — small postmark seal, top-right of the image */
   .mm-card__world {
     position: absolute;
-    top: 9px;
-    right: 9px;
-    z-index: 2;
+    top: 10px;
+    right: 10px;
+    z-index: 5 !important;
     width: 42px;
     height: 42px;
     display: grid;
@@ -307,19 +309,32 @@
     letter-spacing: 0.04em;
     line-height: 1;
     text-align: center;
-    transform: rotate(-8deg);
+    transform: rotate(var(--stamp-rot, -8deg));
   }
   /* When the world has an uploaded stamp image, show it as-is (no circle/accent) */
   .mm-card__world--img {
-    width: auto;
-    height: auto;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
-    transform: rotate(-6deg);
+    display: block !important;
+    width: 58px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    transform: rotate(var(--stamp-rot, -6deg));
+    transform-origin: 55% 45%;
+    pointer-events: none;
   }
-  .mm-card__world-img { display: block; width: 56px; height: auto; }
+  .mm-card__world-img {
+    display: block !important;
+    position: static !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    max-width: none !important;
+    object-fit: contain !important;
+    filter: drop-shadow(1px 1px 0 rgba(33, 32, 32, 0.25));
+  }
   .mm-card__soldout {
     position: absolute;
     inset: auto 0 0 0;
@@ -574,7 +589,7 @@
         card.dataset.price = opt.dataset.price || card.dataset.price;
         this.updateCardPrice(card);
         // Swap the card image to the chosen variant's image, if it has one.
-        const img = card.querySelector('.mm-card__media img');
+        const img = card.querySelector('.mm-card__media > img');
         if (img && opt.dataset.image) {
           img.src = opt.dataset.image;
           img.removeAttribute('srcset');
@@ -619,7 +634,7 @@
 
       // Grab the card's current main image + world stamp for the summary thumbnail.
       captureMedia(card) {
-        const img = card.querySelector('.mm-card__media img');
+        const img = card.querySelector('.mm-card__media > img');
         const stampImgEl = card.querySelector('.mm-card__world-img');
         const seal = card.querySelector('.mm-card__world');
         return {

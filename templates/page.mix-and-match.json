@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "mix_and_match": {
@@ -6,25 +15,78 @@
         "group_1": {
           "type": "group",
           "settings": {
-            "title": "Choose your first item"
+            "title": "Choose your mini shampoo",
+            "subtitle": "Refillable, fresh, signature scents",
+            "products": [
+              "bath-house-mini-shampoo",
+              "coconut-beach-mini-shampoo",
+              "hotel-lobby-mini-shampoo",
+              "icy-peaks-cooling-shampoo-copy",
+              "moon-bloom-mini-shampoo",
+              "wild-flowers-mini-shampoo-copy",
+              "woodland-retreat-mini-shampoo"
+            ],
+            "collection": "anywhere-fragrance-signature",
+            "variant_ids": ""
           }
         },
         "group_2": {
           "type": "group",
           "settings": {
-            "title": "Choose your second item"
+            "title": "Choose your mini conditioner",
+            "subtitle": "Refillable, fresh, signature scents",
+            "products": [
+              "bath-house-mini-conditioner",
+              "coconut-beach-mini-conditioner",
+              "hotel-lobby-mini-conditioner",
+              "icy-peaks-mini-conditioner",
+              "wild-flowers-mini-conditioner",
+              "woodland-retreat-mini-conditioner",
+              "moon-bloom-mini-conditioner"
+            ],
+            "collection": "deodorant-spray",
+            "variant_ids": ""
           }
         },
         "group_3": {
           "type": "group",
           "settings": {
-            "title": "Choose your third item"
+            "title": "Choose your mini hand & body wash",
+            "subtitle": "Refillable, fresh, signature scents",
+            "products": [
+              "bath-house-mini-hand-body-wash",
+              "coconut-beach-mini-hand-body-wash",
+              "hotel-lobby-mini-hand-body-wash",
+              "icy-peaks-cooling-mini-hand-body-wash",
+              "moon-bloom-mini-hand-body-wash",
+              "wild-flowers-mini-hand-body-wash",
+              "woodland-retreat-mini-hand-body-wash"
+            ],
+            "collection": "powder-washes-signature",
+            "variant_ids": ""
           }
         }
       },
-      "block_order": ["group_1", "group_2", "group_3"],
-      "settings": {}
+      "block_order": [
+        "group_1",
+        "group_2",
+        "group_3"
+      ],
+      "settings": {
+        "eyebrow": "Build your set",
+        "heading": "Mix and Match",
+        "intro": "<p>Pick a mini shampoo, conditioner and hand & body wash to enjoy 17% off.</p>",
+        "cta_label": "Add bundle to cart",
+        "discount_type": "fixed",
+        "discount_value": "6",
+        "bundle_label": "Mix & Match",
+        "color_scheme": "scheme-1",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     }
   },
-  "order": ["mix_and_match"]
+  "order": [
+    "mix_and_match"
+  ]
 }

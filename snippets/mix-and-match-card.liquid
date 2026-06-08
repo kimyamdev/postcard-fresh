@@ -37,22 +37,58 @@
     assign cart_title = product.title
   endif
 
-  # World stamp — accent-coloured postmark seal when the product links a world
-  assign world = product.metafields.postcard.world.value | default: product.metafields.custom.world.value
+  # World stamp — image from the linked World metaobject when available.
+  assign world = product.metafields.postcard.world.value | default: product.metafields.product.world.value | default: product.metafields.custom.world.value
   assign world_name = ''
   assign world_color = '#E8C36A'
-  assign world_stamp = nil
+  assign world_stamp = blank
+  assign world_handle = ''
   if world
-    assign wn = world.name.value
+    assign wn = world.name.value | default: world.name
     if wn != blank
       assign world_name = wn
     endif
-    assign wc = world.accent_color.value
+    assign wh = world.slug.value | default: world.handle
+    if wh != blank
+      assign world_handle = wh
+    endif
+    assign wc = world.accent_color.value | default: world.accent_color
     if wc != blank
       assign world_color = wc
     endif
-    assign world_stamp = world.world_stamp.value
+    assign world_stamp = world.world_stamp.value | default: world.world_stamp | default: world.stamp_image.value | default: world.stamp_image | default: world.stamp.value | default: world.stamp
   endif
+
+  if world_name == blank or world_stamp == blank
+    assign world_text = product.metafields.postcard.world | default: product.metafields.product.world | default: product.metafields.custom.world
+    assign world_key = world_handle | default: world_text.value | default: world_text
+    assign world_key_handle = world_key | handle
+    assign world_lookup = shop.metaobjects.world[world_key_handle]
+    if world_lookup
+      assign world_name = world_lookup.name.value | default: world_lookup.name | default: world_name
+      assign wc = world_lookup.accent_color.value | default: world_lookup.accent_color
+      if wc != blank
+        assign world_color = wc
+      endif
+      assign world_stamp = world_lookup.world_stamp.value | default: world_lookup.world_stamp | default: world_lookup.stamp_image.value | default: world_lookup.stamp_image | default: world_lookup.stamp.value | default: world_lookup.stamp | default: world_stamp
+    endif
+  endif
+  assign stamp_mod = product.id | modulo: 7
+  assign stamp_rot = -4
+  case stamp_mod
+    when 0
+      assign stamp_rot = -7
+    when 1
+      assign stamp_rot = 5
+    when 2
+      assign stamp_rot = -3
+    when 3
+      assign stamp_rot = 7
+    when 4
+      assign stamp_rot = -5
+    when 5
+      assign stamp_rot = 3
+  endcase
   assign world_initials = ''
   if world_name != blank
     assign world_words = world_name | split: ' '
@@ -70,6 +106,8 @@
   data-product-title="{{ cart_title | escape }}"
   data-product-url="{{ product.url }}"
   data-variant-id="{{ current.id }}"
+  data-world-name="{{ world_name | escape }}"
+  data-world-stamp="{% if world_stamp != blank %}true{% else %}false{% endif %}"
   data-price="{{ current.price }}"
   data-available="{% if is_available %}true{% else %}false{% endif %}"
   {% unless is_available %}aria-disabled="true"{% endunless %}
@@ -96,7 +134,7 @@
     </span>
     {%- if world_stamp != blank -%}
       {%- assign ws_alt = world_name | append: ' stamp' | escape -%}
-      <span class="mm-card__world mm-card__world--img" title="{{ world_name | escape }}">
+      <span class="mm-card__world mm-card__world--img" title="{{ world_name | escape }}" style="--stamp-rot: {{ stamp_rot }}deg;">
         {{ world_stamp | image_url: width: 180 | image_tag: alt: ws_alt, loading: 'lazy', class: 'mm-card__world-img', widths: '90, 180, 270' }}
       </span>
     {%- elsif world_name != blank -%}
