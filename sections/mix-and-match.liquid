@@ -115,8 +115,11 @@
       <div class="mm-summary__slots" data-mm-slots>
         {%- for block in groups -%}
           <div class="mm-summary__slot" data-mm-slot="{{ forloop.index0 }}">
-            <span class="mm-summary__slot-label">{{ block.settings.title | default: 'Item' }}</span>
-            <span class="mm-summary__slot-value" data-mm-slot-value>—</span>
+            <span class="mm-summary__slot-thumb" data-mm-slot-thumb aria-hidden="true"></span>
+            <span class="mm-summary__slot-text">
+              <span class="mm-summary__slot-label">{{ block.settings.title | default: 'Item' }}</span>
+              <span class="mm-summary__slot-value" data-mm-slot-value>—</span>
+            </span>
           </div>
         {%- endfor -%}
       </div>
@@ -408,7 +411,43 @@
   }
   .mm-summary__tag::before { content: '✦'; color: var(--color-yellow); }
   .mm-summary__slots { display: flex; flex-wrap: wrap; gap: 18px; flex: 1 1 auto; }
-  .mm-summary__slot { display: flex; flex-direction: column; min-width: 120px; gap: 3px; }
+  .mm-summary__slot { display: flex; flex-direction: row; align-items: center; min-width: 120px; gap: 10px; }
+  .mm-summary__slot-thumb {
+    position: relative;
+    flex: 0 0 auto;
+    width: 42px;
+    height: 42px;
+    border: 1.5px solid var(--color-ink);
+    background: var(--color-bg-warm);
+  }
+  .mm-summary__slot-thumb:empty { display: none; }
+  .mm-summary__thumb-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .mm-summary__thumb-stamp {
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    width: 24px;
+    height: auto;
+    transform: rotate(-8deg);
+  }
+  .mm-summary__thumb-seal {
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    width: 20px;
+    height: 20px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid var(--color-ink);
+    background: var(--world-c, #E8C36A);
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    font-size: 8px;
+    line-height: 1;
+    transform: rotate(-8deg);
+  }
+  .mm-summary__slot-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
   .mm-summary__slot-label { font-family: var(--font-display); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.55; }
   .mm-summary__slot-value { font-family: var(--font-display); font-size: 14px; opacity: 0.4; }
   .mm-summary__slot.is-filled .mm-summary__slot-value { opacity: 1; }
@@ -545,6 +584,7 @@
         if (this.selections[gi] && card.classList.contains('is-selected')) {
           this.selections[gi].variantId = opt.value;
           this.selections[gi].price = parseInt(card.dataset.price, 10);
+          Object.assign(this.selections[gi], this.captureMedia(card));
           this.render();
         }
       }
@@ -577,6 +617,31 @@
         }
       }
 
+      // Grab the card's current main image + world stamp for the summary thumbnail.
+      captureMedia(card) {
+        const img = card.querySelector('.mm-card__media img');
+        const stampImgEl = card.querySelector('.mm-card__world-img');
+        const seal = card.querySelector('.mm-card__world');
+        return {
+          image: img ? (img.currentSrc || img.src) : '',
+          stampImg: stampImgEl ? (stampImgEl.currentSrc || stampImgEl.src) : '',
+          stampInitials: stampImgEl ? '' : (seal ? (seal.textContent || '').trim() : ''),
+          stampColor: seal ? (seal.style.getPropertyValue('--world-c') || '#E8C36A') : '#E8C36A',
+        };
+      }
+
+      slotThumbHTML(sel) {
+        if (!sel.image && !sel.stampImg && !sel.stampInitials) return '';
+        const img = sel.image ? '<img class="mm-summary__thumb-img" src="' + sel.image + '" alt="" loading="lazy">' : '';
+        let stamp = '';
+        if (sel.stampImg) {
+          stamp = '<img class="mm-summary__thumb-stamp" src="' + sel.stampImg + '" alt="" loading="lazy">';
+        } else if (sel.stampInitials) {
+          stamp = '<span class="mm-summary__thumb-seal" style="--world-c:' + (sel.stampColor || '#E8C36A') + '">' + sel.stampInitials + '</span>';
+        }
+        return img + stamp;
+      }
+
       selectCard(group, card, gi) {
         if (card.dataset.available !== 'true') return;
         group.querySelectorAll('[data-mm-card]').forEach((c) => {
@@ -586,12 +651,12 @@
         card.classList.add('is-selected');
         card.setAttribute('aria-pressed', 'true');
 
-        this.selections[gi] = {
+        this.selections[gi] = Object.assign({
           variantId: card.dataset.variantId,
           price: parseInt(card.dataset.price, 10) || 0,
           title: card.dataset.productTitle || '',
           groupTitle: group.dataset.mmGroupTitle || '',
-        };
+        }, this.captureMedia(card));
 
         const status = group.querySelector('[data-mm-group-status]');
         if (status) status.textContent = card.dataset.productTitle || 'Selected';
@@ -605,12 +670,15 @@
         this.querySelectorAll('[data-mm-slot]').forEach((slot) => {
           const gi = slot.dataset.mmSlot;
           const valueEl = slot.querySelector('[data-mm-slot-value]');
+          const thumbEl = slot.querySelector('[data-mm-slot-thumb]');
           const sel = this.selections[gi];
           if (sel) {
             valueEl.textContent = sel.title;
+            if (thumbEl) thumbEl.innerHTML = this.slotThumbHTML(sel);
             slot.classList.add('is-filled');
           } else {
             valueEl.textContent = '—';
+            if (thumbEl) thumbEl.innerHTML = '';
             slot.classList.remove('is-filled');
           }
         });
