@@ -4,6 +4,15 @@
   assign og_type = 'website'
   assign og_description = page_description | default: shop.description | default: shop.name
 
+  comment
+    Bundle-only products are sold only through the Mix & Match page, so keep
+    search engines from indexing their standalone product pages.
+  endcomment
+  assign bundle_only = false
+  if request.page_type == 'product' and product.tags contains 'bundle-only'
+    assign bundle_only = true
+  endif
+
   if request.page_type == 'product'
     assign og_type = 'product'
   elsif request.page_type == 'article'
@@ -12,6 +21,10 @@
     assign og_url = request.origin
   endif
 %}
+
+{%- if bundle_only -%}
+  <meta name="robots" content="noindex, nofollow">
+{%- endif -%}
 
 <meta property="og:site_name" content="{{ shop.name }}">
 <meta property="og:url" content="{{ og_url }}">

@@ -130,6 +130,8 @@
               aria-labelledby="predictive-search-products"
             >
               {%- for product in predictive_search.resources.products -%}
+                {%- comment -%} Hide bundle-only products from predictive (type-ahead) search {%- endcomment -%}
+                {%- if product.tags contains 'bundle-only' -%}{%- continue -%}{%- endif -%}
                 <li
                   id="predictive-search-option-product-{{ forloop.index }}"
                   class="predictive-search__list-item"

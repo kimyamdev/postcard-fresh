@@ -35,7 +35,9 @@
     for r in search.results
       case r.object_type
         when 'product'
-          assign products_total = products_total | plus: 1
+          unless r.tags contains 'bundle-only'
+            assign products_total = products_total | plus: 1
+          endunless
         when 'page'
           assign pages_total = pages_total | plus: 1
         when 'article'
@@ -123,6 +125,8 @@
           <div class="pc-search__products">
             {%- for r in search.results -%}
               {%- if r.object_type != 'product' -%}{%- continue -%}{%- endif -%}
+              {%- comment -%} Hide bundle-only products from search results {%- endcomment -%}
+              {%- if r.tags contains 'bundle-only' -%}{%- continue -%}{%- endif -%}
               {%- assign p_world = r.metafields.postcard.world.value -%}
               {%- assign p_world_color = p_world.accent_color.value | default: '#E8C36A' -%}
               {%- assign p_world_name = p_world.name.value | default: '' -%}
