@@ -36,6 +36,29 @@
     assign display_title = product.title
     assign cart_title = product.title
   endif
+
+  # World stamp — accent-coloured postmark seal when the product links a world
+  assign world = product.metafields.postcard.world.value | default: product.metafields.custom.world.value
+  assign world_name = ''
+  assign world_color = '#E8C36A'
+  if world
+    assign wn = world.name.value
+    if wn != blank
+      assign world_name = wn
+    endif
+    assign wc = world.accent_color.value
+    if wc != blank
+      assign world_color = wc
+    endif
+  endif
+  assign world_initials = ''
+  if world_name != blank
+    assign world_words = world_name | split: ' '
+    for ww in world_words limit: 2
+      assign letter = ww | slice: 0, 1 | upcase
+      assign world_initials = world_initials | append: letter
+    endfor
+  endif
 -%}
 
 <article
@@ -69,6 +92,9 @@
     <span class="mm-card__check" aria-hidden="true">
       <svg viewBox="0 0 16 16" width="16" height="16" focusable="false"><path d="M13.5 4.5 6 12 2.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </span>
+    {%- if world_name != blank -%}
+      <span class="mm-card__world" style="--world-c: {{ world_color }};" title="{{ world_name | escape }}" aria-label="World: {{ world_name | escape }}">{{ world_initials }}</span>
+    {%- endif -%}
     {%- unless is_available -%}
       <span class="mm-card__soldout">Sold out</span>
     {%- endunless -%}
