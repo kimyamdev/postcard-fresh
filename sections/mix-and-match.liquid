@@ -112,6 +112,9 @@
 
     <div class="mm-summary" data-mm-summary>
       <span class="mm-summary__tag">{{ bundle_label }} bundle</span>
+      <button type="button" class="mm-summary__toggle" data-mm-summary-toggle aria-expanded="true">
+        <span data-mm-summary-toggle-text>Minimize</span>
+      </button>
       <div class="mm-summary__slots" data-mm-slots>
         {%- for block in groups -%}
           <div class="mm-summary__slot" data-mm-slot="{{ forloop.index0 }}">
@@ -410,6 +413,26 @@
     border: 1.5px solid var(--color-ink);
     box-shadow: var(--shadow-stamp-lg);
   }
+  .mm-summary__toggle {
+    position: absolute;
+    top: 18px;
+    right: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 28px;
+    padding: 4px 10px;
+    border: 1.5px solid var(--color-bg);
+    background: transparent;
+    color: var(--color-bg);
+    font-family: var(--font-display);
+    font-size: 10px;
+    line-height: 1;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .mm-summary__toggle:hover { background: var(--color-bg); color: var(--color-ink); }
   .mm-summary__tag {
     flex-basis: 100%;
     display: inline-flex;
@@ -423,6 +446,7 @@
     padding: 4px 12px;
     background: var(--color-ink);
     color: var(--color-bg);
+    padding-right: 104px;
   }
   .mm-summary__tag::before { content: '✦'; color: var(--color-yellow); }
   .mm-summary__slots { display: flex; flex-wrap: wrap; gap: 18px; flex: 1 1 auto; }
@@ -485,11 +509,58 @@
   .mm-summary__cta[disabled]:hover { transform: none; box-shadow: none; }
   .mm-summary__error { flex-basis: 100%; margin: 0; font-family: var(--font-body); color: #B3261E; font-size: 13px; }
 
+  .mm-summary.is-collapsed {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+  }
+  .mm-summary.is-collapsed .mm-summary__tag {
+    flex: 1 1 auto;
+    flex-basis: auto;
+    padding-right: 12px;
+  }
+  .mm-summary.is-collapsed .mm-summary__toggle {
+    position: static;
+    order: 3;
+    flex: 0 0 auto;
+    border-color: var(--color-ink);
+    color: var(--color-ink);
+  }
+  .mm-summary.is-collapsed .mm-summary__toggle:hover { background: var(--color-ink); color: var(--color-bg); }
+  .mm-summary.is-collapsed .mm-summary__slots,
+  .mm-summary.is-collapsed .mm-summary__cta,
+  .mm-summary.is-collapsed .mm-summary__error {
+    display: none;
+  }
+  .mm-summary.is-collapsed .mm-summary__total {
+    order: 2;
+    flex: 0 0 auto;
+  }
+  .mm-summary.is-collapsed .mm-summary__total-label,
+  .mm-summary.is-collapsed .mm-summary__save {
+    display: none;
+  }
+  .mm-summary.is-collapsed .mm-summary__total-value { font-size: 22px; }
+
   @media (max-width: 749px) {
-    .mm-summary { flex-direction: column; align-items: stretch; text-align: left; bottom: 0; }
+    .mm-summary { flex-direction: column; align-items: stretch; text-align: left; bottom: 0; padding: 16px; }
+    .mm-summary__toggle { top: 16px; right: 16px; }
+    .mm-summary__tag { padding-right: 98px; }
+    .mm-summary__slots { gap: 12px; }
     .mm-summary__total { text-align: left; }
     .mm-summary__save { align-self: flex-start; }
     .mm-summary__cta { width: 100%; justify-content: center; }
+    .mm-summary.is-collapsed {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px 12px;
+      padding: 10px 12px;
+    }
+    .mm-summary.is-collapsed .mm-summary__tag { grid-column: 1; grid-row: 1; }
+    .mm-summary.is-collapsed .mm-summary__total { grid-column: 1; grid-row: 2; }
+    .mm-summary.is-collapsed .mm-summary__toggle { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
   }
 </style>
 
@@ -526,12 +597,34 @@
         this.saveEl = this.querySelector('[data-mm-save]');
         this.errorEl = this.querySelector('[data-mm-error]');
         this.ctaText = this.querySelector('[data-mm-cta-text]');
+        this.summaryEl = this.querySelector('[data-mm-summary]');
+        this.summaryToggle = this.querySelector('[data-mm-summary-toggle]');
+        this.summaryToggleText = this.querySelector('[data-mm-summary-toggle-text]');
         this.defaultCta = this.ctaText ? this.ctaText.textContent : 'Add bundle to cart';
 
+        this.bindSummaryToggle();
         this.bindCards();
         this.bindCarousels();
         this.querySelectorAll('[data-mm-card]').forEach((card) => this.updateCardPrice(card));
         this.addBtn.addEventListener('click', () => this.addBundle());
+      }
+
+      bindSummaryToggle() {
+        if (!this.summaryEl || !this.summaryToggle) return;
+        const mobile = window.matchMedia && window.matchMedia('(max-width: 749px)').matches;
+        this.setSummaryCollapsed(mobile);
+        this.summaryToggle.addEventListener('click', () => {
+          this.setSummaryCollapsed(!this.summaryEl.classList.contains('is-collapsed'));
+        });
+      }
+
+      setSummaryCollapsed(collapsed) {
+        if (!this.summaryEl || !this.summaryToggle) return;
+        this.summaryEl.classList.toggle('is-collapsed', collapsed);
+        this.summaryToggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+        if (this.summaryToggleText) {
+          this.summaryToggleText.textContent = collapsed ? 'Expand' : 'Minimize';
+        }
       }
 
       bindCarousels() {
