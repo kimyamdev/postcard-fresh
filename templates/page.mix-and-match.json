@@ -15,7 +15,7 @@
         "group_1": {
           "type": "group",
           "settings": {
-            "title": "Choose your mini shampoo",
+            "title": "Pick your mini 40 ml shampoo",
             "subtitle": "Refillable, fresh, signature scents",
             "products": [
               "bath-house-mini-shampoo",
@@ -33,7 +33,7 @@
         "group_2": {
           "type": "group",
           "settings": {
-            "title": "Choose your mini conditioner",
+            "title": "Pick your mini 40 ml conditioner",
             "subtitle": "Refillable, fresh, signature scents",
             "products": [
               "bath-house-mini-conditioner",
@@ -51,7 +51,7 @@
         "group_3": {
           "type": "group",
           "settings": {
-            "title": "Choose your mini hand & body wash",
+            "title": "Pick your mini 40 ml hand & body wash",
             "subtitle": "Refillable, fresh, signature scents",
             "products": [
               "bath-house-mini-hand-body-wash",
@@ -75,7 +75,7 @@
       "settings": {
         "eyebrow": "Build your set",
         "heading": "TRAVEL SHOWER ESSENTIALS",
-        "intro": "<p>Pick a mini shampoo, conditioner and hand & body wash to enjoy 17% off.</p>",
+        "intro": "<p>Pick a mini shampoo, conditioner and hand & body wash to enjoy $6 off your set.</p>",
         "cta_label": "Add bundle to cart",
         "discount_type": "fixed",
         "discount_value": "6",
