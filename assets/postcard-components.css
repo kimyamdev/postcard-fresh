@@ -4027,7 +4027,10 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 /* Drawer shell */
 .pc-mn {
   position: fixed;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   z-index: 2147483639;
   pointer-events: none;
   visibility: hidden;
@@ -4038,7 +4041,11 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 
 .pc-mn__overlay {
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
   background: rgba(33, 32, 32, 0.45);
   opacity: 0;
   transition: opacity 0.25s ease;

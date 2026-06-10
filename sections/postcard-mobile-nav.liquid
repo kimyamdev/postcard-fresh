@@ -78,6 +78,7 @@
   }"
   @pc-mobile-nav:open.window="open = true; view = 'root'"
   @keydown.escape.window="if (open) close()"
+  @click.self="close()"
   :class="{ 'pc-mn--open': open }"
   x-cloak
 >
