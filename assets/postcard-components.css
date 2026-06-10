@@ -4034,8 +4034,10 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   z-index: 2147483639;
   pointer-events: none;
   visibility: hidden;
+  /* Keep the drawer visible while it slides/fades out, then hide it. */
+  transition: visibility 0s linear 0.34s;
 }
-.pc-mn--open { pointer-events: auto; visibility: visible; }
+.pc-mn--open { pointer-events: auto; visibility: visible; transition: visibility 0s linear 0s; }
 .pc-mn[x-cloak] { display: none; }
 .pc-mn--open[x-cloak] { display: block; }
 
@@ -4048,7 +4050,7 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   display: block;
   background: rgba(33, 32, 32, 0.45);
   opacity: 0;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
 .pc-mn--open .pc-mn__overlay { opacity: 1; }
@@ -4064,7 +4066,8 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   display: flex;
   flex-direction: column;
   transform: translateX(-100%);
-  transition: transform 0.3s ease;
+  transition: transform 0.34s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
 }
 .pc-mn--open .pc-mn__panel { transform: translateX(0); }
 
