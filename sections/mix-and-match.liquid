@@ -131,7 +131,7 @@
           </div>
         {%- endfor -%}
       </div>
-      <div class="mm-summary__total">
+      <div class="mm-summary__total is-hidden" data-mm-total-block>
         <span class="mm-summary__total-label">Bundle total</span>
         <span class="mm-summary__total-line">
           <span class="mm-summary__total-was" data-mm-was hidden></span>
@@ -529,6 +529,7 @@
   .mm-summary__slot-value { font-family: var(--font-display); font-size: 14px; opacity: 0.4; }
   .mm-summary__slot.is-filled .mm-summary__slot-value { opacity: 1; }
   .mm-summary__total { display: flex; flex-direction: column; text-align: right; gap: 2px; }
+  .mm-summary__total.is-hidden { display: none; }
   .mm-summary__total-label { font-family: var(--font-display); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.55; }
   .mm-summary__total-line { display: inline-flex; align-items: baseline; gap: 8px; justify-content: flex-end; }
   .mm-summary__total-was { font-family: var(--font-display); font-size: 14px; text-decoration: line-through; opacity: 0.5; }
@@ -637,6 +638,7 @@
         this.selections = {}; // groupIndex -> {variantId, price, title}
         this.addBtn = this.querySelector('[data-mm-add]');
         this.totalEl = this.querySelector('[data-mm-total]');
+        this.totalBlock = this.querySelector('[data-mm-total-block]');
         this.wasEl = this.querySelector('[data-mm-was]');
         this.saveEl = this.querySelector('[data-mm-save]');
         this.errorEl = this.querySelector('[data-mm-error]');
@@ -849,6 +851,9 @@
 
         const chosen = Object.keys(this.selections).length;
         const complete = chosen === this.groupCount && this.groupCount > 0;
+
+        // Hide the "Bundle total" block until at least one product is selected.
+        if (this.totalBlock) this.totalBlock.classList.toggle('is-hidden', chosen === 0);
 
         if (complete) {
           let total = 0;
