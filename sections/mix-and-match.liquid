@@ -16,7 +16,7 @@
 -%}
 
 <section
-  class="section mix-and-match"
+  class="section mix-and-match{% if section.settings.card_gradient %} mm--card-gradient{% endif %}"
   data-section-id="{{ section.id }}"
 >
   {%- style -%}
@@ -270,6 +270,18 @@
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+  /* Optional: subtle world-accent gradient behind a contained product image
+     (matches the .ph--world soft radial tint used on landing/collection cards) */
+  .mm--card-gradient .mm-card__media {
+    background:
+      radial-gradient(circle at 30% 20%, color-mix(in oklab, var(--world-c, var(--color-yellow)) 38%, var(--color-bg)) 0%, var(--color-bg-warm) 62%),
+      repeating-linear-gradient(135deg, rgba(33, 32, 32, 0.04) 0 8px, rgba(33, 32, 32, 0.08) 8px 16px);
+  }
+  .mm--card-gradient .mm-card__media > img,
+  .mm--card-gradient .mm-card__placeholder {
+    object-fit: contain;
+    padding: 12%;
   }
   .mm-card__check {
     position: absolute;
@@ -989,6 +1001,8 @@
     { "type": "text", "id": "discount_value", "label": "Discount value", "default": "15", "info": "For percentage enter e.g. 15 (= 15% off). Must match the automatic discount in Shopify admin." },
     { "type": "text", "id": "bundle_label", "label": "Bundle label", "default": "Mix & Match", "info": "Shown on the page and as a tag on each item in the cart." },
     { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    { "type": "header", "content": "Product thumbnails" },
+    { "type": "checkbox", "id": "card_gradient", "label": "Gradient background behind product image", "default": false, "info": "Shows the linked world's accent colour as a gradient behind a contained product image. Off = full-bleed image filling the card." },
     { "type": "header", "content": "Spacing" },
     { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Top padding", "default": 48 },
     { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Bottom padding", "default": 48 }
