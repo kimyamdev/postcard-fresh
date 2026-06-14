@@ -334,7 +334,7 @@ a.pc-product-card { cursor: pointer; }
 .pc-product-card__badge {
   position: absolute;
   top: 12px; right: 12px;
-  background: var(--world-color, var(--color-yellow));
+  background: color-mix(in srgb, var(--world-color, var(--color-yellow)) var(--pc-badge-alpha, 100%), transparent);
   border: 1.5px solid var(--color-ink);
   padding: 4px 10px;
   font-family: var(--font-display);

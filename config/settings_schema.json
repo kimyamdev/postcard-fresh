@@ -1451,5 +1451,25 @@
         "default": "scheme-1"
       }
     ]
+  },
+  {
+    "name": "Postcard · Product cards",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Round world/family badge on product cards (collection grid, bestsellers, search, worlds, etc.)."
+      },
+      {
+        "type": "range",
+        "id": "pc_badge_opacity",
+        "min": 20,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "label": "Family badge colour opacity",
+        "default": 100,
+        "info": "Lower it to soften the world-accent badge background for better contrast with the black text (keeps the same hue)."
+      }
+    ]
   }
 ]
