@@ -604,7 +604,7 @@ a.pc-product-card { cursor: pointer; }
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: var(--color-yellow);
+  background: color-mix(in srgb, var(--world-color, var(--color-yellow)) var(--pc-badge-alpha, 100%), transparent);
   border: 1.5px solid var(--color-ink);
   color: var(--color-ink);
   display: flex;
