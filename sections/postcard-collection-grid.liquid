@@ -9,10 +9,14 @@
     assign show_sort = true
   endif
   assign count_text = section.settings.count_text | default: 'Showing [count] postcards'
+  assign card_gradient = section.settings.card_gradient
+  if card_gradient == nil
+    assign card_gradient = true
+  endif
 -%}
 {%- assign show_filters_for_layout = show_filters -%}
 {%- if collection.filters.size == 0 -%}{%- assign show_filters_for_layout = false -%}{%- endif -%}
-<section class="section pc-coll-grid-section" data-section-id="{{ section.id }}">
+<section class="section pc-coll-grid-section{% unless card_gradient %} pc-coll-grid-section--flat{% endunless %}" data-section-id="{{ section.id }}">
   <div class="container pc-coll-grid{% unless show_filters_for_layout %} pc-coll-grid--no-filters{% endunless %}">
     {%- paginate collection.products by per_page -%}
       {%- if show_filters and collection.filters.size > 0 -%}
@@ -171,6 +175,7 @@
     { "type": "checkbox", "id": "show_type_buttons", "label": "Show product-type buttons", "default": true, "info": "Renders a row of big buttons above the grid, one per product type. When on, the Type filter is hidden from the sidebar to avoid duplication." },
     { "type": "text", "id": "all_button_label", "label": "All-types button label", "default": "All" },
     { "type": "checkbox", "id": "show_sort", "label": "Show sort dropdown", "default": true },
+    { "type": "checkbox", "id": "card_gradient", "label": "World-colour gradient behind product images", "default": true, "info": "On = soft world-accent gradient behind each (contained) product image. Off = plain card background." },
     { "type": "range", "id": "products_per_page", "label": "Products per page", "min": 6, "max": 36, "step": 2, "default": 16 },
     { "type": "range", "id": "max_products", "label": "Total cap (0 = no cap)", "min": 0, "max": 60, "step": 1, "default": 0, "info": "Hard cap on the number of products shown across all pages. When > 0, pagination is hidden. Use for hand-picked / top-N collections." },
     { "type": "text", "id": "count_text", "label": "Count text", "default": "Showing [count] postcards", "info": "[count] is replaced with the filtered total." },

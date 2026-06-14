@@ -358,6 +358,12 @@ a.pc-product-card { cursor: pointer; }
     repeating-linear-gradient(135deg, rgba(33,32,32,0.03) 0 8px, rgba(33,32,32,0.05) 8px 16px),
     var(--color-bg-card) !important;
 }
+/* Collection grid: "World-colour gradient" toggle OFF -> plain card backgrounds */
+.pc-coll-grid-section--flat .pc-product-card__media {
+  background:
+    repeating-linear-gradient(135deg, rgba(33,32,32,0.03) 0 8px, rgba(33,32,32,0.05) 8px 16px),
+    var(--color-bg-card) !important;
+}
 .pc-product-card__chip {
   position: absolute;
   top: 12px; left: 12px;
