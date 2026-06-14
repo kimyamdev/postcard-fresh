@@ -15,54 +15,53 @@
         "group_1": {
           "type": "group",
           "settings": {
-            "title": "Pick your mini 40 ml shampoo",
+            "title": "First travel size deo spray",
             "subtitle": "Refillable, fresh, signature scents",
             "products": [
-              "bath-house-mini-shampoo",
-              "coconut-beach-mini-shampoo",
-              "hotel-lobby-mini-shampoo",
-              "icy-peaks-cooling-shampoo-copy",
-              "moon-bloom-mini-shampoo",
-              "wild-flowers-mini-shampoo-copy",
-              "woodland-retreat-mini-shampoo"
+              "bath-house-mini-deodorant-spray",
+              "hotel-lobby-mini-deodorant-spray",
+              "icy-peaks-mini-cooling-deodorant-spray",
+              "moon-bloom-mini-deodorant-spray",
+              "wild-flowers-mini-deodorant-spray",
+              "woodland-retreat-mini-deodorant-spray"
             ],
-            "collection": "anywhere-fragrance-signature",
+            "collection": "",
             "variant_ids": ""
           }
         },
         "group_2": {
           "type": "group",
           "settings": {
-            "title": "Pick your mini 40 ml conditioner",
+            "title": "Second travel size deo spray",
             "subtitle": "Refillable, fresh, signature scents",
             "products": [
-              "bath-house-mini-conditioner",
-              "coconut-beach-mini-conditioner",
-              "hotel-lobby-mini-conditioner",
-              "icy-peaks-mini-conditioner",
-              "wild-flowers-mini-conditioner",
-              "woodland-retreat-mini-conditioner",
-              "moon-bloom-mini-conditioner"
+              "bath-house-mini-deodorant-spray",
+              "coconut-beach-mini-deodorant-spray",
+              "hotel-lobby-mini-deodorant-spray",
+              "icy-peaks-mini-cooling-deodorant-spray",
+              "moon-bloom-mini-deodorant-spray",
+              "wild-flowers-mini-deodorant-spray",
+              "woodland-retreat-mini-deodorant-spray"
             ],
-            "collection": "deodorant-spray",
+            "collection": "",
             "variant_ids": ""
           }
         },
         "group_3": {
           "type": "group",
           "settings": {
-            "title": "Pick your mini 40 ml hand & body wash",
+            "title": "Third travel size deo spray",
             "subtitle": "Refillable, fresh, signature scents",
             "products": [
-              "bath-house-mini-hand-body-wash",
-              "coconut-beach-mini-hand-body-wash",
-              "hotel-lobby-mini-hand-body-wash",
-              "icy-peaks-cooling-mini-hand-body-wash",
-              "moon-bloom-mini-hand-body-wash",
-              "wild-flowers-mini-hand-body-wash",
-              "woodland-retreat-mini-hand-body-wash"
+              "bath-house-mini-deodorant-spray",
+              "coconut-beach-mini-deodorant-spray",
+              "hotel-lobby-mini-deodorant-spray",
+              "icy-peaks-mini-cooling-deodorant-spray",
+              "moon-bloom-mini-deodorant-spray",
+              "wild-flowers-mini-deodorant-spray",
+              "woodland-retreat-mini-deodorant-spray"
             ],
-            "collection": "powder-washes-signature",
+            "collection": "",
             "variant_ids": ""
           }
         }
@@ -74,11 +73,11 @@
       ],
       "settings": {
         "eyebrow": "Build your set",
-        "heading": "TRAVEL SHOWER ESSENTIALS",
-        "intro": "<p>Pick a mini shampoo, conditioner and hand & body wash to enjoy $6 off your set.</p>",
+        "heading": "TRAVEL DEO SPRAYS",
+        "intro": "<p>Pick 3 mini deo sprays and enjoy $3 off your set.</p>",
         "cta_label": "Add bundle to cart",
         "discount_type": "fixed",
-        "discount_value": "6",
+        "discount_value": "3",
         "bundle_label": "Mix & Match",
         "color_scheme": "scheme-1",
         "card_gradient": true,
