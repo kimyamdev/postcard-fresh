@@ -329,7 +329,7 @@ a.pc-product-card { cursor: pointer; }
   height: auto;
   object-fit: contain;
   display: block;
-  mix-blend-mode: multiply;
+  mix-blend-mode: normal;
 }
 .pc-product-card__badge {
   position: absolute;
@@ -364,9 +364,6 @@ a.pc-product-card { cursor: pointer; }
     repeating-linear-gradient(135deg, rgba(33,32,32,0.03) 0 8px, rgba(33,32,32,0.05) 8px 16px),
     var(--color-bg-card) !important;
 }
-/* Product images are transparent PNGs — sit them cleanly in front of the gradient
-   (multiply would tint the white bottle with the gradient colour). */
-.pc-coll-grid-section .pc-product-card__img { mix-blend-mode: normal; }
 .pc-product-card__chip {
   position: absolute;
   top: 12px; left: 12px;
