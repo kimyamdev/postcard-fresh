@@ -222,6 +222,11 @@
         { "type": "text", "id": "badge_label", "label": "Corner badge (optional)", "info": "Small pill on the image, e.g. STORY. Leave blank to hide." },
         { "type": "text", "id": "cta_label", "label": "Link text", "default": "Read" },
         { "type": "color", "id": "accent_color", "label": "Accent colour", "default": "#E8C36A", "info": "Drives the gradient/badge tint, like a world accent." },
+        { "type": "header", "content": "Price overlay" },
+        { "type": "checkbox", "id": "show_price", "label": "Show price overlay on image", "default": false, "info": "Use for bundle-set promos: shows a struck original price and a discounted price on the card image." },
+        { "type": "text", "id": "compare_price", "label": "Original price (struck)", "info": "e.g. $36. Leave blank to show only the discounted price." },
+        { "type": "text", "id": "price", "label": "Discounted price", "info": "e.g. $30" },
+        { "type": "header", "content": "Placement" },
         { "type": "range", "id": "position", "label": "Position in grid", "min": 1, "max": 24, "step": 1, "default": 3, "info": "Appears before this product number. If larger than the number of products shown, it goes at the end." }
       ]
     }

@@ -25,6 +25,14 @@
     {%- if pc_badge != blank -%}
       <div class="pc-product-card__badge pc-product-card__badge--page">{{ pc_badge }}</div>
     {%- endif -%}
+    {%- if block.settings.show_price and block.settings.price != blank -%}
+      <div class="pc-product-card__price-overlay">
+        {%- if block.settings.compare_price != blank -%}
+          <s class="pc-product-card__price-overlay-was">{{ block.settings.compare_price }}</s>
+        {%- endif -%}
+        <span class="pc-product-card__price-overlay-now">{{ block.settings.price }}</span>
+      </div>
+    {%- endif -%}
   </div>
   <div>
     <div class="pc-product-card__world">{{ pc_eyebrow }}</div>
