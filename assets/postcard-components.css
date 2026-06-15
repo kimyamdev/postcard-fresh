@@ -1297,8 +1297,9 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 .pc-pdp-main { padding: 40px 0; }
 .pc-pdp-main__inner { display: grid; grid-template-columns: 1.4fr 1fr; gap: 56px; }
 .pc-pdp-gallery__main { aspect-ratio: 4/5; overflow: hidden; }
-/* PDP main image: accent gradient fades to pure white (not the cream site base) */
-.pc-pdp-gallery__main.ph--world {
+/* PDP main image + thumbnails: accent gradient fades to pure white (not the cream site base) */
+.pc-pdp-gallery__main.ph--world,
+.pc-pdp-gallery__thumb.ph--world {
   background:
     radial-gradient(circle at 30% 20%, color-mix(in oklab, var(--world-color) 45%, #ffffff) 0%, #ffffff 60%),
     repeating-linear-gradient(135deg, rgba(33,32,32,0.04) 0 8px, rgba(33,32,32,0.08) 8px 16px);
