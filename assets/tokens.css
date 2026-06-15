@@ -194,7 +194,7 @@ a { color: inherit; }
 }
 .ph--world {
   background:
-    radial-gradient(circle at 30% 20%, color-mix(in oklab, var(--world-color) 45%, var(--color-bg)) 0%, var(--color-bg-warm) 60%),
+    radial-gradient(circle at 30% 20%, color-mix(in oklab, var(--world-color) 45%, #ffffff) 0%, #ffffff 60%),
     repeating-linear-gradient(135deg, rgba(33,32,32,0.04) 0 8px, rgba(33,32,32,0.08) 8px 16px);
 }
 .ph--ink { background: var(--color-ink); color: var(--color-bg); }

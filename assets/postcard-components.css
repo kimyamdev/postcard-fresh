@@ -744,7 +744,7 @@ a.pc-product-card { cursor: pointer; }
 .pc-collgift-bestsent__grid .pc-product-card__media {
   border: 1px solid var(--color-line) !important;
   background:
-    radial-gradient(circle at 30% 20%, color-mix(in oklab, var(--world-color) 35%, var(--color-bg-card)) 0%, var(--color-bg-card) 60%),
+    radial-gradient(circle at 30% 20%, color-mix(in oklab, var(--world-color) 35%, #ffffff) 0%, #ffffff 60%),
     repeating-linear-gradient(135deg, rgba(33,32,32,0.03) 0 8px, rgba(33,32,32,0.05) 8px 16px) !important;
 }
 .pc-coll-top__grid .pc-product-card__world-stamp-img,
