@@ -1,0 +1,36 @@
+{%- comment -%}
+  Editorial "page card" for the collection grid. Sits in the product grid like a
+  product card, but links to a page (or any URL) instead of a product.
+  Params:
+    block         - the section block carrying the settings
+    card_gradient - section-level gradient toggle (so it matches neighbouring cards)
+{%- endcomment -%}
+{%- liquid
+  assign pc_link = block.settings.link
+  assign pc_image = block.settings.image
+  assign pc_eyebrow = block.settings.eyebrow
+  assign pc_title = block.settings.title
+  assign pc_cta = block.settings.cta_label | default: 'Read'
+  assign pc_badge = block.settings.badge_label
+  assign pc_accent = block.settings.accent_color | default: '#E8C36A'
+  assign pc_fill = block.settings.image_fill
+-%}
+<a class="pc-product-card pc-product-card--page" href="{{ pc_link | default: '#' }}"{% unless pc_card_no_attrs %} {{ block.shopify_attributes }}{% endunless %}>
+  <div class="ph ph--world pc-product-card__media{% unless card_gradient %} pc-product-card__media--no-world{% endunless %}{% if pc_fill %} pc-product-card__media--fill{% endif %}" style="--world-color: {{ pc_accent }};">
+    {%- if pc_image != blank -%}
+      {{ pc_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: pc_title, class: 'pc-product-card__img' }}
+    {%- else -%}
+      <span style="opacity: 0.55;">{{ pc_title | default: 'Page' }}</span>
+    {%- endif -%}
+    {%- if pc_badge != blank -%}
+      <div class="pc-product-card__badge pc-product-card__badge--page">{{ pc_badge }}</div>
+    {%- endif -%}
+  </div>
+  <div>
+    <div class="pc-product-card__world">{{ pc_eyebrow }}</div>
+    <h3 class="pc-product-card__name">{{ pc_title }}</h3>
+    <div class="pc-product-card__row">
+      <span class="tlink">{{ pc_cta }} &rarr;</span>
+    </div>
+  </div>
+</a>

@@ -140,10 +140,27 @@
           {%- else -%}
             {%- assign sorted_products = collection.products -%}
           {%- endif -%}
+          {%- comment -%}
+            Editorial "page cards" are interleaved by 1-based position, but only on the
+            first page so they don't repeat across pagination. A card whose position is
+            beyond the products shown is appended at the end.
+          {%- endcomment -%}
+          {%- assign page_cards = section.blocks | where: 'type', 'page_card' -%}
+          {%- assign show_page_cards = false -%}
+          {%- if paginate.current_page == 1 and page_cards.size > 0 -%}{%- assign show_page_cards = true -%}{%- endif -%}
           {%- assign max_products = section.settings.max_products | default: 0 -%}
           {%- assign emitted = 0 -%}
+          {%- assign prod_index = 0 -%}
           {%- for p in sorted_products -%}
             {%- if max_products > 0 and emitted >= max_products -%}{%- break -%}{%- endif -%}
+            {%- assign prod_index = prod_index | plus: 1 -%}
+            {%- if show_page_cards -%}
+              {%- for blk in page_cards -%}
+                {%- if blk.settings.position == prod_index -%}
+                  {% render 'page-card', block: blk, card_gradient: card_gradient %}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
             {% render 'product-card', product: p %}
             {%- assign emitted = emitted | plus: 1 -%}
           {%- else -%}
@@ -154,6 +171,13 @@
               {%- endif -%}
             </div>
           {%- endfor -%}
+          {%- if show_page_cards -%}
+            {%- for blk in page_cards -%}
+              {%- if blk.settings.position > prod_index -%}
+                {% render 'page-card', block: blk, card_gradient: card_gradient %}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
         </div>
         {%- if paginate.pages > 1 and max_products == 0 -%}
           <div class="pc-coll-grid__pagination">
@@ -182,6 +206,25 @@
     { "type": "text", "id": "clear_text", "label": "Clear filters text", "default": "Clear filters" },
     { "type": "text", "id": "empty_text", "label": "Empty-state text", "default": "No postcards match these filters." },
     { "type": "text", "id": "empty_clear_text", "label": "Empty-state clear link", "default": "Clear filters →" }
+  ],
+  "blocks": [
+    {
+      "type": "page_card",
+      "name": "Page card",
+      "limit": 6,
+      "settings": [
+        { "type": "paragraph", "content": "An editorial card placed in the product grid that links to a page (or any URL) instead of a product. Only shows on the first page of results." },
+        { "type": "url", "id": "link", "label": "Link", "info": "Pick a page, blog, collection, or paste any URL." },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "checkbox", "id": "image_fill", "label": "Fill frame with image", "default": true, "info": "On = photo fills the card (cropped). Off = image sits contained like a product photo." },
+        { "type": "text", "id": "eyebrow", "label": "Small label (above title)", "default": "Editorial" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Read the story" },
+        { "type": "text", "id": "badge_label", "label": "Corner badge (optional)", "info": "Small pill on the image, e.g. STORY. Leave blank to hide." },
+        { "type": "text", "id": "cta_label", "label": "Link text", "default": "Read" },
+        { "type": "color", "id": "accent_color", "label": "Accent colour", "default": "#E8C36A", "info": "Drives the gradient/badge tint, like a world accent." },
+        { "type": "range", "id": "position", "label": "Position in grid", "min": 1, "max": 24, "step": 1, "default": 3, "info": "Appears before this product number. If larger than the number of products shown, it goes at the end." }
+      ]
+    }
   ],
   "presets": [{ "name": "Collection · Grid" }]
 }
