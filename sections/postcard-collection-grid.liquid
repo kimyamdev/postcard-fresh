@@ -84,16 +84,62 @@
             {%- endif -%}
           {%- endfor -%}
           {%- if type_filter != blank and type_filter.values.size > 0 -%}
-            {%- assign any_active = false -%}
-            {%- for v in type_filter.values -%}{%- if v.active -%}{%- assign any_active = true -%}{%- endif -%}{%- endfor -%}
+            {%- comment -%} Classify each product type into a high-level category (parallel to values). {%- endcomment -%}
+            {%- assign cat_list = '' -%}
+            {%- for v in type_filter.values -%}
+              {%- capture vc -%}{%- render 'coll-type-category', label: v.label -%}{%- endcapture -%}
+              {%- assign cat_list = cat_list | append: vc | strip | append: '~' -%}
+            {%- endfor -%}
+            {%- assign cat_arr = cat_list | split: '~' -%}
+            {%- comment -%} Active state: how many types are active, and which category is "open". {%- endcomment -%}
+            {%- assign active_count = 0 -%}
+            {%- assign open_cat = '' -%}
+            {%- for v in type_filter.values -%}
+              {%- if v.active -%}
+                {%- assign active_count = active_count | plus: 1 -%}
+                {%- if open_cat == blank -%}{%- assign open_cat = cat_arr[forloop.index0] -%}{%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- assign categories = 'Hair,Body,Face,Home,Travel,Pets,Gifts,Accessories' | split: ',' -%}
+            {%- assign open_cat_url = collection.url -%}
             <div class="pc-coll-type-buttons">
-              <a class="pc-coll-type-btn{% unless any_active %} pc-coll-type-btn--active{% endunless %}" href="{{ collection.url }}">{{ section.settings.all_button_label | default: 'All' }}</a>
-              {%- for v in type_filter.values -%}
-                {%- if v.count == 0 and v.active == false -%}{%- continue -%}{%- endif -%}
-                <a class="pc-coll-type-btn{% if v.active %} pc-coll-type-btn--active{% endif %}" href="{% if v.active %}{{ v.url_to_remove }}{% else %}{{ v.url_to_add }}{% endif %}">
-                  {{ v.label }}
-                </a>
-              {%- endfor -%}
+              <div class="pc-coll-cat-buttons">
+                <a class="pc-coll-type-btn pc-coll-cat-btn{% if active_count == 0 %} pc-coll-type-btn--active{% endif %}" href="{{ collection.url }}">{{ section.settings.all_button_label | default: 'All' }}</a>
+                {%- for cat in categories -%}
+                  {%- assign cat_count = 0 -%}
+                  {%- assign cat_url = '' -%}
+                  {%- for v in type_filter.values -%}
+                    {%- if cat_arr[forloop.index0] == cat -%}
+                      {%- if v.count == 0 and v.active == false -%}{%- continue -%}{%- endif -%}
+                      {%- assign cat_count = cat_count | plus: 1 -%}
+                      {%- assign enc = v.value | url_encode -%}
+                      {%- if cat_url == blank -%}
+                        {%- assign cat_url = collection.url | append: '?filter.p.product_type=' | append: enc -%}
+                      {%- else -%}
+                        {%- assign cat_url = cat_url | append: '&filter.p.product_type=' | append: enc -%}
+                      {%- endif -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                  {%- if cat_count > 0 -%}
+                    {%- if cat == open_cat -%}{%- assign open_cat_url = cat_url -%}{%- endif -%}
+                    <a class="pc-coll-type-btn pc-coll-cat-btn{% if cat == open_cat %} pc-coll-type-btn--active pc-coll-cat-btn--open{% endif %}" href="{{ cat_url }}">{{ cat }}</a>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              {%- if open_cat != blank -%}
+                <div class="pc-coll-subtype-buttons">
+                  {%- for v in type_filter.values -%}
+                    {%- if cat_arr[forloop.index0] == open_cat -%}
+                      {%- if v.count == 0 and v.active == false -%}{%- continue -%}{%- endif -%}
+                      {%- if v.active and active_count == 1 -%}
+                        <a class="pc-coll-type-btn pc-coll-subtype-btn pc-coll-type-btn--active" href="{{ open_cat_url }}">{{ v.label }}</a>
+                      {%- else -%}
+                        <a class="pc-coll-type-btn pc-coll-subtype-btn" href="{{ collection.url }}?filter.p.product_type={{ v.value | url_encode }}">{{ v.label }}</a>
+                      {%- endif -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
             </div>
           {%- endif -%}
         {%- endif -%}
