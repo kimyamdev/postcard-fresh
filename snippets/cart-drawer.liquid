@@ -79,7 +79,7 @@
 {%- endif -%}
 
 <cart-drawer class="pc-cart-drawer drawer{% if cart == empty %} is-empty{% endif %}">
-  <div id="CartDrawer-Overlay" class="pc-cart-drawer__overlay"></div>
+  <div id="CartDrawer-Overlay" class="pc-cart-drawer__overlay" onclick="this.closest('cart-drawer').close()"></div>
   <div
     id="CartDrawer"
     class="drawer__inner pc-cart-drawer__panel"
