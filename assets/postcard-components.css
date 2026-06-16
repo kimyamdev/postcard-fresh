@@ -3717,6 +3717,14 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 @media (max-width: 480px) {
   .pc-cart-drawer__panel { width: 100%; box-shadow: none; }
 }
+/* Empty cart: keep our flex column so the header stays at the top. Overrides
+   Dawn's is-empty rule that turns the inner into a vertically-centred grid. */
+cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
+}
 
 /* Just-added toast */
 .pc-cart-drawer__just-added {
