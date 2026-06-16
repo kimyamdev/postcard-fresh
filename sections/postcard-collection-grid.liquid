@@ -188,12 +188,21 @@
           {%- endif -%}
           {%- comment -%}
             Editorial "page cards" are interleaved by 1-based position, but only on the
-            first page so they don't repeat across pagination. A card whose position is
-            beyond the products shown is appended at the end.
+            first page (so they don't repeat across pagination) and only on the
+            unfiltered collection view (so they don't appear under every category /
+            subcategory filter). A card whose position is beyond the products shown
+            is appended at the end.
           {%- endcomment -%}
           {%- assign page_cards = section.blocks | where: 'type', 'page_card' -%}
+          {%- assign has_active_filter = false -%}
+          {%- for f in collection.filters -%}
+            {%- for val in f.values -%}
+              {%- if val.active -%}{%- assign has_active_filter = true -%}{%- break -%}{%- endif -%}
+            {%- endfor -%}
+            {%- if has_active_filter -%}{%- break -%}{%- endif -%}
+          {%- endfor -%}
           {%- assign show_page_cards = false -%}
-          {%- if paginate.current_page == 1 and page_cards.size > 0 -%}{%- assign show_page_cards = true -%}{%- endif -%}
+          {%- if paginate.current_page == 1 and page_cards.size > 0 and has_active_filter == false -%}{%- assign show_page_cards = true -%}{%- endif -%}
           {%- assign max_products = section.settings.max_products | default: 0 -%}
           {%- assign emitted = 0 -%}
           {%- assign prod_index = 0 -%}
