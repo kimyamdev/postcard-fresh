@@ -194,15 +194,44 @@
             is appended at the end.
           {%- endcomment -%}
           {%- assign page_cards = section.blocks | where: 'type', 'page_card' -%}
+          {%- comment -%}
+            Build the active-filter context: each active product type's value AND its
+            high-level category, pipe-delimited and lowercased, so a card's
+            "show_filter" can target either (e.g. "Bundle" or "Gifts").
+          {%- endcomment -%}
           {%- assign has_active_filter = false -%}
+          {%- assign active_ctx = '|' -%}
           {%- for f in collection.filters -%}
             {%- for val in f.values -%}
-              {%- if val.active -%}{%- assign has_active_filter = true -%}{%- break -%}{%- endif -%}
+              {%- if val.active -%}
+                {%- assign has_active_filter = true -%}
+                {%- assign active_ctx = active_ctx | append: val.value | downcase | append: '|' -%}
+                {%- if f.param_name == 'filter.p.product_type' -%}
+                  {%- capture acat -%}{%- render 'coll-type-category', label: val.label -%}{%- endcapture -%}
+                  {%- assign active_ctx = active_ctx | append: acat | strip | downcase | append: '|' -%}
+                {%- endif -%}
+              {%- endif -%}
             {%- endfor -%}
-            {%- if has_active_filter -%}{%- break -%}{%- endif -%}
           {%- endfor -%}
+          {%- comment -%} Per-card visibility: unfiltered view, or the card's show_filter matches. {%- endcomment -%}
+          {%- assign visible_blocks = '' -%}
+          {%- if paginate.current_page == 1 -%}
+            {%- for blk in page_cards -%}
+              {%- assign blk_show = false -%}
+              {%- if has_active_filter == false -%}
+                {%- assign blk_show = true -%}
+              {%- elsif blk.settings.show_filter != blank -%}
+                {%- assign wants = blk.settings.show_filter | downcase | split: ',' -%}
+                {%- for w in wants -%}
+                  {%- assign tok = w | strip | prepend: '|' | append: '|' -%}
+                  {%- if active_ctx contains tok -%}{%- assign blk_show = true -%}{%- break -%}{%- endif -%}
+                {%- endfor -%}
+              {%- endif -%}
+              {%- if blk_show -%}{%- assign visible_blocks = visible_blocks | append: blk.id | append: ',' -%}{%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
           {%- assign show_page_cards = false -%}
-          {%- if paginate.current_page == 1 and page_cards.size > 0 and has_active_filter == false -%}{%- assign show_page_cards = true -%}{%- endif -%}
+          {%- if visible_blocks != blank -%}{%- assign show_page_cards = true -%}{%- endif -%}
           {%- assign max_products = section.settings.max_products | default: 0 -%}
           {%- assign emitted = 0 -%}
           {%- assign prod_index = 0 -%}
@@ -211,7 +240,7 @@
             {%- assign prod_index = prod_index | plus: 1 -%}
             {%- if show_page_cards -%}
               {%- for blk in page_cards -%}
-                {%- if blk.settings.position == prod_index -%}
+                {%- if blk.settings.position == prod_index and visible_blocks contains blk.id -%}
                   {% render 'page-card', block: blk, card_gradient: card_gradient %}
                 {%- endif -%}
               {%- endfor -%}
@@ -228,7 +257,7 @@
           {%- endfor -%}
           {%- if show_page_cards -%}
             {%- for blk in page_cards -%}
-              {%- if blk.settings.position > prod_index -%}
+              {%- if blk.settings.position > prod_index and visible_blocks contains blk.id -%}
                 {% render 'page-card', block: blk, card_gradient: card_gradient %}
               {%- endif -%}
             {%- endfor -%}
@@ -282,6 +311,7 @@
         { "type": "text", "id": "compare_price", "label": "Original price (struck)", "info": "e.g. $36. Leave blank to show only the discounted price." },
         { "type": "text", "id": "price", "label": "Discounted price", "info": "e.g. $30" },
         { "type": "header", "content": "Placement" },
+        { "type": "text", "id": "show_filter", "label": "Also show under filter(s)", "info": "By default the card shows only on the unfiltered view. Enter product type(s) or category name(s) — comma-separated — to also show it when those are selected. E.g. 'Bundle' or 'Travel, Gifts'." },
         { "type": "range", "id": "position", "label": "Position in grid", "min": 1, "max": 24, "step": 1, "default": 3, "info": "Appears before this product number. If larger than the number of products shown, it goes at the end." }
       ]
     }
