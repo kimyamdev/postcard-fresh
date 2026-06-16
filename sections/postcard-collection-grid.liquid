@@ -112,7 +112,7 @@
                     {%- if cat_arr[forloop.index0] == cat -%}
                       {%- if v.count == 0 and v.active == false -%}{%- continue -%}{%- endif -%}
                       {%- assign cat_count = cat_count | plus: 1 -%}
-                      {%- assign enc = v.value | url_encode -%}
+                      {%- assign enc = v.value | replace: '&amp;', '&' | url_encode -%}
                       {%- if cat_url == blank -%}
                         {%- assign cat_url = collection.url | append: '?filter.p.product_type=' | append: enc -%}
                       {%- else -%}
@@ -134,7 +134,7 @@
                       {%- if v.active and active_count == 1 -%}
                         <a class="pc-coll-type-btn pc-coll-subtype-btn pc-coll-type-btn--active" href="{{ open_cat_url }}">{{ v.label }}</a>
                       {%- else -%}
-                        <a class="pc-coll-type-btn pc-coll-subtype-btn" href="{{ collection.url }}?filter.p.product_type={{ v.value | url_encode }}">{{ v.label }}</a>
+                        <a class="pc-coll-type-btn pc-coll-subtype-btn" href="{{ collection.url }}?filter.p.product_type={{ v.value | replace: '&amp;', '&' | url_encode }}">{{ v.label }}</a>
                       {%- endif -%}
                     {%- endif -%}
                   {%- endfor -%}
