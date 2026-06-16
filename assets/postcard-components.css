@@ -3981,6 +3981,9 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
 /* Footer */
 .pc-cart-drawer__footer {
   flex-shrink: 0;
+  /* Short cart: absorb free space so the footer sits at the bottom.
+     Long cart: auto margin collapses to 0 and the whole panel scrolls. */
+  margin-top: auto;
   border-top: 1.5px solid var(--color-ink);
   background: var(--color-bg-warm);
 }
