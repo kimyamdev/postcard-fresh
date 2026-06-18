@@ -218,14 +218,30 @@
           {%- if paginate.current_page == 1 -%}
             {%- for blk in page_cards -%}
               {%- assign blk_show = false -%}
-              {%- if has_active_filter == false -%}
-                {%- assign blk_show = true -%}
-              {%- elsif blk.settings.show_filter != blank -%}
-                {%- assign wants = blk.settings.show_filter | downcase | split: ',' -%}
-                {%- for w in wants -%}
-                  {%- assign tok = w | strip | prepend: '|' | append: '|' -%}
-                  {%- if active_ctx contains tok -%}{%- assign blk_show = true -%}{%- break -%}{%- endif -%}
+              {%- comment -%}
+                Collection gate: if show_collections is set, the card only appears on those
+                collections (matched by handle or title). Blank = show on every collection.
+              {%- endcomment -%}
+              {%- assign coll_ok = true -%}
+              {%- if blk.settings.show_collections != blank -%}
+                {%- assign coll_ok = false -%}
+                {%- assign want_colls = blk.settings.show_collections | downcase | split: ',' -%}
+                {%- assign coll_title_l = collection.title | downcase -%}
+                {%- for wc in want_colls -%}
+                  {%- assign wc_clean = wc | strip -%}
+                  {%- if wc_clean == collection.handle or wc_clean == coll_title_l -%}{%- assign coll_ok = true -%}{%- break -%}{%- endif -%}
                 {%- endfor -%}
+              {%- endif -%}
+              {%- if coll_ok -%}
+                {%- if has_active_filter == false -%}
+                  {%- assign blk_show = true -%}
+                {%- elsif blk.settings.show_filter != blank -%}
+                  {%- assign wants = blk.settings.show_filter | downcase | split: ',' -%}
+                  {%- for w in wants -%}
+                    {%- assign tok = w | strip | prepend: '|' | append: '|' -%}
+                    {%- if active_ctx contains tok -%}{%- assign blk_show = true -%}{%- break -%}{%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
               {%- endif -%}
               {%- if blk_show -%}{%- assign visible_blocks = visible_blocks | append: blk.id | append: ',' -%}{%- endif -%}
             {%- endfor -%}
@@ -311,6 +327,7 @@
         { "type": "text", "id": "compare_price", "label": "Original price (struck)", "info": "e.g. $36. Leave blank to show only the discounted price." },
         { "type": "text", "id": "price", "label": "Discounted price", "info": "e.g. $30" },
         { "type": "header", "content": "Placement" },
+        { "type": "text", "id": "show_collections", "label": "Show only on these collections", "info": "Comma-separated collection handles (the URL slug) or titles. Leave blank to show on every collection. E.g. 'fathers-day' or 'Father's Day'." },
         { "type": "text", "id": "show_filter", "label": "Also show under filter(s)", "info": "By default the card shows only on the unfiltered view. Enter product type(s) or category name(s) — comma-separated — to also show it when those are selected. E.g. 'Bundle' or 'Travel, Gifts'." },
         { "type": "range", "id": "position", "label": "Position in grid", "min": 1, "max": 24, "step": 1, "default": 3, "info": "Appears before this product number. If larger than the number of products shown, it goes at the end." }
       ]
