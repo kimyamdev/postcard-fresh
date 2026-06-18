@@ -15,7 +15,7 @@
         "breadcrumb_prefix": "",
         "eyebrow": "",
         "title_override": "",
-        "body": "",
+        "body": "A thoughtful edit for the father figures who prefer the practical, the understated, and the quietly indulgent. Our Father’s Day Collection brings together everyday self-care essentials made to refresh, reset, and make him feel appreciated — without the fuss.",
         "body_mobile": "",
         "image_alt": ""
       }
@@ -32,11 +32,14 @@
     },
     "grid": {
       "type": "postcard-collection-grid",
+      "blocks": {},
+      "block_order": [],
       "settings": {
         "show_filters": true,
         "show_type_buttons": true,
         "all_button_label": "All",
         "show_sort": true,
+        "card_gradient": true,
         "products_per_page": 36,
         "max_products": 0,
         "count_text": "Showing [count] products",
