@@ -1,7 +1,9 @@
 {%- comment -%}
   Renders one totals row per delivery frequency = autoship savings for the
-  current cart. Saving per line = one-off price (original_line_price) minus the
-  plan price (selling_plan_allocation.price x qty), grouped by clean cadence.
+  current cart. Saving per line = (one-off unit price - plan unit price) x qty,
+  grouped by clean cadence. NOTE: for a line already on a selling plan,
+  original_line_price already equals the plan price, so the baseline must be
+  item.variant.price (the regular one-off price), not original_line_price.
   Two passes: collect distinct cadences, then sum each. Renders nothing when no
   line is on a selling plan.
 
@@ -29,8 +31,8 @@
       {%- assign icad_lead = icad | slice: 0, 2 -%}
       {%- if icad_lead == '1 ' -%}{%- assign icad = icad | remove_first: '1 ' -%}{%- endif -%}
       {%- if icad == cad -%}
-        {%- assign sub_line_price = item.selling_plan_allocation.price | times: item.quantity -%}
-        {%- assign cad_savings = cad_savings | plus: item.original_line_price | minus: sub_line_price -%}
+        {%- assign line_saving = item.variant.price | minus: item.selling_plan_allocation.price | times: item.quantity -%}
+        {%- assign cad_savings = cad_savings | plus: line_saving -%}
       {%- endif -%}
     {%- endif -%}
   {%- endfor -%}
