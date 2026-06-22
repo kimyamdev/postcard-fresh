@@ -247,26 +247,6 @@
               assign size_label = ''
             endif
             assign refillable = item.product.metafields.custom.refillable.value
-            comment
-              Active-subscription tag: derive a clean cadence (e.g. "month",
-              "2 weeks") from the plan's option value rather than the verbose
-              PayWhirl plan name, plus the percent saved.
-            endcomment
-            assign cadence_label = ''
-            assign sub_pct = 0
-            if item.selling_plan_allocation
-              assign sub_plan = item.selling_plan_allocation.selling_plan
-              assign cadence_raw = sub_plan.options.first.value | default: sub_plan.name
-              assign cadence_label = cadence_raw
-              assign lead = cadence_raw | slice: 0, 2
-              if lead == '1 '
-                assign cadence_label = cadence_raw | remove_first: '1 '
-              endif
-              assign sub_adj = sub_plan.price_adjustments.first
-              if sub_adj.value_type == 'percentage'
-                assign sub_pct = sub_adj.value
-              endif
-            endif
             assign world_first_word = world_name | split: ' ' | first
           -%}
           <div class="pc-cart-line" data-line-key="{{ item.key }}">
@@ -290,12 +270,7 @@
                 </div>
               {%- endif -%}
 
-              {%- if cadence_label != blank -%}
-                <div class="pc-cart-line__autoship">
-                  <span class="pc-cart-line__autoship-icon" aria-hidden="true">&#8635;</span>
-                  <span class="pc-cart-line__autoship-text">On autoship &middot; every {{ cadence_label }}{% if sub_pct > 0 %} &middot; save {{ sub_pct }}%{% endif %}</span>
-                </div>
-              {%- endif -%}
+              {%- render 'cart-autoship-tag', item: item -%}
 
               {%- if item.properties._gift_message != blank -%}
                 <div class="pc-cart-line__badge pc-cart-line__badge--gift">&#127873; GIFT &middot; note attached</div>

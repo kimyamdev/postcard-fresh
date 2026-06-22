@@ -1,0 +1,22 @@
+{%- comment -%}
+  Clean "active autoship" tag for a subscribed cart line: recurring icon +
+  "On autoship · every {cadence} · save {pct}%". Cadence comes from the plan's
+  option value (not the verbose PayWhirl plan name), percent from its price
+  adjustment. Renders nothing when the line has no selling plan.
+
+  Accepts:
+    item   cart line item (required)
+{%- endcomment -%}
+{%- if item.selling_plan_allocation -%}
+  {%- assign sub_plan = item.selling_plan_allocation.selling_plan -%}
+  {%- assign cadence_label = sub_plan.options.first.value | default: sub_plan.name -%}
+  {%- assign lead = cadence_label | slice: 0, 2 -%}
+  {%- if lead == '1 ' -%}{%- assign cadence_label = cadence_label | remove_first: '1 ' -%}{%- endif -%}
+  {%- assign sub_adj = sub_plan.price_adjustments.first -%}
+  {%- assign sub_pct = 0 -%}
+  {%- if sub_adj.value_type == 'percentage' -%}{%- assign sub_pct = sub_adj.value -%}{%- endif -%}
+  <div class="pc-cart-line__autoship">
+    <span class="pc-cart-line__autoship-icon" aria-hidden="true">&#8635;</span>
+    <span class="pc-cart-line__autoship-text">On autoship &middot; every {{ cadence_label }}{% if sub_pct > 0 %} &middot; save {{ sub_pct }}%{% endif %}</span>
+  </div>
+{%- endif -%}
