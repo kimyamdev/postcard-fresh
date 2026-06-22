@@ -55,9 +55,10 @@
   >
     <button type="button" class="pc-cart-sub__toggle" @click="open = !open" :aria-expanded="open">
       <span class="pc-cart-sub__toggle-icon" aria-hidden="true">&#8635;</span>
-      <span class="pc-cart-sub__toggle-text">
-        {%- if sp_pct > 0 -%}Subscribe &amp; save {{ sp_pct }}%{%- else -%}Subscribe &amp; save{%- endif -%}
-      </span>
+      <span class="pc-cart-sub__toggle-text">Subscribe &amp; save</span>
+      {%- if sp_pct > 0 -%}
+        <span class="pc-cart-sub__toggle-badge">&minus;{{ sp_pct }}%</span>
+      {%- endif -%}
       <span class="pc-cart-sub__toggle-arrow" :class="{ 'pc-cart-sub__toggle-arrow--open': open }" aria-hidden="true">&#9662;</span>
     </button>
 
