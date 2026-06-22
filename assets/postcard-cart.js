@@ -121,6 +121,37 @@
     await Promise.all([refreshDrawer(), refreshBag(), refreshCartPage()]);
   }
 
+  // Upgrade some-or-all of a one-off line to a subscription. Shopify can't split
+  // a line, so we ADD `subQty` units of the variant on the selling plan (a new
+  // line, since the plan differs) and REDUCE the original one-off line by the
+  // same amount (to 0 = removed when the whole line is upgraded).
+  async function upgradeLineToPlan(opts) {
+    var totalQty = opts.totalQty;
+    var m = Math.max(1, Math.min(parseInt(opts.subQty, 10) || totalQty, totalQty));
+
+    const addRes = await fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: opts.variantId, quantity: m, selling_plan: opts.planId })
+    });
+    if (!addRes.ok) {
+      const err = await addRes.json().catch(() => ({}));
+      throw new Error(err.description || err.message || 'Could not add subscription');
+    }
+
+    const changeRes = await fetch('/cart/change.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: opts.lineKey, quantity: totalQty - m })
+    });
+    if (!changeRes.ok) {
+      const err = await changeRes.json().catch(() => ({}));
+      throw new Error(err.description || err.message || 'Could not update one-off line');
+    }
+
+    await Promise.all([refreshDrawer(), refreshBag(), refreshCartPage()]);
+  }
+
   // Set the same quantity on every line of a Mix & Match bundle in one request,
   // so the 3 items move together. keysCsv is a comma-separated list of line keys.
   async function updateBundle(keysCsv, qty) {
@@ -193,5 +224,5 @@
     tryApplyVillaShipping();
   }
 
-  window.PostcardCart = { addItem, updateLine, updateBundle, setLinePlan, refreshDrawer, refreshCartPage, refreshBag, tryApplyVillaShipping };
+  window.PostcardCart = { addItem, updateLine, updateBundle, setLinePlan, upgradeLineToPlan, refreshDrawer, refreshCartPage, refreshBag, tryApplyVillaShipping };
 })();

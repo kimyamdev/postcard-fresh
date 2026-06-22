@@ -4021,6 +4021,51 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
 }
 .pc-cart-sub__pill:hover { background: rgba(176, 122, 78, 0.12); }
 .pc-cart-sub__pill--active { background: #B07A4E; color: #fff; }
+.pc-cart-sub__qty {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 12px;
+}
+.pc-cart-sub__qty-label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: #8A5A33;
+}
+.pc-cart-sub__stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1.5px solid #B07A4E;
+}
+.pc-cart-sub__stepper-btn {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #8A5A33;
+}
+.pc-cart-sub__stepper-btn:hover { background: rgba(176, 122, 78, 0.12); }
+.pc-cart-sub__stepper-value {
+  min-width: 30px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  color: #8A5A33;
+  border-left: 1.5px solid #B07A4E;
+  border-right: 1.5px solid #B07A4E;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 .pc-cart-sub__apply {
   all: unset;
   box-sizing: border-box;
