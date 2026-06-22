@@ -3933,6 +3933,11 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
   border-left: 3px solid #B07A4E;
   padding: 10px 12px;
 }
+/* Drawer: span the full cart-line grid row (thumbnail-left edge to price-right edge) */
+.pc-cart-sub--row {
+  grid-column: 1 / -1;
+  margin-top: 2px;
+}
 .pc-cart-sub__toggle {
   all: unset;
   box-sizing: border-box;

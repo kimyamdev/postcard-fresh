@@ -304,8 +304,6 @@
                 <button type="button" class="pc-cart-line__remove tlink"
                   onclick="window.PostcardCart && window.PostcardCart.updateLine('{{ item.key }}', 0)">Remove</button>
               </div>
-
-              {%- render 'cart-subscribe-upsell', item: item -%}
             </div>
             <div class="pc-cart-line__price">
               <div class="h-display pc-cart-line__price-now">{{ item.final_line_price | money }}</div>
@@ -313,6 +311,8 @@
                 <div class="pc-cart-line__price-was">{{ item.original_line_price | money }}</div>
               {%- endif -%}
             </div>
+
+            {%- render 'cart-subscribe-upsell', item: item, layout: 'drawer' -%}
           </div>
           {%- endif -%}
         {%- endfor -%}
