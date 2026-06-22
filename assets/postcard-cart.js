@@ -126,22 +126,16 @@
   }
 
   // Upgrade some-or-all of a one-off line to a subscription. Shopify can't split
-  // a line, so we ADD `subQty` units of the variant on the selling plan (a new
-  // line, since the plan differs) and REDUCE the original one-off line by the
-  // same amount (to 0 = removed when the whole line is upgraded).
+  // a line, so we REDUCE the original one-off line and ADD `subQty` units of the
+  // variant on the selling plan (a new line, since the plan differs).
+  //
+  // Order matters: reduce the one-off line FIRST, while its key is still valid.
+  // Shopify line keys aren't stable across cart mutations, so adding first can
+  // invalidate the one-off line's key and make the follow-up change fail with
+  // "no valid id or line parameter".
   async function upgradeLineToPlan(opts) {
     var totalQty = opts.totalQty;
     var m = Math.max(1, Math.min(parseInt(opts.subQty, 10) || totalQty, totalQty));
-
-    const addRes = await fetch('/cart/add.js', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: opts.variantId, quantity: m, selling_plan: opts.planId })
-    });
-    if (!addRes.ok) {
-      const err = await addRes.json().catch(() => ({}));
-      throw new Error(err.description || err.message || 'Could not add subscription');
-    }
 
     const changeRes = await fetch('/cart/change.js', {
       method: 'POST',
@@ -151,6 +145,16 @@
     if (!changeRes.ok) {
       const err = await changeRes.json().catch(() => ({}));
       throw new Error(err.description || err.message || 'Could not update one-off line');
+    }
+
+    const addRes = await fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: opts.variantId, quantity: m, selling_plan: opts.planId })
+    });
+    if (!addRes.ok) {
+      const err = await addRes.json().catch(() => ({}));
+      throw new Error(err.description || err.message || 'Could not add subscription');
     }
 
     await Promise.all([refreshDrawer(), refreshBag(), refreshCartPage()]);
