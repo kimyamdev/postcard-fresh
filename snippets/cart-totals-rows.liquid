@@ -1,0 +1,94 @@
+{%- comment -%}
+  Shared cart totals rows, used by the drawer and the /cart footer so the two
+  never drift. Renders the rows BETWEEN the items and the surface's own final
+  total (drawer grand TOTAL / cart estimated total):
+
+    Subtotal (true full one-off price)
+    Autoship savings · every <cadence>   (one per frequency)
+    <Bundle> savings
+    Shipping
+    Free shipping saved                  (only when shipping is free)
+    You saved                            (grand total of all savings)
+
+  Subtotal is the regular price of every line (variant.price x qty for plan
+  lines, original_line_price otherwise) so that Subtotal minus item savings
+  equals the cart total — Shopify's original_total_price bakes in the plan
+  price, which would hide the autoship saving.
+
+  ship_fee_cents = the store's standard shipping rate (S$3.99). Update here.
+
+  Accepts:
+    variant   'drawer' or 'cart' — picks row markup/classes.
+{%- endcomment -%}
+{%- liquid
+  assign threshold_cents = 6000
+  assign ship_fee_cents = 399
+
+  assign mm_savings_cents = 0
+  assign bundle_name = ''
+  assign sub_savings_cents = 0
+  assign subtotal_regular_cents = 0
+  for item in cart.items
+    if item.properties._bundle_id != blank
+      assign bundle_name_raw = item.properties.Bundle | default: item.properties._bundle | default: 'Mix & Match'
+      assign bundle_name = bundle_name_raw | split: ' (' | first
+      for alloc in item.line_level_discount_allocations
+        assign mm_savings_cents = mm_savings_cents | plus: alloc.amount
+      endfor
+    endif
+    if item.selling_plan_allocation
+      assign reg_line = item.variant.price | times: item.quantity
+      assign per_unit_saving = item.variant.price | minus: item.selling_plan_allocation.price
+      assign line_saving = per_unit_saving | times: item.quantity
+      assign sub_savings_cents = sub_savings_cents | plus: line_saving
+    else
+      assign reg_line = item.original_line_price
+    endif
+    assign subtotal_regular_cents = subtotal_regular_cents | plus: reg_line
+  endfor
+
+  assign vip_tier = customer.metafields.smile.vip_tier_name.value
+  assign is_villa = false
+  if vip_tier != blank
+    assign vip_tier_lower = vip_tier | downcase | strip
+    if vip_tier_lower == 'villa'
+      assign is_villa = true
+    endif
+  endif
+  assign free_ship = false
+  if is_villa or cart.total_price >= threshold_cents
+    assign free_ship = true
+  endif
+  assign ship_saved_cents = 0
+  if free_ship
+    assign ship_saved_cents = ship_fee_cents
+  endif
+  assign total_savings_cents = sub_savings_cents | plus: mm_savings_cents | plus: ship_saved_cents
+
+  if variant == 'cart'
+    assign row = 'pc-cart-total-row'
+    assign row_save = 'pc-cart-total-row pc-cart-total-row--savings'
+    assign row_total = 'pc-cart-total-row pc-cart-total-row--total-savings'
+  else
+    assign row = 'pc-cart-drawer__total-row'
+    assign row_save = 'pc-cart-drawer__total-row pc-cart-drawer__total-row--savings'
+    assign row_total = 'pc-cart-drawer__total-row pc-cart-drawer__total-row--total-savings'
+  endif
+-%}
+<div class="{{ row }}"><span>Subtotal</span><span>{{ subtotal_regular_cents | money }}</span></div>
+{%- render 'cart-autoship-savings', variant: variant -%}
+{%- if mm_savings_cents > 0 -%}
+  <div class="{{ row_save }}"><span>{{ bundle_name | default: 'Mix & Match' }} savings</span><span>&minus;{{ mm_savings_cents | money }}</span></div>
+{%- endif -%}
+<div class="{{ row }}"><span>Shipping</span><span>
+  {%- if is_villa -%}Free &middot; Villa tier
+  {%- elsif cart.total_price >= threshold_cents -%}Free
+  {%- else -%}Calc. at checkout
+  {%- endif -%}
+</span></div>
+{%- if ship_saved_cents > 0 -%}
+  <div class="{{ row_save }}"><span>Free shipping saved</span><span>&minus;{{ ship_saved_cents | money }}</span></div>
+{%- endif -%}
+{%- if total_savings_cents > 0 -%}
+  <div class="{{ row_total }}"><span>You saved</span><span>{{ total_savings_cents | money }}</span></div>
+{%- endif -%}

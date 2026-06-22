@@ -24,24 +24,6 @@
     assign pct = 100
   endif
   comment
-    Mix & Match bundle savings: bundle lines carry a `_bundle_id` property, so
-    their line-level discount allocations are the bundle discount, shown on its
-    own totals line. Subscription/autoship savings are computed separately in
-    the footer, one line per delivery frequency.
-  endcomment
-  assign mm_savings_cents = 0
-  assign bundle_name = ''
-  for item in cart.items
-    if item.properties._bundle_id != blank
-      assign bundle_name_raw = item.properties.Bundle | default: item.properties._bundle | default: 'Mix & Match'
-      assign bundle_name = bundle_name_raw | split: ' (' | first
-      for alloc in item.line_level_discount_allocations
-        assign mm_savings_cents = mm_savings_cents | plus: alloc.amount
-      endfor
-    endif
-  endfor
-
-  comment
     Smile VIP tier integration. Customer's tier name is read from
     customer.metafields.smile.vip_tier_name (single-line text). The "Villa"
     tier is the free-shipping tier — the tier badge always paints when set,
@@ -63,37 +45,6 @@
     assign remaining_cents = 0
     assign pct = 100
   endif
-
-  comment
-    Savings roll-up for the totals footer: subscription/autoship savings
-    (one-off price minus plan price per line), plus bundle savings, plus the
-    free-shipping value when shipping is free, summed into total_savings_cents.
-    ship_fee_cents = the store's standard shipping rate (S$3.99). Update it here
-    if the rate changes.
-  endcomment
-  assign sub_savings_cents = 0
-  assign subtotal_regular_cents = 0
-  for item in cart.items
-    if item.selling_plan_allocation
-      assign reg_line = item.variant.price | times: item.quantity
-      assign per_unit_saving = item.variant.price | minus: item.selling_plan_allocation.price
-      assign line_saving = per_unit_saving | times: item.quantity
-      assign sub_savings_cents = sub_savings_cents | plus: line_saving
-    else
-      assign reg_line = item.original_line_price
-    endif
-    assign subtotal_regular_cents = subtotal_regular_cents | plus: reg_line
-  endfor
-  assign ship_fee_cents = 399
-  assign free_ship = false
-  if is_villa or cart.total_price >= threshold_cents
-    assign free_ship = true
-  endif
-  assign ship_saved_cents = 0
-  if free_ship
-    assign ship_saved_cents = ship_fee_cents
-  endif
-  assign total_savings_cents = sub_savings_cents | plus: mm_savings_cents | plus: ship_saved_cents
 -%}
 
 {%- if customer -%}
@@ -340,23 +291,7 @@
       <form action="{{ routes.cart_url }}" method="post" id="CartDrawer-Form" class="pc-cart-drawer__footer" novalidate>
         <div class="pc-cart-drawer__footer-inner">
           <div class="pc-cart-drawer__totals">
-            <div class="pc-cart-drawer__total-row"><span>Subtotal</span><span>{{ subtotal_regular_cents | money }}</span></div>
-            {%- render 'cart-autoship-savings', variant: 'drawer' -%}
-            {%- if mm_savings_cents > 0 -%}
-              <div class="pc-cart-drawer__total-row pc-cart-drawer__total-row--savings"><span>{{ bundle_name | default: 'Mix & Match' }} savings</span><span>&minus;{{ mm_savings_cents | money }}</span></div>
-            {%- endif -%}
-            <div class="pc-cart-drawer__total-row"><span>Shipping</span><span>
-              {%- if is_villa -%}Free &middot; Villa tier
-              {%- elsif cart.total_price >= threshold_cents -%}Free
-              {%- else -%}Calc. at checkout
-              {%- endif -%}
-            </span></div>
-            {%- if ship_saved_cents > 0 -%}
-              <div class="pc-cart-drawer__total-row pc-cart-drawer__total-row--savings"><span>Free shipping saved</span><span>&minus;{{ ship_saved_cents | money }}</span></div>
-            {%- endif -%}
-            {%- if total_savings_cents > 0 -%}
-              <div class="pc-cart-drawer__total-row pc-cart-drawer__total-row--total-savings"><span>You saved</span><span>{{ total_savings_cents | money }}</span></div>
-            {%- endif -%}
+            {%- render 'cart-totals-rows', variant: 'drawer' -%}
           </div>
           <div class="pc-cart-drawer__grand">
             <span class="h-display pc-cart-drawer__grand-label">TOTAL</span>

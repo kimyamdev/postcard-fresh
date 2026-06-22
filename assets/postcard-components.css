@@ -3925,17 +3925,25 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
   background: #B07A4E;
 }
 
-/* Per-frequency autoship savings row on the /cart page footer (cart-autoship-savings.liquid) */
-.pc-autoship-saving {
+/* Cart-page totals rows (cart-totals-rows.liquid / cart-autoship-savings.liquid) */
+.pc-cart-totals { margin: 0 0 1.2rem; }
+.pc-cart-total-row {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 1.2rem;
   margin: 0 0 0.6rem;
   font-size: 1.4rem;
-  color: #8A5A33;
 }
-.pc-autoship-saving__amount { font-weight: 600; white-space: nowrap; }
+.pc-cart-total-row span:last-child { white-space: nowrap; }
+.pc-cart-total-row--savings { color: #B07A4E; }
+.pc-cart-total-row--total-savings {
+  margin-top: 0.4rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed rgba(176, 122, 78, 0.4);
+  color: #8A5A33;
+  font-weight: 700;
+}
 
 /* Active-subscription tag on a cart line (filled accent = locked in) */
 .pc-cart-line__autoship {

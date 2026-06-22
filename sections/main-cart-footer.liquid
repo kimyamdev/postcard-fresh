@@ -58,7 +58,9 @@
                   {%- endif -%}
                 </div>
 
-                {%- render 'cart-autoship-savings', variant: 'cart' -%}
+                <div class="pc-cart-totals">
+                  {%- render 'cart-totals-rows', variant: 'cart' -%}
+                </div>
 
                 <div class="totals">
                   <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
