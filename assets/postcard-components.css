@@ -4238,6 +4238,13 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
 }
 .pc-cart-drawer__total-row { display: flex; justify-content: space-between; }
 .pc-cart-drawer__total-row--savings { color: #B07A4E; }
+.pc-cart-drawer__total-row--total-savings {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(176, 122, 78, 0.4);
+  color: #8A5A33;
+  font-weight: 700;
+}
 
 .pc-cart-drawer__grand {
   margin-top: 14px;
