@@ -34,6 +34,28 @@
     }
   }
 
+  // Re-render the standalone /cart page line items in place (no full reload),
+  // mirroring how the drawer refreshes. No-op on pages without the cart section.
+  async function refreshCartPage() {
+    const container = document.getElementById('main-cart-items');
+    if (!container) return;
+    const sectionId = container.dataset.id || 'main-cart-items';
+    try {
+      const r = await fetch(`${window.location.pathname}?section_id=${encodeURIComponent(sectionId)}`);
+      if (!r.ok) return;
+      const text = await r.text();
+      const parsed = new DOMParser().parseFromString(text, 'text/html');
+      const newContents = parsed.querySelector('.js-contents');
+      const cur = container.querySelector('.js-contents');
+      if (newContents && cur) {
+        cur.innerHTML = newContents.innerHTML;
+        if (window.Alpine && typeof window.Alpine.initTree === 'function') {
+          window.Alpine.initTree(cur);
+        }
+      }
+    } catch (_) {}
+  }
+
   async function refreshBag() {
     try {
       const cart = await (await fetch('/cart.js')).json();
@@ -81,6 +103,22 @@
       throw new Error(err.description || 'Cart update failed');
     }
     await Promise.all([refreshDrawer(), refreshBag()]);
+  }
+
+  // Switch a cart line between one-off and subscription (or change frequency).
+  // The Cart API requires the `line` index (not the line key) and `quantity`
+  // when setting selling_plan; pass planId = null/'' to revert to one-time.
+  async function setLinePlan(line, qty, planId) {
+    const r = await fetch('/cart/change.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ line: line, quantity: qty, selling_plan: planId || null })
+    });
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({}));
+      throw new Error(err.description || err.message || 'Could not update subscription');
+    }
+    await Promise.all([refreshDrawer(), refreshBag(), refreshCartPage()]);
   }
 
   // Set the same quantity on every line of a Mix & Match bundle in one request,
@@ -155,5 +193,5 @@
     tryApplyVillaShipping();
   }
 
-  window.PostcardCart = { addItem, updateLine, updateBundle, refreshDrawer, refreshBag, tryApplyVillaShipping };
+  window.PostcardCart = { addItem, updateLine, updateBundle, setLinePlan, refreshDrawer, refreshCartPage, refreshBag, tryApplyVillaShipping };
 })();

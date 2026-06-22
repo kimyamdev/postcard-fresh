@@ -1,0 +1,88 @@
+{%- comment -%}
+  Inline "switch to subscription" upsell for a single cart line.
+
+  Renders a compact "Subscribe & save X%" toggle under a one-off line whose
+  product has selling plans, letting the customer convert that line to a
+  subscription at a chosen frequency without leaving the cart. The switch goes
+  through /cart/change.js (identified by `line` + `selling_plan`) via
+  PostcardCart.setLinePlan, then the cart re-renders.
+
+  Renders NOTHING when:
+    - the line is already on a selling plan (item.selling_plan_allocation), or
+    - the product has no selling plan groups (not subscribable).
+  So it stays fully dormant until selling plans are configured in admin.
+
+  Accepts:
+    item   cart line item (required)
+{%- endcomment -%}
+
+{%- liquid
+  assign sp_groups = item.product.selling_plan_groups
+  assign already_sub = false
+  if item.selling_plan_allocation
+    assign already_sub = true
+  endif
+-%}
+
+{%- if already_sub == false and sp_groups.size > 0 -%}
+  {%- liquid
+    assign sp_group = sp_groups.first
+    assign sp_plans = sp_group.selling_plans
+    assign first_plan = sp_plans.first
+    assign first_adj = first_plan.price_adjustments.first
+    assign sp_pct = 0
+    if first_adj.value_type == 'percentage'
+      assign sp_pct = first_adj.value
+    endif
+    assign cadence_eyebrow = sp_group.options.first | default: 'Deliver every'
+    assign line_index = item.index | plus: 1
+    assign default_plan = first_plan.id
+  -%}
+  <div
+    class="pc-cart-sub"
+    x-data="{
+      open: false,
+      plan: '{{ default_plan }}',
+      busy: false,
+      err: '',
+      subscribe() {
+        if (this.busy || !window.PostcardCart) return;
+        this.busy = true; this.err = '';
+        window.PostcardCart.setLinePlan({{ line_index }}, {{ item.quantity }}, this.plan)
+          .catch((e) => { this.busy = false; this.err = (e && e.message) || 'Could not switch'; });
+      }
+    }"
+  >
+    <button type="button" class="pc-cart-sub__toggle" @click="open = !open" :aria-expanded="open">
+      <span class="pc-cart-sub__toggle-icon" aria-hidden="true">&#8635;</span>
+      <span class="pc-cart-sub__toggle-text">
+        {%- if sp_pct > 0 -%}Subscribe &amp; save {{ sp_pct }}%{%- else -%}Subscribe &amp; save{%- endif -%}
+      </span>
+      <span class="pc-cart-sub__toggle-arrow" :class="{ 'pc-cart-sub__toggle-arrow--open': open }" aria-hidden="true">&#9662;</span>
+    </button>
+
+    <div x-show="open" x-cloak class="pc-cart-sub__panel">
+      <div class="eyebrow pc-cart-sub__cadence-label">{{ cadence_eyebrow }}</div>
+      <div class="pc-cart-sub__pills">
+        {%- for plan in sp_plans -%}
+          {%- assign plan_label = plan.options.first.value | default: plan.name -%}
+          <button
+            type="button"
+            class="pc-cart-sub__pill"
+            :class="{ 'pc-cart-sub__pill--active': plan === '{{ plan.id }}' }"
+            @click="plan = '{{ plan.id }}'"
+          >{{ plan_label }}</button>
+        {%- endfor -%}
+      </div>
+      <button
+        type="button"
+        class="pc-cart-sub__apply"
+        @click="subscribe()"
+        :disabled="busy"
+        x-text="busy ? 'Switching…' : 'Switch to subscription'"
+      >Switch to subscription</button>
+      <p class="pc-cart-sub__err" x-show="err" x-cloak x-text="err"></p>
+      <p class="pc-cart-sub__note">Skip, swap world, or cancel anytime.</p>
+    </div>
+  </div>
+{%- endif -%}

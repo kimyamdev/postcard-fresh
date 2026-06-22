@@ -3925,6 +3925,59 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
   background: #B07A4E;
 }
 
+/* Inline "switch to subscription" upsell on a one-off line (cart-subscribe-upsell.liquid) */
+.pc-cart-sub {
+  margin-top: 8px;
+  border-top: 1px dashed var(--color-line);
+  padding-top: 8px;
+}
+.pc-cart-sub__toggle {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: #B07A4E;
+}
+.pc-cart-sub__toggle:hover { text-decoration: underline; }
+.pc-cart-sub__toggle-icon { font-size: 13px; line-height: 1; }
+.pc-cart-sub__toggle-arrow { font-size: 9px; transition: transform 0.15s ease; }
+.pc-cart-sub__toggle-arrow--open { transform: rotate(180deg); }
+.pc-cart-sub__panel { margin-top: 8px; }
+.pc-cart-sub__cadence-label { font-size: 10px; margin-bottom: 6px; }
+.pc-cart-sub__pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.pc-cart-sub__pill {
+  cursor: pointer;
+  padding: 6px 10px;
+  border: 1.5px solid var(--color-ink);
+  background: transparent;
+  font-family: var(--font-display);
+  font-size: 11px;
+  color: var(--color-ink);
+}
+.pc-cart-sub__pill--active { background: var(--color-ink); color: var(--color-bg); }
+.pc-cart-sub__apply {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-block;
+  margin-top: 8px;
+  padding: 7px 14px;
+  background: var(--color-ink);
+  color: var(--color-bg);
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+.pc-cart-sub__apply[disabled] { opacity: 0.6; cursor: default; }
+.pc-cart-sub__err { font-size: 11px; color: #B23B3B; margin: 6px 0 0; }
+.pc-cart-sub__note { font-size: 11px; opacity: 0.65; font-style: italic; margin: 6px 0 0; }
+
 /* Mix & Match bundle group — 3 locked lines shown as one unit */
 .pc-cart-bundle {
   border: 1px solid var(--color-ink);
