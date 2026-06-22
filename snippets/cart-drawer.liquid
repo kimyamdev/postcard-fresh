@@ -72,12 +72,17 @@
     if the rate changes.
   endcomment
   assign sub_savings_cents = 0
+  assign subtotal_regular_cents = 0
   for item in cart.items
     if item.selling_plan_allocation
+      assign reg_line = item.variant.price | times: item.quantity
       assign per_unit_saving = item.variant.price | minus: item.selling_plan_allocation.price
       assign line_saving = per_unit_saving | times: item.quantity
       assign sub_savings_cents = sub_savings_cents | plus: line_saving
+    else
+      assign reg_line = item.original_line_price
     endif
+    assign subtotal_regular_cents = subtotal_regular_cents | plus: reg_line
   endfor
   assign ship_fee_cents = 399
   assign free_ship = false
@@ -335,13 +340,10 @@
       <form action="{{ routes.cart_url }}" method="post" id="CartDrawer-Form" class="pc-cart-drawer__footer" novalidate>
         <div class="pc-cart-drawer__footer-inner">
           <div class="pc-cart-drawer__totals">
-            <div class="pc-cart-drawer__total-row"><span>Subtotal</span><span>{{ cart.original_total_price | money }}</span></div>
+            <div class="pc-cart-drawer__total-row"><span>Subtotal</span><span>{{ subtotal_regular_cents | money }}</span></div>
             {%- render 'cart-autoship-savings', variant: 'drawer' -%}
             {%- if mm_savings_cents > 0 -%}
               <div class="pc-cart-drawer__total-row pc-cart-drawer__total-row--savings"><span>{{ bundle_name | default: 'Mix & Match' }} savings</span><span>&minus;{{ mm_savings_cents | money }}</span></div>
-            {%- endif -%}
-            {%- if ship_saved_cents > 0 -%}
-              <div class="pc-cart-drawer__total-row pc-cart-drawer__total-row--savings"><span>Free shipping saved</span><span>&minus;{{ ship_saved_cents | money }}</span></div>
             {%- endif -%}
             <div class="pc-cart-drawer__total-row"><span>Shipping</span><span>
               {%- if is_villa -%}Free &middot; Villa tier
@@ -349,6 +351,9 @@
               {%- else -%}Calc. at checkout
               {%- endif -%}
             </span></div>
+            {%- if ship_saved_cents > 0 -%}
+              <div class="pc-cart-drawer__total-row pc-cart-drawer__total-row--savings"><span>Free shipping saved</span><span>&minus;{{ ship_saved_cents | money }}</span></div>
+            {%- endif -%}
             {%- if total_savings_cents > 0 -%}
               <div class="pc-cart-drawer__total-row pc-cart-drawer__total-row--total-savings"><span>You saved</span><span>{{ total_savings_cents | money }}</span></div>
             {%- endif -%}
