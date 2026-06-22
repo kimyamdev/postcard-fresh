@@ -34,26 +34,30 @@
     }
   }
 
-  // Re-render the standalone /cart page line items in place (no full reload),
-  // mirroring how the drawer refreshes. No-op on pages without the cart section.
+  // Re-render the standalone /cart page sections in place (no full reload),
+  // mirroring how the drawer refreshes. Covers both the line items and the
+  // footer (subtotal/savings/total). No-op on pages without these sections.
   async function refreshCartPage() {
-    const container = document.getElementById('main-cart-items');
-    if (!container) return;
-    const sectionId = container.dataset.id || 'main-cart-items';
-    try {
-      const r = await fetch(`${window.location.pathname}?section_id=${encodeURIComponent(sectionId)}`);
-      if (!r.ok) return;
-      const text = await r.text();
-      const parsed = new DOMParser().parseFromString(text, 'text/html');
-      const newContents = parsed.querySelector('.js-contents');
-      const cur = container.querySelector('.js-contents');
-      if (newContents && cur) {
-        cur.innerHTML = newContents.innerHTML;
-        if (window.Alpine && typeof window.Alpine.initTree === 'function') {
-          window.Alpine.initTree(cur);
+    const containers = document.querySelectorAll('#main-cart-items, #main-cart-footer');
+    if (!containers.length) return;
+    await Promise.all(Array.from(containers).map(async (container) => {
+      const sectionId = container.dataset.id;
+      if (!sectionId) return;
+      try {
+        const r = await fetch(`${window.location.pathname}?section_id=${encodeURIComponent(sectionId)}`);
+        if (!r.ok) return;
+        const text = await r.text();
+        const parsed = new DOMParser().parseFromString(text, 'text/html');
+        const newContents = parsed.querySelector('.js-contents');
+        const cur = container.querySelector('.js-contents');
+        if (newContents && cur) {
+          cur.innerHTML = newContents.innerHTML;
+          if (window.Alpine && typeof window.Alpine.initTree === 'function') {
+            window.Alpine.initTree(cur);
+          }
         }
-      }
-    } catch (_) {}
+      } catch (_) {}
+    }));
   }
 
   async function refreshBag() {

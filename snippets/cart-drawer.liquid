@@ -335,42 +335,7 @@
         <div class="pc-cart-drawer__footer-inner">
           <div class="pc-cart-drawer__totals">
             <div class="pc-cart-drawer__total-row"><span>Subtotal</span><span>{{ cart.original_total_price | money }}</span></div>
-            {%- comment -%}
-              Autoship savings, one line per delivery frequency. Saving per line
-              = one-off price (original_line_price) minus the plan price
-              (allocation per-unit price x qty), grouped by clean cadence.
-              Two passes: collect distinct cadences, then sum each.
-            {%- endcomment -%}
-            {%- assign sub_cadences = '' -%}
-            {%- for item in cart.items -%}
-              {%- if item.selling_plan_allocation -%}
-                {%- assign sp = item.selling_plan_allocation.selling_plan -%}
-                {%- assign cad = sp.options.first.value | default: sp.name -%}
-                {%- assign cad_lead = cad | slice: 0, 2 -%}
-                {%- if cad_lead == '1 ' -%}{%- assign cad = cad | remove_first: '1 ' -%}{%- endif -%}
-                {%- assign tok = cad | append: '|||' -%}
-                {%- unless sub_cadences contains tok -%}{%- assign sub_cadences = sub_cadences | append: tok -%}{%- endunless -%}
-              {%- endif -%}
-            {%- endfor -%}
-            {%- assign cadence_list = sub_cadences | split: '|||' -%}
-            {%- for cad in cadence_list -%}
-              {%- assign cad_savings = 0 -%}
-              {%- for item in cart.items -%}
-                {%- if item.selling_plan_allocation -%}
-                  {%- assign isp = item.selling_plan_allocation.selling_plan -%}
-                  {%- assign icad = isp.options.first.value | default: isp.name -%}
-                  {%- assign icad_lead = icad | slice: 0, 2 -%}
-                  {%- if icad_lead == '1 ' -%}{%- assign icad = icad | remove_first: '1 ' -%}{%- endif -%}
-                  {%- if icad == cad -%}
-                    {%- assign sub_line_price = item.selling_plan_allocation.price | times: item.quantity -%}
-                    {%- assign cad_savings = cad_savings | plus: item.original_line_price | minus: sub_line_price -%}
-                  {%- endif -%}
-                {%- endif -%}
-              {%- endfor -%}
-              {%- if cad_savings > 0 -%}
-                <div class="pc-cart-drawer__total-row pc-cart-drawer__total-row--savings"><span>Autoship savings &middot; every {{ cad }}</span><span>&minus;{{ cad_savings | money }}</span></div>
-              {%- endif -%}
-            {%- endfor -%}
+            {%- render 'cart-autoship-savings', variant: 'drawer' -%}
             {%- if mm_savings_cents > 0 -%}
               <div class="pc-cart-drawer__total-row pc-cart-drawer__total-row--savings"><span>{{ bundle_name | default: 'Mix & Match' }} savings</span><span>&minus;{{ mm_savings_cents | money }}</span></div>
             {%- endif -%}
