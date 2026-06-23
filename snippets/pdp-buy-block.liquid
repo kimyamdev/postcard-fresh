@@ -141,7 +141,7 @@
       if sp_discount_pct > 0
         assign sub_label = sub_label | append: ' ' | append: sp_discount_pct | append: '%'
       endif
-      assign cadence_eyebrow = first_group.options.first | default: 'Deliver every'
+      assign cadence_eyebrow = first_group.options.first.name | default: 'Deliver every'
     endif
   -%}
   <div class="pc-pdp-buy__option" {{ block.shopify_attributes }}>
