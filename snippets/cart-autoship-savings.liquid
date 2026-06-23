@@ -38,9 +38,9 @@
   {%- endfor -%}
   {%- if cad_savings > 0 -%}
     {%- if variant == 'cart' -%}
-      <div class="pc-cart-total-row pc-cart-total-row--savings"><span>Autoship savings &middot; every {{ cad }}</span><span>&minus;{{ cad_savings | money }}</span></div>
+      <div class="pc-cart-total-row pc-cart-total-row--savings"><span>Refill savings &middot; every {{ cad }}</span><span>&minus;{{ cad_savings | money }}</span></div>
     {%- else -%}
-      <div class="pc-cart-drawer__total-row pc-cart-drawer__total-row--savings"><span>Autoship savings &middot; every {{ cad }}</span><span>&minus;{{ cad_savings | money }}</span></div>
+      <div class="pc-cart-drawer__total-row pc-cart-drawer__total-row--savings"><span>Refill savings &middot; every {{ cad }}</span><span>&minus;{{ cad_savings | money }}</span></div>
     {%- endif -%}
   {%- endif -%}
 {%- endfor -%}

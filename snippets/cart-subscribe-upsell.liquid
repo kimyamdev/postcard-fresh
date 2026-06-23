@@ -1,11 +1,11 @@
 {%- comment -%}
   Inline "switch to subscription" upsell for a single cart line.
 
-  Renders a compact "Upgrade to autoship" card under a one-off line whose
+  Renders a compact "Refill & save" card under a one-off line whose
   product has selling plans, showing the dynamic per-delivery savings and
-  letting the customer convert the line to a subscription at a chosen
-  frequency without leaving the cart. When the line has qty > 1, a stepper
-  lets them pick HOW MANY units to put on autoship; the rest stay one-off.
+  letting the customer convert the line to a subscription (a "refill plan")
+  at a chosen frequency without leaving the cart. When the line has qty > 1,
+  a stepper lets them pick HOW MANY units to put on refill; the rest stay one-off.
   PostcardCart.upgradeLineToPlan adds the chosen quantity as a new selling-plan
   line and reduces the one-off line, then the cart re-renders.
 
@@ -38,7 +38,7 @@
     if first_adj.value_type == 'percentage'
       assign sp_pct = first_adj.value
     endif
-    assign cadence_eyebrow = sp_group.options.first.name | default: 'Deliver every'
+    assign cadence_eyebrow = 'Deliver every'
     assign default_plan = first_plan.id
   -%}
   {%- comment -%}
@@ -75,25 +75,29 @@
       <span class="pc-cart-sub__badge-icon" aria-hidden="true">&#8635;</span>
       <span class="pc-cart-sub__head">
         <span class="pc-cart-sub__head-row">
-          <span class="pc-cart-sub__toggle-text">Upgrade to autoship</span>
+          <span class="pc-cart-sub__toggle-text">Refill &amp; save</span>
           {%- if sp_pct > 0 -%}
             <span class="pc-cart-sub__toggle-badge">&minus;{{ sp_pct }}%</span>
           {%- endif -%}
         </span>
         <span
           class="pc-cart-sub__subline"
-          x-text="(savings[plan] ? ('Save ' + savings[plan] + ' on every delivery') : 'Deliver on repeat') + ' · Skip, pause or cancel anytime'"
-        >{%- if default_save > 0 -%}Save {{ default_save | money }} on every delivery &middot; Skip, pause or cancel anytime{%- else -%}Deliver on repeat &middot; Skip, pause or cancel anytime{%- endif -%}</span>
+          x-text="(savings[plan] ? ('Save ' + savings[plan] + ' on every delivery') : 'Save on every refill') + '. Skip, pause or cancel anytime.'"
+        >{%- if default_save > 0 -%}Save {{ default_save | money }} on every delivery. Skip, pause or cancel anytime.{%- else -%}Save on every refill. Skip, pause or cancel anytime.{%- endif -%}</span>
       </span>
       <span class="pc-cart-sub__toggle-arrow" :class="{ 'pc-cart-sub__toggle-arrow--open': open }" aria-hidden="true">&#9662;</span>
     </button>
 
     <div x-show="open" x-cloak class="pc-cart-sub__panel">
-      <p class="pc-cart-sub__pitch"><strong>Your self-care, on repeat.</strong> Save {{ sp_pct }}% on your favourite Postcard essentials, delivered at your rhythm. Skip, pause or cancel anytime.</p>
+      <p class="pc-cart-sub__emote">Your self-care, on repeat.</p>
+      <p class="pc-cart-sub__support">Save {{ sp_pct }}% on every refill, delivered at your rhythm.</p>
       <div class="eyebrow pc-cart-sub__cadence-label">{{ cadence_eyebrow }}</div>
       <div class="pc-cart-sub__pills">
         {%- for plan in sp_plans -%}
-          {%- assign plan_label = plan.options.first.value | default: plan.name -%}
+          {%- assign plan_raw = plan.options.first.value | default: plan.name -%}
+          {%- assign plan_lead = plan_raw | slice: 0, 2 -%}
+          {%- if plan_lead == '1 ' -%}{%- assign plan_raw = plan_raw | remove_first: '1 ' -%}{%- endif -%}
+          {%- assign plan_label = 'Every ' | append: plan_raw -%}
           <button
             type="button"
             class="pc-cart-sub__pill"
@@ -106,9 +110,9 @@
         <div class="pc-cart-sub__qty">
           <span class="pc-cart-sub__qty-label">How many of {{ item.quantity }}?</span>
           <div class="pc-cart-sub__stepper">
-            <button type="button" class="pc-cart-sub__stepper-btn" aria-label="Fewer on autoship" @click="if (subQty > 1) subQty--">&minus;</button>
+            <button type="button" class="pc-cart-sub__stepper-btn" aria-label="Fewer on refill" @click="if (subQty > 1) subQty--">&minus;</button>
             <span class="pc-cart-sub__stepper-value" x-text="subQty">{{ item.quantity }}</span>
-            <button type="button" class="pc-cart-sub__stepper-btn" aria-label="More on autoship" @click="if (subQty < {{ item.quantity }}) subQty++">+</button>
+            <button type="button" class="pc-cart-sub__stepper-btn" aria-label="More on refill" @click="if (subQty < {{ item.quantity }}) subQty++">+</button>
           </div>
         </div>
       {%- endif -%}
@@ -117,8 +121,8 @@
         class="pc-cart-sub__apply"
         @click="subscribe()"
         :disabled="busy"
-        x-text="busy ? 'Upgrading…' : ({% if item.quantity > 1 %}'Upgrade ' + subQty + ' to autoship'{% else %}'Upgrade to autoship'{% endif %})"
-      >Upgrade to autoship</button>
+        x-text="busy ? 'Starting…' : ({% if item.quantity > 1 %}'Start refill plan · ' + subQty + ' of {{ item.quantity }}'{% else %}'Start my refill plan'{% endif %})"
+      >Start my refill plan</button>
       <p class="pc-cart-sub__err" x-show="err" x-cloak x-text="err"></p>
     </div>
   </div>
