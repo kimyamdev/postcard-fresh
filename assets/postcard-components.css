@@ -5745,3 +5745,39 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
 .pc-reorder--compact .pc-reorder__head { margin-bottom: 12px; }
 .pc-reorder--compact .pc-reorder__heading { font-size: 15px; font-style: normal; text-transform: uppercase; letter-spacing: 0.05em; }
 .pc-reorder--compact .pc-reorder__grid { grid-template-columns: 1fr; gap: 12px; }
+
+/* Quick-add on "From your worlds" rec cards (customer-world-recs.liquid) */
+.pc-quick-add { display: flex; justify-content: flex-end; align-items: stretch; gap: 8px; margin-top: 10px; }
+.pc-quick-add__select {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 7px 9px;
+  border: 1.5px solid var(--color-ink);
+  background: var(--color-bg);
+  font-family: var(--font-display);
+  font-size: 11px;
+  color: var(--color-ink);
+}
+.pc-quick-add__btn {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  flex: none;
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--color-ink);
+  background: var(--color-ink);
+  color: var(--color-bg);
+  font-size: 20px;
+  line-height: 1;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.pc-quick-add__btn:hover { background: #B07A4E; border-color: #B07A4E; }
+.pc-quick-add__btn[disabled] { opacity: 0.5; cursor: default; }
+.pc-world-recs--compact .pc-quick-add { margin-top: 8px; }
+.pc-world-recs--compact .pc-quick-add__btn { width: 32px; min-width: 32px; height: 32px; font-size: 18px; }

@@ -60,7 +60,23 @@
         {%- if exclude_id and fp.id == exclude_id -%}{%- continue -%}{%- endif -%}
         {%- assign rendered_ids = rendered_ids | append: fp.id | append: ',' -%}
         {%- assign rec_count = rec_count | plus: 1 -%}
-        <div class="pc-world-recs__cell">{%- render 'product-card', product: fp -%}</div>
+        <div class="pc-world-recs__cell">
+          {%- render 'product-card', product: fp -%}
+          {%- if fp.available -%}
+            <form class="pc-pdp-buy__form pc-quick-add">
+              {%- if fp.variants.size > 1 -%}
+                <select name="id" class="pc-quick-add__select" aria-label="Choose option for {{ fp.title | escape }}">
+                  {%- for v in fp.variants -%}
+                    <option value="{{ v.id }}"{% unless v.available %} disabled{% endunless %}>{{ v.title }}{% unless v.available %} &middot; sold out{% endunless %}</option>
+                  {%- endfor -%}
+                </select>
+              {%- else -%}
+                <input type="hidden" name="id" value="{{ fp.selected_or_first_available_variant.id }}">
+              {%- endif -%}
+              <button type="submit" class="pc-quick-add__btn" aria-label="Add {{ fp.title | escape }} to bag">+</button>
+            </form>
+          {%- endif -%}
+        </div>
       {%- endfor -%}
     {%- endfor -%}
   {%- endcapture -%}
