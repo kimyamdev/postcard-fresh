@@ -38,14 +38,19 @@
   {%- endif -%}
   <div
     class="pc-review-form"
+    {%- comment -%}
+      json values are HTML-escaped so their double quotes become &quot; and
+      don't close this double-quoted x-data attribute; the browser decodes them
+      back to valid JSON for Alpine. See reference_alpine_xdata_single_quotes.
+    {%- endcomment -%}
     x-data="pcReviewForm({
-      endpoint: {{ rf_endpoint | json }},
-      proxyUrl: {{ proxy_url | default: '' | json }},
-      productId: {{ product.id | json }},
-      productName: {{ product.title | json }},
-      productSKU: {{ product.handle | json }},
-      productUrl: {{ shop.url | append: product.url | json }},
-      productImageUrl: {{ rf_img | json }}
+      endpoint: {{ rf_endpoint | json | escape }},
+      proxyUrl: {{ proxy_url | default: '' | json | escape }},
+      productId: {{ product.id | json | escape }},
+      productName: {{ product.title | json | escape }},
+      productSKU: {{ product.handle | json | escape }},
+      productUrl: {{ shop.url | append: product.url | json | escape }},
+      productImageUrl: {{ rf_img | json | escape }}
     })"
   >
     <button type="button" class="pc-review-form__toggle" x-show="!open && !done" @click="open = true">
