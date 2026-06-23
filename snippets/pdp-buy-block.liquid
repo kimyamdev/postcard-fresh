@@ -166,7 +166,7 @@
         <label class="pc-pdp-buy__po" :class="{ 'pc-pdp-buy__po--active': mode === 'sub' }" @click="mode = 'sub'">
           <span class="pc-pdp-buy__po-radio"><span class="pc-pdp-buy__po-dot" x-show="mode === 'sub'"></span></span>
           <input type="radio" name="purchase_mode" value="sub" x-model="mode" class="pc-pdp-buy__po-input">
-          <span class="pc-pdp-buy__po-label">{{ sub_label }}</span>
+          <span class="pc-pdp-buy__po-label">{{ sub_label }}<button type="button" class="pc-refill-info" aria-label="View refill plan terms" data-refill-pct="{{ sp_discount_pct }}" onclick="event.preventDefault();event.stopPropagation();if(window.PostcardRefillTerms)window.PostcardRefillTerms.open(this);return false;"><span aria-hidden="true">i</span></button></span>
           <span class="pc-pdp-buy__po-price" x-text="(window.PCSubPrices && window.PCSubPrices[variantId] && window.PCSubPrices[variantId][cadence]) || ''"></span>
         </label>
         <div x-show="mode === 'sub'" x-cloak class="pc-pdp-buy__cadence">

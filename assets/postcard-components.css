@@ -4199,6 +4199,108 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
 .pc-cart-sub__apply[disabled] { opacity: 0.6; cursor: default; }
 .pc-cart-sub__err { font-size: 11px; color: #B23B3B; margin: 6px 0 0; }
 
+/* Refill plan terms — shared info icon (PDP + cart) and modal */
+.pc-refill-info {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 15px;
+  height: 15px;
+  margin-left: 6px;
+  border: 1px solid rgba(176, 122, 78, 0.55);
+  border-radius: 50%;
+  color: #B07A4E;
+  font-family: var(--font-display);
+  font-size: 9.5px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1;
+  vertical-align: middle;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.pc-refill-info:hover,
+.pc-refill-info:focus-visible {
+  background: #B07A4E;
+  color: #fff;
+  outline: none;
+}
+.pc-refill-info > span { pointer-events: none; }
+
+.pc-refill-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(40, 30, 20, 0.45);
+}
+.pc-refill-modal[hidden] { display: none; }
+.pc-refill-modal__dialog {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  background: var(--color-bg, #FFFCF7);
+  border: 1px solid rgba(176, 122, 78, 0.35);
+  box-shadow: 0 14px 44px rgba(33, 25, 16, 0.22);
+  padding: 26px 24px 22px;
+}
+.pc-refill-modal__close {
+  all: unset;
+  box-sizing: border-box;
+  position: absolute;
+  top: 9px;
+  right: 12px;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  line-height: 1;
+  color: #8A5A33;
+}
+.pc-refill-modal__close:hover,
+.pc-refill-modal__close:focus-visible { color: #B07A4E; outline: none; }
+.pc-refill-modal__title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8A5A33;
+  margin: 0 0 14px;
+}
+.pc-refill-modal__list { list-style: none; margin: 0; padding: 0; }
+.pc-refill-modal__list li {
+  position: relative;
+  padding-left: 16px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #6B4E34;
+  margin-bottom: 9px;
+}
+.pc-refill-modal__list li:last-child { margin-bottom: 0; }
+.pc-refill-modal__list li::before {
+  content: '';
+  position: absolute;
+  left: 1px;
+  top: 7px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #B07A4E;
+}
+body.pc-refill-modal-open { overflow: hidden; }
+
 /* Mix & Match bundle group — 3 locked lines shown as one unit */
 .pc-cart-bundle {
   border: 1px solid var(--color-ink);

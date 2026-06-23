@@ -1,0 +1,70 @@
+{%- comment -%}
+  Shared "Refill Plan Terms" modal — rendered ONCE globally from theme.liquid so
+  both the PDP purchase-options block and the cart refill upsell can share a
+  single instance (no duplicate IDs). Opened by any trigger element via:
+      onclick="window.PostcardRefillTerms.open(this)"
+  The trigger may carry data-refill-pct="<n>" to override the displayed discount %
+  (PDP/cart each pass their own dynamic plan percentage); falls back to 15.
+
+  Vanilla JS, no Alpine — so it survives the cart drawer's innerHTML re-renders
+  and sits above the drawer (z-index). Reuses Dawn's trapFocus/removeTrapFocus
+  when available, with a graceful fallback. Free-shipping threshold mirrors the
+  cart drawer's S$60 bar (snippets/cart-drawer.liquid threshold_cents = 6000).
+{%- endcomment -%}
+{%- assign refill_ship_cents = 6000 -%}
+<div id="pc-refill-terms" class="pc-refill-modal" hidden role="dialog" aria-modal="true" aria-labelledby="pc-refill-terms-title" data-refill-close>
+  <div class="pc-refill-modal__dialog">
+    <button type="button" class="pc-refill-modal__close" data-refill-close aria-label="Close">&times;</button>
+    <h2 id="pc-refill-terms-title" class="pc-refill-modal__title">Refill Plan Terms</h2>
+    <ul class="pc-refill-modal__list">
+      <li><span data-refill-pct>15</span>% off normal product prices on every refill</li>
+      <li>Minimum 3 refill cycles</li>
+      <li>Swap products anytime</li>
+      <li>Pause, skip, or edit your delivery frequency from your account</li>
+      <li>Auto-charged based on your selected frequency</li>
+      <li>Orders ship after payment is completed</li>
+      <li>Free shipping on orders above {{ refill_ship_cents | money_without_trailing_zeros }}</li>
+    </ul>
+  </div>
+</div>
+<script>
+(function () {
+  if (window.PostcardRefillTerms) return;
+  var modal = document.getElementById('pc-refill-terms');
+  if (!modal) return;
+  var dialog = modal.querySelector('.pc-refill-modal__dialog');
+  var closeBtn = modal.querySelector('.pc-refill-modal__close');
+  var pctEl = modal.querySelector('[data-refill-pct]');
+  var lastTrigger = null;
+
+  function onKey(e) {
+    if (e.key === 'Escape' || e.key === 'Esc') { e.preventDefault(); close(); }
+  }
+  function open(trigger) {
+    lastTrigger = (trigger && trigger.focus) ? trigger : null;
+    if (trigger && trigger.getAttribute) {
+      var p = trigger.getAttribute('data-refill-pct');
+      if (p && pctEl) pctEl.textContent = p;
+    }
+    modal.hidden = false;
+    document.body.classList.add('pc-refill-modal-open');
+    if (typeof trapFocus === 'function') { trapFocus(dialog, closeBtn); }
+    else if (closeBtn) { closeBtn.focus(); }
+    document.addEventListener('keydown', onKey, true);
+  }
+  function close() {
+    if (modal.hidden) return;
+    modal.hidden = true;
+    document.body.classList.remove('pc-refill-modal-open');
+    document.removeEventListener('keydown', onKey, true);
+    if (typeof removeTrapFocus === 'function') { removeTrapFocus(lastTrigger); }
+    else if (lastTrigger) { lastTrigger.focus(); }
+    lastTrigger = null;
+  }
+  modal.addEventListener('click', function (e) {
+    var t = e.target;
+    if (t && t.nodeType === 1 && t.hasAttribute('data-refill-close')) close();
+  });
+  window.PostcardRefillTerms = { open: open, close: close };
+})();
+</script>
