@@ -1,0 +1,89 @@
+{%- comment -%}
+  "Buy it again" — reorder + autoship from order history. Shows previously
+  purchased products (the exact variant bought) that are still available AND
+  subscribable, so each can be reordered one-off or put on autoship in one tap.
+  Newest purchases first, deduped by variant.
+
+  Add-to-cart reuses the global .pc-pdp-buy__form handler in postcard-cart.js
+  (adds the variant; the Autoship button sets selling_plan first).
+
+  Renders NOTHING when logged out, no orders, or no eligible products.
+
+  Accepts:
+    heading   panel heading (default "Buy it again")
+    limit     max cards (default 4)
+    columns   grid columns on desktop (default 4)
+    compact   true for the narrow cart-drawer layout
+{%- endcomment -%}
+{%- if customer -%}
+  {%- liquid
+    assign ro_limit = limit | default: 4
+    assign ro_cols = columns | default: 4
+    assign ro_heading = heading | default: 'Buy it again'
+  -%}
+  {%- capture ro_cards -%}
+    {%- assign ro_seen = ',' -%}
+    {%- assign ro_n = 0 -%}
+    {%- for order in customer.orders -%}
+      {%- if ro_n >= ro_limit -%}{%- break -%}{%- endif -%}
+      {%- for line in order.line_items -%}
+        {%- if ro_n >= ro_limit -%}{%- break -%}{%- endif -%}
+        {%- assign rp = line.product -%}
+        {%- assign rv = line.variant -%}
+        {%- if rp == blank or rv == blank -%}{%- continue -%}{%- endif -%}
+        {%- unless rv.available -%}{%- continue -%}{%- endunless -%}
+        {%- if rp.selling_plan_groups.size == 0 -%}{%- continue -%}{%- endif -%}
+        {%- assign rvtok = ',' | append: rv.id | append: ',' -%}
+        {%- if ro_seen contains rvtok -%}{%- continue -%}{%- endif -%}
+        {%- assign ro_seen = ro_seen | append: rv.id | append: ',' -%}
+        {%- assign ro_n = ro_n | plus: 1 -%}
+
+        {%- assign rgrp = rp.selling_plan_groups.first -%}
+        {%- assign rplan = rgrp.selling_plans.first -%}
+        {%- assign radj = rplan.price_adjustments.first -%}
+        {%- assign rpct = 0 -%}
+        {%- if radj.value_type == 'percentage' -%}{%- assign rpct = radj.value -%}{%- endif -%}
+        {%- assign rvtitle = rv.title -%}
+        {%- if rvtitle == 'Default Title' -%}{%- assign rvtitle = '' -%}{%- endif -%}
+
+        <div class="pc-reorder__card">
+          <a class="pc-reorder__thumb" href="{{ rp.url }}" tabindex="-1" aria-hidden="true">
+            {%- if rp.featured_image -%}
+              <img src="{{ rp.featured_image | image_url: width: 240 }}" alt="" loading="lazy" width="80" height="96">
+            {%- endif -%}
+          </a>
+          <div class="pc-reorder__info">
+            <a class="pc-reorder__title" href="{{ rp.url }}">{{ rp.title }}</a>
+            <div class="pc-reorder__meta">
+              {%- if rvtitle != blank -%}<span class="pc-reorder__variant">{{ rvtitle }}</span> &middot; {% endif -%}
+              <span class="pc-reorder__price">{{ rv.price | money }}</span>
+            </div>
+            <form class="pc-pdp-buy__form pc-reorder__form">
+              <input type="hidden" name="id" value="{{ rv.id }}">
+              <input type="hidden" name="selling_plan" value="">
+              <div class="pc-reorder__actions">
+                <button type="submit" class="pc-reorder__btn">Reorder</button>
+                {%- if rpct > 0 -%}
+                  <button type="button" class="pc-reorder__btn pc-reorder__btn--sub" data-plan="{{ rplan.id }}"
+                    onclick="this.form.querySelector('[name=selling_plan]').value = this.dataset.plan; this.form.requestSubmit();">
+                    Autoship &minus;{{ rpct }}%
+                  </button>
+                {%- endif -%}
+              </div>
+            </form>
+          </div>
+        </div>
+      {%- endfor -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- assign ro_cards_clean = ro_cards | strip -%}
+  {%- if ro_cards_clean != blank -%}
+    <div class="pc-reorder{% if compact %} pc-reorder--compact{% endif %}" style="--pc-reorder-cols: {{ ro_cols }};">
+      <div class="pc-reorder__head">
+        <h2 class="pc-reorder__heading">{{ ro_heading }}</h2>
+      </div>
+      <div class="pc-reorder__grid">{{ ro_cards }}</div>
+    </div>
+  {%- endif -%}
+{%- endif -%}
