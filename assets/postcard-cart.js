@@ -9,7 +9,10 @@
         start: 0,
         step: step,
         _cells: function () {
-          return Array.prototype.slice.call(this.$el.querySelectorAll('.pc-world-recs__cell'));
+          // $root = the component root (the .pc-world-recs div) regardless of
+          // which element the calling expression is bound to. $el would be the
+          // button when called from its @click, finding no cells.
+          return Array.prototype.slice.call(this.$root.querySelectorAll('.pc-world-recs__cell'));
         },
         apply: function () {
           var cells = this._cells();
