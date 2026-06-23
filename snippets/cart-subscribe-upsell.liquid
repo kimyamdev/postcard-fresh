@@ -82,13 +82,14 @@
         </span>
         <span
           class="pc-cart-sub__subline"
-          x-text="(savings[plan] ? ('Save ' + savings[plan] + ' on every delivery') : 'Deliver on repeat') + ' · skip or cancel anytime'"
-        >{%- if default_save > 0 -%}Save {{ default_save | money }} on every delivery &middot; skip or cancel anytime{%- else -%}Deliver on repeat &middot; skip or cancel anytime{%- endif -%}</span>
+          x-text="(savings[plan] ? ('Save ' + savings[plan] + ' on every delivery') : 'Deliver on repeat') + ' · Skip, pause or cancel anytime'"
+        >{%- if default_save > 0 -%}Save {{ default_save | money }} on every delivery &middot; Skip, pause or cancel anytime{%- else -%}Deliver on repeat &middot; Skip, pause or cancel anytime{%- endif -%}</span>
       </span>
       <span class="pc-cart-sub__toggle-arrow" :class="{ 'pc-cart-sub__toggle-arrow--open': open }" aria-hidden="true">&#9662;</span>
     </button>
 
     <div x-show="open" x-cloak class="pc-cart-sub__panel">
+      <p class="pc-cart-sub__pitch"><strong>Your self-care, on repeat.</strong> Save {{ sp_pct }}% on your favourite Postcard essentials, delivered at your rhythm. Skip, pause or cancel anytime.</p>
       <div class="eyebrow pc-cart-sub__cadence-label">{{ cadence_eyebrow }}</div>
       <div class="pc-cart-sub__pills">
         {%- for plan in sp_plans -%}

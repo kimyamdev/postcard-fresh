@@ -142,6 +142,7 @@
         assign sub_label = sub_label | append: ' ' | append: sp_discount_pct | append: '%'
       endif
       assign cadence_eyebrow = first_group.options.first.name | default: 'Deliver every'
+      assign sub_pitch = 'Save ' | append: sp_discount_pct | append: '% on your favourite Postcard essentials, delivered at your rhythm. Skip, pause or cancel anytime.'
     endif
   -%}
   <div class="pc-pdp-buy__option" {{ block.shopify_attributes }}>
@@ -174,7 +175,8 @@
               <button type="button" class="pc-pdp-buy__cadence-pill" :class="{ 'pc-pdp-buy__cadence-pill--active': cadence === '{{ plan.id }}' }" @click.prevent="cadence = '{{ plan.id }}'">{{ plan_label }}</button>
             {%- endfor -%}
           </div>
-          <p class="pc-pdp-buy__cadence-note">{{ block.settings.cadence_note | default: 'Skip, swap world, or cancel anytime — no postcards held hostage.' }}</p>
+          <p class="pc-pdp-buy__sub-tagline">Your self-care, on repeat</p>
+          <p class="pc-pdp-buy__cadence-note">{{ block.settings.cadence_note | default: sub_pitch }}</p>
         </div>
       {%- endif -%}
     </div>

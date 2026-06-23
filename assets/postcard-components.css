@@ -1854,7 +1854,14 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   color: var(--color-ink);
 }
 .pc-pdp-buy__cadence-pill--active { background: var(--color-ink); color: var(--color-bg); }
-.pc-pdp-buy__cadence-note { font-size: 12px; opacity: 0.7; font-style: italic; margin: 4px 0 0; }
+.pc-pdp-buy__sub-tagline {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-ink);
+  margin: 10px 0 2px;
+}
+.pc-pdp-buy__cadence-note { font-size: 12px; color: var(--color-ink); opacity: 0.78; font-style: italic; margin: 4px 0 0; }
 
 .pc-pdp-buy__about {
   all: unset;
@@ -4107,6 +4114,8 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
   padding-top: 10px;
   border-top: 1px dashed rgba(176, 122, 78, 0.4);
 }
+.pc-cart-sub__pitch { font-size: 11.5px; line-height: 1.4; color: #8A5A33; margin: 0 0 12px; }
+.pc-cart-sub__pitch strong { font-weight: 700; }
 .pc-cart-sub__cadence-label { font-size: 10px; margin-bottom: 6px; }
 .pc-cart-sub__pills { display: flex; gap: 6px; flex-wrap: wrap; }
 .pc-cart-sub__pill {
