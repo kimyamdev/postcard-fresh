@@ -38,11 +38,6 @@
   {%- endif -%}
   <div
     class="pc-review-form"
-    {%- comment -%}
-      json values are HTML-escaped so their double quotes become &quot; and
-      don't close this double-quoted x-data attribute; the browser decodes them
-      back to valid JSON for Alpine. See reference_alpine_xdata_single_quotes.
-    {%- endcomment -%}
     x-data="pcReviewForm({
       endpoint: {{ rf_endpoint | json | escape }},
       proxyUrl: {{ proxy_url | default: '' | json | escape }},
