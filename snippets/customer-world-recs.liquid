@@ -1,7 +1,8 @@
 {%- comment -%}
   "From your worlds" — same-world cross-sell from the logged-in customer's order
   history. Reads the worlds they've bought into, then suggests products from
-  those worlds' `featured_products` that they don't already own.
+  those worlds (the curated featured_products first, then the rest of the
+  world's collection) that they don't already own.
 
   Renders a POOL (a few × the display count) and shows `limit` at a time; a
   shuffle button (when the pool is larger) cycles the visible window through the
@@ -68,7 +69,22 @@
         {%- assign wtok = '|' | append: lw.system.handle | append: '|' -%}
         {%- if done_worlds contains wtok -%}{%- continue -%}{%- endif -%}
         {%- assign done_worlds = done_worlds | append: lw.system.handle | append: '|' -%}
-        {%- for fp in lw.featured_products.value -%}
+        {%- comment -%}
+          Candidates = the world's curated featured_products first, then the rest
+          of its collection (handle = world slug) for shuffle depth. Dedup is
+          handled below by rendered_ids.
+        {%- endcomment -%}
+        {%- assign wslug = lw.slug.value | default: lw.system.handle -%}
+        {%- assign wcoll_products = collections[wslug].products -%}
+        {%- assign wfeat = lw.featured_products.value -%}
+        {%- if wcoll_products.size > 0 and wfeat.size > 0 -%}
+          {%- assign wcandidates = wfeat | concat: wcoll_products -%}
+        {%- elsif wcoll_products.size > 0 -%}
+          {%- assign wcandidates = wcoll_products -%}
+        {%- else -%}
+          {%- assign wcandidates = wfeat -%}
+        {%- endif -%}
+        {%- for fp in wcandidates -%}
           {%- if rec_count >= pool_limit -%}{%- break -%}{%- endif -%}
           {%- unless fp.available -%}{%- continue -%}{%- endunless -%}
           {%- assign idtok = ',' | append: fp.id | append: ',' -%}
