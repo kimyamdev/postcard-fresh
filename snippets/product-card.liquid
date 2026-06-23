@@ -25,6 +25,16 @@
   assign card_price = price | default: card_price
   assign card_compare_at = compare_at | default: card_compare_at
   assign card_world = world | default: card_world | default: ''
+  comment
+    Drop the world name from the displayed title — it's already shown as the
+    eyebrow above. Display only; the real product title is unchanged.
+  endcomment
+  if card_world != blank
+    assign card_name_stripped = card_name | remove_first: card_world | strip
+    if card_name_stripped != blank and card_name_stripped != card_name
+      assign card_name = card_name_stripped
+    endif
+  endif
   assign card_has_world = false
   if card_world != blank or card_world_color != blank or world_obj
     assign card_has_world = true

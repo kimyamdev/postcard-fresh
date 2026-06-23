@@ -230,6 +230,17 @@
             endif
             assign refillable = item.product.metafields.custom.refillable.value
             assign world_first_word = world_name | split: ' ' | first
+            comment
+              Drop the world name from the displayed title (shown as the eyebrow
+              above). Display only — the real product title is unchanged.
+            endcomment
+            assign clean_title = item.product.title
+            if world_name != blank
+              assign ct_stripped = item.product.title | remove_first: world_name | strip
+              if ct_stripped != blank and ct_stripped != item.product.title
+                assign clean_title = ct_stripped
+              endif
+            endif
           -%}
           <div class="pc-cart-line" data-line-key="{{ item.key }}">
             <a class="pc-cart-line__thumb ph ph--world" href="{{ item.url }}" style="--world-color: {{ world_color }};" aria-hidden="true" tabindex="-1">
@@ -244,7 +255,7 @@
                 <div class="eyebrow pc-cart-line__world">{{ world_name }}</div>
               {%- endif -%}
               <div class="h-typewriter pc-cart-line__title">
-                <a href="{{ item.url }}">{{ item.product.title }}</a>
+                <a href="{{ item.url }}">{{ clean_title }}</a>
               </div>
               {%- if size_label != blank or refillable -%}
                 <div class="pc-cart-line__size">
