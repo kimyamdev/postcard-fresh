@@ -131,7 +131,9 @@
       assign has_plans = true
     endif
     assign sp_discount_pct = 0
-    assign sub_label = block.settings.subscribe_label | default: 'Subscribe & save'
+    # Customer-facing label is fixed to Postcard's "Refill & save" wording
+    # (auto-suffixed with the live discount %); the block setting is ignored.
+    assign sub_label = 'Refill & save'
     if has_plans
       assign first_plan = first_group.selling_plans.first
       assign first_adj = first_plan.price_adjustments.first
@@ -141,8 +143,8 @@
       if sp_discount_pct > 0
         assign sub_label = sub_label | append: ' ' | append: sp_discount_pct | append: '%'
       endif
-      assign cadence_eyebrow = first_group.options.first.name | default: 'Deliver every'
-      assign sub_pitch = 'Save ' | append: sp_discount_pct | append: '% on your favourite Postcard essentials, delivered at your rhythm. Skip, pause or cancel anytime.'
+      assign cadence_eyebrow = 'Deliver every'
+      assign sub_pitch = 'Save ' | append: sp_discount_pct | append: '% on every refill, delivered at your rhythm. Skip, pause or cancel anytime.'
     endif
   -%}
   <div class="pc-pdp-buy__option" {{ block.shopify_attributes }}>
@@ -171,7 +173,10 @@
           <div class="eyebrow pc-pdp-buy__cadence-label">{{ cadence_eyebrow }}</div>
           <div class="pc-pdp-buy__cadence-pills">
             {%- for plan in first_group.selling_plans -%}
-              {%- assign plan_label = plan.options.first.value | default: plan.name -%}
+              {%- assign plan_raw = plan.options.first.value | default: plan.name -%}
+              {%- assign plan_lead = plan_raw | slice: 0, 2 -%}
+              {%- if plan_lead == '1 ' -%}{%- assign plan_raw = plan_raw | remove_first: '1 ' -%}{%- endif -%}
+              {%- assign plan_label = 'Every ' | append: plan_raw -%}
               <button type="button" class="pc-pdp-buy__cadence-pill" :class="{ 'pc-pdp-buy__cadence-pill--active': cadence === '{{ plan.id }}' }" @click.prevent="cadence = '{{ plan.id }}'">{{ plan_label }}</button>
             {%- endfor -%}
           </div>
@@ -190,7 +195,7 @@
         {%- if block.settings.about_body != blank -%}
           {{ block.settings.about_body }}
         {%- else -%}
-          Always {{ sp_discount_pct }}% off. Free shipping over S$60. Skip a delivery, swap to a different product, or cancel from your account in two clicks. Manage everything from your account in two clicks.
+          Always {{ sp_discount_pct }}% off. Free shipping over S$60. Skip a delivery, change your frequency, swap products, or cancel anytime from your account.
         {%- endif -%}
       </div>
 
