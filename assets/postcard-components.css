@@ -4218,6 +4218,13 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
 }
 
 .pc-cart-line__price { text-align: right; }
+/* Qty + Remove moved under the price, right-aligned */
+.pc-cart-line__price .pc-cart-line__qty-row {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  margin-top: 8px;
+}
 .pc-cart-line__price-now { font-size: 18px; }
 .pc-cart-line__price-was {
   font-size: 10px;

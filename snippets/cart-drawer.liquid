@@ -263,6 +263,12 @@
                 <div class="pc-cart-line__badge pc-cart-line__badge--bundle">&#10022; {{ legacy_bundle }} bundle</div>
               {%- endif -%}
 
+            </div>
+            <div class="pc-cart-line__price">
+              <div class="h-display pc-cart-line__price-now">{{ item.final_line_price | money }}</div>
+              {%- if item.original_line_price > item.final_line_price -%}
+                <div class="pc-cart-line__price-was">{{ item.original_line_price | money }}</div>
+              {%- endif -%}
               <div class="pc-cart-line__qty-row">
                 <div class="pc-cart-line__qty">
                   <button type="button" class="pc-cart-line__qty-btn" aria-label="Decrease quantity"
@@ -274,12 +280,6 @@
                 <button type="button" class="pc-cart-line__remove tlink"
                   onclick="window.PostcardCart && window.PostcardCart.updateLine('{{ item.key }}', 0)">Remove</button>
               </div>
-            </div>
-            <div class="pc-cart-line__price">
-              <div class="h-display pc-cart-line__price-now">{{ item.final_line_price | money }}</div>
-              {%- if item.original_line_price > item.final_line_price -%}
-                <div class="pc-cart-line__price-was">{{ item.original_line_price | money }}</div>
-              {%- endif -%}
             </div>
 
             {%- render 'cart-subscribe-upsell', item: item, layout: 'drawer' -%}
