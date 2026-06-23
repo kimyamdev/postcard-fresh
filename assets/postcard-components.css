@@ -5680,6 +5680,7 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
 @media (max-width: 990px) { .pc-world-recs__grid { grid-template-columns: repeat(2, 1fr); gap: 20px; } }
 @media (max-width: 560px) { .pc-world-recs__grid { gap: 12px; } }
 /* compact = cart drawer */
+.pc-world-recs--compact { padding: 18px 20px; border-top: 1px solid var(--color-ink); }
 .pc-world-recs--compact .pc-world-recs__head { margin-bottom: 14px; }
 .pc-world-recs--compact .pc-world-recs__title { font-size: 15px; font-style: normal; text-transform: uppercase; letter-spacing: 0.05em; }
 .pc-world-recs--compact .pc-world-recs__grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }

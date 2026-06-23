@@ -288,6 +288,9 @@
         {%- endfor -%}
       </div>
 
+      {%- comment -%} History-based same-world cross-sell (logged-in; renders nothing otherwise). {%- endcomment -%}
+      {%- render 'customer-world-recs', compact: true, limit: 2, columns: 2, heading: 'From your worlds' -%}
+
       <form action="{{ routes.cart_url }}" method="post" id="CartDrawer-Form" class="pc-cart-drawer__footer" novalidate>
         <div class="pc-cart-drawer__footer-inner">
           <div class="pc-cart-drawer__totals">
