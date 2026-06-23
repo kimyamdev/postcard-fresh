@@ -107,9 +107,9 @@
         <div class="pc-cart-drawer__ship-row">
           <span>
             {%- if is_villa -%}
-              &#10003; Free shipping &middot; Villa tier perk
+              <span class="pc-cart-drawer__ship-party" aria-hidden="true">&#127881;</span> Free shipping &middot; Villa tier perk
             {%- elsif remaining_cents <= 0 -%}
-              &#10003; Free shipping unlocked
+              <span class="pc-cart-drawer__ship-party" aria-hidden="true">&#127881;</span> Free shipping unlocked
             {%- else -%}
               {{ remaining_cents | money }} from free shipping
             {%- endif -%}

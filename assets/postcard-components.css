@@ -3842,6 +3842,21 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
   justify-content: space-between;
 }
 .pc-cart-drawer__ship-pct { opacity: 0.6; }
+/* Party pop when free shipping is unlocked */
+.pc-cart-drawer__ship-party {
+  display: inline-block;
+  transform-origin: center bottom;
+  animation: pc-party-pop 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28) both;
+}
+@keyframes pc-party-pop {
+  0% { transform: scale(0) rotate(-25deg); opacity: 0; }
+  55% { transform: scale(1.45) rotate(14deg); }
+  75% { transform: scale(0.92) rotate(-6deg); }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pc-cart-drawer__ship-party { animation: none; }
+}
 .pc-cart-drawer__ship-track {
   margin-top: 8px;
   height: 6px;
