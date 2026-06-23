@@ -6,23 +6,41 @@
   Stamped's cross-origin response can't be read from the browser (CORS), but the
   POST still reaches them, so we treat a sent request as submitted.
 
+  When `proxy_url` (the Cloudflare review-submit worker) is set, the form reads
+  the real result and shows success/error. Otherwise it posts straight to
+  Stamped fire-and-forget (CORS hides the response).
+
   Accepts:
     product      cart/storefront product (required)
-    public_key   Stamped PUBLIC api key (safe to expose client-side)
-    store_hash   Stamped store id (sId)
+    public_key   Stamped PUBLIC api key (used for the direct fallback path)
+    store_hash   Stamped store id (sId, direct fallback path)
+    proxy_url    Cloudflare review-submit worker URL (preferred; real confirmation)
     heading      optional panel heading
 
-  Renders nothing without a product or public_key.
+  Renders nothing without a product, and without either a public_key or proxy_url.
 {%- endcomment -%}
-{%- if product and public_key != blank -%}
+{%- liquid
+  assign rf_ok = false
+  if product and public_key != blank
+    assign rf_ok = true
+  endif
+  if product and proxy_url != blank
+    assign rf_ok = true
+  endif
+-%}
+{%- if rf_ok -%}
   {%- assign rf_heading = heading | default: 'Leave your own postcard' -%}
   {%- assign rf_img = product.featured_image | image_url: width: 600 -%}
-  {%- assign rf_endpoint = 'https://stamped.io/api/reviews3?apiKey=' | append: public_key -%}
-  {%- if store_hash != blank -%}{%- assign rf_endpoint = rf_endpoint | append: '&sId=' | append: store_hash -%}{%- endif -%}
+  {%- assign rf_endpoint = '' -%}
+  {%- if public_key != blank -%}
+    {%- assign rf_endpoint = 'https://stamped.io/api/reviews3?apiKey=' | append: public_key -%}
+    {%- if store_hash != blank -%}{%- assign rf_endpoint = rf_endpoint | append: '&sId=' | append: store_hash -%}{%- endif -%}
+  {%- endif -%}
   <div
     class="pc-review-form"
     x-data="pcReviewForm({
       endpoint: {{ rf_endpoint | json }},
+      proxyUrl: {{ proxy_url | default: '' | json }},
       productId: {{ product.id | json }},
       productName: {{ product.title | json }},
       productSKU: {{ product.handle | json }},
@@ -108,9 +126,32 @@
             fd.append('productImageUrl', cfg.productImageUrl);
             fd.append('productUrl', cfg.productUrl);
             var self = this;
-            fetch(cfg.endpoint, { method: 'POST', body: fd })
-              .catch(function () { /* CORS hides the response; the POST still lands */ })
-              .finally(function () { self.busy = false; self.done = true; });
+
+            if (cfg.proxyUrl) {
+              // Proxy path: the worker returns JSON + CORS, so we know the real outcome.
+              fetch(cfg.proxyUrl, { method: 'POST', body: fd })
+                .then(function (r) {
+                  return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, j: j }; });
+                })
+                .then(function (res) {
+                  self.busy = false;
+                  if (res.ok && res.j && res.j.ok) {
+                    self.done = true;
+                  } else {
+                    self.err = (res.j && res.j.message) || 'Could not submit your review — please try again.';
+                  }
+                })
+                .catch(function () {
+                  self.busy = false;
+                  self.err = 'Network error — please try again.';
+                });
+            } else {
+              // Direct path: Stamped sends no CORS headers, so we can't read the
+              // response. The POST still lands; reviews are moderated. Fire-and-forget.
+              fetch(cfg.endpoint, { method: 'POST', body: fd })
+                .catch(function () {})
+                .finally(function () { self.busy = false; self.done = true; });
+            }
           }
         };
       };

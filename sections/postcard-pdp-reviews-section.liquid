@@ -18,9 +18,12 @@
   endcomment
   assign rf_public_key = section.settings.stamped_public_key
   assign rf_store_hash = section.settings.stamped_store_hash
+  assign rf_proxy_url = section.settings.review_proxy_url
   assign show_form = false
-  if section.settings.show_review_form and rf_public_key != blank
-    assign show_form = true
+  if section.settings.show_review_form
+    if rf_public_key != blank or rf_proxy_url != blank
+      assign show_form = true
+    endif
   endif
 -%}
 
@@ -354,7 +357,7 @@
     {%- endif -%}
 
     {%- if show_form -%}
-      {%- render 'pdp-review-form', product: product, public_key: rf_public_key, store_hash: rf_store_hash, heading: section.settings.form_heading -%}
+      {%- render 'pdp-review-form', product: product, public_key: rf_public_key, store_hash: rf_store_hash, proxy_url: rf_proxy_url, heading: section.settings.form_heading -%}
     {%- endif -%}
   </div>
 </section>
@@ -458,7 +461,8 @@
     { "type": "checkbox", "id": "show_review_form", "label": "Show \"Write a review\" form", "default": true, "info": "Posts to Stamped (pending moderation). Shows even on products with no reviews yet." },
     { "type": "text", "id": "form_heading", "label": "Form heading", "default": "Leave your own postcard" },
     { "type": "text", "id": "stamped_public_key", "label": "Stamped PUBLIC key", "default": "pubkey-fRh64cbQ719469EWH2sl255mdn9W6z", "info": "Publishable key (safe to expose). From env/shopify.env STAMPED_PUBLIC_KEY." },
-    { "type": "text", "id": "stamped_store_hash", "label": "Stamped store id (sId)", "default": "252274", "info": "From env/shopify.env STAMPED_STORE_HASH." }
+    { "type": "text", "id": "stamped_store_hash", "label": "Stamped store id (sId)", "default": "252274", "info": "From env/shopify.env STAMPED_STORE_HASH." },
+    { "type": "text", "id": "review_proxy_url", "label": "Review proxy URL", "info": "Cloudflare review-submit worker (infra/stamped-review-worker). When set, the form shows real success/error instead of fire-and-forget. Leave blank to post directly to Stamped." }
   ],
   "presets": [{ "name": "PDP Reviews" }]
 }
