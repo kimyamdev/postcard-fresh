@@ -45,7 +45,9 @@
       productName: {{ product.title | json | escape }},
       productSKU: {{ product.handle | json | escape }},
       productUrl: {{ shop.url | append: product.url | json | escape }},
-      productImageUrl: {{ rf_img | json | escape }}
+      productImageUrl: {{ rf_img | json | escape }},
+      prefillName: {{ customer.name | default: '' | json | escape }},
+      prefillEmail: {{ customer.email | default: '' | json | escape }}
     })"
   >
     <button type="button" class="pc-review-form__toggle" x-show="!open && !done" @click="open = true">
@@ -94,8 +96,8 @@
           open: false,
           rating: 0,
           hover: 0,
-          name: '',
-          email: '',
+          name: (cfg.prefillName || '').trim(),
+          email: (cfg.prefillEmail || '').trim(),
           message: '',
           busy: false,
           done: false,
