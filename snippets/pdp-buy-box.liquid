@@ -89,7 +89,7 @@
             <button type="button" class="pc-pdp-buy__cadence-pill" :class="{ 'pc-pdp-buy__cadence-pill--active': cadence === '60d' }" @click.prevent="cadence = '60d'">60 days &middot; most popular</button>
             <button type="button" class="pc-pdp-buy__cadence-pill" :class="{ 'pc-pdp-buy__cadence-pill--active': cadence === '90d' }" @click.prevent="cadence = '90d'">90 days</button>
           </div>
-          <p class="pc-pdp-buy__cadence-note">Skip, swap world, or cancel anytime &mdash; no postcards held hostage.</p>
+          <p class="pc-pdp-buy__cadence-note">Skip, swap product, or cancel anytime &mdash; no postcards held hostage.</p>
         </div>
       </div>
       <button type="button" class="pc-pdp-buy__about" @click="subOpen = !subOpen">
@@ -97,7 +97,7 @@
         About subscriptions
       </button>
       <div x-show="subOpen" x-cloak class="pc-pdp-buy__about-info">
-        Always {{ discount_pct }}% off. Free shipping over S$60. Skip a delivery, swap to a different world, or cancel from your account in two clicks. Your second order earns you a free Discovery Set in any world you haven&rsquo;t tried yet.
+        Always {{ discount_pct }}% off. Free shipping over S$60. Skip a delivery, swap to a different product, or cancel from your account in two clicks. Your second order earns you a free Discovery Set in any world you haven&rsquo;t tried yet.
       </div>
     </div>
 
