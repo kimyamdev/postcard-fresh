@@ -5564,8 +5564,8 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
 }
 .pc-art__related-title { font-size: 18px; line-height: 1.25; margin: 6px 0 0; }
 
-/* PDP "Write a review" form (snippets/pdp-review-form.liquid) */
-.pc-review-form { margin: 40px auto 0; max-width: 560px; }
+/* PDP "Write a review" form (snippets/pdp-review-form.liquid) — sits under the heading */
+.pc-review-form { margin: 0 auto 56px; max-width: 560px; }
 .pc-review-form__toggle {
   all: unset;
   box-sizing: border-box;

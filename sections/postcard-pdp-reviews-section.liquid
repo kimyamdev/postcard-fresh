@@ -341,6 +341,10 @@
       </div>
     {%- endif -%}
 
+    {%- if show_form -%}
+      {%- render 'pdp-review-form', product: product, public_key: rf_public_key, store_hash: rf_store_hash, proxy_url: rf_proxy_url, heading: section.settings.form_heading -%}
+    {%- endif -%}
+
     {%- if sp_count > 0 -%}
       <div
         id="stamped-main-widget"
@@ -354,10 +358,6 @@
       >
         {{ product.metafields.stamped.reviews }}
       </div>
-    {%- endif -%}
-
-    {%- if show_form -%}
-      {%- render 'pdp-review-form', product: product, public_key: rf_public_key, store_hash: rf_store_hash, proxy_url: rf_proxy_url, heading: section.settings.form_heading -%}
     {%- endif -%}
   </div>
 </section>
