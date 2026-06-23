@@ -4218,11 +4218,11 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
 }
 
 .pc-cart-line__price { text-align: right; }
-/* Qty + Remove moved under the price, right-aligned */
+/* Qty + Remove moved under the price, right-aligned, Remove stacked under the stepper */
 .pc-cart-line__price .pc-cart-line__qty-row {
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  gap: 8px 10px;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
   margin-top: 8px;
 }
 .pc-cart-line__price-now { font-size: 18px; }
