@@ -1,4 +1,35 @@
 (function () {
+  // Alpine factory for the "From your worlds" recs: shows `step` cells at a time
+  // and cycles the visible window through the rendered pool on shuffle(). Defined
+  // here (a real external script) so it survives the cart drawer's innerHTML
+  // refresh, where inline <script> tags don't re-execute.
+  if (!window.pcRecsShuffle) {
+    window.pcRecsShuffle = function (step) {
+      return {
+        start: 0,
+        step: step,
+        _cells: function () {
+          return Array.prototype.slice.call(this.$el.querySelectorAll('.pc-world-recs__cell'));
+        },
+        apply: function () {
+          var cells = this._cells();
+          var total = cells.length;
+          if (!total) return;
+          for (var i = 0; i < total; i++) {
+            var rel = ((i - this.start) % total + total) % total;
+            cells[i].style.display = rel < this.step ? '' : 'none';
+          }
+        },
+        shuffle: function () {
+          var total = this._cells().length;
+          if (total <= this.step) return;
+          this.start = (this.start + this.step) % total;
+          this.apply();
+        }
+      };
+    };
+  }
+
   if (window.PostcardCart) return;
 
   const CART_DRAWER_SELECTOR = 'cart-drawer';
