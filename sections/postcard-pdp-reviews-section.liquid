@@ -462,7 +462,7 @@
     { "type": "text", "id": "form_heading", "label": "Form heading", "default": "Leave your own postcard" },
     { "type": "text", "id": "stamped_public_key", "label": "Stamped PUBLIC key", "default": "pubkey-fRh64cbQ719469EWH2sl255mdn9W6z", "info": "Publishable key (safe to expose). From env/shopify.env STAMPED_PUBLIC_KEY." },
     { "type": "text", "id": "stamped_store_hash", "label": "Stamped store id (sId)", "default": "252274", "info": "From env/shopify.env STAMPED_STORE_HASH." },
-    { "type": "text", "id": "review_proxy_url", "label": "Review proxy URL", "info": "Cloudflare review-submit worker (infra/stamped-review-worker). When set, the form shows real success/error instead of fire-and-forget. Leave blank to post directly to Stamped." }
+    { "type": "text", "id": "review_proxy_url", "label": "Review proxy URL", "default": "https://stamped-review.philippe-7f7.workers.dev", "info": "Cloudflare review-submit worker (infra/stamped-review-worker). When set, the form shows real success/error instead of fire-and-forget. Leave blank to post directly to Stamped." }
   ],
   "presets": [{ "name": "PDP Reviews" }]
 }
