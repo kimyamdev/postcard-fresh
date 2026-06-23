@@ -1,0 +1,25 @@
+{%- comment -%}
+  One recommendation cell: the product card + quick-add ("+" or variant select).
+  Shared by customer-world-recs and customer-orderagain-recs.
+
+  Accepts:
+    product   the product (required)
+    hidden    true to render hidden (part of the shuffle pool, not in the first window)
+{%- endcomment -%}
+<div class="pc-world-recs__cell{% if product.variants.size > 1 %} pc-world-recs__cell--multi{% endif %}"{% if hidden %} style="display: none;"{% endif %}>
+  {%- render 'product-card', product: product -%}
+  {%- if product.available -%}
+    <form class="pc-pdp-buy__form pc-quick-add">
+      {%- if product.variants.size > 1 -%}
+        <select name="id" class="pc-quick-add__select" aria-label="Choose option for {{ product.title | escape }}">
+          {%- for v in product.variants -%}
+            <option value="{{ v.id }}"{% unless v.available %} disabled{% endunless %}>{{ v.title }} &middot; {{ v.price | money }}{% unless v.available %} (sold out){% endunless %}</option>
+          {%- endfor -%}
+        </select>
+      {%- else -%}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      {%- endif -%}
+      <button type="submit" class="pc-quick-add__btn" aria-label="Add {{ product.title | escape }} to bag">+</button>
+    </form>
+  {%- endif -%}
+</div>

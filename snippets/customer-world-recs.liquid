@@ -1,41 +1,25 @@
 {%- comment -%}
-  "From your worlds" — same-world cross-sell from the logged-in customer's order
-  history. Reads the worlds they've bought into, then suggests products from
-  those worlds (the curated featured_products first, then the rest of the
-  world's collection) that they don't already own.
+  "From your fav worlds" — same-world cross-sell from the logged-in customer's
+  order history. Reads the worlds they've bought into, then suggests products
+  from those worlds (the world's collection; falls back to featured_products)
+  that they don't already own. Pool + shuffle via customer-rec-shell.
 
-  Renders a POOL (a few × the display count) and shows `limit` at a time; a
-  shuffle button (when the pool is larger) cycles the visible window through the
-  pool client-side via window.pcRecsShuffle (defined in postcard-cart.js).
+  Renders NOTHING when logged out, no orders, or no fresh suggestions exist.
 
-  Renders NOTHING when: logged out, no orders, or no fresh suggestions exist.
-  Logged-in only — `customer.orders` is the source.
-
-  Accepts:
-    heading      panel heading (default "From your worlds")
-    blurb        optional sub-line under the heading
-    limit        cards shown at once (default 4)
-    columns      grid columns on desktop (default 4)
-    exclude_id   a product id to skip (e.g. the current PDP product)
-    compact      true for the narrow cart-drawer layout
+  Accepts: heading, blurb, limit, columns, exclude_id, compact
 {%- endcomment -%}
 {%- if customer -%}
   {%- liquid
     assign rec_limit = limit | default: 4
     assign rec_cols = columns | default: 4
-    assign rec_heading = heading | default: 'From your worlds'
-    comment
-      Pool to shuffle through: a few times the visible count, capped so the DOM
-      stays small.
-    endcomment
+    assign rec_heading = heading | default: 'From your fav worlds'
     assign pool_limit = rec_limit | times: 3
     if pool_limit > 12
       assign pool_limit = 12
     endif
 
     comment
-      Pass 1 — collect every owned product id, so we never suggest something the
-      customer already bought.
+      Pass 1 — every owned product id, so we never suggest something already bought.
     endcomment
     assign owned_ids = ','
     for order in customer.orders
@@ -48,11 +32,9 @@
   -%}
 
   {%- comment -%}
-    Pass 2 — walk orders newest-first (customer.orders is reverse-chronological),
-    and the first time each world is seen render its fresh featured products
-    (not owned, not already shown), up to pool_limit. The most recently
-    purchased world's products lead, so the visible window + early shuffles stay
-    within that world.
+    Pass 2 — walk orders newest-first; the first time each world is seen, render
+    its fresh products (not owned, not shown), up to pool_limit. Most recently
+    purchased world leads.
   {%- endcomment -%}
   {%- capture rec_cards -%}
     {%- assign rec_count = 0 -%}
@@ -69,11 +51,6 @@
         {%- assign wtok = '|' | append: lw.system.handle | append: '|' -%}
         {%- if done_worlds contains wtok -%}{%- continue -%}{%- endif -%}
         {%- assign done_worlds = done_worlds | append: lw.system.handle | append: '|' -%}
-        {%- comment -%}
-          Candidates = the world's collection (handle = world slug) for a deep
-          shuffle pool — it already contains the featured products. Fall back to
-          the curated featured_products if the world has no matching collection.
-        {%- endcomment -%}
         {%- assign wslug = lw.slug.value | default: lw.system.handle -%}
         {%- assign wcandidates = collections[wslug].products -%}
         {%- if wcandidates == blank or wcandidates.size == 0 -%}
@@ -88,41 +65,13 @@
           {%- if exclude_id and fp.id == exclude_id -%}{%- continue -%}{%- endif -%}
           {%- assign rendered_ids = rendered_ids | append: fp.id | append: ',' -%}
           {%- assign rec_count = rec_count | plus: 1 -%}
-        <div class="pc-world-recs__cell{% if fp.variants.size > 1 %} pc-world-recs__cell--multi{% endif %}"{% if rec_count > rec_limit %} style="display: none;"{% endif %}>
-          {%- render 'product-card', product: fp -%}
-          {%- if fp.available -%}
-            <form class="pc-pdp-buy__form pc-quick-add">
-              {%- if fp.variants.size > 1 -%}
-                <select name="id" class="pc-quick-add__select" aria-label="Choose option for {{ fp.title | escape }}">
-                  {%- for v in fp.variants -%}
-                    <option value="{{ v.id }}"{% unless v.available %} disabled{% endunless %}>{{ v.title }} &middot; {{ v.price | money }}{% unless v.available %} (sold out){% endunless %}</option>
-                  {%- endfor -%}
-                </select>
-              {%- else -%}
-                <input type="hidden" name="id" value="{{ fp.selected_or_first_available_variant.id }}">
-              {%- endif -%}
-              <button type="submit" class="pc-quick-add__btn" aria-label="Add {{ fp.title | escape }} to bag">+</button>
-            </form>
-          {%- endif -%}
-        </div>
+          {%- assign rec_hidden = false -%}
+          {%- if rec_count > rec_limit -%}{%- assign rec_hidden = true -%}{%- endif -%}
+          {%- render 'customer-rec-card', product: fp, hidden: rec_hidden -%}
         {%- endfor -%}
       {%- endfor -%}
     {%- endfor -%}
   {%- endcapture -%}
 
-  {%- assign rec_cards_clean = rec_cards | strip -%}
-  {%- if rec_cards_clean != blank -%}
-    <div class="pc-world-recs{% if compact %} pc-world-recs--compact{% endif %}" style="--pc-recs-cols: {{ rec_cols }};" x-data="pcRecsShuffle({{ rec_limit }})" x-init="apply()">
-      <div class="pc-world-recs__head">
-        <div class="pc-world-recs__head-text">
-          <h2 class="pc-world-recs__title">{{ rec_heading }}</h2>
-          {%- if blurb != blank -%}<p class="pc-world-recs__blurb">{{ blurb }}</p>{%- endif -%}
-        </div>
-        {%- if rec_count > rec_limit -%}
-          <button type="button" class="pc-world-recs__shuffle" @click="shuffle()" aria-label="Show other products">&#8635; Shuffle</button>
-        {%- endif -%}
-      </div>
-      <div class="pc-world-recs__grid">{{ rec_cards }}</div>
-    </div>
-  {%- endif -%}
+  {%- render 'customer-rec-shell', cards: rec_cards, heading: rec_heading, blurb: blurb, count: rec_count, limit: rec_limit, columns: rec_cols, compact: compact -%}
 {%- endif -%}

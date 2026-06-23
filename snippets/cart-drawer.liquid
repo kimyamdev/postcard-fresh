@@ -288,8 +288,8 @@
         {%- endfor -%}
       </div>
 
-      {%- comment -%} History-based same-world cross-sell (logged-in; renders nothing otherwise). {%- endcomment -%}
-      {%- render 'customer-world-recs', compact: true, limit: 2, columns: 2, heading: 'From your worlds' -%}
+      {%- comment -%} History-based recs (logged-in; each renders nothing otherwise). {%- endcomment -%}
+      {%- render 'cart-recs' -%}
 
       <form action="{{ routes.cart_url }}" method="post" id="CartDrawer-Form" class="pc-cart-drawer__footer" novalidate>
         <div class="pc-cart-drawer__footer-inner">
@@ -312,6 +312,8 @@
         <p class="pc-cart-drawer__empty-body">Pick a postcard and we&rsquo;ll dispatch it to your skin.</p>
         <a href="{{ routes.all_products_collection_url }}" class="btn">START WRITING &rarr;</a>
       </div>
+      {%- comment -%} Recs still show on an empty bag (logged-in with history). {%- endcomment -%}
+      {%- render 'cart-recs' -%}
     {%- endif -%}
   </div>
 </cart-drawer>

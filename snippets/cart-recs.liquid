@@ -1,0 +1,6 @@
+{%- comment -%}
+  The cart-drawer recommendation blocks (logged-in; each renders nothing when it
+  has no suggestions). Shown whether the cart has items or is empty.
+{%- endcomment -%}
+{%- render 'customer-orderagain-recs', compact: true, limit: 2, columns: 2, heading: 'Order it again' -%}
+{%- render 'customer-world-recs', compact: true, limit: 2, columns: 2, heading: 'From your fav worlds' -%}

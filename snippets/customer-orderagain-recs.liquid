@@ -1,0 +1,44 @@
+{%- comment -%}
+  "Order it again" — the exact products the logged-in customer has ordered
+  before that are still available, newest purchase first, deduped. Quick-add +
+  shuffle via the shared card/shell.
+
+  Renders NOTHING when logged out, no orders, or nothing still available.
+
+  Accepts: heading, blurb, limit, columns, exclude_id, compact
+{%- endcomment -%}
+{%- if customer -%}
+  {%- liquid
+    assign rec_limit = limit | default: 4
+    assign rec_cols = columns | default: 4
+    assign rec_heading = heading | default: 'Order it again'
+    assign pool_limit = rec_limit | times: 3
+    if pool_limit > 12
+      assign pool_limit = 12
+    endif
+  -%}
+
+  {%- capture rec_cards -%}
+    {%- assign rec_count = 0 -%}
+    {%- assign seen_ids = ',' -%}
+    {%- for order in customer.orders -%}
+      {%- if rec_count >= pool_limit -%}{%- break -%}{%- endif -%}
+      {%- for line in order.line_items -%}
+        {%- if rec_count >= pool_limit -%}{%- break -%}{%- endif -%}
+        {%- assign p = line.product -%}
+        {%- if p == blank -%}{%- continue -%}{%- endif -%}
+        {%- unless p.available -%}{%- continue -%}{%- endunless -%}
+        {%- assign tok = ',' | append: p.id | append: ',' -%}
+        {%- if seen_ids contains tok -%}{%- continue -%}{%- endif -%}
+        {%- if exclude_id and p.id == exclude_id -%}{%- continue -%}{%- endif -%}
+        {%- assign seen_ids = seen_ids | append: p.id | append: ',' -%}
+        {%- assign rec_count = rec_count | plus: 1 -%}
+        {%- assign rec_hidden = false -%}
+        {%- if rec_count > rec_limit -%}{%- assign rec_hidden = true -%}{%- endif -%}
+        {%- render 'customer-rec-card', product: p, hidden: rec_hidden -%}
+      {%- endfor -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- render 'customer-rec-shell', cards: rec_cards, heading: rec_heading, blurb: blurb, count: rec_count, limit: rec_limit, columns: rec_cols, compact: compact -%}
+{%- endif -%}
