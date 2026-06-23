@@ -1,0 +1,119 @@
+{%- comment -%}
+  Small "Write a review" form that submits to Stamped's public reviews API.
+  Postcard-styled, Alpine-driven, collapsed behind a "Write a review" button.
+
+  Submissions land in Stamped PENDING moderation (nothing goes live unapproved).
+  Stamped's cross-origin response can't be read from the browser (CORS), but the
+  POST still reaches them, so we treat a sent request as submitted.
+
+  Accepts:
+    product      cart/storefront product (required)
+    public_key   Stamped PUBLIC api key (safe to expose client-side)
+    store_hash   Stamped store id (sId)
+    heading      optional panel heading
+
+  Renders nothing without a product or public_key.
+{%- endcomment -%}
+{%- if product and public_key != blank -%}
+  {%- assign rf_heading = heading | default: 'Leave your own postcard' -%}
+  {%- assign rf_img = product.featured_image | image_url: width: 600 -%}
+  {%- assign rf_endpoint = 'https://stamped.io/api/reviews3?apiKey=' | append: public_key -%}
+  {%- if store_hash != blank -%}{%- assign rf_endpoint = rf_endpoint | append: '&sId=' | append: store_hash -%}{%- endif -%}
+  <div
+    class="pc-review-form"
+    x-data="pcReviewForm({
+      endpoint: {{ rf_endpoint | json }},
+      productId: {{ product.id | json }},
+      productName: {{ product.title | json }},
+      productSKU: {{ product.handle | json }},
+      productUrl: {{ shop.url | append: product.url | json }},
+      productImageUrl: {{ rf_img | json }}
+    })"
+  >
+    <button type="button" class="pc-review-form__toggle" x-show="!open && !done" @click="open = true">
+      &#9998; Write a review
+    </button>
+
+    <form class="pc-review-form__panel" x-show="open && !done" x-cloak @submit.prevent="submit()">
+      <div class="pc-review-form__title">{{ rf_heading }}</div>
+
+      <div class="pc-review-form__stars" @mouseleave="hover = 0" role="radiogroup" aria-label="Rating">
+        <template x-for="n in 5" :key="n">
+          <button
+            type="button"
+            class="pc-review-form__star"
+            :class="{ 'is-on': (hover || rating) >= n }"
+            @mouseenter="hover = n"
+            @click="rating = n"
+            :aria-label="n + ' star' + (n > 1 ? 's' : '')"
+          >&#9733;</button>
+        </template>
+      </div>
+
+      <input type="text" class="pc-review-form__input" placeholder="Your name" x-model="name" autocomplete="name">
+      <input type="email" class="pc-review-form__input" placeholder="Your email (never published)" x-model="email" autocomplete="email">
+      <textarea class="pc-review-form__input pc-review-form__textarea" rows="4" placeholder="How was it?" x-model="message"></textarea>
+
+      <p class="pc-review-form__err" x-show="err" x-cloak x-text="err"></p>
+
+      <div class="pc-review-form__actions">
+        <button type="submit" class="pc-review-form__submit" :disabled="busy" x-text="busy ? 'Sending…' : 'Send review →'">Send review &rarr;</button>
+        <button type="button" class="pc-review-form__cancel tlink" @click="open = false">Cancel</button>
+      </div>
+      <p class="pc-review-form__note">Reviews are checked before they&rsquo;re posted.</p>
+    </form>
+
+    <div class="pc-review-form__thanks" x-show="done" x-cloak>
+      <span class="pc-review-form__thanks-tick">&#10003;</span>
+      <span>Thanks for your postcard! Your review is pending approval.</span>
+    </div>
+  </div>
+
+  <script>
+    if (!window.pcReviewForm) {
+      window.pcReviewForm = function (cfg) {
+        return {
+          open: false,
+          rating: 0,
+          hover: 0,
+          name: '',
+          email: '',
+          message: '',
+          busy: false,
+          done: false,
+          err: '',
+          validate: function () {
+            if (!this.rating) return 'Please pick a star rating.';
+            if (!this.name.trim()) return 'Please add your name.';
+            if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(this.email.trim())) return 'Please add a valid email.';
+            if (this.message.trim().length < 4) return 'Please write a few words.';
+            return '';
+          },
+          submit: function () {
+            if (this.busy) return;
+            var v = this.validate();
+            if (v) { this.err = v; return; }
+            this.err = '';
+            this.busy = true;
+            var msg = this.message.trim();
+            var fd = new FormData();
+            fd.append('productId', cfg.productId);
+            fd.append('author', this.name.trim());
+            fd.append('email', this.email.trim());
+            fd.append('reviewRating', String(this.rating));
+            fd.append('reviewTitle', msg.slice(0, 60));
+            fd.append('reviewMessage', msg);
+            fd.append('productName', cfg.productName);
+            fd.append('productSKU', cfg.productSKU);
+            fd.append('productImageUrl', cfg.productImageUrl);
+            fd.append('productUrl', cfg.productUrl);
+            var self = this;
+            fetch(cfg.endpoint, { method: 'POST', body: fd })
+              .catch(function () { /* CORS hides the response; the POST still lands */ })
+              .finally(function () { self.busy = false; self.done = true; });
+          }
+        };
+      };
+    }
+  </script>
+{%- endif -%}
