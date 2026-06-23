@@ -70,19 +70,14 @@
         {%- if done_worlds contains wtok -%}{%- continue -%}{%- endif -%}
         {%- assign done_worlds = done_worlds | append: lw.system.handle | append: '|' -%}
         {%- comment -%}
-          Candidates = the world's curated featured_products first, then the rest
-          of its collection (handle = world slug) for shuffle depth. Dedup is
-          handled below by rendered_ids.
+          Candidates = the world's collection (handle = world slug) for a deep
+          shuffle pool — it already contains the featured products. Fall back to
+          the curated featured_products if the world has no matching collection.
         {%- endcomment -%}
         {%- assign wslug = lw.slug.value | default: lw.system.handle -%}
-        {%- assign wcoll_products = collections[wslug].products -%}
-        {%- assign wfeat = lw.featured_products.value -%}
-        {%- if wcoll_products.size > 0 and wfeat.size > 0 -%}
-          {%- assign wcandidates = wfeat | concat: wcoll_products -%}
-        {%- elsif wcoll_products.size > 0 -%}
-          {%- assign wcandidates = wcoll_products -%}
-        {%- else -%}
-          {%- assign wcandidates = wfeat -%}
+        {%- assign wcandidates = collections[wslug].products -%}
+        {%- if wcandidates == blank or wcandidates.size == 0 -%}
+          {%- assign wcandidates = lw.featured_products.value -%}
         {%- endif -%}
         {%- for fp in wcandidates -%}
           {%- if rec_count >= pool_limit -%}{%- break -%}{%- endif -%}
