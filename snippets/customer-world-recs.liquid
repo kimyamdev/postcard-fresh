@@ -1,0 +1,77 @@
+{%- comment -%}
+  "From your worlds" — same-world cross-sell from the logged-in customer's order
+  history. Reads the worlds they've bought into, then suggests products from
+  those worlds' `featured_products` that they don't already own.
+
+  Renders NOTHING when: logged out, no orders, or no fresh suggestions exist.
+  Logged-in only — `customer.orders` is the source.
+
+  Accepts:
+    heading      panel heading (default "From your worlds")
+    blurb        optional sub-line under the heading
+    limit        max cards (default 4)
+    columns      grid columns on desktop (default 4)
+    exclude_id   a product id to skip (e.g. the current PDP product)
+    compact      true for the narrow cart-drawer layout
+{%- endcomment -%}
+{%- if customer -%}
+  {%- liquid
+    assign rec_limit = limit | default: 4
+    assign rec_cols = columns | default: 4
+    assign rec_heading = heading | default: 'From your worlds'
+
+    comment
+      Pass 1 — from order history collect owned product ids (for exclusion) and
+      the set of worlds the customer has bought into (deduped by handle).
+    endcomment
+    assign owned_ids = ','
+    assign owned_worlds = '|'
+    for order in customer.orders
+      for line in order.line_items
+        assign lp = line.product
+        if lp
+          assign owned_ids = owned_ids | append: lp.id | append: ','
+          assign lw = lp.metafields.postcard.world.value | default: lp.metafields.custom.world.value
+          if lw
+            assign lwt = '|' | append: lw.system.handle | append: '|'
+            unless owned_worlds contains lwt
+              assign owned_worlds = owned_worlds | append: lw.system.handle | append: '|'
+            endunless
+          endif
+        endif
+      endfor
+    endfor
+  -%}
+
+  {%- comment -%} Pass 2 — render fresh featured products from owned worlds, capped at limit. {%- endcomment -%}
+  {%- capture rec_cards -%}
+    {%- assign rec_count = 0 -%}
+    {%- assign rendered_ids = ',' -%}
+    {%- for w in shop.metaobjects.world.values -%}
+      {%- if rec_count >= rec_limit -%}{%- break -%}{%- endif -%}
+      {%- assign wtok = '|' | append: w.system.handle | append: '|' -%}
+      {%- unless owned_worlds contains wtok -%}{%- continue -%}{%- endunless -%}
+      {%- for fp in w.featured_products.value -%}
+        {%- if rec_count >= rec_limit -%}{%- break -%}{%- endif -%}
+        {%- unless fp.available -%}{%- continue -%}{%- endunless -%}
+        {%- assign idtok = ',' | append: fp.id | append: ',' -%}
+        {%- if owned_ids contains idtok -%}{%- continue -%}{%- endif -%}
+        {%- if rendered_ids contains idtok -%}{%- continue -%}{%- endif -%}
+        {%- if exclude_id and fp.id == exclude_id -%}{%- continue -%}{%- endif -%}
+        {%- assign rendered_ids = rendered_ids | append: fp.id | append: ',' -%}
+        {%- assign rec_count = rec_count | plus: 1 -%}
+        <div class="pc-world-recs__cell">{%- render 'product-card', product: fp -%}</div>
+      {%- endfor -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- if rec_cards | strip != blank -%}
+    <div class="pc-world-recs{% if compact %} pc-world-recs--compact{% endif %}" style="--pc-recs-cols: {{ rec_cols }};">
+      <div class="pc-world-recs__head">
+        <h2 class="pc-world-recs__title">{{ rec_heading }}</h2>
+        {%- if blurb != blank -%}<p class="pc-world-recs__blurb">{{ blurb }}</p>{%- endif -%}
+      </div>
+      <div class="pc-world-recs__grid">{{ rec_cards }}</div>
+    </div>
+  {%- endif -%}
+{%- endif -%}
