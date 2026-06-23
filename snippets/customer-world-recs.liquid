@@ -21,45 +21,49 @@
     assign rec_heading = heading | default: 'From your worlds'
 
     comment
-      Pass 1 — from order history collect owned product ids (for exclusion) and
-      the set of worlds the customer has bought into (deduped by handle).
+      Pass 1 — collect every owned product id, so we never suggest something the
+      customer already bought.
     endcomment
     assign owned_ids = ','
-    assign owned_worlds = '|'
     for order in customer.orders
       for line in order.line_items
-        assign lp = line.product
-        if lp
-          assign owned_ids = owned_ids | append: lp.id | append: ','
-          assign lw = lp.metafields.postcard.world.value | default: lp.metafields.custom.world.value
-          if lw
-            assign lwt = '|' | append: lw.system.handle | append: '|'
-            unless owned_worlds contains lwt
-              assign owned_worlds = owned_worlds | append: lw.system.handle | append: '|'
-            endunless
-          endif
+        if line.product
+          assign owned_ids = owned_ids | append: line.product.id | append: ','
         endif
       endfor
     endfor
   -%}
 
-  {%- comment -%} Pass 2 — render fresh featured products from owned worlds, capped at limit. {%- endcomment -%}
+  {%- comment -%}
+    Pass 2 — walk orders newest-first (customer.orders is reverse-chronological),
+    and the first time each world is seen render its fresh featured products
+    (not owned, not already shown), capped at limit. Result: the most recently
+    purchased world's products lead.
+  {%- endcomment -%}
   {%- capture rec_cards -%}
     {%- assign rec_count = 0 -%}
     {%- assign rendered_ids = ',' -%}
-    {%- for w in shop.metaobjects.world.values -%}
+    {%- assign done_worlds = '|' -%}
+    {%- for order in customer.orders -%}
       {%- if rec_count >= rec_limit -%}{%- break -%}{%- endif -%}
-      {%- assign wtok = '|' | append: w.system.handle | append: '|' -%}
-      {%- unless owned_worlds contains wtok -%}{%- continue -%}{%- endunless -%}
-      {%- for fp in w.featured_products.value -%}
+      {%- for line in order.line_items -%}
         {%- if rec_count >= rec_limit -%}{%- break -%}{%- endif -%}
-        {%- unless fp.available -%}{%- continue -%}{%- endunless -%}
-        {%- assign idtok = ',' | append: fp.id | append: ',' -%}
-        {%- if owned_ids contains idtok -%}{%- continue -%}{%- endif -%}
-        {%- if rendered_ids contains idtok -%}{%- continue -%}{%- endif -%}
-        {%- if exclude_id and fp.id == exclude_id -%}{%- continue -%}{%- endif -%}
-        {%- assign rendered_ids = rendered_ids | append: fp.id | append: ',' -%}
-        {%- assign rec_count = rec_count | plus: 1 -%}
+        {%- assign lp = line.product -%}
+        {%- if lp == blank -%}{%- continue -%}{%- endif -%}
+        {%- assign lw = lp.metafields.postcard.world.value | default: lp.metafields.custom.world.value -%}
+        {%- if lw == blank -%}{%- continue -%}{%- endif -%}
+        {%- assign wtok = '|' | append: lw.system.handle | append: '|' -%}
+        {%- if done_worlds contains wtok -%}{%- continue -%}{%- endif -%}
+        {%- assign done_worlds = done_worlds | append: lw.system.handle | append: '|' -%}
+        {%- for fp in lw.featured_products.value -%}
+          {%- if rec_count >= rec_limit -%}{%- break -%}{%- endif -%}
+          {%- unless fp.available -%}{%- continue -%}{%- endunless -%}
+          {%- assign idtok = ',' | append: fp.id | append: ',' -%}
+          {%- if owned_ids contains idtok -%}{%- continue -%}{%- endif -%}
+          {%- if rendered_ids contains idtok -%}{%- continue -%}{%- endif -%}
+          {%- if exclude_id and fp.id == exclude_id -%}{%- continue -%}{%- endif -%}
+          {%- assign rendered_ids = rendered_ids | append: fp.id | append: ',' -%}
+          {%- assign rec_count = rec_count | plus: 1 -%}
         <div class="pc-world-recs__cell{% if fp.variants.size > 1 %} pc-world-recs__cell--multi{% endif %}">
           {%- render 'product-card', product: fp -%}
           {%- if fp.available -%}
@@ -77,6 +81,7 @@
             </form>
           {%- endif -%}
         </div>
+        {%- endfor -%}
       {%- endfor -%}
     {%- endfor -%}
   {%- endcapture -%}
