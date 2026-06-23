@@ -5781,3 +5781,7 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
 .pc-quick-add__btn[disabled] { opacity: 0.5; cursor: default; }
 .pc-world-recs--compact .pc-quick-add { margin-top: 8px; }
 .pc-world-recs--compact .pc-quick-add__btn { width: 32px; min-width: 32px; height: 32px; font-size: 18px; }
+
+/* Recs cards: drop the redundant "Add →"; for multi-variant, drop the "From $…" row (prices are in the dropdown) */
+.pc-world-recs .pc-product-card__row .tlink { display: none; }
+.pc-world-recs__cell--multi .pc-product-card__row { display: none; }
