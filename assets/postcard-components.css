@@ -5684,6 +5684,10 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
 .pc-world-recs--compact .pc-world-recs__head { margin-bottom: 14px; }
 .pc-world-recs--compact .pc-world-recs__title { font-size: 15px; font-style: normal; text-transform: uppercase; letter-spacing: 0.05em; }
 .pc-world-recs--compact .pc-world-recs__grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+/* Drop the image overlays on the cart thumbnails — too squeezed in the narrow drawer */
+.pc-world-recs--compact .pc-product-card__badge,
+.pc-world-recs--compact .pc-product-card__chip,
+.pc-world-recs--compact .pc-product-card__world-stamp { display: none !important; }
 
 /* "Buy it again" reorder + autoship (customer-reorder-recs.liquid / postcard-reorder-recs.liquid) */
 .pc-reorder__wrap { max-width: 1280px; margin: 0 auto; }
