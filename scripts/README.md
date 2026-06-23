@@ -135,6 +135,44 @@ needed.
 
 ---
 
+## sync_google_reviews.py
+
+**What it does**
+Same result as `refresh_google_rating.py` (writes the header's
+`google_review.rating` + `google_review.count` metafields), but reads from
+the **Cloudflare Worker proxy** — the exact source the on-page "Google
+reviews" section shows — so the header bar matches the section. Needs **no
+Google API key** (the worker holds it).
+
+**Signal**
+`GET https://postcard-google-reviews.philippe-7f7.workers.dev` (the section's
+Proxy URL) → `{ rating, total }`. Must send a real `User-Agent` and an
+`Origin` matching the worker's `ALLOWED_ORIGIN`, or Cloudflare returns 403.
+
+**Writes**
+- `shop.metafields.google_review.rating` (single line, e.g. "4.9")
+- `shop.metafields.google_review.count`  (single line, e.g. "191")
+
+**Consumed by**
+Header announcement bar (sections/header.liquid).
+
+**Required env**
+- `SHOPIFY_STORE_URL`, `SHOPIFY_API_VERSION`, `SHOPIFY_ACCESS_TOKEN`
+
+**Optional env** (have defaults)
+- `GREVIEWS_PROXY_URL` — default `https://postcard-google-reviews.philippe-7f7.workers.dev`
+- `GREVIEWS_ORIGIN` — default `https://thisisoasis.myshopify.com`
+
+**Which one to use?**
+Prefer **sync_google_reviews.py** for routine refreshes (no Google key, always
+matches the section). Use **refresh_google_rating.py** only if the worker is
+down and you need to hit Google directly.
+
+**Run cadence**
+Weekly, or whenever new reviews accumulate. Worker edge-caches ~15 min.
+
+---
+
 ## env/shopify.env — full template
 
 ```
