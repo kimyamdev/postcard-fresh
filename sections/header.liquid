@@ -242,14 +242,22 @@
     {%- endfor -%}
   </nav>
 
+  {%- liquid
+    comment Smile VIP tier (club / deluxe / villa) tints the bag button. endcomment
+    assign hdr_tier = customer.metafields.smile.vip_tier_name.value | downcase | strip
+  -%}
   <div class="pc-utility">
     {%- if section.settings.show_search -%}
       <a class="pc-utility__link" href="{{ routes.search_url }}">{{ section.settings.search_label | default: 'Search' }}</a>
     {%- endif -%}
     {%- if section.settings.show_account -%}
-      <a class="pc-utility__link" href="{{ routes.account_url }}">{{ section.settings.account_label | default: 'Account' }}</a>
+      {%- if customer -%}
+        <a class="pc-utility__link" href="{{ routes.account_url }}">{{ section.settings.account_label | default: 'Account' }}</a>
+      {%- else -%}
+        <a class="pc-utility__link" href="{{ routes.account_login_url }}">Sign Up / Sign In</a>
+      {%- endif -%}
     {%- endif -%}
-    <a class="pc-bag" id="cart-icon-bubble" href="{{ routes.cart_url }}">{{ section.settings.bag_label | default: 'Bag' }} &middot; <span data-pc-cart-count>{{ cart.item_count }}</span></a>
+    <a class="pc-bag{% if hdr_tier != blank %} pc-bag--tier pc-bag--{{ hdr_tier }}{% endif %}" id="cart-icon-bubble" href="{{ routes.cart_url }}">{{ section.settings.bag_label | default: 'Bag' }} &middot; <span data-pc-cart-count>{{ cart.item_count }}</span></a>
   </div>
 </header>
 

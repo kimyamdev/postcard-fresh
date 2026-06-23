@@ -93,7 +93,7 @@
         </div>
         <div class="h-display pc-cart-drawer__header-title">YOUR BAG</div>
         {%- if vip_tier != blank -%}
-          <div class="pc-cart-drawer__tier{% if is_villa %} pc-cart-drawer__tier--villa{% endif %}" title="Smile VIP tier">
+          <div class="pc-cart-drawer__tier{% if vip_tier_lower != blank %} pc-cart-drawer__tier--{{ vip_tier_lower }}{% endif %}" title="Smile VIP tier">
             <span class="pc-cart-drawer__tier-dot"></span>
             <span>{{ vip_tier | upcase }} TIER</span>
           </div>
@@ -101,6 +101,14 @@
       </div>
       <button class="pc-cart-drawer__close" type="button" onclick="this.closest('cart-drawer').close()" aria-label="Close">&times;</button>
     </div>
+
+    {%- unless customer -%}
+      <a class="pc-cart-drawer__signin" href="{{ routes.account_login_url }}">
+        <span class="pc-cart-drawer__signin-icon" aria-hidden="true">&#9733;</span>
+        <span class="pc-cart-drawer__signin-text"><strong>Sign up / Sign in</strong> &middot; earn rewards &amp; save your bag</span>
+        <span class="pc-cart-drawer__signin-arrow" aria-hidden="true">&rarr;</span>
+      </a>
+    {%- endunless -%}
 
     {%- if cart != empty -%}
       <div class="pc-cart-drawer__ship{% if remaining_cents <= 0 %} pc-cart-drawer__ship--done{% endif %}">
