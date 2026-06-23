@@ -65,7 +65,8 @@
     {%- endfor -%}
   {%- endcapture -%}
 
-  {%- if rec_cards | strip != blank -%}
+  {%- assign rec_cards_clean = rec_cards | strip -%}
+  {%- if rec_cards_clean != blank -%}
     <div class="pc-world-recs{% if compact %} pc-world-recs--compact{% endif %}" style="--pc-recs-cols: {{ rec_cols }};">
       <div class="pc-world-recs__head">
         <h2 class="pc-world-recs__title">{{ rec_heading }}</h2>
