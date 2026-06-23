@@ -59,6 +59,7 @@
         {%- for fp in wcandidates -%}
           {%- if rec_count >= pool_limit -%}{%- break -%}{%- endif -%}
           {%- unless fp.available -%}{%- continue -%}{%- endunless -%}
+          {%- if fp.title contains 'Mini' -%}{%- continue -%}{%- endif -%}
           {%- assign idtok = ',' | append: fp.id | append: ',' -%}
           {%- if owned_ids contains idtok -%}{%- continue -%}{%- endif -%}
           {%- if rendered_ids contains idtok -%}{%- continue -%}{%- endif -%}
