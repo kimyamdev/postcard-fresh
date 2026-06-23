@@ -3829,7 +3829,7 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 0 16px;
+  margin: 16px 16px 0;
   padding: 11px 14px;
   border: 1.5px solid var(--color-ink);
   background: var(--color-bg-card);
