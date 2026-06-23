@@ -1,35 +1,23 @@
 (function () {
-  // Alpine factory for the "From your worlds" recs: shows `step` cells at a time
-  // and cycles the visible window through the rendered pool on shuffle(). Defined
-  // here (a real external script) so it survives the cart drawer's innerHTML
-  // refresh, where inline <script> tags don't re-execute.
-  if (!window.pcRecsShuffle) {
-    window.pcRecsShuffle = function (step) {
-      return {
-        start: 0,
-        step: step,
-        _cells: function () {
-          // $root = the component root (the .pc-world-recs div) regardless of
-          // which element the calling expression is bound to. $el would be the
-          // button when called from its @click, finding no cells.
-          return Array.prototype.slice.call(this.$root.querySelectorAll('.pc-world-recs__cell'));
-        },
-        apply: function () {
-          var cells = this._cells();
-          var total = cells.length;
-          if (!total) return;
-          for (var i = 0; i < total; i++) {
-            var rel = ((i - this.start) % total + total) % total;
-            cells[i].style.display = rel < this.step ? '' : 'none';
-          }
-        },
-        shuffle: function () {
-          var total = this._cells().length;
-          if (total <= this.step) return;
-          this.start = (this.start + this.step) % total;
-          this.apply();
-        }
-      };
+  // Recs shuffle — cycle the visible window of rec cards. Plain vanilla (no
+  // Alpine) so it survives the cart drawer's innerHTML refresh and avoids
+  // $root/x-data/initTree timing issues with nested components. Initial
+  // visibility is set server-side via inline styles on the cells; this only
+  // runs on click. `this` (the button) finds its own .pc-world-recs container.
+  if (!window.pcShuffleRecs) {
+    window.pcShuffleRecs = function (btn) {
+      var root = btn.closest('.pc-world-recs');
+      if (!root) return;
+      var cells = root.querySelectorAll('.pc-world-recs__cell');
+      var total = cells.length;
+      var step = parseInt(root.getAttribute('data-recs-step'), 10) || 2;
+      if (total <= step) return;
+      var start = ((parseInt(root.getAttribute('data-recs-start'), 10) || 0) + step) % total;
+      root.setAttribute('data-recs-start', start);
+      for (var i = 0; i < total; i++) {
+        var rel = ((i - start) % total + total) % total;
+        cells[i].style.display = rel < step ? '' : 'none';
+      }
     };
   }
 
