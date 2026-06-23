@@ -207,11 +207,18 @@
     if (!form.classList.contains('pc-pdp-buy__form')) return;
     e.preventDefault();
     const cta = form.querySelector('button[type="submit"]');
+    // Small "+" quick-add buttons get a CSS spinner ("Adding…" text overflows the
+    // tiny button); everything else keeps the text label.
+    const isQuickAdd = cta && cta.classList.contains('pc-quick-add__btn');
     const ctaText = cta ? cta.textContent : '';
     if (cta) {
       cta.disabled = true;
-      cta.dataset.pcOriginalText = ctaText;
-      cta.textContent = 'Adding…';
+      if (isQuickAdd) {
+        cta.classList.add('is-loading');
+      } else {
+        cta.dataset.pcOriginalText = ctaText;
+        cta.textContent = 'Adding…';
+      }
     }
     try {
       await addItem(new FormData(form));
@@ -221,7 +228,11 @@
     } finally {
       if (cta) {
         cta.disabled = false;
-        cta.textContent = cta.dataset.pcOriginalText || ctaText;
+        if (isQuickAdd) {
+          cta.classList.remove('is-loading');
+        } else {
+          cta.textContent = cta.dataset.pcOriginalText || ctaText;
+        }
       }
     }
   }, true);

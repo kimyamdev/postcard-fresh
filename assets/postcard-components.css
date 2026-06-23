@@ -5817,7 +5817,23 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
   white-space: nowrap;
 }
 .pc-quick-add__btn:hover { background: #B07A4E; border-color: #B07A4E; }
-.pc-quick-add__btn[disabled] { opacity: 0.5; cursor: default; }
+.pc-quick-add__btn[disabled] { cursor: default; }
+/* Loading: hide the "+" and show a small spinner */
+.pc-quick-add__btn.is-loading { color: transparent; pointer-events: none; position: relative; }
+.pc-quick-add__btn.is-loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: pc-qa-spin 0.6s linear infinite;
+}
+@keyframes pc-qa-spin { to { transform: rotate(360deg); } }
 .pc-world-recs--compact .pc-quick-add { margin-top: 8px; }
 .pc-world-recs--compact .pc-quick-add__btn { width: 32px; min-width: 32px; height: 32px; font-size: 18px; }
 
