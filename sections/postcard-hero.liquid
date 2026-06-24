@@ -21,9 +21,17 @@
         {%- assign s_idx = forloop.index0 -%}
         {%- assign s_video = block.settings.video -%}
         {%- assign s_image = block.settings.image -%}
-        <div class="pc-hero__media pc-hero__slide{% if slide_count == 1 %} pc-hero__slide--active{% endif %}"
+        {%- assign s_link = block.settings.link -%}
+        {%- capture s_slide_class -%}pc-hero__media pc-hero__slide{% if s_link != blank %} pc-hero__slide--link{% endif %}{% if slide_count == 1 %} pc-hero__slide--active{% endif %}{%- endcapture -%}
+        {%- if s_link != blank -%}
+          <a href="{{ s_link }}" class="{{ s_slide_class }}" aria-label="{{ block.settings.eyebrow | default: block.settings.tag | default: 'View' | escape }}"
              {%- if slide_count > 1 %} :class="{ 'pc-hero__slide--active': i === {{ s_idx }} }"{%- endif -%}
              {{ block.shopify_attributes }}>
+        {%- else -%}
+          <div class="{{ s_slide_class }}"
+               {%- if slide_count > 1 %} :class="{ 'pc-hero__slide--active': i === {{ s_idx }} }"{%- endif -%}
+               {{ block.shopify_attributes }}>
+        {%- endif -%}
           {%- if s_video != blank -%}
             {{ s_video | video_tag: image_size: '1600x', autoplay: true, loop: true, muted: true, controls: false, class: 'pc-hero__media-vid' }}
           {%- elsif s_image != blank -%}
@@ -42,7 +50,7 @@
           {%- if block.settings.legend != blank -%}
             <div class="pc-image-legend pc-hero__legend">{{ block.settings.legend }}</div>
           {%- endif -%}
-        </div>
+        {%- if s_link != blank -%}</a>{%- else -%}</div>{%- endif -%}
       {%- endfor -%}
     {%- elsif media_video != blank -%}
       <div class="pc-hero__media">
@@ -166,6 +174,7 @@
       "settings": [
         { "type": "image_picker", "id": "image", "label": "Image", "info": "PNG/JPG/WebP/SVG accepted." },
         { "type": "video",        "id": "video", "label": "Video", "info": "Takes priority over image if both are set. Auto-plays muted + loops." },
+        { "type": "url",          "id": "link", "label": "Slide links to", "info": "Pick a product (or any page). The whole slide becomes clickable. Leave blank for a non-clickable slide." },
         { "type": "text",         "id": "eyebrow", "label": "Overlay eyebrow", "info": "Leave blank to use the section-level default." },
         { "type": "text",         "id": "tag", "label": "Overlay tag", "info": "Leave blank to use the section-level default." },
         { "type": "text",         "id": "legend", "label": "Image legend (bottom-left)", "info": "Typewriter caption overlaid on the slide image. Leave blank to hide." },
