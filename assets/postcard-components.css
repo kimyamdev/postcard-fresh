@@ -386,9 +386,9 @@ a.pc-product-card { cursor: pointer; }
 .pc-bestsellers__grid .pc-product-card__media--no-world,
 .pc-search__products .pc-product-card__media--no-world,
 .pc-refill-cat .pc-product-card__media--no-world {
-  background:
-    repeating-linear-gradient(135deg, rgba(33,32,32,0.03) 0 8px, rgba(33,32,32,0.05) 8px 16px),
-    var(--color-bg-card) !important;
+  /* Products with no linked world get a clean, neutral very-light-grey panel
+     instead of the diagonal-stripe placeholder. */
+  background: #F4F4F2 !important;
 }
 /* Collection grid: "World-colour gradient" toggle OFF -> plain card backgrounds */
 .pc-coll-grid-section--flat .pc-product-card__media {
