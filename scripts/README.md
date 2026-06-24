@@ -173,6 +173,42 @@ Weekly, or whenever new reviews accumulate. Worker edge-caches ~15 min.
 
 ---
 
+## refresh_landing_bestsellers.py
+
+**What it does**
+Rebuilds the manual **`landing-bestsellers`** collection (Collection GID
+`486636290274`) — the pool the homepage "Postcard Bestsellers" section
+shuffles 3 of — from the top 20 *clean retail* products by net sales over the
+trailing ~6 months. Unlike the other scripts it writes **collection membership**
+(add/remove + reorder), not metafields. Idempotent: converges to exactly the 20.
+
+**Signal**
+Sum of line-item `discountedTotalSet` from paid orders (`financial_status:paid`)
+in the trailing `WINDOW_DAYS` (182). "Clean retail" drops titles whose tokens hit
+`{custom, refill, mini(s), discovery, sojao, esse}` or the phrase "pick and mix"
+— i.e. customs, the in-store Refill SKU, mini/discovery sets, Pick & Mix, and the
+SOJAO/ESSE collabs. Co-brands like Heytea are kept.
+
+**Writes**
+- `collection landing-bestsellers` → its 20 product members, ordered by net sales.
+
+**Consumed by**
+- Homepage Postcard Bestsellers section (sections/postcard-bestsellers.liquid),
+  which renders this collection's top 20 as a pool and JS-shuffles 3 per visit.
+
+**Required env**
+- `SHOPIFY_STORE_URL`, `SHOPIFY_API_VERSION`, `SHOPIFY_ACCESS_TOKEN`
+
+**Run cadence**
+Monthly. Installed as a launchd agent
+(`~/Library/LaunchAgents/com.postcard.bestsellers-refresh.plist`, a copy lives at
+`scripts/launchd/`) that fires on the 1st at 09:34 local (runs on next wake if the
+Mac was asleep). Logs to `/tmp/postcard-bestsellers-refresh.log`.
+Manage: `launchctl list | grep postcard` · unload with
+`launchctl unload ~/Library/LaunchAgents/com.postcard.bestsellers-refresh.plist`.
+
+---
+
 ## env/shopify.env — full template
 
 ```
