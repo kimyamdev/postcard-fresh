@@ -166,9 +166,9 @@
       "type": "postcard-bestsellers",
       "settings": {
         "eyebrow": "Best-sellers",
-        "title": "Products we send most often.",
+        "title": "Products we send often.",
         "lede": "The ones most people keep coming back to.",
-        "collection": "bestsellers-postcard",
+        "collection": "landing-bestsellers",
         "randomize": false,
         "badge_1": "",
         "badge_2": "",
@@ -224,10 +224,13 @@
       ],
       "settings": {
         "world_handle": "hotel-lobby",
-        "bg_alpha": 14,
+        "bg_alpha": 8,
         "media_opacity": 100,
-        "stamp_size": 60,
-        "stamp_opacity": 100,
+        "stamp_size": 55,
+        "stamp_opacity": 95,
+        "stamp_pos_x": 80,
+        "stamp_pos_y": 8,
+        "stamp_rotate": 8,
         "media_height": 90,
         "light_badges_mode": "auto",
         "eyebrow": "World deep-dive · This month",
@@ -248,7 +251,7 @@
             "image": "shopify://shop_images/ChatGPT_Image_May_19_2026_02_26_01_PM.png",
             "image_placeholder": "illustrated postcard panel",
             "heading": "Bring it back.",
-            "body": "Empty Postcard bottle. Any size, any world."
+            "body": "Bring any clean bottle for a refill."
           }
         },
         "step_2": {
@@ -259,7 +262,7 @@
             "image": "shopify://shop_images/ChatGPT_Image_May_19_2026_02_29_45_PM.png",
             "image_placeholder": "illustrated postcard panel",
             "heading": "We refill it.",
-            "body": "From the beauty kitchen. Same recipe, same scent."
+            "body": "Pick your product. Choose your quantity. We'll refill your bottle on the spot"
           }
         },
         "step_3": {
@@ -269,8 +272,8 @@
             "postmark": "FOREVER YOURS",
             "image": "shopify://shop_images/120ce417-7724-4de5-8451-0d7777a7740c.png",
             "image_placeholder": "illustrated postcard panel",
-            "heading": "You reap it.",
-            "body": "Less waste, same scent. Save up to 15% per visit."
+            "heading": "On to the next journey",
+            "body": "Less waste, same favourites. Enjoy savings every time you refill."
           }
         }
       },
@@ -280,9 +283,9 @@
         "step_3"
       ],
       "settings": {
-        "eyebrow": "Refill, repeat, rejoice",
-        "title": "Bring it back. We'll top you up.",
-        "lede": "Visit our Orchard flagship. Less waste, same scent. Save up to 15% on every refill.",
+        "eyebrow": "Leave The World A Little More Postcard Perfect",
+        "title": "Refill & Repeat",
+        "lede": "Visit our Orchard flagship to refill your favourites. Enjoy the same scents you love, less packaging waste, and savings on every refill.",
         "primary_cta_text": "See the refill list →",
         "primary_cta_url": "",
         "secondary_cta_text": "Find our store →",
@@ -295,13 +298,13 @@
         "p1": {
           "type": "paragraph",
           "settings": {
-            "text": "<p>Postcard (F.K.A. Oasis Beauty Kitchen) started in 2018 — as a refillery in Everton Park, and as a brand built around a question: what if self-care was simpler, kinder, and a little bit playful?</p>"
+            "text": "<p>POSTCARD began with a simple wish: to make everyday self-care feel a little more joyful.</p>"
           }
         },
         "p2": {
           "type": "paragraph",
           "settings": {
-            "text": "<p>We mix, pour, and pack everything ourselves. Refill where we can. Source from local farms and distilleries. Painstakingly fuss until it's perfect.</p>"
+            "text": "<p>For years, I struggled with sensitive skin and relied heavily on steroid creams. Personal care often felt clinical and corrective — something I had to do, rather than something I looked forward to. I wanted products that felt gentle and effective, but also beautiful to use.</p><p>What started as a search for a better solution slowly grew into POSTCARD.</p>"
           }
         }
       },
@@ -310,12 +313,12 @@
         "p2"
       ],
       "settings": {
-        "photo": "shopify://shop_images/ChatGPT_Image_May_28_2026_05_18_15_PM.png",
+        "photo": "shopify://shop_images/founder_photo.png",
         "photo_alt": "",
         "photo_placeholder": "Hildra · in the beauty kitchen",
         "eyebrow": "Made by humans, in Singapore.",
-        "title": "FORMULATING AND MAKING SINCE 2018.",
-        "cta_text": "About Us →",
+        "title": "A Postcard From The Founder",
+        "cta_text": "Read More →",
         "cta_url": ""
       }
     }
