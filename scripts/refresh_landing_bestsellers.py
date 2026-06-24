@@ -71,27 +71,37 @@ def call(query, variables=None, retries=4):
             raise
 
 
-# ---- 1) product gid -> title ----------------------------------------------
-def fetch_product_titles():
-    print("[1/4] Fetching product titles…", flush=True)
-    out = {}
+# ---- 1) product gid -> title (+ flag accessories) -------------------------
+def fetch_products():
+    """Return (titles: {gid->title}, accessory_gids: set).
+
+    Accessories are tagged/typed inconsistently, so we catch them by tag
+    "Accessories" OR a productType containing "accessor" or "pouch"."""
+    print("[1/4] Fetching products…", flush=True)
+    titles = {}
+    accessories = set()
     cursor = None
     q = """
     query($cursor: String) {
       products(first: 250, after: $cursor) {
         pageInfo { hasNextPage endCursor }
-        edges { node { id title } }
+        edges { node { id title productType tags } }
       }
     }"""
     while True:
         d = call(q, {"cursor": cursor})
         for e in d["products"]["edges"]:
-            out[e["node"]["id"]] = e["node"]["title"]
+            n = e["node"]
+            titles[n["id"]] = n["title"]
+            pt = (n.get("productType") or "").lower()
+            tags = {t.lower() for t in (n.get("tags") or [])}
+            if "accessor" in pt or "pouch" in pt or "accessories" in tags:
+                accessories.add(n["id"])
         if not d["products"]["pageInfo"]["hasNextPage"]:
             break
         cursor = d["products"]["pageInfo"]["endCursor"]
-    print(f"    {len(out)} products")
-    return out
+    print(f"    {len(titles)} products ({len(accessories)} flagged as accessories)")
+    return titles, accessories
 
 
 # ---- 2) sum net sales per product in window -------------------------------
@@ -148,11 +158,11 @@ def is_clean_retail(title):
     return tokens.isdisjoint(EXCLUDE_TOKENS)
 
 
-def rank(sales, titles):
+def rank(sales, titles, accessories):
     rows = []
     for pid, amt in sales.items():
         title = titles.get(pid)
-        if not title or not is_clean_retail(title):
+        if not title or pid in accessories or not is_clean_retail(title):
             continue
         rows.append((pid, title, amt))
     rows.sort(key=lambda r: (-r[2], r[1]))
@@ -228,9 +238,9 @@ def reorder_products(ordered_ids):
 
 def main():
     dry = "--dry-run" in sys.argv
-    titles = fetch_product_titles()
+    titles, accessories = fetch_products()
     sales = fetch_net_sales()
-    top = rank(sales, titles)
+    top = rank(sales, titles, accessories)
 
     print(f"\nTop {TOP_N} clean-retail bestsellers (last {WINDOW_DAYS}d, by net sales):")
     print(f"  {'#':>2}  {'net sales':>10}  product")

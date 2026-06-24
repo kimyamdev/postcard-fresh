@@ -187,7 +187,9 @@ Sum of line-item `discountedTotalSet` from paid orders (`financial_status:paid`)
 in the trailing `WINDOW_DAYS` (182). "Clean retail" drops titles whose tokens hit
 `{custom, refill, mini(s), discovery, sojao, esse}` or the phrase "pick and mix"
 — i.e. customs, the in-store Refill SKU, mini/discovery sets, Pick & Mix, and the
-SOJAO/ESSE collabs. Co-brands like Heytea are kept.
+SOJAO/ESSE collabs. **Accessories are also excluded** (tag "Accessories" OR a
+productType containing "accessor"/"pouch" — catches both the tagged pouches and
+the untagged soap dish). Co-brands like Heytea are kept.
 
 **Writes**
 - `collection landing-bestsellers` → its 20 product members, ordered by net sales.
