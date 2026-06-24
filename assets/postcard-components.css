@@ -3798,7 +3798,7 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
 
 /* Header */
 .pc-cart-drawer__header {
-  padding: 20px 22px;
+  padding: 20px 0;
   border-bottom: 1.5px solid var(--color-ink);
   display: flex;
   justify-content: space-between;
@@ -3920,7 +3920,7 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
 /* Body / lines */
 .pc-cart-drawer__body {
   flex: 0 0 auto;
-  padding: 4px 22px 0;
+  padding: 4px 0 0;
 }
 
 .pc-cart-line {
@@ -4406,7 +4406,7 @@ body.pc-refill-modal-open { overflow: hidden; }
   border-top: 1.5px solid var(--color-ink);
   background: var(--color-bg-warm);
 }
-.pc-cart-drawer__footer-inner { padding: 16px 22px; }
+.pc-cart-drawer__footer-inner { padding: 16px 0; }
 
 .pc-cart-drawer__totals {
   display: grid;
