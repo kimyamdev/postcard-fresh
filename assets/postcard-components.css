@@ -526,7 +526,11 @@ a.pc-product-card { cursor: pointer; }
 .pc-hero {
   position: relative;
   display: grid;
-  grid-template-columns: 1.4fr 1fr;
+  /* Left (image) column is capped so it stops growing on wide screens — the
+     right (copy) column (1fr) absorbs the extra width. Keeps the cover image
+     from zooming in too much when the hero is stretched. ~58vw at common
+     widths (matches the old 1.4fr feel), never past 880px. */
+  grid-template-columns: clamp(440px, 58vw, 880px) 1fr;
   min-height: 720px;
   border-bottom: 1.5px solid var(--color-line);
 }
