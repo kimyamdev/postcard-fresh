@@ -7,6 +7,11 @@
 
   assign badges = section.settings.badge_1 | append: '||' | append: section.settings.badge_2 | append: '||' | append: section.settings.badge_3 | split: '||'
 
+  # Per-visit random: render the top N as a pool and let JS reveal 3 random
+  # ones on every page load. Takes priority over the daily "Rotate" offset.
+  assign random_per_visit = section.settings.random_per_visit
+  assign pool_size = section.settings.pool_size | default: 20
+
   assign offset = 0
   if use_collection
     assign max_offset = coll.products_count | minus: 3
@@ -39,8 +44,23 @@
         <p class="pc-bestsellers__lede">{{ section.settings.lede }}</p>
       {%- endif -%}
     </div>
-    <div class="pc-bestsellers__grid">
-      {%- if use_collection -%}
+    <div class="pc-bestsellers__grid{% if use_collection and random_per_visit %} pc-bestsellers__grid--shuffle{% endif %}"{% if use_collection and random_per_visit %} data-bestsellers-shuffle data-bs-show="3"{% endif %}>
+      {%- if use_collection and random_per_visit -%}
+        {%- comment -%}
+          Render the top {{ pool_size }} bestsellers as a shuffle pool. CSS hides
+          everything past the 3rd child (no-JS fallback = top 3); the inline JS
+          reorders the children so a random 3 land first on each visit. Per-position
+          badge overrides don't apply here (positions are dynamic), so each card
+          uses its world family.
+        {%- endcomment -%}
+        {%- for p in coll.products limit: pool_size -%}
+          {%- assign w = p.metafields.postcard.world.value | default: p.metafields.custom.world.value -%}
+          {%- assign w_color = w.accent_color.value | default: '#E8C36A' -%}
+          {%- assign w_name = w.name.value | default: '' -%}
+          {%- assign w_family = w.family.value -%}
+          {% render 'product-card', product: p, world: w_name, world_color: w_color, badge: w_family %}
+        {%- endfor -%}
+      {%- elsif use_collection -%}
         {%- assign emitted = 0 -%}
         {%- for p in coll.products limit: 50 -%}
           {%- if forloop.index0 < offset -%}{%- continue -%}{%- endif -%}
@@ -85,6 +105,32 @@
   </div>
 </section>
 
+<script>
+(function () {
+  if (window.pcShuffleBestsellers) { window.pcShuffleBestsellers(); return; }
+  function shuffle(root) {
+    var grids = (root || document).querySelectorAll('[data-bestsellers-shuffle]');
+    grids.forEach(function (grid) {
+      var cards = Array.prototype.slice.call(grid.children);
+      if (cards.length <= 3) return;
+      for (var i = cards.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = cards[i]; cards[i] = cards[j]; cards[j] = t;
+      }
+      // Reorder DOM; CSS shows the first 3, hides the rest.
+      cards.forEach(function (c) { grid.appendChild(c); });
+    });
+  }
+  window.pcShuffleBestsellers = shuffle;
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { shuffle(); });
+  } else {
+    shuffle();
+  }
+  document.addEventListener('shopify:section:load', function (e) { shuffle(e.target); });
+})();
+</script>
+
 {% schema %}
 {
   "name": "Postcard Bestsellers",
@@ -93,8 +139,10 @@
     { "type": "text", "id": "title",   "label": "Title",   "default": "Postcards we send most often." },
     { "type": "text", "id": "lede",    "label": "Lede",    "default": "The ones you keep coming back to. Sent 1,200+ times in the last 95 days." },
     { "type": "header", "content": "Source" },
-    { "type": "collection", "id": "collection", "label": "Collection", "info": "When set, pulls 3 products from this collection. Leave blank to use the manual pickers below." },
-    { "type": "checkbox", "id": "randomize", "label": "Rotate daily", "default": true, "info": "Picks a different starting offset each day so the 3 shown products rotate through the collection. Stable within a day so the page isn't jittery on refresh." },
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "When set, pulls products from this collection. Order the collection by best-selling so the pool is your top sellers. Leave blank to use the manual pickers below." },
+    { "type": "checkbox", "id": "random_per_visit", "label": "Shuffle every visit", "default": true, "info": "Shows 3 random products picked from the top N (below) on every page load. Overrides 'Rotate daily'." },
+    { "type": "range", "id": "pool_size", "label": "Shuffle pool (top N)", "min": 3, "max": 50, "step": 1, "default": 20, "unit": "" , "info": "How many of the collection's top products to randomly pick the 3 from. E.g. 20 = 3 random of the top 20." },
+    { "type": "checkbox", "id": "randomize", "label": "Rotate daily", "default": true, "info": "Used only when 'Shuffle every visit' is off. Picks a different starting offset each day so the 3 shown rotate through the collection, stable within a day." },
     { "type": "header", "content": "Badges (optional per-position override)" },
     { "type": "paragraph", "content": "Leave blank and the badge auto-fills with each card's world family (e.g. \"Hesperidic Gourmand\"). Fill in to override a specific position." },
     { "type": "text", "id": "badge_1", "label": "Badge 1 (override)" },

@@ -677,6 +677,9 @@ a.pc-product-card { cursor: pointer; }
 .pc-bestsellers__title { font-size: 56px; margin-top: 8px; }
 .pc-bestsellers__lede { margin-top: 12px; font-size: 17px; opacity: 0.78; }
 .pc-bestsellers__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+/* Shuffle pool: only the first 3 cards show; JS reorders children so the visible
+   3 are random each visit. No-JS fallback shows the top 3. */
+.pc-bestsellers__grid--shuffle > *:nth-child(n+4) { display: none; }
 .pc-bestsellers__more { margin-top: 32px; }
 /* Bestsellers: hide the world-initials chip; stamp stays top-right; round scent badge moves to top-left */
 .pc-bestsellers__grid .pc-product-card__chip { display: none; }
