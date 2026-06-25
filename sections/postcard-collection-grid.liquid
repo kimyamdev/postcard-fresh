@@ -102,7 +102,40 @@
             {%- endfor -%}
             {%- assign categories = 'Hair,Body,Face,Home,Travel,Pets,Bundles,Gifts,Accessories' | split: ',' -%}
             {%- assign open_cat_url = collection.url -%}
+            {%- comment -%}
+              Count how many high-level categories the collection actually spans.
+              If it's just one (e.g. a "Body" collection), skip the redundant
+              first-level category button and show its sub-types as the primary
+              filter buttons straight away.
+            {%- endcomment -%}
+            {%- assign present_count = 0 -%}
+            {%- assign single_cat = '' -%}
+            {%- for cat in categories -%}
+              {%- assign cc = 0 -%}
+              {%- for v in type_filter.values -%}
+                {%- if cat_arr[forloop.index0] == cat -%}
+                  {%- if v.count == 0 and v.active == false -%}{%- continue -%}{%- endif -%}
+                  {%- assign cc = cc | plus: 1 -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {%- if cc > 0 -%}{%- assign present_count = present_count | plus: 1 -%}{%- assign single_cat = cat -%}{%- endif -%}
+            {%- endfor -%}
             <div class="pc-coll-type-buttons">
+            {%- if present_count == 1 -%}
+              <div class="pc-coll-cat-buttons">
+                <a class="pc-coll-type-btn pc-coll-cat-btn{% if active_count == 0 %} pc-coll-type-btn--active{% endif %}" href="{{ collection.url }}">{{ section.settings.all_button_label | default: 'All' }}</a>
+                {%- for v in type_filter.values -%}
+                  {%- if cat_arr[forloop.index0] == single_cat -%}
+                    {%- if v.count == 0 and v.active == false -%}{%- continue -%}{%- endif -%}
+                    {%- if v.active -%}
+                      <a class="pc-coll-type-btn pc-coll-cat-btn pc-coll-type-btn--active" href="{{ collection.url }}">{{ v.label }}</a>
+                    {%- else -%}
+                      <a class="pc-coll-type-btn pc-coll-cat-btn" href="{{ collection.url }}?filter.p.product_type={{ v.value | replace: '&amp;', '&' | url_encode }}">{{ v.label }}</a>
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            {%- else -%}
               <div class="pc-coll-cat-buttons">
                 <a class="pc-coll-type-btn pc-coll-cat-btn{% if active_count == 0 %} pc-coll-type-btn--active{% endif %}" href="{{ collection.url }}">{{ section.settings.all_button_label | default: 'All' }}</a>
                 {%- for cat in categories -%}
@@ -140,6 +173,7 @@
                   {%- endfor -%}
                 </div>
               {%- endif -%}
+            {%- endif -%}
             </div>
           {%- endif -%}
         {%- endif -%}
