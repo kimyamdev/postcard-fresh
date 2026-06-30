@@ -22,11 +22,11 @@ import gen_social_images as g
 from PIL import Image
 
 CANVAS_W, CANVAS_H = 1200, 630
-STAMP_H = 520  # stamp height on the card; width scales
+PAGE_STAMP_H = 400  # stamp height (caption sits below)
 
 
 def fetch_world_stamps():
-    """{world_handle -> stamp_url} for worlds that have a stamp."""
+    """{world_handle -> {url, name, family, accent}} for worlds with a stamp."""
     out = {}
     cursor = None
     q = """
@@ -35,6 +35,9 @@ def fetch_world_stamps():
         pageInfo { hasNextPage endCursor }
         edges { node {
           handle
+          name: field(key: "name") { value }
+          family: field(key: "family") { value }
+          accent: field(key: "accent_color") { value }
           stamp: field(key: "world_stamp") { reference { ... on MediaImage { image { url } } ... on GenericFile { url } } }
         } }
       }
@@ -46,7 +49,10 @@ def fetch_world_stamps():
             ref = (n.get("stamp") or {}).get("reference") or {}
             url = (ref.get("image") or {}).get("url") or ref.get("url")
             if url:
-                out[n["handle"]] = url
+                out[n["handle"]] = {"url": url,
+                                    "name": (n.get("name") or {}).get("value"),
+                                    "family": (n.get("family") or {}).get("value"),
+                                    "accent": g.hex_to_rgb((n.get("accent") or {}).get("value"))}
         if not d["metaobjects"]["pageInfo"]["hasNextPage"]:
             break
         cursor = d["metaobjects"]["pageInfo"]["endCursor"]
@@ -75,14 +81,15 @@ def fetch_pages():
     return out
 
 
-def compose(stamp_url):
+def compose(info):
     canvas = Image.new("RGBA", (CANVAS_W, CANVAS_H), (255, 255, 255, 255))
-    st = g.fetch_image(stamp_url, width=600)
-    w = max(1, round(st.width * (STAMP_H / st.height)))
-    st = st.resize((w, STAMP_H), Image.LANCZOS)
-    canvas.alpha_composite(st, ((CANVAS_W - w) // 2, (CANVAS_H - STAMP_H) // 2))
+    st = g.fetch_image(info["url"], width=600)
+    w = max(1, round(st.width * (PAGE_STAMP_H / st.height)))
+    st = st.resize((w, PAGE_STAMP_H), Image.LANCZOS)
+    canvas.alpha_composite(st, ((CANVAS_W - w) // 2, 232 - PAGE_STAMP_H // 2))
     out = Image.new("RGB", (CANVAS_W, CANVAS_H), (255, 255, 255))
     out.paste(canvas, (0, 0), canvas)
+    g.draw_caption(out, info.get("name"), info.get("family"), info.get("accent", g.INK))
     buf = io.BytesIO()
     out.save(buf, "JPEG", quality=88, optimize=True)
     return buf.getvalue()
@@ -114,7 +121,7 @@ def main():
 
     for i, p in enumerate(matched, 1):
         try:
-            data = compose(stamps[p["handle"]])
+            data = compose(stamps[p["handle"]])  # info dict (url/name/family/accent)
             fname = f"social-page-{p['handle']}.jpg"
             if preview:
                 path = os.path.join("/tmp", fname)

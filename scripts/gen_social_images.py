@@ -22,13 +22,46 @@ Reads creds from env/shopify.env. Needs Pillow (stdlib otherwise).
 Note: re-runs upload NEW files to Shopify Files (old ones are left orphaned).
 """
 import io, json, os, sys, time, urllib.request, urllib.error
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 CANVAS_W, CANVAS_H = 1200, 630
-PROD_MAX_W, PROD_MAX_H = 470, 500   # product image fit box (centered)
-STAMP_W = 190                        # stamp width; height scales
-STAMP_PAD = 44                       # padding from top + right edges
+PROD_MAX_W, PROD_MAX_H = 460, 410   # product image fit box
+PROD_CENTER_Y = 232                  # product vertical centre (room for caption)
+STAMP_W = 180                        # stamp width; height scales
+STAMP_PAD = 40                       # padding from top + right edges
 BG = (255, 255, 255)
+INK = (33, 32, 31)
+FONT_PATH = os.path.join(os.path.dirname(__file__), "fonts", "SpecialElite-Regular.ttf")
+
+
+def hex_to_rgb(h, default=INK):
+    if not h:
+        return default
+    h = h.lstrip("#")
+    if len(h) == 3:
+        h = "".join(c * 2 for c in h)
+    try:
+        return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
+    except Exception:
+        return default
+
+
+def draw_caption(img, name, family, accent=INK):
+    """World name + scent family, centred near the bottom in the brand font."""
+    draw = ImageDraw.Draw(img)
+    if name:
+        nf = ImageFont.truetype(FONT_PATH, 40)
+        nx = (img.width - draw.textlength(name, font=nf)) / 2
+        draw.text((nx, 484), name, font=nf, fill=INK)
+    if family:
+        ff = ImageFont.truetype(FONT_PATH, 20)
+        fam = family.upper()
+        track = 4
+        total = sum(draw.textlength(c, font=ff) for c in fam) + track * (len(fam) - 1)
+        x = (img.width - total) / 2
+        for c in fam:
+            draw.text((x, 544), c, font=ff, fill=accent)
+            x += draw.textlength(c, font=ff) + track
 
 # ---- creds ----------------------------------------------------------------
 ENV_PATH = os.path.join(os.path.dirname(__file__), "..", "env", "shopify.env")
@@ -83,10 +116,16 @@ def fetch_products():
           featuredImage { url }
           pw: metafield(namespace: "postcard", key: "world") { reference { ... on Metaobject {
             handle
+            name: field(key: "name") { value }
+            family: field(key: "family") { value }
+            accent: field(key: "accent_color") { value }
             stamp: field(key: "world_stamp") { reference { ... on MediaImage { image { url } } ... on GenericFile { url } } }
           } } }
           cw: metafield(namespace: "custom", key: "world") { reference { ... on Metaobject {
             handle
+            name: field(key: "name") { value }
+            family: field(key: "family") { value }
+            accent: field(key: "accent_color") { value }
             stamp: field(key: "world_stamp") { reference { ... on MediaImage { image { url } } ... on GenericFile { url } } }
           } } }
         } }
@@ -105,7 +144,10 @@ def fetch_products():
             if not stamp_url or not img_url:
                 continue
             out.append({"gid": n["id"], "handle": n["handle"], "title": n["title"],
-                        "img_url": img_url, "stamp_url": stamp_url, "world": ref["handle"]})
+                        "img_url": img_url, "stamp_url": stamp_url, "world": ref["handle"],
+                        "name": (ref.get("name") or {}).get("value"),
+                        "family": (ref.get("family") or {}).get("value"),
+                        "accent": hex_to_rgb((ref.get("accent") or {}).get("value"))})
         if not d["products"]["pageInfo"]["hasNextPage"]:
             break
         cursor = d["products"]["pageInfo"]["endCursor"]
@@ -113,14 +155,14 @@ def fetch_products():
 
 
 # ---- 2) compose the card --------------------------------------------------
-def compose(img_url, stamp_url):
+def compose(img_url, stamp_url, name=None, family=None, accent=INK):
     canvas = Image.new("RGBA", (CANVAS_W, CANVAS_H), BG + (255,))
-    # product image, fit + centered
+    # product image, fit + centred in the upper area (caption sits below)
     prod = fetch_image(img_url, width=900)
     scale = min(PROD_MAX_W / prod.width, PROD_MAX_H / prod.height)
     pw, ph = max(1, round(prod.width * scale)), max(1, round(prod.height * scale))
     prod = prod.resize((pw, ph), Image.LANCZOS)
-    canvas.alpha_composite(prod, ((CANVAS_W - pw) // 2, (CANVAS_H - ph) // 2))
+    canvas.alpha_composite(prod, ((CANVAS_W - pw) // 2, max(24, PROD_CENTER_Y - ph // 2)))
     # world stamp, top-right
     stamp = fetch_image(stamp_url, width=400)
     sh = max(1, round(stamp.height * (STAMP_W / stamp.width)))
@@ -128,6 +170,7 @@ def compose(img_url, stamp_url):
     canvas.alpha_composite(stamp, (CANVAS_W - STAMP_W - STAMP_PAD, STAMP_PAD))
     out = Image.new("RGB", (CANVAS_W, CANVAS_H), BG)
     out.paste(canvas, (0, 0), canvas)
+    draw_caption(out, name, family, accent)
     buf = io.BytesIO()
     out.save(buf, "JPEG", quality=86, optimize=True)
     return buf.getvalue()
@@ -235,7 +278,7 @@ def main():
 
     for i, p in enumerate(prods, 1):
         try:
-            data = compose(p["img_url"], p["stamp_url"])
+            data = compose(p["img_url"], p["stamp_url"], p.get("name"), p.get("family"), p.get("accent", INK))
             fname = f"social-{p['handle']}.jpg"
             if preview:
                 path = os.path.join("/tmp", fname)
