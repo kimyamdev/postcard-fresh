@@ -18,7 +18,7 @@
           "type": "shop_item",
           "settings": {
             "column": 1,
-            "text": "Deodorants",
+            "text": "Deodorant",
             "url": "/collections/deodorant"
           }
         },
@@ -42,7 +42,7 @@
           "type": "shop_item",
           "settings": {
             "column": 1,
-            "text": "Powder Washes",
+            "text": "Powder Wash",
             "url": "shopify://collections/powder-washes"
           }
         },
@@ -145,6 +145,22 @@
             "url": "/products/destination-hotel-lobby-travel-gift-box"
           }
         },
+        "shop_item_3mi3Cx": {
+          "type": "shop_item",
+          "settings": {
+            "column": 2,
+            "text": "Mix Travel Essentials",
+            "url": "shopify://pages/pick-mix-travel"
+          }
+        },
+        "shop_item_fEkEb6": {
+          "type": "shop_item",
+          "settings": {
+            "column": 2,
+            "text": "Mix Travel Deo Spray",
+            "url": "shopify://pages/pick-mix-travel-deo-spray"
+          }
+        },
         "s15": {
           "type": "shop_item",
           "settings": {
@@ -229,7 +245,7 @@
         "n3": {
           "type": "nav_link",
           "settings": {
-            "text": "Members",
+            "text": "Membership",
             "url": "/pages/membership"
           }
         },
@@ -365,6 +381,8 @@
         "s12",
         "s13",
         "s14",
+        "shop_item_3mi3Cx",
+        "shop_item_fEkEb6",
         "s15",
         "s16",
         "s17",
@@ -411,7 +429,7 @@
         "shop_col4_title": "Custom",
         "show_worlds": true,
         "worlds_label": "Worlds",
-        "worlds_limit": 7,
+        "worlds_limit": 9,
         "worlds_see_all_text": "See all [count] worlds →",
         "worlds_see_all_url": "",
         "show_search": true,
@@ -463,7 +481,7 @@
         "r_members": {
           "type": "root_item",
           "settings": {
-            "label": "Members",
+            "label": "Membership",
             "sub": "earn coins, unlock perks →",
             "target_view": "none",
             "link": "/pages/membership"
@@ -595,8 +613,8 @@
         "st_pickmix": {
           "type": "shop_type",
           "settings": {
-            "label": "Pick & Mix",
-            "link": "/pages/pick-and-mix"
+            "label": "Travel Pick & Mix",
+            "link": "/pages/mix-match"
           }
         },
         "st_disc": {
@@ -611,6 +629,15 @@
           "settings": {
             "label": "Hotel Lobby Travel Box",
             "link": "/products/destination-hotel-lobby-travel-gift-box"
+          }
+        },
+        "quick_tile_arHxV8": {
+          "type": "quick_tile",
+          "settings": {
+            "label": "Deo Spray Travel Mix",
+            "link": "shopify://pages/pick-mix-travel-deo-spray",
+            "color": "#ffb233",
+            "text_color": ""
           }
         },
         "sh_new": {
@@ -746,6 +773,15 @@
             "render_when": "signed_in"
           }
         },
+        "al_loyalty": {
+          "type": "account_link",
+          "settings": {
+            "label": "LOYALTY HUB",
+            "sub": "rewards, coins & perks",
+            "link": "https://account.wearepostcard.com/pages/daacc659-e05e-4631-8c8a-09c6370fe146",
+            "render_when": "signed_in"
+          }
+        },
         "al_card": {
           "type": "account_link",
           "settings": {
@@ -845,6 +881,7 @@
         "st_pickmix",
         "st_disc",
         "st_hl_travel",
+        "quick_tile_arHxV8",
         "sh_new",
         "st_sojao",
         "st_esse",
@@ -862,6 +899,7 @@
         "qt_disc",
         "al_orders",
         "al_subs",
+        "al_loyalty",
         "al_card",
         "al_addr",
         "al_track",

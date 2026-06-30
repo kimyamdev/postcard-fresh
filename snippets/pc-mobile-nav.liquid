@@ -214,14 +214,6 @@
             </div>
             <span>&rarr;</span>
           </a>
-          {%- assign vip_tier = customer.metafields.smile.vip_tier_name.value | strip -%}
-          <a class="pc-mn__acct-row" href="/pages/membership">
-            <div>
-              <div class="h-typewriter">REWARDS &amp; TIERS</div>
-              <div class="pc-mn__acct-row-sub">{% if vip_tier != blank %}{{ vip_tier }} member &middot; coins &amp; perks{% else %}earn coins, unlock perks{% endif %}</div>
-            </div>
-            <span>&rarr;</span>
-          </a>
           <a class="pc-mn__acct-row" href="/account#subscriptions">
             <div>
               <div class="h-typewriter">SUBSCRIPTIONS</div>
