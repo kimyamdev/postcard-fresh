@@ -222,6 +222,10 @@
     {%- comment -%} ============ ACCOUNT VIEW ============ {%- endcomment -%}
     <div x-show="view === 'account'" x-cloak class="pc-mn__view">
       {%- if customer -%}
+        {%- comment -%} Smile VIP tier -> fills the {tier} token in any account_link sub {%- endcomment -%}
+        {%- assign smile_tier = customer.metafields.smile.vip_tier_name.value | strip -%}
+        {%- assign tier_prefix = '' -%}
+        {%- if smile_tier != blank -%}{%- assign tier_prefix = smile_tier | append: ' member &middot; ' -%}{%- endif -%}
         <div class="pc-mn__hdr pc-mn__hdr--bg">
           <button class="tlink pc-mn__back" @click="setView('root')" type="button">{{ account_signedin_back_label }}</button>
           <button class="pc-mn__close" @click="close()" aria-label="Close menu">{{ close_label }}</button>
@@ -243,7 +247,7 @@
                   <div>
                     <div class="h-typewriter">{{ block.settings.label }}</div>
                     {%- if block.settings.sub != blank -%}
-                      <div class="pc-mn__acct-row-sub">{{ block.settings.sub }}</div>
+                      <div class="pc-mn__acct-row-sub">{{ block.settings.sub | replace: '{tier}', tier_prefix }}</div>
                     {%- endif -%}
                   </div>
                   <span>&rarr;</span>

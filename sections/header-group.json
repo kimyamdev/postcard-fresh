@@ -777,7 +777,7 @@
           "type": "account_link",
           "settings": {
             "label": "LOYALTY HUB",
-            "sub": "rewards, coins & perks",
+            "sub": "{tier}rewards & perks",
             "link": "https://account.wearepostcard.com/pages/daacc659-e05e-4631-8c8a-09c6370fe146",
             "render_when": "signed_in"
           }
