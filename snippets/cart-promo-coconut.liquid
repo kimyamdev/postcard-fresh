@@ -1,17 +1,46 @@
 {%- comment -%}
-  Coconut Beach cart promo. Rendered at the top of cart-recs (above "Order it
-  again"). Three states based on how much Coconut Beach Collection value is in
-  the cart (matches the automatic BXGY discount's collection + $50 threshold):
-    - some but < $50  -> progress teaser ("add $X more to unlock")
-    - >= $50, no pouch -> unlocked, one-tap add
-    - >= $50, has pouch -> reward applied
-  The pouch price (Large Bubble variant) is read live; deal = price - $16.90
-  (the discount amount). Server-rendered, updates as the drawer re-renders,
-  hidden after the promo end date.
+  Coconut Beach promo. Two modes:
+    empty:true  -> empty-bag awareness block (in place of the START WRITING CTA)
+                   during the promo window; falls back to START WRITING after.
+    default     -> in-cart states based on Coconut Beach Collection value:
+                     some but < $50  -> progress teaser
+                     >= $50, no pouch -> unlocked, one-tap add
+                     >= $50, has pouch -> reward applied
+  Ties to the automatic BXGY discount "Coconut Beach $50 -> Summer Yellow Pouch
+  $10". Pouch price (Large Bubble) read live; deal = price - $16.90. In-cart use
+  on_page:true on the /cart page to make the add button a normal submit.
 {%- endcomment -%}
 {%- assign promo_end = '2026-08-31T16:00:00Z' | date: '%s' | plus: 0 -%}
 {%- assign now_s = 'now' | date: '%s' | plus: 0 -%}
-{%- if now_s < promo_end and cart.item_count > 0 -%}
+{%- assign promo_live = false -%}
+{%- if now_s < promo_end -%}{%- assign promo_live = true -%}{%- endif -%}
+
+{%- assign pouch_price = 2690 -%}
+{%- assign pouch = all_products['summer-yellow-travel-pouch'] -%}
+{%- if pouch != blank -%}
+  {%- for v in pouch.variants -%}
+    {%- if v.id == 45735961952482 -%}{%- assign pouch_price = v.price -%}{%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+{%- assign pouch_deal = pouch_price | minus: 1690 -%}
+{%- if pouch_deal < 0 -%}{%- assign pouch_deal = 0 -%}{%- endif -%}
+{%- capture price_html -%}<strong>{{ pouch_deal | money }}</strong> <s class="pc-cart-promo__was">{{ pouch_price | money }}</s>{%- endcapture -%}
+
+{%- if empty -%}
+  {%- if promo_live -%}
+    {%- assign cb_url = collections['coconut-beach-collection'].url | default: '/collections/coconut-beach-collection' -%}
+    <div class="pc-cart-promo pc-cart-promo--empty">
+      <span class="pc-cart-promo__icon" aria-hidden="true">&#127796;</span>
+      <div class="pc-cart-promo__body">
+        <div class="pc-cart-promo__title">Coconut Beach steal</div>
+        <div class="pc-cart-promo__text">Add <strong>$50+</strong> from the Coconut Beach world and the Summer Yellow Travel Pouch is yours for just {{ price_html }}.</div>
+        <a class="pc-cart-promo__link" href="{{ cb_url }}">Shop Coconut Beach &rarr;</a>
+      </div>
+    </div>
+  {%- else -%}
+    <a href="{{ routes.all_products_collection_url }}" class="btn">START WRITING &rarr;</a>
+  {%- endif -%}
+{%- elsif promo_live and cart.item_count > 0 -%}
   {%- assign cb_total = 0 -%}
   {%- assign has_pouch = false -%}
   {%- for item in cart.items -%}
@@ -24,16 +53,6 @@
     {%- endfor -%}
   {%- endfor -%}
   {%- if cb_total > 0 -%}
-    {%- assign pouch_price = 2690 -%}
-    {%- assign pouch = all_products['summer-yellow-travel-pouch'] -%}
-    {%- if pouch != blank -%}
-      {%- for v in pouch.variants -%}
-        {%- if v.id == 45735961952482 -%}{%- assign pouch_price = v.price -%}{%- endif -%}
-      {%- endfor -%}
-    {%- endif -%}
-    {%- assign pouch_deal = pouch_price | minus: 1690 -%}
-    {%- if pouch_deal < 0 -%}{%- assign pouch_deal = 0 -%}{%- endif -%}
-    {%- capture price_html -%}<strong>{{ pouch_deal | money }}</strong> <s class="pc-cart-promo__was">{{ pouch_price | money }}</s>{%- endcapture -%}
     <div class="pc-cart-promo{% if cb_total < 5000 %} pc-cart-promo--teaser{% endif %}">
       <span class="pc-cart-promo__icon" aria-hidden="true">{% if cb_total >= 5000 %}&#127881;{% else %}&#127796;{% endif %}</span>
       <div class="pc-cart-promo__body">

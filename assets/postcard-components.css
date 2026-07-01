@@ -4262,6 +4262,20 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
 .pc-cart-promo__text strong { font-weight: 700; }
 .pc-cart-promo__was { opacity: 0.55; font-size: 0.92em; }
 .pc-cart-promo--teaser { background: #FCF6E8; }
+.pc-cart-promo--empty { max-width: 320px; text-align: left; margin: 0; }
+.pc-cart-promo__link {
+  display: inline-block;
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8A5A33;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.pc-cart-promo__link:hover { color: var(--color-ink); }
 .pc-cart-promo__form { margin-top: 10px; }
 .pc-cart-promo__btn {
   all: unset;
