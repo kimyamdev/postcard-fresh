@@ -3912,10 +3912,10 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
 .pc-cart-drawer__ship {
   padding: 14px 22px;
   border-bottom: 1.5px solid var(--color-ink);
-  background: var(--color-bg-card);
+  background: var(--color-bg-warm);
   flex-shrink: 0;
 }
-.pc-cart-drawer__ship--done { background: var(--color-yellow); }
+.pc-cart-drawer__ship--done { background: var(--color-bg-warm); }
 .pc-cart-drawer__ship-row {
   font-family: var(--font-display);
   font-size: 11px;
