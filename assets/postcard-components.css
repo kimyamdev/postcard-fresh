@@ -3847,6 +3847,23 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
 .pc-cart-drawer__tier--deluxe { background: #FFFDF4; }
 .pc-cart-drawer__tier--club { background: #F2EEDD; }
 .pc-cart-drawer__tier--villa { background: #FFB233; }
+
+/* Mobile nav account row: VIP tier pill (same tier colours) */
+.pc-mn__tier-pill {
+  display: inline-block;
+  padding: 1px 8px;
+  border: 1px solid var(--color-ink);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  vertical-align: baseline;
+}
+.pc-mn__tier-pill--deluxe { background: #FFFDF4; }
+.pc-mn__tier-pill--club { background: #F2EEDD; }
+.pc-mn__tier-pill--villa { background: #FFB233; }
 .pc-cart-drawer__tier-dot {
   width: 6px; height: 6px;
   border-radius: 50%;

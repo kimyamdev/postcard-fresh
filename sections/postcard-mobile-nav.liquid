@@ -225,7 +225,10 @@
         {%- comment -%} Smile VIP tier -> fills the [tier] token in any account_link sub {%- endcomment -%}
         {%- assign smile_tier = customer.metafields.smile.vip_tier_name.value | strip -%}
         {%- assign tier_prefix = '' -%}
-        {%- if smile_tier != blank -%}{%- assign tier_prefix = smile_tier | append: ' member &middot; ' -%}{%- endif -%}
+        {%- if smile_tier != blank -%}
+          {%- assign tier_lower = smile_tier | downcase | strip -%}
+          {%- capture tier_prefix -%}<span class="pc-mn__tier-pill pc-mn__tier-pill--{{ tier_lower }}">{{ smile_tier }}</span>&nbsp;&middot;&nbsp;{%- endcapture -%}
+        {%- endif -%}
         <div class="pc-mn__hdr pc-mn__hdr--bg">
           <button class="tlink pc-mn__back" @click="setView('root')" type="button">{{ account_signedin_back_label }}</button>
           <button class="pc-mn__close" @click="close()" aria-label="Close menu">{{ close_label }}</button>
