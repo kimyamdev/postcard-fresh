@@ -17,6 +17,6 @@
   {%- if sub_adj.value_type == 'percentage' -%}{%- assign sub_pct = sub_adj.value -%}{%- endif -%}
   <div class="pc-cart-line__autoship">
     <span class="pc-cart-line__autoship-icon" aria-hidden="true">&#8635;</span>
-    <span class="pc-cart-line__autoship-text">On refill &middot; every {{ cadence_label }}{% if sub_pct > 0 %} &middot; save {{ sub_pct }}%{% endif %}</span>
+    <span class="pc-cart-line__autoship-text">On subscription &middot; every {{ cadence_label }}{% if sub_pct > 0 %} &middot; save {{ sub_pct }}%{% endif %}</span>
   </div>
 {%- endif -%}
