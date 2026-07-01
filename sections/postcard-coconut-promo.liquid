@@ -13,7 +13,7 @@
   {%- if img == blank -%}{%- assign img = all_products['summer-yellow-travel-pouch'].featured_image -%}{%- endif -%}
   {%- assign bg = section.settings.bg_color | default: '#FCE9E4' -%}
   {%- assign accent = section.settings.accent_color | default: '#E9A5A7' -%}
-  {%- assign cta_url = section.settings.cta_url | default: '/collections/coconut-beach-collection' -%}
+  {%- assign cta_url = section.settings.cta_url | default: '/pages/coconut-beach' -%}
   <section class="section pc-coco" style="--coco-bg: {{ bg }}; --coco-accent: {{ accent }};" {{ section.shopify_attributes }}>
     <div class="container">
       <div class="pc-coco__card">
@@ -80,7 +80,7 @@
     { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Add $50 or more from the Coconut Beach world and the Summer Yellow Travel Pouch is yours for just $10 — normally $26.90. It's applied automatically at checkout.</p>" },
     { "type": "image_picker", "id": "image", "label": "Image", "info": "Defaults to the Summer Yellow Travel Pouch photo if left blank." },
     { "type": "text", "id": "cta_text", "label": "Button text", "default": "Shop Coconut Beach" },
-    { "type": "url", "id": "cta_url", "label": "Button link", "info": "Defaults to the Coconut Beach collection." },
+    { "type": "url", "id": "cta_url", "label": "Button link", "info": "Defaults to the Coconut Beach world page (/pages/coconut-beach)." },
     { "type": "text", "id": "fine_print", "label": "Fine print", "default": "Ends 31 Aug 2026. One discounted pouch per order, while stocks last." },
     { "type": "header", "content": "Style" },
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#FCE9E4" },
