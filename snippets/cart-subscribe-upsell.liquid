@@ -75,7 +75,7 @@
       <span class="pc-cart-sub__badge-icon" aria-hidden="true">&#8635;</span>
       <span class="pc-cart-sub__head">
         <span class="pc-cart-sub__head-row">
-          <span class="pc-cart-sub__toggle-text">Refill &amp; save</span>
+          <span class="pc-cart-sub__toggle-text">Subscribe &amp; save</span>
           {%- if sp_pct > 0 -%}
             <span class="pc-cart-sub__toggle-badge">&minus;{{ sp_pct }}%</span>
           {%- endif -%}
@@ -83,15 +83,15 @@
         </span>
         <span
           class="pc-cart-sub__subline"
-          x-text="(savings[plan] ? ('Save ' + savings[plan] + ' on every delivery') : 'Save on every refill') + '. Skip, pause or cancel anytime.'"
-        >{%- if default_save > 0 -%}Save {{ default_save | money }} on every delivery. Skip, pause or cancel anytime.{%- else -%}Save on every refill. Skip, pause or cancel anytime.{%- endif -%}</span>
+          x-text="(savings[plan] ? ('Save ' + savings[plan] + ' on every delivery') : 'Save on every order') + '. Skip, pause or cancel anytime.'"
+        >{%- if default_save > 0 -%}Save {{ default_save | money }} on every delivery. Skip, pause or cancel anytime.{%- else -%}Save on every order. Skip, pause or cancel anytime.{%- endif -%}</span>
       </span>
       <span class="pc-cart-sub__toggle-arrow" :class="{ 'pc-cart-sub__toggle-arrow--open': open }" aria-hidden="true">&#9662;</span>
     </button>
 
     <div x-show="open" x-cloak class="pc-cart-sub__panel">
       <p class="pc-cart-sub__emote">Your self-care, on repeat.</p>
-      <p class="pc-cart-sub__support">Save {{ sp_pct }}% on every refill, delivered at your rhythm.</p>
+      <p class="pc-cart-sub__support">Save {{ sp_pct }}% on every order, delivered at your rhythm.</p>
       <div class="eyebrow pc-cart-sub__cadence-label">{{ cadence_eyebrow }}</div>
       <div class="pc-cart-sub__pills">
         {%- for plan in sp_plans -%}
@@ -111,9 +111,9 @@
         <div class="pc-cart-sub__qty">
           <span class="pc-cart-sub__qty-label">How many of {{ item.quantity }}?</span>
           <div class="pc-cart-sub__stepper">
-            <button type="button" class="pc-cart-sub__stepper-btn" aria-label="Fewer on refill" @click="if (subQty > 1) subQty--">&minus;</button>
+            <button type="button" class="pc-cart-sub__stepper-btn" aria-label="Fewer on subscription" @click="if (subQty > 1) subQty--">&minus;</button>
             <span class="pc-cart-sub__stepper-value" x-text="subQty">{{ item.quantity }}</span>
-            <button type="button" class="pc-cart-sub__stepper-btn" aria-label="More on refill" @click="if (subQty < {{ item.quantity }}) subQty++">+</button>
+            <button type="button" class="pc-cart-sub__stepper-btn" aria-label="More on subscription" @click="if (subQty < {{ item.quantity }}) subQty++">+</button>
           </div>
         </div>
       {%- endif -%}
@@ -122,8 +122,8 @@
         class="pc-cart-sub__apply"
         @click="subscribe()"
         :disabled="busy"
-        x-text="busy ? 'Starting…' : ({% if item.quantity > 1 %}'Start refill plan · ' + subQty + ' of {{ item.quantity }}'{% else %}'Start my refill plan'{% endif %})"
-      >Start my refill plan</button>
+        x-text="busy ? 'Starting…' : ({% if item.quantity > 1 %}'Start subscription plan · ' + subQty + ' of {{ item.quantity }}'{% else %}'Start subscription plan'{% endif %})"
+      >Start subscription plan</button>
       <p class="pc-cart-sub__err" x-show="err" x-cloak x-text="err"></p>
     </div>
   </div>
