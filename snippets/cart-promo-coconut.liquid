@@ -1,0 +1,41 @@
+{%- comment -%}
+  Coconut Beach cart promo nudge. When the cart holds $50+ of Coconut Beach
+  Collection products, surface the "Summer Yellow Travel Pouch for $10" reward
+  (the automatic BXGY discount "Coconut Beach $50 -> Summer Yellow Pouch $10").
+  Rendered at the top of cart-recs (i.e. above "Order it again"). Server-rendered,
+  so it appears/updates as the drawer re-renders. Matches the discount exactly
+  (same collection, $50 threshold) and hides once the promo end date passes.
+{%- endcomment -%}
+{%- assign promo_end = '2026-08-31T16:00:00Z' | date: '%s' | plus: 0 -%}
+{%- assign now_s = 'now' | date: '%s' | plus: 0 -%}
+{%- if now_s < promo_end and cart.item_count > 0 -%}
+  {%- assign cb_total = 0 -%}
+  {%- assign has_pouch = false -%}
+  {%- for item in cart.items -%}
+    {%- if item.variant.id == 45735961952482 -%}{%- assign has_pouch = true -%}{%- endif -%}
+    {%- for c in item.product.collections -%}
+      {%- if c.handle == 'coconut-beach-collection' -%}
+        {%- assign cb_total = cb_total | plus: item.final_line_price -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endfor -%}
+  {%- if cb_total >= 5000 -%}
+    <div class="pc-cart-promo">
+      <span class="pc-cart-promo__icon" aria-hidden="true">&#127881;</span>
+      <div class="pc-cart-promo__body">
+        {%- if has_pouch -%}
+          <div class="pc-cart-promo__title">Reward applied</div>
+          <div class="pc-cart-promo__text">Your Summer Yellow Travel Pouch is <strong>$10</strong> in this order.</div>
+        {%- else -%}
+          <div class="pc-cart-promo__title">Coconut Beach reward unlocked</div>
+          <div class="pc-cart-promo__text">Add the Summer Yellow Travel Pouch for just <strong>$10</strong>.</div>
+          <form class="pc-pdp-buy__form pc-cart-promo__form" action="{{ routes.cart_add_url }}" method="post">
+            <input type="hidden" name="id" value="45735961952482">
+            <button type="submit" class="pc-cart-promo__btn">Add &middot; $10</button>
+          </form>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+{%- endif -%}

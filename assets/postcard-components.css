@@ -4239,6 +4239,47 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
 .pc-cart-sub__apply[disabled] { opacity: 0.6; cursor: default; }
 .pc-cart-sub__err { font-size: 11px; color: #B23B3B; margin: 6px 0 0; }
 
+/* Coconut Beach cart promo nudge (above "Order it again") */
+.pc-cart-promo {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--color-ink);
+  background: #FFF3DC;
+}
+.pc-cart-promo__icon { font-size: 20px; line-height: 1.2; flex: none; }
+.pc-cart-promo__body { flex: 1 1 auto; min-width: 0; }
+.pc-cart-promo__title {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #8A5A33;
+}
+.pc-cart-promo__text { font-size: 12px; line-height: 1.4; color: #6B4E34; margin-top: 2px; }
+.pc-cart-promo__text strong { font-weight: 700; }
+.pc-cart-promo__form { margin-top: 10px; }
+.pc-cart-promo__btn {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-block;
+  padding: 7px 14px;
+  background: #FFB233;
+  color: var(--color-ink);
+  border: 1.5px solid var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.pc-cart-promo__btn:hover { background: #F2A520; }
+.pc-cart-promo__btn[disabled] { opacity: 0.6; cursor: default; }
+
 /* Refill plan terms — shared info icon (PDP + cart) and modal */
 .pc-refill-info {
   all: unset;
