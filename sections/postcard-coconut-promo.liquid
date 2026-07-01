@@ -19,7 +19,8 @@
       <div class="pc-coco__card">
         <div class="pc-coco__media">
           {%- if img != blank -%}
-            {{ img | image_url: width: 900 | image_tag: alt: section.settings.title | escape, loading: 'lazy', class: 'pc-coco__img', widths: '400,600,900' }}
+            {%- assign coco_alt = section.settings.title | default: 'Coconut Beach summer offer' | escape -%}
+            {{ img | image_url: width: 900 | image_tag: alt: coco_alt, loading: 'lazy', class: 'pc-coco__img', widths: '400,600,900' }}
           {%- endif -%}
         </div>
         <div class="pc-coco__body">
