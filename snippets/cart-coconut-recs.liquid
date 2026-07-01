@@ -1,0 +1,43 @@
+{%- comment -%}
+  Coconut Beach world shuffle block for the cart drawer (empty + non-empty),
+  rendered above "Order it again". Products from the Coconut Beach Collection
+  with one-tap quick-add and a shuffle button (reuses customer-rec-shell /
+  customer-rec-card / pcShuffleRecs). Shown to everyone during the promo window
+  to help hit the $50 Coconut Beach threshold for the $10 Summer pouch offer.
+
+  Accepts: limit, columns, compact
+{%- endcomment -%}
+{%- assign promo_end = '2026-08-31T16:00:00Z' | date: '%s' | plus: 0 -%}
+{%- assign now_s = 'now' | date: '%s' | plus: 0 -%}
+{%- if now_s < promo_end -%}
+  {%- liquid
+    assign rec_limit = limit | default: 4
+    assign rec_cols = columns | default: 4
+    assign pool_limit = rec_limit | times: 3
+    if pool_limit > 12
+      assign pool_limit = 12
+    endif
+    assign cb_products = collections['coconut-beach-collection'].products
+    # Don't suggest products already in the bag.
+    assign cart_ids = ','
+    for item in cart.items
+      assign cart_ids = cart_ids | append: item.product.id | append: ','
+    endfor
+  -%}
+  {%- if cb_products.size > 0 -%}
+    {%- capture rec_cards -%}
+      {%- assign rec_count = 0 -%}
+      {%- for p in cb_products -%}
+        {%- if rec_count >= pool_limit -%}{%- break -%}{%- endif -%}
+        {%- unless p.available -%}{%- continue -%}{%- endunless -%}
+        {%- assign idtok = ',' | append: p.id | append: ',' -%}
+        {%- if cart_ids contains idtok -%}{%- continue -%}{%- endif -%}
+        {%- assign rec_count = rec_count | plus: 1 -%}
+        {%- assign rec_hidden = false -%}
+        {%- if rec_count > rec_limit -%}{%- assign rec_hidden = true -%}{%- endif -%}
+        {%- render 'customer-rec-card', product: p, hidden: rec_hidden -%}
+      {%- endfor -%}
+    {%- endcapture -%}
+    {%- render 'customer-rec-shell', cards: rec_cards, heading: 'Shop the Coconut Beach world', blurb: 'Add $50+ to unlock the Summer pouch for $10', count: rec_count, limit: rec_limit, columns: rec_cols, compact: compact -%}
+  {%- endif -%}
+{%- endif -%}
