@@ -224,10 +224,12 @@
       {%- if customer -%}
         {%- comment -%} Smile VIP tier -> fills the [tier] token in any account_link sub {%- endcomment -%}
         {%- assign smile_tier = customer.metafields.smile.vip_tier_name.value | strip -%}
+        {%- comment -%} points_balance only renders if Smile is set to sync it to this metafield {%- endcomment -%}
+        {%- assign smile_points = customer.metafields.smile.points_balance.value -%}
         {%- assign tier_prefix = '' -%}
         {%- if smile_tier != blank -%}
           {%- assign tier_lower = smile_tier | downcase | strip -%}
-          {%- capture tier_prefix -%}<span class="pc-mn__tier-pill pc-mn__tier-pill--{{ tier_lower }}">{{ smile_tier }}</span>&nbsp;&middot;&nbsp;{%- endcapture -%}
+          {%- capture tier_prefix -%}<span class="pc-mn__tier-pill pc-mn__tier-pill--{{ tier_lower }}">{{ smile_tier }}</span>{%- if smile_points != blank %}&nbsp;<span class="pc-mn__tier-pts">{{ smile_points }} Postcards</span>{%- endif -%}&nbsp;&middot;&nbsp;{%- endcapture -%}
         {%- endif -%}
         <div class="pc-mn__hdr pc-mn__hdr--bg">
           <button class="tlink pc-mn__back" @click="setView('root')" type="button">{{ account_signedin_back_label }}</button>
