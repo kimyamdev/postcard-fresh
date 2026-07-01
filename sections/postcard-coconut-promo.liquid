@@ -20,11 +20,17 @@
       {%- if w.system.handle == 'coconut-beach' -%}{%- assign coco_stamp = w.world_stamp.value -%}{%- break -%}{%- endif -%}
     {%- endfor -%}
   {%- endif -%}
+  {%- assign product_cutout = section.settings.product_image -%}
+  {%- if product_cutout == blank -%}{%- assign product_cutout = all_products['summer-yellow-travel-pouch'].featured_image -%}{%- endif -%}
   <section class="section pc-coco" style="--coco-bg: {{ bg }}; --coco-accent: {{ accent }};" {{ section.shopify_attributes }}>
     <div class="container">
       <div class="pc-coco__card">
         {%- if coco_stamp != blank -%}
           <img class="pc-coco__stamp" src="{{ coco_stamp | image_url: width: 320 }}" alt="" loading="lazy">
+        {%- endif -%}
+        {%- if product_cutout != blank -%}
+          {%- assign pc_alt = section.settings.title | default: 'Product' | escape -%}
+          <img class="pc-coco__product" src="{{ product_cutout | image_url: width: 520 }}" alt="{{ pc_alt }}" loading="lazy">
         {%- endif -%}
         <div class="pc-coco__media">
           {%- if img != blank -%}
@@ -67,6 +73,18 @@
       z-index: 2;
       pointer-events: none;
     }
+    /* Transparent product cutout, floating over the lifestyle image. */
+    .pc-coco__product {
+      position: absolute;
+      left: 7%;
+      bottom: -26px;
+      width: clamp(130px, 15vw, 185px);
+      height: auto;
+      transform: rotate(-5deg);
+      filter: drop-shadow(0 10px 16px rgba(33, 25, 16, 0.22));
+      z-index: 3;
+      pointer-events: none;
+    }
     .pc-coco__media { display: flex; justify-content: center; }
     .pc-coco__img { max-width: 320px; width: 100%; height: auto; display: block; }
     .pc-coco__eyebrow-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -87,6 +105,7 @@
       .pc-coco__eyebrow-row { justify-content: center; }
       .pc-coco__text { margin-left: auto; margin-right: auto; }
       .pc-coco__stamp { width: 80px; top: -12px; right: 8px; }
+      .pc-coco__product { left: auto; right: 14px; bottom: -14px; width: 108px; }
     }
   {% endstyle %}
 {%- endif -%}
@@ -101,6 +120,7 @@
     { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Add $50 or more from the Coconut Beach world and the Summer Yellow Travel Pouch is yours for just $10 — normally $26.90. It's applied automatically at checkout.</p>" },
     { "type": "image_picker", "id": "image", "label": "Image", "info": "Defaults to the Summer Yellow Travel Pouch photo if left blank." },
     { "type": "image_picker", "id": "stamp", "label": "Corner stamp", "info": "Defaults to the Coconut Beach world stamp." },
+    { "type": "image_picker", "id": "product_image", "label": "Product cutout (transparent)", "info": "Floats over the main image. Use a transparent PNG of the product. Defaults to the pouch's product photo." },
     { "type": "text", "id": "cta_text", "label": "Button text", "default": "Shop Coconut Beach" },
     { "type": "url", "id": "cta_url", "label": "Button link", "info": "Defaults to the Coconut Beach world page (/pages/coconut-beach)." },
     { "type": "text", "id": "fine_print", "label": "Fine print", "default": "Ends 31 Aug 2026. One discounted pouch per order, while stocks last." },
