@@ -1,7 +1,9 @@
 {%- comment -%}
   Coconut Beach promo. Two modes:
-    empty:true  -> empty-bag awareness block (in place of the START WRITING CTA)
-                   during the promo window; falls back to START WRITING after.
+    bag_empty:true -> empty-bag awareness block (in place of the START WRITING
+                   CTA) during the promo window; falls back to START WRITING after.
+                   (Do NOT name this param `empty` — it's a reserved Liquid word
+                   that always evaluates truthy.)
     default     -> in-cart states based on Coconut Beach Collection value:
                      some but < $50  -> progress teaser
                      >= $50, no pouch -> unlocked, one-tap add
@@ -26,7 +28,7 @@
 {%- if pouch_deal < 0 -%}{%- assign pouch_deal = 0 -%}{%- endif -%}
 {%- capture price_html -%}<strong>{{ pouch_deal | money }}</strong> <s class="pc-cart-promo__was">{{ pouch_price | money }}</s>{%- endcapture -%}
 
-{%- if empty -%}
+{%- if bag_empty -%}
   {%- if promo_live -%}
     {%- assign cb_url = collections['coconut-beach-collection'].url | default: '/collections/coconut-beach-collection' -%}
     <div class="pc-cart-promo pc-cart-promo--empty">

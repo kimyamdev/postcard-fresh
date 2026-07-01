@@ -329,7 +329,7 @@
       <div class="pc-cart-drawer__empty">
         <div class="h-display pc-cart-drawer__empty-title">YOUR BAG IS EMPTY</div>
         <p class="pc-cart-drawer__empty-body">Pick a postcard and we&rsquo;ll dispatch it to your skin.</p>
-        {%- render 'cart-promo-coconut', empty: true -%}
+        {%- render 'cart-promo-coconut', bag_empty: true -%}
       </div>
       {%- comment -%} Recs still show on an empty bag (logged-in with history). {%- endcomment -%}
       {%- render 'cart-recs' -%}
