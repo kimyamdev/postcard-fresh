@@ -3821,11 +3821,10 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
 /* Header */
 .pc-cart-drawer__header {
   padding: 20px 0;
-  border-bottom: 1.5px solid var(--color-ink);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--color-bg-warm);
+  background: var(--color-bg);
   flex-shrink: 0;
 }
 .pc-cart-drawer__header-sub { font-size: 10px; }
@@ -3912,10 +3911,10 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
 .pc-cart-drawer__ship {
   padding: 14px 22px;
   border-bottom: 1.5px solid var(--color-ink);
-  background: var(--color-bg-warm);
+  background: var(--color-bg);
   flex-shrink: 0;
 }
-.pc-cart-drawer__ship--done { background: var(--color-bg-warm); }
+.pc-cart-drawer__ship--done { background: var(--color-bg); }
 .pc-cart-drawer__ship-row {
   font-family: var(--font-display);
   font-size: 11px;
@@ -4487,7 +4486,7 @@ body.pc-refill-modal-open { overflow: hidden; }
      Long cart: auto margin collapses to 0 and the whole panel scrolls. */
   margin-top: auto;
   border-top: 1.5px solid var(--color-ink);
-  background: var(--color-bg-warm);
+  background: var(--color-bg);
 }
 .pc-cart-drawer__footer-inner { padding: 16px 0; }
 
