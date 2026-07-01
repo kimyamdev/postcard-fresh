@@ -1,0 +1,92 @@
+{%- comment -%}
+  Coconut Beach summer promo band for the landing page. Communicates the offer:
+  spend $50+ in the Coconut Beach world -> Summer Yellow Travel Pouch for $10.
+  Fully editable; auto-hides after the End date. Image defaults to the pouch.
+{%- endcomment -%}
+{%- liquid
+  assign end_date = section.settings.end_date | default: '2026-08-31'
+  assign end_ts = end_date | append: 'T23:59:59+08:00' | date: '%s' | plus: 0
+  assign now_ts = 'now' | date: '%s' | plus: 0
+-%}
+{%- if now_ts <= end_ts -%}
+  {%- assign img = section.settings.image -%}
+  {%- if img == blank -%}{%- assign img = all_products['summer-yellow-travel-pouch'].featured_image -%}{%- endif -%}
+  {%- assign bg = section.settings.bg_color | default: '#FCE9E4' -%}
+  {%- assign accent = section.settings.accent_color | default: '#E9A5A7' -%}
+  {%- assign cta_url = section.settings.cta_url | default: '/collections/coconut-beach-collection' -%}
+  <section class="section pc-coco" style="--coco-bg: {{ bg }}; --coco-accent: {{ accent }};" {{ section.shopify_attributes }}>
+    <div class="container">
+      <div class="pc-coco__card">
+        <div class="pc-coco__media">
+          {%- if img != blank -%}
+            {{ img | image_url: width: 900 | image_tag: alt: section.settings.title | escape, loading: 'lazy', class: 'pc-coco__img', widths: '400,600,900' }}
+          {%- endif -%}
+        </div>
+        <div class="pc-coco__body">
+          <div class="pc-coco__eyebrow-row">
+            {%- if section.settings.eyebrow != blank -%}<div class="eyebrow pc-coco__eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
+            {%- if section.settings.badge_text != blank -%}<span class="pc-coco__badge">{{ section.settings.badge_text }}</span>{%- endif -%}
+          </div>
+          {%- if section.settings.title != blank -%}<h2 class="h-display pc-coco__title">{{ section.settings.title }}</h2>{%- endif -%}
+          {%- if section.settings.body != blank -%}<div class="pc-coco__text rte">{{ section.settings.body }}</div>{%- endif -%}
+          {%- if section.settings.cta_text != blank -%}<a class="btn pc-coco__cta" href="{{ cta_url }}">{{ section.settings.cta_text }} &rarr;</a>{%- endif -%}
+          {%- if section.settings.fine_print != blank -%}<p class="pc-coco__fine">{{ section.settings.fine_print }}</p>{%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+  {% style %}
+    .pc-coco__card {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      align-items: center;
+      gap: 44px;
+      background: var(--coco-bg);
+      border: 1.5px solid var(--color-ink);
+      box-shadow: 6px 6px 0 var(--color-ink);
+      padding: 36px 44px;
+    }
+    .pc-coco__media { display: flex; justify-content: center; }
+    .pc-coco__img { max-width: 320px; width: 100%; height: auto; display: block; }
+    .pc-coco__eyebrow-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .pc-coco__eyebrow { color: var(--color-ink); opacity: 0.75; }
+    .pc-coco__badge {
+      display: inline-block; padding: 2px 10px; border: 1.5px solid var(--color-ink);
+      border-radius: 999px; background: var(--coco-accent); color: var(--color-ink);
+      font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 0.04em;
+    }
+    .pc-coco__title { font-size: clamp(26px, 3vw, 34px); margin: 10px 0 12px; }
+    .pc-coco__text { font-size: 15px; line-height: 1.55; max-width: 48ch; }
+    .pc-coco__text p { margin: 0 0 8px; }
+    .pc-coco__cta { margin-top: 22px; background: var(--coco-accent); }
+    .pc-coco__cta:hover { filter: brightness(0.95); }
+    .pc-coco__fine { margin-top: 12px; font-size: 12px; opacity: 0.6; }
+    @media (max-width: 800px) {
+      .pc-coco__card { grid-template-columns: 1fr; gap: 22px; padding: 24px; text-align: center; }
+      .pc-coco__eyebrow-row { justify-content: center; }
+      .pc-coco__text { margin-left: auto; margin-right: auto; }
+    }
+  {% endstyle %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Coconut Beach promo",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Summer offer · Coconut Beach" },
+    { "type": "text", "id": "badge_text", "label": "Badge", "default": "Save $16.90" },
+    { "type": "text", "id": "title", "label": "Title", "default": "The Summer Yellow pouch, yours for $10" },
+    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Add $50 or more from the Coconut Beach world and the Summer Yellow Travel Pouch is yours for just $10 — normally $26.90. It's applied automatically at checkout.</p>" },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Defaults to the Summer Yellow Travel Pouch photo if left blank." },
+    { "type": "text", "id": "cta_text", "label": "Button text", "default": "Shop Coconut Beach" },
+    { "type": "url", "id": "cta_url", "label": "Button link", "info": "Defaults to the Coconut Beach collection." },
+    { "type": "text", "id": "fine_print", "label": "Fine print", "default": "Ends 31 Aug 2026. One discounted pouch per order, while stocks last." },
+    { "type": "header", "content": "Style" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#FCE9E4" },
+    { "type": "color", "id": "accent_color", "label": "Accent (badge + button)", "default": "#E9A5A7" },
+    { "type": "header", "content": "Schedule" },
+    { "type": "text", "id": "end_date", "label": "End date (YYYY-MM-DD, SG time)", "default": "2026-08-31", "info": "The block hides itself after this date." }
+  ],
+  "presets": [{ "name": "Coconut Beach promo" }]
+}
+{% endschema %}

@@ -9,6 +9,10 @@
  */
 {
   "sections": {
+    "coconut_promo": {
+      "type": "postcard-coconut-promo",
+      "settings": {}
+    },
     "hero": {
       "type": "postcard-hero",
       "blocks": {
@@ -16,16 +20,38 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/Hotel_Lobby.png",
+            "link": "shopify://products/anywhere-fragrance-hotel-lobby",
             "eyebrow": "",
             "tag": "",
             "legend": "Hotel Lobby Anywhere Fragrance",
             "stamp_1": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Hotel_Lobby.png"
           }
         },
+        "slide_HYi3nD": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/moonbloomdiffuseroil.png",
+            "link": "shopify://products/diffuser-oil-moon-bloom",
+            "eyebrow": "",
+            "tag": "",
+            "legend": "MOON BLOOM DIFFUSER OIL"
+          }
+        },
+        "slide_ycG9DU": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/IMG-2019.png",
+            "link": "shopify://products/velvet-lounge-travel-pouch",
+            "eyebrow": "",
+            "tag": "",
+            "legend": "Travel Pouch Velvet Lounge"
+          }
+        },
         "slide_dkhfFf": {
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/Pickleball_Java_Jungle_Powder_Wash.png",
+            "link": "shopify://products/java-jungle-head-to-toe-powder-wash",
             "eyebrow": "",
             "tag": "",
             "legend": "Java Jungle Head-to-toe Powder Wash",
@@ -36,6 +62,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/body_oil.png",
+            "link": "shopify://products/coconut-beach-dry-touch-body-oil-spray",
             "eyebrow": "",
             "tag": "",
             "legend": "Coconut Beach Body Oil",
@@ -46,6 +73,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/IMG-1861.png",
+            "link": "shopify://products/body-balm-refill-laurel-garden",
             "eyebrow": "",
             "tag": "",
             "legend": "LAUREL GARDEN BODY BALM",
@@ -56,15 +84,27 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/IMG-1923.png",
+            "link": "shopify://products/destination-bath-house-travel-gift-box",
             "eyebrow": "",
             "tag": "",
-            "legend": "DESTINATION BOX"
+            "legend": "Destination: Bath House Travel Gift Box"
+          }
+        },
+        "slide_GKq3PL": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/IMG-1530.png",
+            "link": "shopify://products/the-layover-pouch",
+            "eyebrow": "",
+            "tag": "",
+            "legend": "The Layover Pouch FOREST AIR"
           }
         },
         "slide_yWCwxr": {
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/IMG-1872_f15eb88d-b600-4577-8c6f-1b75ef0fa9cd.png",
+            "link": "shopify://products/moon-bloom-hand-body-wash",
             "eyebrow": "",
             "tag": "",
             "legend": "Moon Bloom Hand & Body Wash",
@@ -75,6 +115,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/citrus_circus_solid_shampoo_shower_foam.png",
+            "link": "shopify://products/citrus-circus-shampoo-bar-normal",
             "eyebrow": "",
             "tag": "",
             "legend": "Citrus Circus Shampoo Bar",
@@ -85,6 +126,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/tennis_-_deodorant.png",
+            "link": "shopify://products/icy-peaks-cooling-deodorant-spray",
             "eyebrow": "",
             "tag": "",
             "legend": "ICY PEAKS DEODORANT SPRAY",
@@ -94,7 +136,8 @@
         "slide_MrQF3G": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/woman_padel_court_from_back.jpg",
+            "image": "shopify://shop_images/IMG-2037.png",
+            "link": "shopify://products/coconut-beach-deodorant-spray",
             "eyebrow": "",
             "tag": "",
             "legend": "COCONUT BEACH DEODORANT SPRAY",
@@ -105,24 +148,39 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/IMG-1885.png",
+            "link": "shopify://products/wild-flowers-natural-deodorant-spray",
             "eyebrow": "",
             "tag": "",
             "legend": "Wild flowers Deodorant Spray",
             "stamp_1": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Wild_Flowers_8756d0ee-916f-4d81-8fce-9b21ec0b0fa4.png"
           }
+        },
+        "slide_zNnPVb": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/IMG-2010.png",
+            "link": "shopify://products/cosmic-dust-travel-pouch",
+            "eyebrow": "",
+            "tag": "",
+            "legend": "Cosmic Dust Travel Pouch"
+          }
         }
       },
       "block_order": [
         "slide_XKmj8Q",
+        "slide_HYi3nD",
+        "slide_ycG9DU",
         "slide_dkhfFf",
         "slide_bWnp7a",
         "slide_HJcpjm",
         "slide_RhiCVG",
+        "slide_GKq3PL",
         "slide_yWCwxr",
         "slide_L3nrtC",
         "slide_dNEmwg",
         "slide_MrQF3G",
-        "slide_tXfdBB"
+        "slide_tXfdBB",
+        "slide_zNnPVb"
       ],
       "settings": {
         "slide_duration_ms": 3500,
@@ -169,6 +227,8 @@
         "title": "Products we send often.",
         "lede": "The ones most people keep coming back to.",
         "collection": "landing-bestsellers",
+        "random_per_visit": true,
+        "pool_size": 20,
         "randomize": false,
         "badge_1": "",
         "badge_2": "",
@@ -325,6 +385,7 @@
   },
   "order": [
     "hero",
+    "coconut_promo",
     "worlds_quick",
     "bestsellers",
     "world_of_the_month",
