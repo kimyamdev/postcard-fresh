@@ -3827,6 +3827,8 @@ cart-drawer.is-empty .drawer__inner.pc-cart-drawer__panel {
   background: var(--color-bg);
   flex-shrink: 0;
 }
+/* Empty bag: no full-width line items, so restore side padding on the header. */
+.pc-cart-drawer.is-empty .pc-cart-drawer__header { padding-left: 22px; padding-right: 22px; }
 .pc-cart-drawer__header-sub { font-size: 10px; }
 .pc-cart-drawer__header-title { font-size: 22px; margin-top: 2px; }
 .pc-cart-drawer__tier {
