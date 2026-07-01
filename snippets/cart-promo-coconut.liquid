@@ -44,7 +44,7 @@
           {%- else -%}
             <div class="pc-cart-promo__title">Coconut Beach reward unlocked</div>
             <div class="pc-cart-promo__text">Add the Summer Yellow Travel Pouch for just {{ price_html }}.</div>
-            <form class="pc-pdp-buy__form pc-cart-promo__form" action="{{ routes.cart_add_url }}" method="post">
+            <form class="{% unless on_page %}pc-pdp-buy__form {% endunless %}pc-cart-promo__form" action="{{ routes.cart_add_url }}" method="post">
               <input type="hidden" name="id" value="45735961952482">
               <button type="submit" class="pc-cart-promo__btn">Add &middot; {{ pouch_deal | money }}</button>
             </form>
