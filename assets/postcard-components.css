@@ -4488,7 +4488,7 @@ body.pc-refill-modal-open { overflow: hidden; }
   border-top: 1.5px solid var(--color-ink);
   background: var(--color-bg);
 }
-.pc-cart-drawer__footer-inner { padding: 16px 0; }
+.pc-cart-drawer__footer-inner { padding: 16px 22px; }
 
 .pc-cart-drawer__totals {
   display: grid;
