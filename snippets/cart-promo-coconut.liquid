@@ -1,10 +1,13 @@
 {%- comment -%}
-  Coconut Beach cart promo nudge. When the cart holds $50+ of Coconut Beach
-  Collection products, surface the "Summer Yellow Travel Pouch for $10" reward
-  (the automatic BXGY discount "Coconut Beach $50 -> Summer Yellow Pouch $10").
-  Rendered at the top of cart-recs (i.e. above "Order it again"). Server-rendered,
-  so it appears/updates as the drawer re-renders. Matches the discount exactly
-  (same collection, $50 threshold) and hides once the promo end date passes.
+  Coconut Beach cart promo. Rendered at the top of cart-recs (above "Order it
+  again"). Three states based on how much Coconut Beach Collection value is in
+  the cart (matches the automatic BXGY discount's collection + $50 threshold):
+    - some but < $50  -> progress teaser ("add $X more to unlock")
+    - >= $50, no pouch -> unlocked, one-tap add
+    - >= $50, has pouch -> reward applied
+  The pouch price (Large Bubble variant) is read live; deal = price - $16.90
+  (the discount amount). Server-rendered, updates as the drawer re-renders,
+  hidden after the promo end date.
 {%- endcomment -%}
 {%- assign promo_end = '2026-08-31T16:00:00Z' | date: '%s' | plus: 0 -%}
 {%- assign now_s = 'now' | date: '%s' | plus: 0 -%}
@@ -20,20 +23,36 @@
       {%- endif -%}
     {%- endfor -%}
   {%- endfor -%}
-  {%- if cb_total >= 5000 -%}
-    <div class="pc-cart-promo">
-      <span class="pc-cart-promo__icon" aria-hidden="true">&#127881;</span>
+  {%- if cb_total > 0 -%}
+    {%- assign pouch_price = 2690 -%}
+    {%- assign pouch = all_products['summer-yellow-travel-pouch'] -%}
+    {%- if pouch != blank -%}
+      {%- for v in pouch.variants -%}
+        {%- if v.id == 45735961952482 -%}{%- assign pouch_price = v.price -%}{%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+    {%- assign pouch_deal = pouch_price | minus: 1690 -%}
+    {%- if pouch_deal < 0 -%}{%- assign pouch_deal = 0 -%}{%- endif -%}
+    {%- capture price_html -%}<strong>{{ pouch_deal | money }}</strong> <s class="pc-cart-promo__was">{{ pouch_price | money }}</s>{%- endcapture -%}
+    <div class="pc-cart-promo{% if cb_total < 5000 %} pc-cart-promo--teaser{% endif %}">
+      <span class="pc-cart-promo__icon" aria-hidden="true">{% if cb_total >= 5000 %}&#127881;{% else %}&#127796;{% endif %}</span>
       <div class="pc-cart-promo__body">
-        {%- if has_pouch -%}
-          <div class="pc-cart-promo__title">Reward applied</div>
-          <div class="pc-cart-promo__text">Your Summer Yellow Travel Pouch is <strong>$10</strong> in this order.</div>
+        {%- if cb_total >= 5000 -%}
+          {%- if has_pouch -%}
+            <div class="pc-cart-promo__title">Reward applied</div>
+            <div class="pc-cart-promo__text">Your Summer Yellow Travel Pouch is {{ price_html }} in this order.</div>
+          {%- else -%}
+            <div class="pc-cart-promo__title">Coconut Beach reward unlocked</div>
+            <div class="pc-cart-promo__text">Add the Summer Yellow Travel Pouch for just {{ price_html }}.</div>
+            <form class="pc-pdp-buy__form pc-cart-promo__form" action="{{ routes.cart_add_url }}" method="post">
+              <input type="hidden" name="id" value="45735961952482">
+              <button type="submit" class="pc-cart-promo__btn">Add &middot; {{ pouch_deal | money }}</button>
+            </form>
+          {%- endif -%}
         {%- else -%}
-          <div class="pc-cart-promo__title">Coconut Beach reward unlocked</div>
-          <div class="pc-cart-promo__text">Add the Summer Yellow Travel Pouch for just <strong>$10</strong>.</div>
-          <form class="pc-pdp-buy__form pc-cart-promo__form" action="{{ routes.cart_add_url }}" method="post">
-            <input type="hidden" name="id" value="45735961952482">
-            <button type="submit" class="pc-cart-promo__btn">Add &middot; $10</button>
-          </form>
+          {%- assign cb_remaining = 5000 | minus: cb_total -%}
+          <div class="pc-cart-promo__title">Almost there</div>
+          <div class="pc-cart-promo__text">Add <strong>{{ cb_remaining | money }}</strong> more of Coconut Beach to unlock the Summer Yellow Travel Pouch for {{ price_html }}.</div>
         {%- endif -%}
       </div>
     </div>
