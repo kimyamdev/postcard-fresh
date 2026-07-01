@@ -6,6 +6,7 @@
     Subtotal (true full one-off price)
     Autoship savings · every <cadence>   (one per frequency)
     <Bundle> savings
+    <Promotion title>                    (automatic/code discount, e.g. Coconut Beach)
     Shipping
     Free shipping saved                  (only when shipping is free)
     You saved                            (grand total of all savings)
@@ -27,6 +28,8 @@
   assign mm_savings_cents = 0
   assign bundle_name = ''
   assign sub_savings_cents = 0
+  assign promo_savings_cents = 0
+  assign promo_title = ''
   assign subtotal_regular_cents = 0
   for item in cart.items
     if item.properties._bundle_id != blank
@@ -34,6 +37,15 @@
       assign bundle_name = bundle_name_raw | split: ' (' | first
       for alloc in item.line_level_discount_allocations
         assign mm_savings_cents = mm_savings_cents | plus: alloc.amount
+      endfor
+    else
+      # Automatic/code promo discounts on normal lines (e.g. the Coconut Beach
+      # world offer); bundle allocations are counted above instead.
+      for alloc in item.line_level_discount_allocations
+        assign promo_savings_cents = promo_savings_cents | plus: alloc.amount
+        if promo_title == blank
+          assign promo_title = alloc.discount_application.title
+        endif
       endfor
     endif
     if item.selling_plan_allocation
@@ -63,7 +75,7 @@
   if free_ship
     assign ship_saved_cents = ship_fee_cents
   endif
-  assign total_savings_cents = sub_savings_cents | plus: mm_savings_cents | plus: ship_saved_cents
+  assign total_savings_cents = sub_savings_cents | plus: mm_savings_cents | plus: promo_savings_cents | plus: ship_saved_cents
 
   if variant == 'cart'
     assign row = 'pc-cart-total-row'
@@ -79,6 +91,9 @@
 {%- render 'cart-autoship-savings', variant: variant -%}
 {%- if mm_savings_cents > 0 -%}
   <div class="{{ row_save }}"><span>{{ bundle_name | default: 'Mix & Match' }} savings</span><span>&minus;{{ mm_savings_cents | money }}</span></div>
+{%- endif -%}
+{%- if promo_savings_cents > 0 -%}
+  <div class="{{ row_save }}"><span>{{ promo_title | default: 'Promotion' }}</span><span>&minus;{{ promo_savings_cents | money }}</span></div>
 {%- endif -%}
 <div class="{{ row }}"><span>Shipping</span><span>
   {%- if is_villa -%}Free &middot; Villa tier
