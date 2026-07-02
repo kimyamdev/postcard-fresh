@@ -103,6 +103,7 @@
       throw new Error(msg);
     }
     await Promise.all([refreshDrawer(), refreshBag()]);
+    tryApplyCocoVip();
 
     const item = (data.items && data.items[0]) || data;
     window.dispatchEvent(new CustomEvent('pc-just-added', {
@@ -259,11 +260,31 @@
       villaApplied = false;
     }
   }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', tryApplyVillaShipping);
-  } else {
-    tryApplyVillaShipping();
+  // Smile VIP — auto-apply the Coconut Beach pouch code (COCONUTVIP) for Club/
+  // Villa members. The code discount is customer-segment-restricted, so it only
+  // takes effect for them; it's re-checked as items are added (see addItem) so
+  // it's present once the cart hits $50 Coconut Beach + the pouch.
+  async function tryApplyCocoVip() {
+    const c = window.PostcardCustomer;
+    if (!c || !c.isCocoVip || !c.cocoVipCode) return;
+    try {
+      const cart = await (await fetch('/cart.js')).json();
+      if ((cart.discount_codes || []).some((d) => d.code === c.cocoVipCode)) return;
+      await fetch('/cart/update.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ discount: c.cocoVipCode })
+      });
+      await Promise.all([refreshDrawer(), refreshBag()]);
+    } catch (e) { /* ignore */ }
   }
 
-  window.PostcardCart = { addItem, updateLine, updateBundle, setLinePlan, upgradeLineToPlan, refreshDrawer, refreshCartPage, refreshBag, tryApplyVillaShipping };
+  function pcApplyVipCodes() { tryApplyVillaShipping(); tryApplyCocoVip(); }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', pcApplyVipCodes);
+  } else {
+    pcApplyVipCodes();
+  }
+
+  window.PostcardCart = { addItem, updateLine, updateBundle, setLinePlan, upgradeLineToPlan, refreshDrawer, refreshCartPage, refreshBag, tryApplyVillaShipping, tryApplyCocoVip };
 })();

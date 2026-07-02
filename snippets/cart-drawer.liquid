@@ -35,10 +35,14 @@
   endcomment
   assign vip_tier = customer.metafields.smile.vip_tier_name.value
   assign is_villa = false
+  assign is_coco_vip = false
   if vip_tier != blank
     assign vip_tier_lower = vip_tier | downcase | strip
     if vip_tier_lower == 'villa'
       assign is_villa = true
+    endif
+    if vip_tier_lower == 'villa' or vip_tier_lower == 'club'
+      assign is_coco_vip = true
     endif
   endif
   if is_villa
@@ -52,6 +56,8 @@
     window.PostcardCustomer = {
       tier: {{ vip_tier | default: '' | json }},
       isVilla: {{ is_villa | json }},
+      isCocoVip: {{ is_coco_vip | json }},
+      cocoVipCode: "COCONUTVIP",
       villaShippingCode: window.PostcardConfig && window.PostcardConfig.villaShippingCode || ""
     };
   </script>
