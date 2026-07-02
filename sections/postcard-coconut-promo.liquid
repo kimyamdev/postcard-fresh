@@ -8,7 +8,8 @@
   assign end_ts = end_date | append: 'T23:59:59+08:00' | date: '%s' | plus: 0
   assign now_ts = 'now' | date: '%s' | plus: 0
 -%}
-{%- if now_ts <= end_ts -%}
+{%- capture coco_gate -%}{%- render 'coco-gate' -%}{%- endcapture -%}
+{%- if now_ts <= end_ts and coco_gate contains 'show' -%}
   {%- assign img = section.settings.image -%}
   {%- if img == blank -%}{%- assign img = all_products['summer-yellow-travel-pouch'].featured_image -%}{%- endif -%}
   {%- assign bg = section.settings.bg_color | default: '#FCE9E4' -%}

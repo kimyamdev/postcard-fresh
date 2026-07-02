@@ -1,0 +1,29 @@
+{%- comment -%}
+  Reusable Smile VIP tier gate. Outputs the string "show" when the current
+  customer's tier is allowed, otherwise outputs nothing. Consume via capture:
+
+    {%- capture g -%}{%- render 'tier-gate', allow: 'club,villa' -%}{%- endcapture -%}
+    {%- if g contains 'show' -%} ...visible content... {%- endif -%}
+
+  allow: comma-separated tier names (club / deluxe / villa). Blank or 'all'
+  means everyone (including logged-out). Logged-out or non-matching tiers get
+  nothing. Tier read from customer.metafields.smile.vip_tier_name.
+{%- endcomment -%}
+{%- liquid
+  assign a = allow | default: 'all' | downcase | strip
+  if a == '' or a == 'all'
+    echo 'show'
+  else
+    assign tier = customer.metafields.smile.vip_tier_name.value | downcase | strip
+    if tier != blank
+      assign parts = a | split: ','
+      for p in parts
+        assign pp = p | strip
+        if pp == tier
+          echo 'show'
+          break
+        endif
+      endfor
+    endif
+  endif
+-%}

@@ -16,6 +16,9 @@
 {%- assign now_s = 'now' | date: '%s' | plus: 0 -%}
 {%- assign promo_live = false -%}
 {%- if now_s < promo_end -%}{%- assign promo_live = true -%}{%- endif -%}
+{%- capture _coco_g -%}{%- render 'coco-gate' -%}{%- endcapture -%}
+{%- assign coco_show = false -%}
+{%- if _coco_g contains 'show' -%}{%- assign coco_show = true -%}{%- endif -%}
 
 {%- assign pouch_price = 2690 -%}
 {%- assign pouch = all_products['summer-yellow-travel-pouch'] -%}
@@ -29,7 +32,7 @@
 {%- capture price_html -%}<strong>{{ pouch_deal | money }}</strong> <s class="pc-cart-promo__was">{{ pouch_price | money }}</s>{%- endcapture -%}
 
 {%- if bag_empty -%}
-  {%- if promo_live -%}
+  {%- if promo_live and coco_show -%}
     {%- assign cb_url = '/pages/coconut-beach' -%}
     <div class="pc-cart-promo pc-cart-promo--empty">
       <span class="pc-cart-promo__icon" aria-hidden="true">&#127796;</span>
@@ -42,7 +45,7 @@
   {%- else -%}
     <a href="{{ routes.all_products_collection_url }}" class="btn">START WRITING &rarr;</a>
   {%- endif -%}
-{%- elsif promo_live and cart.item_count > 0 -%}
+{%- elsif promo_live and coco_show and cart.item_count > 0 -%}
   {%- assign cb_total = 0 -%}
   {%- assign has_pouch = false -%}
   {%- for item in cart.items -%}

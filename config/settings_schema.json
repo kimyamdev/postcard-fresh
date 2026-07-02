@@ -8,6 +8,17 @@
     "theme_support_url": "https://support.shopify.com/"
   },
   {
+    "name": "Coconut Beach promo",
+    "settings": [
+      { "type": "paragraph", "content": "Controls who sees the Coconut Beach summer promo (homepage section + cart nudges). Tick 'Show to everyone' to open it up after extending the promo." },
+      { "type": "checkbox", "id": "coco_promo_all", "label": "Show to everyone", "default": false },
+      { "type": "header", "content": "Otherwise, restrict to VIP tiers" },
+      { "type": "checkbox", "id": "coco_promo_club", "label": "Club", "default": true },
+      { "type": "checkbox", "id": "coco_promo_deluxe", "label": "Deluxe", "default": false },
+      { "type": "checkbox", "id": "coco_promo_villa", "label": "Villa", "default": true }
+    ]
+  },
+  {
     "name": "t:settings_schema.logo.name",
     "settings": [
       {

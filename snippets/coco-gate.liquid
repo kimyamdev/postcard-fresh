@@ -1,0 +1,24 @@
+{%- comment -%}
+  Coconut Beach promo visibility gate. Outputs "show" when the current customer
+  may see the promo, per Theme settings > Coconut Beach promo (tier checkboxes /
+  "Show to everyone"). Used by the homepage section AND the cart nudges so one
+  toggle controls them all. To open the promo to everyone, tick "Show to
+  everyone" in Theme settings — no code change needed.
+{%- endcomment -%}
+{%- liquid
+  if settings.coco_promo_all
+    assign coco_allow = 'all'
+  else
+    assign coco_allow = ''
+    if settings.coco_promo_club
+      assign coco_allow = coco_allow | append: 'club,'
+    endif
+    if settings.coco_promo_deluxe
+      assign coco_allow = coco_allow | append: 'deluxe,'
+    endif
+    if settings.coco_promo_villa
+      assign coco_allow = coco_allow | append: 'villa,'
+    endif
+  endif
+-%}
+{%- render 'tier-gate', allow: coco_allow -%}
