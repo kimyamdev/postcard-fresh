@@ -23,6 +23,10 @@
   {%- endif -%}
   {%- assign product_cutout = section.settings.product_image -%}
   {%- if product_cutout == blank -%}{%- assign product_cutout = all_products['summer-yellow-travel-pouch'].featured_image -%}{%- endif -%}
+  {%- assign product_cutout_2 = section.settings.product_image_2 -%}
+  {%- assign coco_flick = false -%}
+  {%- if product_cutout != blank and product_cutout_2 != blank -%}{%- assign coco_flick = true -%}{%- endif -%}
+  {%- assign flip_cycle = section.settings.cutout_flip_ms | default: 100 | times: 2 -%}
   {%- comment -%} VIP tier tags — shown only when the offer is restricted (not "show to everyone"). {%- endcomment -%}
   {%- assign coco_vip_tags = '' -%}
   {%- unless settings.coco_promo_all -%}
@@ -32,13 +36,16 @@
   {%- endunless -%}
   <section class="section pc-coco" style="--coco-bg: {{ bg }}; --coco-accent: {{ accent }};" {{ section.shopify_attributes }}>
     <div class="container">
-      <div class="pc-coco__card">
+      <div class="pc-coco__card{% if coco_flick %} pc-coco__card--flick{% endif %}"{% if coco_flick %} style="--coco-flick: {{ flip_cycle }}ms;"{% endif %}>
         {%- if coco_stamp != blank -%}
           <img class="pc-coco__stamp" src="{{ coco_stamp | image_url: width: 320 }}" alt="" loading="lazy">
         {%- endif -%}
         {%- if product_cutout != blank -%}
           {%- assign pc_alt = section.settings.title | default: 'Product' | escape -%}
           <img class="pc-coco__product" src="{{ product_cutout | image_url: width: 520 }}" alt="{{ pc_alt }}" loading="lazy">
+          {%- if coco_flick -%}
+            <img class="pc-coco__product pc-coco__product--2" src="{{ product_cutout_2 | image_url: width: 520 }}" alt="" loading="lazy">
+          {%- endif -%}
         {%- endif -%}
         <div class="pc-coco__media">
           {%- if img != blank -%}
@@ -102,6 +109,15 @@
       z-index: 3;
       pointer-events: none;
     }
+    /* Two cutouts alternate in place (flip-book). --coco-flick = full cycle (2x per-image). */
+    .pc-coco__card--flick .pc-coco__product { animation: coco-flick-a var(--coco-flick, 200ms) linear infinite; }
+    .pc-coco__card--flick .pc-coco__product--2 { animation: coco-flick-b var(--coco-flick, 200ms) linear infinite; }
+    @keyframes coco-flick-a { 0%, 49.99% { opacity: 1; } 50%, 100% { opacity: 0; } }
+    @keyframes coco-flick-b { 0%, 49.99% { opacity: 0; } 50%, 100% { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) {
+      .pc-coco__card--flick .pc-coco__product { animation: none; opacity: 1; }
+      .pc-coco__card--flick .pc-coco__product--2 { animation: none; opacity: 0; }
+    }
     .pc-coco__media { display: flex; justify-content: center; }
     .pc-coco__img { max-width: 320px; width: 100%; height: auto; display: block; }
     .pc-coco__eyebrow-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -145,6 +161,8 @@
     { "type": "image_picker", "id": "image", "label": "Image", "info": "Defaults to the Summer Yellow Travel Pouch photo if left blank." },
     { "type": "image_picker", "id": "stamp", "label": "Corner stamp", "info": "Defaults to the Coconut Beach world stamp." },
     { "type": "image_picker", "id": "product_image", "label": "Product cutout (transparent)", "info": "Floats over the main image. Use a transparent PNG of the product. Defaults to the pouch's product photo." },
+    { "type": "image_picker", "id": "product_image_2", "label": "Product cutout 2 (transparent)", "info": "If set, the two cutouts alternate in place (flip-book effect)." },
+    { "type": "range", "id": "cutout_flip_ms", "label": "Cutout alternate speed", "min": 40, "max": 1000, "step": 20, "default": 100, "unit": "ms", "info": "How long each cutout shows before swapping. 100 = fast flicker." },
     { "type": "text", "id": "cta_text", "label": "Button text", "default": "Shop Coconut Beach" },
     { "type": "url", "id": "cta_url", "label": "Button link", "info": "Defaults to the Coconut Beach world page (/pages/coconut-beach)." },
     { "type": "text", "id": "fine_print", "label": "Fine print", "default": "Ends 31 Aug 2026. One discounted pouch per order, while stocks last." },
