@@ -256,6 +256,13 @@
             "url": "/pages/about"
           }
         },
+        "n_journal": {
+          "type": "nav_link",
+          "settings": {
+            "text": "Journal",
+            "url": "/blogs/postcard-blog"
+          }
+        },
         "n5": {
           "type": "nav_link",
           "settings": {
@@ -395,6 +402,7 @@
         "n2",
         "n3",
         "n4",
+        "n_journal",
         "n5",
         "wg1",
         "wl1",
@@ -494,6 +502,15 @@
             "sub": "story, in-house, values, mission →",
             "target_view": "none",
             "link": "/pages/about"
+          }
+        },
+        "r_journal": {
+          "type": "root_item",
+          "settings": {
+            "label": "Journal",
+            "sub": "stories, guides & more →",
+            "target_view": "none",
+            "link": "/blogs/postcard-blog"
           }
         },
         "r_corporate": {
@@ -862,6 +879,7 @@
         "r_refill",
         "r_members",
         "r_about",
+        "r_journal",
         "r_corporate",
         "r_account",
         "sh_byneed",
