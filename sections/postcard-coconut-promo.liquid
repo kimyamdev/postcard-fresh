@@ -47,16 +47,18 @@
           {%- endif -%}
         </div>
         <div class="pc-coco__body">
-          <div class="pc-coco__eyebrow-row">
-            {%- if section.settings.eyebrow != blank -%}<div class="eyebrow pc-coco__eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
-            {%- if section.settings.badge_text != blank -%}<span class="pc-coco__badge">{{ section.settings.badge_text }}</span>{%- endif -%}
-            {%- if coco_vip_tags != blank -%}
+          {%- if coco_vip_tags != blank -%}
+            <div class="pc-coco__vip-row">
               <span class="pc-coco__vip">VIP only</span>
               {%- assign coco_tier_arr = coco_vip_tags | split: ',' -%}
               {%- for t in coco_tier_arr -%}
                 <span class="pc-coco__tier pc-coco__tier--{{ t | downcase }}">{{ t }}</span>
               {%- endfor -%}
-            {%- endif -%}
+            </div>
+          {%- endif -%}
+          <div class="pc-coco__eyebrow-row">
+            {%- if section.settings.eyebrow != blank -%}<div class="eyebrow pc-coco__eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
+            {%- if section.settings.badge_text != blank -%}<span class="pc-coco__badge">{{ section.settings.badge_text }}</span>{%- endif -%}
           </div>
           {%- if section.settings.title != blank -%}<h2 class="h-display pc-coco__title">{{ section.settings.title }}</h2>{%- endif -%}
           {%- if section.settings.body != blank -%}<div class="pc-coco__text rte">{{ section.settings.body }}</div>{%- endif -%}
@@ -103,6 +105,7 @@
     .pc-coco__media { display: flex; justify-content: center; }
     .pc-coco__img { max-width: 320px; width: 100%; height: auto; display: block; }
     .pc-coco__eyebrow-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .pc-coco__vip-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
     .pc-coco__vip { font-family: var(--font-display); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-ink); opacity: 0.65; }
     .pc-coco__tier { display: inline-block; padding: 1px 9px; border: 1.5px solid var(--color-ink); border-radius: 999px; font-family: var(--font-display); font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--color-ink); }
     .pc-coco__tier--villa { background: #FFB233; }
@@ -123,6 +126,7 @@
     @media (max-width: 800px) {
       .pc-coco__card { grid-template-columns: 1fr; gap: 22px; padding: 24px; text-align: center; }
       .pc-coco__eyebrow-row { justify-content: center; }
+      .pc-coco__vip-row { justify-content: center; }
       .pc-coco__text { margin-left: auto; margin-right: auto; }
       .pc-coco__stamp { width: 80px; top: -12px; right: 8px; }
       .pc-coco__product { display: none; }
