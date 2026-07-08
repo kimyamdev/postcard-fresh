@@ -3526,6 +3526,7 @@ a.pc-wotm__format:hover { border-color: var(--color-ink); transform: translateY(
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  max-width: 100%;
 }
 .pc-coll-subtype-buttons {
   display: flex;
