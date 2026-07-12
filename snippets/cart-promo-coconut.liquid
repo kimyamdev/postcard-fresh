@@ -50,8 +50,11 @@
   {%- assign has_pouch = false -%}
   {%- for item in cart.items -%}
     {%- if item.variant.id == 45735961952482 -%}{%- assign has_pouch = true -%}{%- endif -%}
+    {%- comment -%} Count value from the promo-eligibility collection (all Coconut Beach
+        products incl. minis/travel), so bundle picks like the Pick & Mix deo count too —
+        matches the VIP discount's customerBuys collection. {%- endcomment -%}
     {%- for c in item.product.collections -%}
-      {%- if c.handle == 'coconut-beach-collection' -%}
+      {%- if c.handle == 'coconut-beach-promo' -%}
         {%- assign cb_total = cb_total | plus: item.final_line_price -%}
         {%- break -%}
       {%- endif -%}
