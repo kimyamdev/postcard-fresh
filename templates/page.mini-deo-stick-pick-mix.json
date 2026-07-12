@@ -1,0 +1,90 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "mix_and_match": {
+      "type": "mix-and-match",
+      "blocks": {
+        "group_1": {
+          "type": "group",
+          "settings": {
+            "title": "First mini deo stick",
+            "subtitle": "Aluminium-free, fresh, signature scents",
+            "products": [
+              "bath-house-mini-deodorant-stick",
+              "deodorant-mini-coconut-beach",
+              "hotel-lobby-mini-deodorant-stick",
+              "deodorant-mini-icy-peaks",
+              "deodorant-mini-wild-flowers",
+              "woodland-retreat-mini-deodorant-stick"
+            ],
+            "collection": "",
+            "variant_ids": ""
+          }
+        },
+        "group_2": {
+          "type": "group",
+          "settings": {
+            "title": "Second mini deo stick",
+            "subtitle": "Aluminium-free, fresh, signature scents",
+            "products": [
+              "bath-house-mini-deodorant-stick",
+              "deodorant-mini-coconut-beach",
+              "hotel-lobby-mini-deodorant-stick",
+              "deodorant-mini-icy-peaks",
+              "deodorant-mini-wild-flowers",
+              "woodland-retreat-mini-deodorant-stick"
+            ],
+            "collection": "",
+            "variant_ids": ""
+          }
+        },
+        "group_3": {
+          "type": "group",
+          "settings": {
+            "title": "Third mini deo stick",
+            "subtitle": "Aluminium-free, fresh, signature scents",
+            "products": [
+              "bath-house-mini-deodorant-stick",
+              "deodorant-mini-coconut-beach",
+              "hotel-lobby-mini-deodorant-stick",
+              "deodorant-mini-icy-peaks",
+              "deodorant-mini-wild-flowers",
+              "woodland-retreat-mini-deodorant-stick"
+            ],
+            "collection": "",
+            "variant_ids": ""
+          }
+        }
+      },
+      "block_order": [
+        "group_1",
+        "group_2",
+        "group_3"
+      ],
+      "settings": {
+        "eyebrow": "Build your set",
+        "heading": "TRAVEL DEO STICKS",
+        "intro": "<p>Pick 3 mini deo sticks and enjoy $3 off your set.</p>",
+        "cta_label": "Add bundle to cart",
+        "discount_type": "fixed",
+        "discount_value": "3",
+        "bundle_label": "Mix & Match",
+        "color_scheme": "scheme-1",
+        "card_gradient": true,
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    }
+  },
+  "order": [
+    "mix_and_match"
+  ]
+}
