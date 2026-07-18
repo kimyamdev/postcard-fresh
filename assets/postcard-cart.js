@@ -280,10 +280,24 @@
   }
 
   function pcApplyVipCodes() { tryApplyVillaShipping(); tryApplyCocoVip(); }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', pcApplyVipCodes);
-  } else {
+  function pcInitVipCodes() {
     pcApplyVipCodes();
+    // Also (re)apply after native Dawn <product-form> adds, which don't route
+    // through PostcardCart.addItem — e.g. adding the Summer pouch from its own
+    // product page. Dawn publishes 'cart-update' on every such add, so the VIP
+    // codes (incl. COCONUTVIP) get applied no matter how the item was added.
+    // tryApplyCocoVip re-checks the cart and is a no-op once the code is on, so
+    // the extra calls are idempotent (no loop).
+    try {
+      if (typeof subscribe === 'function' && typeof PUB_SUB_EVENTS !== 'undefined' && PUB_SUB_EVENTS.cartUpdate) {
+        subscribe(PUB_SUB_EVENTS.cartUpdate, pcApplyVipCodes);
+      }
+    } catch (e) { /* pub/sub not available — on-load + addItem paths still cover it */ }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', pcInitVipCodes);
+  } else {
+    pcInitVipCodes();
   }
 
   window.PostcardCart = { addItem, updateLine, updateBundle, setLinePlan, upgradeLineToPlan, refreshDrawer, refreshCartPage, refreshBag, tryApplyVillaShipping, tryApplyCocoVip };
