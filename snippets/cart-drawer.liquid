@@ -57,7 +57,11 @@
       tier: {{ vip_tier | default: '' | json }},
       isVilla: {{ is_villa | json }},
       isCocoVip: {{ is_coco_vip | json }},
-      cocoVipCode: "COCONUTVIP",
+      {%- comment -%} Coconut Beach pouch offer is now a public AUTOMATIC discount
+          (applies to everyone, no login). Leave cocoVipCode blank so the theme
+          doesn't try to apply the retired VIP code. To re-gate to VIPs later,
+          reactivate the COCONUTVIP code discount and restore this value. {%- endcomment -%}
+      cocoVipCode: "",
       villaShippingCode: window.PostcardConfig && window.PostcardConfig.villaShippingCode || ""
     };
   </script>
