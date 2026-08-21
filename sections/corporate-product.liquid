@@ -1,101 +1,231 @@
 {%- comment -%}
-  Corporate Product — renders a single `corporate_product` metaobject entry as its
-  own QR-linked page (custom products displayed at corporate partners: gyms, hotels…).
-  Data comes from the metaobject, not block settings — blocks control presence/order/styling.
-  Docs: within a metaobject template the current entry is the global `metaobject`.
+  Corporate Product microsite — renders a single `corporate_product` metaobject
+  entry as an immersive branded page (QR-linked, shown at corporate partners).
+
+  Per-entry content comes from the metaobject (hero image, partner name, product
+  title, ingredients). Shared story content (who we are / production) lives in the
+  block settings and is the same across every corporate product page — edit once in
+  the theme editor. Within a metaobject template the current entry is the global
+  `metaobject` drop.
 {%- endcomment -%}
-{{ 'section-main-page.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign hero_image = metaobject.hero_image.value
+  assign partner = metaobject.partner_name.value
+  assign product_title = metaobject.title.value
+-%}
 
 {%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  #shopify-section-{{ section.id }} { --accent: {{ section.settings.accent_color }}; }
+  .pc-cp { color: var(--color-ink); background: var(--color-bg); }
+  .pc-cp a { color: inherit; }
+  .pc-cp__eyebrow { font-family: var(--font-display); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.8; }
+  .pc-cp__script { font-family: var(--font-script); font-size: clamp(26px, 6vw, 40px); line-height: 1; color: var(--accent); }
+  .pc-cp__body { font-family: var(--font-display); font-size: 16px; line-height: 1.75; }
+  .pc-cp__body p { margin: 0 0 1em; }
+  .pc-cp__body p:last-child { margin-bottom: 0; }
+
+  /* ---------- HERO ---------- */
+  .pc-cp-hero { position: relative; min-height: 82vh; display: flex; flex-direction: column; justify-content: space-between;
+    background: var(--accent); color: var(--color-bg); overflow: hidden; }
+  .pc-cp-hero__media { position: absolute; inset: 0; z-index: 0; }
+  .pc-cp-hero__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pc-cp-hero::after { content: ""; position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(180deg, rgba(33,32,32,0.30) 0%, rgba(33,32,32,0.05) 32%, rgba(33,32,32,0.10) 60%, rgba(33,32,32,0.72) 100%); }
+  .pc-cp-hero--has-media { color: #fff; }
+  .pc-cp-hero__bar { position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; padding: 18px 20px; }
+  .pc-cp-hero__logo { font-family: var(--font-headline); font-size: 22px; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1;
+    background: var(--color-bg); color: var(--color-ink); padding: 10px 20px; border-radius: var(--radius-pill); border: 2px solid var(--color-ink); box-shadow: var(--shadow-stamp); }
+  .pc-cp-hero__inner { position: relative; z-index: 2; padding: 32px 24px 40px; text-align: center; }
+  .pc-cp-hero__partner { display: inline-block; margin-bottom: 10px; font-family: var(--font-script); font-size: clamp(22px, 5vw, 32px); line-height: 1;
+    color: #fff; }
+  .pc-cp-hero:not(.pc-cp-hero--has-media) .pc-cp-hero__partner { color: var(--color-ink); }
+  .pc-cp-hero__title { margin: 0; font-family: var(--font-headline); font-weight: 400; text-transform: uppercase; letter-spacing: 0.02em;
+    font-size: clamp(44px, 12vw, 96px); line-height: 0.95; }
+  .pc-cp-hero__scroll { margin-top: 18px; font-family: var(--font-display); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.85; }
+
+  /* ---------- INGREDIENTS BOX ---------- */
+  .pc-cp-ing { padding: 40px 20px; }
+  .pc-cp-ing__card { max-width: 620px; margin: -64px auto 0; position: relative; z-index: 3;
+    background: var(--color-bg-card); border: 2px solid var(--color-ink); border-radius: var(--radius-soft); box-shadow: var(--shadow-stamp-lg);
+    padding: 28px 26px 30px; }
+  .pc-cp-ing__label { display: inline-block; margin: 0 0 14px; font-family: var(--font-display); font-size: 12px; letter-spacing: 0.16em;
+    text-transform: uppercase; padding: 5px 12px; border: 1.5px solid var(--color-ink); border-radius: var(--radius-pill); }
+  .pc-cp-ing__body { font-family: var(--font-display); font-size: 15px; line-height: 1.7; }
+  .pc-cp-ing__body ul, .pc-cp-ing__body ol { margin: 0; padding: 0; list-style: none;
+    display: grid; grid-template-columns: 1fr; gap: 2px; }
+  .pc-cp-ing__body li { padding: 9px 0; border-bottom: 1px solid var(--color-line-soft); }
+  .pc-cp-ing__body li:last-child { border-bottom: 0; }
+  .pc-cp-ing__body p { margin: 0 0 14px; }
+  @media (min-width: 560px) { .pc-cp-ing__body ul, .pc-cp-ing__body ol { grid-template-columns: 1fr 1fr; gap: 0 28px; } }
+
+  /* ---------- STORY (who we are / production) ---------- */
+  .pc-cp-story { padding: 56px 24px; }
+  .pc-cp-story + .pc-cp-story { padding-top: 8px; }
+  .pc-cp-story--tint { background: var(--color-bg-warm); }
+  .pc-cp-story__wrap { max-width: 1080px; margin: 0 auto; display: grid; gap: 28px; align-items: center; }
+  .pc-cp-story__title { margin: 10px 0 16px; font-family: var(--font-headline); font-weight: 400; text-transform: uppercase; letter-spacing: 0.02em;
+    font-size: clamp(30px, 7vw, 52px); line-height: 1; }
+  .pc-cp-story__media { position: relative; aspect-ratio: 4/5; background: var(--accent); border: 2px solid var(--color-ink); border-radius: var(--radius-soft);
+    box-shadow: var(--shadow-stamp); overflow: hidden; }
+  .pc-cp-story__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pc-cp-story__legend { position: absolute; left: 0; bottom: 0; z-index: 2; margin: 12px; padding: 4px 10px;
+    background: var(--color-bg-card); border: 1.5px solid var(--color-ink); font-family: var(--font-display); font-size: 11px; letter-spacing: 0.04em; }
+  @media (min-width: 800px) {
+    .pc-cp-story__wrap { grid-template-columns: 1fr 1fr; gap: 56px; }
+    .pc-cp-story--flip .pc-cp-story__media { order: -1; }
   }
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
-  .pc-corp { display: block; padding-left: 24px; padding-right: 24px; }
-  .pc-corp__inner { max-width: 720px; margin: 0 auto; }
-  .pc-corp__eyebrow { margin-bottom: 12px; opacity: 0.7; font-family: var(--font-display); }
-  .pc-corp__title { margin: 0; font-size: clamp(32px, 6vw, 56px); font-family: var(--font-headline); letter-spacing: 0.02em; text-transform: uppercase; }
-  .pc-corp__block { margin-top: 40px; }
-  .pc-corp__label { margin: 0 0 12px; font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.08em; font-size: 14px; opacity: 0.7; }
-  .pc-corp-rte { font-size: 16px; line-height: 1.7; font-family: var(--font-display); color: var(--color-ink); }
-  .pc-corp-rte > :first-child { margin-top: 0; }
-  .pc-corp-rte p, .pc-corp-rte li { font-family: var(--font-display); }
-  .pc-corp-rte strong { font-weight: 700; }
-  @media screen and (min-width: 750px) {
-    .pc-corp { padding-left: 48px; padding-right: 48px; }
-  }
+
+  /* ---------- CTA ---------- */
+  .pc-cp-cta { padding: 8px 24px 72px; text-align: center; }
+  .pc-cp-cta__btn { display: inline-block; font-family: var(--font-headline); font-size: 18px; letter-spacing: 0.04em; text-transform: uppercase;
+    background: var(--accent); color: var(--color-ink); padding: 14px 30px; border: 2px solid var(--color-ink); border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-stamp); text-decoration: none; transition: transform 0.08s ease, box-shadow 0.08s ease; }
+  .pc-cp-cta__btn:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-stamp-lg); }
 {%- endstyle -%}
 
-<div class="section-{{ section.id }}-padding pc-corp">
-  <div class="pc-corp__inner">
-    {%- if metaobject == nil -%}
-      <p>This section only renders inside a Corporate Product page.</p>
-    {%- else -%}
-      {%- for block in section.blocks -%}
-        {%- case block.type -%}
-          {%- when 'title' -%}
-            <header class="{% if settings.animations_reveal_on_scroll %}scroll-trigger animate--fade-in{% endif %}" {{ block.shopify_attributes }}>
-              {%- if block.settings.eyebrow != blank -%}
-                <div class="eyebrow pc-corp__eyebrow">{{ block.settings.eyebrow }}</div>
-              {%- endif -%}
-              <h1 class="h-display pc-corp__title">{{ metaobject.title.value | escape }}</h1>
-            </header>
+<div class="pc-cp">
+  {%- if metaobject == nil -%}
+    <p style="padding:40px;text-align:center">This section only renders inside a Corporate Product page.</p>
+  {%- else -%}
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
 
-          {%- when 'ingredients' -%}
-            {%- if metaobject.ingredients.value != blank -%}
-              <div class="pc-corp__block {% if settings.animations_reveal_on_scroll %}scroll-trigger animate--slide-in{% endif %}" {{ block.shopify_attributes }}>
-                {%- if block.settings.label != blank -%}
-                  <h2 class="pc-corp__label">{{ block.settings.label | escape }}</h2>
-                {%- endif -%}
-                <div class="rte pc-corp-rte">{% render 'corporate-rich-text', rt: metaobject.ingredients.value %}</div>
+        {%- when 'hero' -%}
+          <section class="pc-cp-hero{% if hero_image != blank %} pc-cp-hero--has-media{% endif %}" {{ block.shopify_attributes }}>
+            {%- if hero_image != blank -%}
+              <div class="pc-cp-hero__media">
+                {{ hero_image | image_url: width: 2000 | image_tag: alt: product_title, loading: 'eager', widths: '600,900,1200,1600,2000', sizes: '100vw' }}
               </div>
             {%- endif -%}
-        {%- endcase -%}
-      {%- endfor -%}
-    {%- endif -%}
-  </div>
+            {%- if block.settings.show_logo -%}
+              <div class="pc-cp-hero__bar">
+                <a href="{{ routes.root_url }}" class="pc-cp-hero__logo">{{ block.settings.logo_text }}</a>
+              </div>
+            {%- else -%}
+              <div class="pc-cp-hero__bar"></div>
+            {%- endif -%}
+            <div class="pc-cp-hero__inner">
+              {%- if partner != blank -%}
+                <span class="pc-cp-hero__partner">{{ block.settings.partner_prefix }} {{ partner }}</span>
+              {%- endif -%}
+              <h1 class="pc-cp-hero__title" style="color: {{ block.settings.title_color }}">{{ product_title | escape }}</h1>
+              {%- if block.settings.scroll_hint != blank -%}
+                <div class="pc-cp-hero__scroll">{{ block.settings.scroll_hint }}</div>
+              {%- endif -%}
+            </div>
+          </section>
+
+        {%- when 'ingredients' -%}
+          {%- if metaobject.ingredients.value != blank -%}
+            <section class="pc-cp-ing" {{ block.shopify_attributes }}>
+              <div class="pc-cp-ing__card{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+                {%- if block.settings.label != blank -%}
+                  <span class="pc-cp-ing__label">{{ block.settings.label | escape }}</span>
+                {%- endif -%}
+                <div class="pc-cp-ing__body">{% render 'corporate-rich-text', rt: metaobject.ingredients.value %}</div>
+              </div>
+            </section>
+          {%- endif -%}
+
+        {%- when 'story' -%}
+          {%- assign img = block.settings.image -%}
+          <section class="pc-cp-story{% if block.settings.tint %} pc-cp-story--tint{% endif %}" {{ block.shopify_attributes }}>
+            <div class="pc-cp-story__wrap{% if block.settings.image_first %} pc-cp-story--flip{% endif %}">
+              <div class="pc-cp-story__copy{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+                {%- if block.settings.eyebrow != blank -%}<div class="pc-cp__eyebrow">{{ block.settings.eyebrow }}</div>{%- endif -%}
+                {%- if block.settings.script != blank -%}<div class="pc-cp__script">{{ block.settings.script }}</div>{%- endif -%}
+                {%- if block.settings.title != blank -%}<h2 class="pc-cp-story__title">{{ block.settings.title }}</h2>{%- endif -%}
+                {%- if block.settings.body != blank -%}<div class="pc-cp__body">{{ block.settings.body }}</div>{%- endif -%}
+              </div>
+              {%- if img != blank or block.settings.legend != blank -%}
+                <div class="pc-cp-story__media">
+                  {%- if img != blank -%}
+                    {{ img | image_url: width: 1200 | image_tag: alt: block.settings.title | default: 'Postcard', loading: 'lazy', widths: '600,900,1200' }}
+                  {%- endif -%}
+                  {%- if block.settings.legend != blank -%}<div class="pc-cp-story__legend">{{ block.settings.legend }}</div>{%- endif -%}
+                </div>
+              {%- endif -%}
+            </div>
+          </section>
+
+        {%- when 'cta' -%}
+          {%- if block.settings.button_text != blank -%}
+            <section class="pc-cp-cta" {{ block.shopify_attributes }}>
+              <a href="{{ block.settings.button_link | default: routes.root_url }}" class="pc-cp-cta__btn">{{ block.settings.button_text | escape }}</a>
+            </section>
+          {%- endif -%}
+
+      {%- endcase -%}
+    {%- endfor -%}
+  {%- endif -%}
 </div>
 
 {% schema %}
 {
   "name": "Corporate product",
   "tag": "section",
-  "class": "section",
+  "settings": [
+    { "type": "header", "content": "Accent" },
+    { "type": "color", "id": "accent_color", "label": "Accent colour", "default": "#FFB233", "info": "Used for the script lines, buttons and image frames." }
+  ],
   "blocks": [
     {
-      "type": "title",
-      "name": "Title",
+      "type": "hero",
+      "name": "Hero",
       "limit": 1,
       "settings": [
-        { "type": "text", "id": "eyebrow", "label": "Eyebrow", "info": "Small caps line above the title (optional). Same on every page." }
+        { "type": "paragraph", "content": "Image + product name come from the metaobject entry (Hero image, Partner name, Title)." },
+        { "type": "color", "id": "title_color", "label": "Product title colour", "default": "#FFFFFF", "info": "White reads best over most photos; switch to dark for light images." },
+        { "type": "checkbox", "id": "show_logo", "label": "Show logo pill", "default": true },
+        { "type": "text", "id": "logo_text", "label": "Logo text", "default": "Postcard" },
+        { "type": "text", "id": "partner_prefix", "label": "Partner prefix", "default": "Made for", "info": "Shown before the partner name, e.g. \"Made for Equinox\"." },
+        { "type": "text", "id": "scroll_hint", "label": "Scroll hint", "default": "Scroll to explore" }
       ]
     },
     {
       "type": "ingredients",
-      "name": "Ingredients list",
+      "name": "Ingredients box",
       "limit": 1,
       "settings": [
-        { "type": "text", "id": "label", "label": "Section label", "default": "Ingredients", "info": "Heading shown above the list. Leave blank to hide." }
+        { "type": "paragraph", "content": "List comes from the metaobject entry's Ingredients field." },
+        { "type": "text", "id": "label", "label": "Box label", "default": "Ingredients" }
+      ]
+    },
+    {
+      "type": "story",
+      "name": "Story section",
+      "settings": [
+        { "type": "paragraph", "content": "Shared across every corporate page — edit once here." },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+        { "type": "text", "id": "script", "label": "Handwritten line", "info": "Caveat script, in the accent colour." },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "richtext", "id": "body", "label": "Body" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "legend", "label": "Image caption", "info": "Typewriter caption over the image (optional)." },
+        { "type": "checkbox", "id": "image_first", "label": "Image on left (desktop)", "default": false },
+        { "type": "checkbox", "id": "tint", "label": "Warm tint background", "default": false }
+      ]
+    },
+    {
+      "type": "cta",
+      "name": "Call to action",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "button_text", "label": "Button text", "default": "Enter the Postcard world" },
+        { "type": "url", "id": "button_link", "label": "Button link" }
       ]
     }
-  ],
-  "settings": [
-    { "type": "header", "content": "Padding" },
-    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Padding top", "default": 48 },
-    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Padding bottom", "default": 48 }
   ],
   "presets": [
     {
       "name": "Corporate product",
       "blocks": [
-        { "type": "title" },
-        { "type": "ingredients" }
+        { "type": "hero" },
+        { "type": "ingredients" },
+        { "type": "story" },
+        { "type": "story" },
+        { "type": "cta" }
       ]
     }
   ]

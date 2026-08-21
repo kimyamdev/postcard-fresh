@@ -3,21 +3,57 @@
     "main": {
       "type": "corporate-product",
       "blocks": {
-        "title": {
-          "type": "title",
-          "settings": {}
+        "hero": {
+          "type": "hero",
+          "settings": {
+            "title_color": "#FFFFFF",
+            "show_logo": true,
+            "logo_text": "Postcard",
+            "partner_prefix": "Made for",
+            "scroll_hint": "Scroll to explore"
+          }
         },
         "ingredients": {
           "type": "ingredients",
           "settings": {
             "label": "Ingredients"
           }
+        },
+        "story_who": {
+          "type": "story",
+          "settings": {
+            "eyebrow": "Who we are",
+            "script": "Made by humans, in Singapore.",
+            "title": "Do more with less.",
+            "body": "<p>Postcard is a self-care destination, made in our beauty kitchen in Singapore. Effective natural recipes, simple ingredients, and the least wasteful packaging we can manage.</p><p>We're here to make care personal again — one honest little ritual at a time.</p>",
+            "legend": "in the beauty kitchen, mid-formulation",
+            "image_first": false,
+            "tint": false
+          }
+        },
+        "story_process": {
+          "type": "story",
+          "settings": {
+            "eyebrow": "How it's made",
+            "script": "Small batches, real ingredients.",
+            "title": "Made by hand, made to last.",
+            "body": "<p>Every formula is mixed, poured and finished by hand in small batches — no shortcuts, no fillers you can't pronounce.</p><p>We start with what the skin actually needs, keep the ingredient list short, and pack it in the most refillable, least wasteful way we can.</p>",
+            "legend": "small-batch, poured by hand",
+            "image_first": true,
+            "tint": true
+          }
+        },
+        "cta": {
+          "type": "cta",
+          "settings": {
+            "button_text": "Enter the Postcard world",
+            "button_link": "/"
+          }
         }
       },
-      "block_order": ["title", "ingredients"],
+      "block_order": ["hero", "ingredients", "story_who", "story_process", "cta"],
       "settings": {
-        "padding_top": 48,
-        "padding_bottom": 48
+        "accent_color": "#FFB233"
       }
     }
   },
