@@ -45,6 +45,28 @@
             "tint": true
           }
         },
+        "founders": {
+          "type": "founders",
+          "settings": {
+            "eyebrow": "The people behind it",
+            "title": "Made by a small team, for you.",
+            "image": "shopify://shop_images/founder_photo.png",
+            "names": "the Postcard team",
+            "body": "<p>We started Postcard to make self-care honest again — simple, effective, and kinder to the planet. Everything you're holding was formulated and finished by our own hands.</p>",
+            "tint": false
+          }
+        },
+        "product": {
+          "type": "product",
+          "settings": {
+            "image": "shopify://shop_images/moonbloomdiffuseroil.png",
+            "eyebrow": "Take it home",
+            "title": "Bring the ritual home.",
+            "body": "<p>Loved it here? The full Postcard range — deodorants, washes, refills and more — is a tap away.</p>",
+            "button_text": "Shop Postcard",
+            "button_link": "/"
+          }
+        },
         "cta": {
           "type": "cta",
           "settings": {
@@ -53,7 +75,7 @@
           }
         }
       },
-      "block_order": ["hero", "ingredients", "story_who", "story_process", "cta"],
+      "block_order": ["hero", "ingredients", "story_who", "story_process", "founders", "product", "cta"],
       "settings": {
         "accent_color": "#FFB233"
       }
