@@ -26,6 +26,7 @@
             "script": "Made by humans, in Singapore.",
             "title": "Do more with less.",
             "body": "<p>Postcard is a self-care destination, made in our beauty kitchen in Singapore. Effective natural recipes, simple ingredients, and the least wasteful packaging we can manage.</p><p>We're here to make care personal again — one honest little ritual at a time.</p>",
+            "image": "shopify://shop_images/wellness_studio_sg.png",
             "legend": "in the beauty kitchen, mid-formulation",
             "image_first": false,
             "tint": false
@@ -38,6 +39,7 @@
             "script": "Small batches, real ingredients.",
             "title": "Made by hand, made to last.",
             "body": "<p>Every formula is mixed, poured and finished by hand in small batches — no shortcuts, no fillers you can't pronounce.</p><p>We start with what the skin actually needs, keep the ingredient list short, and pack it in the most refillable, least wasteful way we can.</p>",
+            "image": "shopify://shop_images/law_scent.png",
             "legend": "small-batch, poured by hand",
             "image_first": true,
             "tint": true
