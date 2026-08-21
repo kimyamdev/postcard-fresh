@@ -1,0 +1,103 @@
+{%- comment -%}
+  Corporate Product — renders a single `corporate_product` metaobject entry as its
+  own QR-linked page (custom products displayed at corporate partners: gyms, hotels…).
+  Data comes from the metaobject, not block settings — blocks control presence/order/styling.
+  Docs: within a metaobject template the current entry is the global `metaobject`.
+{%- endcomment -%}
+{{ 'section-main-page.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  .pc-corp { display: block; padding-left: 24px; padding-right: 24px; }
+  .pc-corp__inner { max-width: 720px; margin: 0 auto; }
+  .pc-corp__eyebrow { margin-bottom: 12px; opacity: 0.7; font-family: var(--font-display); }
+  .pc-corp__title { margin: 0; font-size: clamp(32px, 6vw, 56px); font-family: var(--font-headline); letter-spacing: 0.02em; text-transform: uppercase; }
+  .pc-corp__block { margin-top: 40px; }
+  .pc-corp__label { margin: 0 0 12px; font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.08em; font-size: 14px; opacity: 0.7; }
+  .pc-corp-rte { font-size: 16px; line-height: 1.7; font-family: var(--font-display); color: var(--color-ink); }
+  .pc-corp-rte > :first-child { margin-top: 0; }
+  .pc-corp-rte p, .pc-corp-rte li { font-family: var(--font-display); }
+  .pc-corp-rte strong { font-weight: 700; }
+  @media screen and (min-width: 750px) {
+    .pc-corp { padding-left: 48px; padding-right: 48px; }
+  }
+{%- endstyle -%}
+
+<div class="section-{{ section.id }}-padding pc-corp">
+  <div class="pc-corp__inner">
+    {%- if metaobject == nil -%}
+      <p>This section only renders inside a Corporate Product page.</p>
+    {%- else -%}
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'title' -%}
+            <header class="{% if settings.animations_reveal_on_scroll %}scroll-trigger animate--fade-in{% endif %}" {{ block.shopify_attributes }}>
+              {%- if block.settings.eyebrow != blank -%}
+                <div class="eyebrow pc-corp__eyebrow">{{ block.settings.eyebrow }}</div>
+              {%- endif -%}
+              <h1 class="h-display pc-corp__title">{{ metaobject.title.value | escape }}</h1>
+            </header>
+
+          {%- when 'ingredients' -%}
+            {%- if metaobject.ingredients.value != blank -%}
+              <div class="pc-corp__block {% if settings.animations_reveal_on_scroll %}scroll-trigger animate--slide-in{% endif %}" {{ block.shopify_attributes }}>
+                {%- if block.settings.label != blank -%}
+                  <h2 class="pc-corp__label">{{ block.settings.label | escape }}</h2>
+                {%- endif -%}
+                <div class="rte pc-corp-rte">{% render 'corporate-rich-text', rt: metaobject.ingredients.value %}</div>
+              </div>
+            {%- endif -%}
+        {%- endcase -%}
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Corporate product",
+  "tag": "section",
+  "class": "section",
+  "blocks": [
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow", "info": "Small caps line above the title (optional). Same on every page." }
+      ]
+    },
+    {
+      "type": "ingredients",
+      "name": "Ingredients list",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Section label", "default": "Ingredients", "info": "Heading shown above the list. Leave blank to hide." }
+      ]
+    }
+  ],
+  "settings": [
+    { "type": "header", "content": "Padding" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Padding top", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Padding bottom", "default": 48 }
+  ],
+  "presets": [
+    {
+      "name": "Corporate product",
+      "blocks": [
+        { "type": "title" },
+        { "type": "ingredients" }
+      ]
+    }
+  ]
+}
+{% endschema %}

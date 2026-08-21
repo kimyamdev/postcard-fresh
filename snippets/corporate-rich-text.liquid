@@ -1,0 +1,41 @@
+{%- comment -%}
+  Renders a Shopify rich_text_field value (e.g. a metaobject field) as HTML.
+  Metaobject rich-text fields don't auto-render to HTML in Liquid (outputting the
+  field or its .value dumps the raw node hash), so we walk the node tree ourselves.
+  Handles: paragraph, heading, unordered/ordered list, and inline text/bold/italic/link.
+  Usage: {% render 'corporate-rich-text', rt: metaobject.ingredients.value %}
+{%- endcomment -%}
+{%- for node in rt.children -%}
+  {%- case node.type -%}
+    {%- when 'paragraph' -%}
+      <p>
+      {%- for c in node.children -%}
+        {%- if c.type == 'link' -%}
+          <a href="{{ c.url }}"{% if c.title != blank %} title="{{ c.title | escape }}"{% endif %}>{% for lc in c.children %}{{ lc.value | escape }}{% endfor %}</a>
+        {%- elsif c.bold -%}<strong>{{ c.value | escape }}</strong>
+        {%- elsif c.italic -%}<em>{{ c.value | escape }}</em>
+        {%- else -%}{{ c.value | escape }}
+        {%- endif -%}
+      {%- endfor -%}
+      </p>
+    {%- when 'heading' -%}
+      {%- assign lvl = node.level | default: 3 -%}
+      <h{{ lvl }}>{% for c in node.children %}{{ c.value | escape }}{% endfor %}</h{{ lvl }}>
+    {%- when 'list' -%}
+      {%- if node.listType == 'ordered' -%}{%- assign list_tag = 'ol' -%}{%- else -%}{%- assign list_tag = 'ul' -%}{%- endif -%}
+      <{{ list_tag }}>
+      {%- for li in node.children -%}
+        <li>
+        {%- for c in li.children -%}
+          {%- if c.type == 'link' -%}
+            <a href="{{ c.url }}">{% for lc in c.children %}{{ lc.value | escape }}{% endfor %}</a>
+          {%- elsif c.bold -%}<strong>{{ c.value | escape }}</strong>
+          {%- elsif c.italic -%}<em>{{ c.value | escape }}</em>
+          {%- else -%}{{ c.value | escape }}
+          {%- endif -%}
+        {%- endfor -%}
+        </li>
+      {%- endfor -%}
+      </{{ list_tag }}>
+  {%- endcase -%}
+{%- endfor -%}
