@@ -7,7 +7,7 @@
           "type": "hero",
           "settings": {
             "title_color": "#FFFFFF",
-            "show_logo": true,
+            "show_logo": false,
             "logo_text": "Postcard",
             "partner_prefix": "Made for",
             "scroll_hint": "Scroll to explore"
@@ -22,6 +22,7 @@
         "story_who": {
           "type": "story",
           "settings": {
+            "slot": "1",
             "eyebrow": "Who we are",
             "script": "Made by humans, in Singapore.",
             "title": "Do more with less.",
@@ -35,6 +36,7 @@
         "story_process": {
           "type": "story",
           "settings": {
+            "slot": "2",
             "eyebrow": "How it's made",
             "script": "Small batches, real ingredients.",
             "title": "Made by hand, made to last.",
@@ -70,8 +72,8 @@
         "cta": {
           "type": "cta",
           "settings": {
-            "button_text": "Enter the Postcard world",
-            "button_link": "/"
+            "button_text": "Explore worlds",
+            "button_link": "/pages/worlds"
           }
         }
       },

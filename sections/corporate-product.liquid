@@ -2,11 +2,10 @@
   Corporate Product microsite — renders a single `corporate_product` metaobject
   entry as an immersive branded page (QR-linked, shown at corporate partners).
 
-  Per-entry content comes from the metaobject (hero image, partner name, product
-  title, ingredients). Shared story content (who we are / production) lives in the
-  block settings and is the same across every corporate product page — edit once in
-  the theme editor. Within a metaobject template the current entry is the global
-  `metaobject` drop.
+  Every content slot reads the per-entry metaobject field FIRST and falls back to
+  the shared block setting (edited once in the theme editor) when the entry leaves
+  it blank. So a page can be fully bespoke or fully templated. Within a metaobject
+  template the current entry is the global `metaobject` drop.
 {%- endcomment -%}
 
 {%- liquid
@@ -37,8 +36,7 @@
   .pc-cp-hero__logo { font-family: var(--font-headline); font-size: 22px; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1;
     background: var(--color-bg); color: var(--color-ink); padding: 10px 20px; border-radius: var(--radius-pill); border: 2px solid var(--color-ink); box-shadow: var(--shadow-stamp); }
   .pc-cp-hero__inner { position: relative; z-index: 2; padding: 32px 24px 40px; text-align: center; }
-  .pc-cp-hero__partner { display: inline-block; margin-bottom: 10px; font-family: var(--font-script); font-size: clamp(22px, 5vw, 32px); line-height: 1;
-    color: #fff; }
+  .pc-cp-hero__partner { display: inline-block; margin-bottom: 10px; font-family: var(--font-script); font-size: clamp(22px, 5vw, 32px); line-height: 1; color: #fff; }
   .pc-cp-hero:not(.pc-cp-hero--has-media) .pc-cp-hero__partner { color: var(--color-ink); }
   .pc-cp-hero__title { margin: 0; font-family: var(--font-headline); font-weight: 400; text-transform: uppercase; letter-spacing: 0.02em;
     font-size: clamp(44px, 12vw, 96px); line-height: 0.95; }
@@ -52,25 +50,21 @@
   .pc-cp-ing__label { display: inline-block; margin: 0 0 14px; font-family: var(--font-display); font-size: 12px; letter-spacing: 0.16em;
     text-transform: uppercase; padding: 5px 12px; border: 1.5px solid var(--color-ink); border-radius: var(--radius-pill); }
   .pc-cp-ing__body { font-family: var(--font-display); font-size: 15px; line-height: 1.7; }
-  .pc-cp-ing__body ul, .pc-cp-ing__body ol { margin: 0; padding: 0; list-style: none;
-    display: grid; grid-template-columns: 1fr; gap: 2px; }
+  .pc-cp-ing__body ul, .pc-cp-ing__body ol { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr; gap: 2px; }
   .pc-cp-ing__body li { padding: 9px 0; border-bottom: 1px solid var(--color-line-soft); }
   .pc-cp-ing__body li:last-child { border-bottom: 0; }
   .pc-cp-ing__body p { margin: 0 0 14px; }
   @media (min-width: 560px) { .pc-cp-ing__body ul, .pc-cp-ing__body ol { grid-template-columns: 1fr 1fr; gap: 0 28px; } }
 
-  /* ---------- STORY (who we are / production) ---------- */
+  /* ---------- STORY ---------- */
   .pc-cp-story { padding: 56px 24px; }
   .pc-cp-story + .pc-cp-story { padding-top: 8px; }
   .pc-cp-story--tint { background: var(--color-bg-warm); }
   .pc-cp-story__wrap { max-width: 1080px; margin: 0 auto; display: grid; gap: 28px; align-items: center; }
-  .pc-cp-story__title { margin: 10px 0 16px; font-family: var(--font-headline); font-weight: 400; text-transform: uppercase; letter-spacing: 0.02em;
-    font-size: clamp(30px, 7vw, 52px); line-height: 1; }
-  .pc-cp-story__media { position: relative; aspect-ratio: 4/5; background: var(--accent); border: 2px solid var(--color-ink); border-radius: var(--radius-soft);
-    box-shadow: var(--shadow-stamp); overflow: hidden; }
+  .pc-cp-story__title { margin: 10px 0 16px; font-family: var(--font-headline); font-weight: 400; text-transform: uppercase; letter-spacing: 0.02em; font-size: clamp(30px, 7vw, 52px); line-height: 1; }
+  .pc-cp-story__media { position: relative; aspect-ratio: 4/5; background: var(--accent); border: 2px solid var(--color-ink); border-radius: var(--radius-soft); box-shadow: var(--shadow-stamp); overflow: hidden; }
   .pc-cp-story__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .pc-cp-story__legend { position: absolute; left: 0; bottom: 0; z-index: 2; margin: 12px; padding: 4px 10px;
-    background: var(--color-bg-card); border: 1.5px solid var(--color-ink); font-family: var(--font-display); font-size: 11px; letter-spacing: 0.04em; }
+  .pc-cp-story__legend { position: absolute; left: 0; bottom: 0; z-index: 2; margin: 12px; padding: 4px 10px; background: var(--color-bg-card); border: 1.5px solid var(--color-ink); font-family: var(--font-display); font-size: 11px; letter-spacing: 0.04em; }
   @media (min-width: 800px) {
     .pc-cp-story__wrap { grid-template-columns: 1fr 1fr; gap: 56px; }
     .pc-cp-story--flip .pc-cp-story__media { order: -1; }
@@ -88,23 +82,19 @@
   .pc-cp-founders--tint { background: var(--color-bg-warm); }
   .pc-cp-founders__wrap { max-width: 600px; margin: 0 auto; }
   .pc-cp-founders__title { margin: 10px 0 0; font-family: var(--font-headline); font-weight: 400; text-transform: uppercase; letter-spacing: 0.02em; font-size: clamp(28px, 6vw, 46px); line-height: 1; }
-  .pc-cp-founders__portrait { max-width: 340px; margin: 24px auto 0; aspect-ratio: 4/5; overflow: hidden;
-    border: 2px solid var(--color-ink); border-radius: var(--radius-soft); box-shadow: var(--shadow-stamp); background: var(--accent); }
+  .pc-cp-founders__portrait { max-width: 340px; margin: 24px auto 0; aspect-ratio: 4/5; overflow: hidden; border: 2px solid var(--color-ink); border-radius: var(--radius-soft); box-shadow: var(--shadow-stamp); background: var(--accent); }
   .pc-cp-founders__portrait img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(1); }
   .pc-cp-founders__names { margin-top: 14px; font-family: var(--font-script); font-size: clamp(22px, 5vw, 32px); line-height: 1; color: var(--accent); }
   .pc-cp-founders__body { margin-top: 12px; }
 
   /* ---------- PRODUCT SHOT ---------- */
   .pc-cp-product { padding: 8px 24px 64px; }
-  .pc-cp-product__card { max-width: 760px; margin: 0 auto; overflow: hidden;
-    background: var(--color-bg-card); border: 2px solid var(--color-ink); border-radius: var(--radius-soft); box-shadow: var(--shadow-stamp-lg);
-    display: grid; grid-template-columns: 1fr; }
+  .pc-cp-product__card { max-width: 760px; margin: 0 auto; overflow: hidden; background: var(--color-bg-card); border: 2px solid var(--color-ink); border-radius: var(--radius-soft); box-shadow: var(--shadow-stamp-lg); display: grid; grid-template-columns: 1fr; }
   .pc-cp-product__media { aspect-ratio: 4/3; background: var(--color-bg-warm); }
   .pc-cp-product__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .pc-cp-product__body { padding: 28px 26px; }
   .pc-cp-product__title { margin: 6px 0 12px; font-family: var(--font-headline); font-weight: 400; text-transform: uppercase; letter-spacing: 0.02em; font-size: clamp(24px, 5vw, 38px); line-height: 1; }
-  .pc-cp-product__btn { display: inline-block; margin-top: 16px; font-family: var(--font-display); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase;
-    padding: 10px 20px; border: 1.5px solid var(--color-ink); border-radius: var(--radius-pill); text-decoration: none; }
+  .pc-cp-product__btn { display: inline-block; margin-top: 16px; font-family: var(--font-display); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 20px; border: 1.5px solid var(--color-ink); border-radius: var(--radius-pill); text-decoration: none; }
   @media (min-width: 700px) {
     .pc-cp-product__card { grid-template-columns: 1fr 1fr; align-items: stretch; }
     .pc-cp-product__media { aspect-ratio: auto; height: 100%; }
@@ -127,96 +117,120 @@
               </div>
             {%- endif -%}
             {%- if block.settings.show_logo -%}
-              <div class="pc-cp-hero__bar">
-                <a href="{{ routes.root_url }}" class="pc-cp-hero__logo">{{ block.settings.logo_text }}</a>
-              </div>
+              <div class="pc-cp-hero__bar"><a href="{{ routes.root_url }}" class="pc-cp-hero__logo">{{ block.settings.logo_text }}</a></div>
             {%- else -%}
               <div class="pc-cp-hero__bar"></div>
             {%- endif -%}
             <div class="pc-cp-hero__inner">
-              {%- if partner != blank -%}
-                <span class="pc-cp-hero__partner">{{ block.settings.partner_prefix }} {{ partner }}</span>
-              {%- endif -%}
+              {%- if partner != blank -%}<span class="pc-cp-hero__partner">{{ block.settings.partner_prefix }} {{ partner }}</span>{%- endif -%}
               <h1 class="pc-cp-hero__title" style="color: {{ block.settings.title_color }}">{{ product_title | escape }}</h1>
-              {%- if block.settings.scroll_hint != blank -%}
-                <div class="pc-cp-hero__scroll">{{ block.settings.scroll_hint }}</div>
-              {%- endif -%}
+              {%- if block.settings.scroll_hint != blank -%}<div class="pc-cp-hero__scroll">{{ block.settings.scroll_hint }}</div>{%- endif -%}
             </div>
           </section>
 
         {%- when 'ingredients' -%}
           {%- if metaobject.ingredients.value != blank -%}
+            {%- assign ing_label = metaobject.ingredients_label.value | default: block.settings.label -%}
             <section class="pc-cp-ing" {{ block.shopify_attributes }}>
               <div class="pc-cp-ing__card{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-                {%- if block.settings.label != blank -%}
-                  <span class="pc-cp-ing__label">{{ block.settings.label | escape }}</span>
-                {%- endif -%}
+                {%- if ing_label != blank -%}<span class="pc-cp-ing__label">{{ ing_label | escape }}</span>{%- endif -%}
                 <div class="pc-cp-ing__body">{% render 'corporate-rich-text', rt: metaobject.ingredients.value %}</div>
               </div>
             </section>
           {%- endif -%}
 
         {%- when 'story' -%}
-          {%- assign img = block.settings.image -%}
+          {%- liquid
+            if block.settings.slot == '2'
+              assign e_eyebrow = metaobject.story_2_eyebrow.value
+              assign e_script = metaobject.story_2_script.value
+              assign e_title = metaobject.story_2_title.value
+              assign e_legend = metaobject.story_2_legend.value
+              assign e_body = metaobject.story_2_body.value
+              assign e_image = metaobject.story_image_2.value
+            else
+              assign e_eyebrow = metaobject.story_1_eyebrow.value
+              assign e_script = metaobject.story_1_script.value
+              assign e_title = metaobject.story_1_title.value
+              assign e_legend = metaobject.story_1_legend.value
+              assign e_body = metaobject.story_1_body.value
+              assign e_image = metaobject.story_image_1.value
+            endif
+            assign s_eyebrow = e_eyebrow | default: block.settings.eyebrow
+            assign s_script = e_script | default: block.settings.script
+            assign s_title = e_title | default: block.settings.title
+            assign s_legend = e_legend | default: block.settings.legend
+            assign s_image = e_image | default: block.settings.image
+          -%}
           <section class="pc-cp-story{% if block.settings.tint %} pc-cp-story--tint{% endif %}" {{ block.shopify_attributes }}>
             <div class="pc-cp-story__wrap{% if block.settings.image_first %} pc-cp-story--flip{% endif %}">
               <div class="pc-cp-story__copy{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-                {%- if block.settings.eyebrow != blank -%}<div class="pc-cp__eyebrow">{{ block.settings.eyebrow }}</div>{%- endif -%}
-                {%- if block.settings.script != blank -%}<div class="pc-cp__script">{{ block.settings.script }}</div>{%- endif -%}
-                {%- if block.settings.title != blank -%}<h2 class="pc-cp-story__title">{{ block.settings.title }}</h2>{%- endif -%}
-                {%- if block.settings.body != blank -%}<div class="pc-cp__body">{{ block.settings.body }}</div>{%- endif -%}
+                {%- if s_eyebrow != blank -%}<div class="pc-cp__eyebrow">{{ s_eyebrow }}</div>{%- endif -%}
+                {%- if s_script != blank -%}<div class="pc-cp__script">{{ s_script }}</div>{%- endif -%}
+                {%- if s_title != blank -%}<h2 class="pc-cp-story__title">{{ s_title }}</h2>{%- endif -%}
+                <div class="pc-cp__body">
+                  {%- if e_body != blank -%}{% render 'corporate-rich-text', rt: e_body %}{%- else -%}{{ block.settings.body }}{%- endif -%}
+                </div>
               </div>
-              {%- if img != blank or block.settings.legend != blank -%}
+              {%- if s_image != blank or s_legend != blank -%}
                 <div class="pc-cp-story__media">
-                  {%- if img != blank -%}
-                    {{ img | image_url: width: 1200 | image_tag: alt: block.settings.title | default: 'Postcard', loading: 'lazy', widths: '600,900,1200' }}
-                  {%- endif -%}
-                  {%- if block.settings.legend != blank -%}<div class="pc-cp-story__legend">{{ block.settings.legend }}</div>{%- endif -%}
+                  {%- if s_image != blank -%}{{ s_image | image_url: width: 1200 | image_tag: alt: s_title | default: 'Postcard', loading: 'lazy', widths: '600,900,1200' }}{%- endif -%}
+                  {%- if s_legend != blank -%}<div class="pc-cp-story__legend">{{ s_legend }}</div>{%- endif -%}
                 </div>
               {%- endif -%}
             </div>
           </section>
 
         {%- when 'founders' -%}
-          {%- assign f_img = block.settings.image -%}
+          {%- liquid
+            assign f_eyebrow = metaobject.founders_eyebrow.value | default: block.settings.eyebrow
+            assign f_title = metaobject.founders_title.value | default: block.settings.title
+            assign f_names = metaobject.founders_names.value | default: block.settings.names
+            assign f_body = metaobject.founders_body.value
+            assign f_img = metaobject.founders_image.value | default: block.settings.image
+          -%}
           <section class="pc-cp-founders{% if block.settings.tint %} pc-cp-founders--tint{% endif %}" {{ block.shopify_attributes }}>
             <div class="pc-cp-founders__wrap{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-              {%- if block.settings.eyebrow != blank -%}<div class="pc-cp__eyebrow">{{ block.settings.eyebrow }}</div>{%- endif -%}
-              {%- if block.settings.title != blank -%}<h2 class="pc-cp-founders__title">{{ block.settings.title }}</h2>{%- endif -%}
+              {%- if f_eyebrow != blank -%}<div class="pc-cp__eyebrow">{{ f_eyebrow }}</div>{%- endif -%}
+              {%- if f_title != blank -%}<h2 class="pc-cp-founders__title">{{ f_title }}</h2>{%- endif -%}
               {%- if f_img != blank -%}
-                <div class="pc-cp-founders__portrait">
-                  {{ f_img | image_url: width: 800 | image_tag: alt: block.settings.names | default: 'Founders', loading: 'lazy', widths: '400,600,800' }}
-                </div>
+                <div class="pc-cp-founders__portrait">{{ f_img | image_url: width: 800 | image_tag: alt: f_names | default: 'Founders', loading: 'lazy', widths: '400,600,800' }}</div>
               {%- endif -%}
-              {%- if block.settings.names != blank -%}<div class="pc-cp-founders__names">{{ block.settings.names }}</div>{%- endif -%}
-              {%- if block.settings.body != blank -%}<div class="pc-cp__body pc-cp-founders__body">{{ block.settings.body }}</div>{%- endif -%}
+              {%- if f_names != blank -%}<div class="pc-cp-founders__names">{{ f_names }}</div>{%- endif -%}
+              {%- if f_body != blank -%}<div class="pc-cp__body pc-cp-founders__body">{% render 'corporate-rich-text', rt: f_body %}</div>
+              {%- elsif block.settings.body != blank -%}<div class="pc-cp__body pc-cp-founders__body">{{ block.settings.body }}</div>{%- endif -%}
             </div>
           </section>
 
         {%- when 'product' -%}
-          {%- assign p_img = block.settings.image -%}
+          {%- liquid
+            assign p_eyebrow = metaobject.product_eyebrow.value | default: block.settings.eyebrow
+            assign p_title = metaobject.product_title.value | default: block.settings.title
+            assign p_btn = metaobject.product_button_text.value | default: block.settings.button_text
+            assign p_body = metaobject.product_body.value
+            assign p_img = metaobject.product_image.value | default: block.settings.image
+          -%}
           <section class="pc-cp-product" {{ block.shopify_attributes }}>
             <div class="pc-cp-product__card{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
               {%- if p_img != blank -%}
-                <div class="pc-cp-product__media">
-                  {{ p_img | image_url: width: 1000 | image_tag: alt: block.settings.title | default: 'Product', loading: 'lazy', widths: '400,700,1000' }}
-                </div>
+                <div class="pc-cp-product__media">{{ p_img | image_url: width: 1000 | image_tag: alt: p_title | default: 'Product', loading: 'lazy', widths: '400,700,1000' }}</div>
               {%- endif -%}
               <div class="pc-cp-product__body">
-                {%- if block.settings.eyebrow != blank -%}<div class="pc-cp__eyebrow">{{ block.settings.eyebrow }}</div>{%- endif -%}
-                {%- if block.settings.title != blank -%}<h2 class="pc-cp-product__title">{{ block.settings.title }}</h2>{%- endif -%}
-                {%- if block.settings.body != blank -%}<div class="pc-cp__body">{{ block.settings.body }}</div>{%- endif -%}
-                {%- if block.settings.button_text != blank -%}
-                  <a href="{{ block.settings.button_link | default: routes.root_url }}" class="pc-cp-product__btn">{{ block.settings.button_text | escape }}</a>
-                {%- endif -%}
+                {%- if p_eyebrow != blank -%}<div class="pc-cp__eyebrow">{{ p_eyebrow }}</div>{%- endif -%}
+                {%- if p_title != blank -%}<h2 class="pc-cp-product__title">{{ p_title }}</h2>{%- endif -%}
+                <div class="pc-cp__body">
+                  {%- if p_body != blank -%}{% render 'corporate-rich-text', rt: p_body %}{%- else -%}{{ block.settings.body }}{%- endif -%}
+                </div>
+                {%- if p_btn != blank -%}<a href="{{ block.settings.button_link | default: routes.root_url }}" class="pc-cp-product__btn">{{ p_btn | escape }}</a>{%- endif -%}
               </div>
             </div>
           </section>
 
         {%- when 'cta' -%}
-          {%- if block.settings.button_text != blank -%}
+          {%- assign cta_btn = metaobject.cta_button_text.value | default: block.settings.button_text -%}
+          {%- if cta_btn != blank -%}
             <section class="pc-cp-cta" {{ block.shopify_attributes }}>
-              <a href="{{ block.settings.button_link | default: routes.root_url }}" class="pc-cp-cta__btn">{{ block.settings.button_text | escape }}</a>
+              <a href="{{ block.settings.button_link | default: routes.root_url }}" class="pc-cp-cta__btn">{{ cta_btn | escape }}</a>
             </section>
           {%- endif -%}
 
@@ -239,11 +253,11 @@
       "name": "Hero",
       "limit": 1,
       "settings": [
-        { "type": "paragraph", "content": "Image + product name come from the metaobject entry (Hero image, Partner name, Title)." },
+        { "type": "paragraph", "content": "Image, product name & partner come from the metaobject entry." },
         { "type": "color", "id": "title_color", "label": "Product title colour", "default": "#FFFFFF", "info": "White reads best over most photos; switch to dark for light images." },
         { "type": "checkbox", "id": "show_logo", "label": "Show logo pill", "default": true },
         { "type": "text", "id": "logo_text", "label": "Logo text", "default": "Postcard" },
-        { "type": "text", "id": "partner_prefix", "label": "Partner prefix", "default": "Made for", "info": "Shown before the partner name, e.g. \"Made for Equinox\"." },
+        { "type": "text", "id": "partner_prefix", "label": "Partner prefix", "default": "Made for" },
         { "type": "text", "id": "scroll_hint", "label": "Scroll hint", "default": "Scroll to explore" }
       ]
     },
@@ -252,21 +266,22 @@
       "name": "Ingredients box",
       "limit": 1,
       "settings": [
-        { "type": "paragraph", "content": "List comes from the metaobject entry's Ingredients field." },
-        { "type": "text", "id": "label", "label": "Box label", "default": "Ingredients" }
+        { "type": "paragraph", "content": "List + label can be set per entry (falls back to below)." },
+        { "type": "text", "id": "label", "label": "Box label (default)", "default": "Ingredients" }
       ]
     },
     {
       "type": "story",
       "name": "Story section",
       "settings": [
-        { "type": "paragraph", "content": "Shared across every corporate page — edit once here." },
+        { "type": "paragraph", "content": "Shared defaults — each entry can override via its Story 1/2 fields." },
+        { "type": "select", "id": "slot", "label": "Per-entry field set", "default": "1", "options": [ { "value": "1", "label": "Story 1 fields" }, { "value": "2", "label": "Story 2 fields" } ] },
         { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
-        { "type": "text", "id": "script", "label": "Handwritten line", "info": "Caveat script, in the accent colour." },
+        { "type": "text", "id": "script", "label": "Handwritten line" },
         { "type": "text", "id": "title", "label": "Title" },
         { "type": "richtext", "id": "body", "label": "Body" },
         { "type": "image_picker", "id": "image", "label": "Image" },
-        { "type": "text", "id": "legend", "label": "Image caption", "info": "Typewriter caption over the image (optional)." },
+        { "type": "text", "id": "legend", "label": "Image caption" },
         { "type": "checkbox", "id": "image_first", "label": "Image on left (desktop)", "default": false },
         { "type": "checkbox", "id": "tint", "label": "Warm tint background", "default": false }
       ]
@@ -275,11 +290,11 @@
       "type": "founders",
       "name": "Founders",
       "settings": [
-        { "type": "paragraph", "content": "Shared across every corporate page." },
+        { "type": "paragraph", "content": "Shared defaults — each entry can override via its Founders fields." },
         { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The people behind it" },
         { "type": "text", "id": "title", "label": "Title" },
         { "type": "image_picker", "id": "image", "label": "Portrait image" },
-        { "type": "text", "id": "names", "label": "Caption / names", "info": "Handwritten line under the photo, e.g. founder names." },
+        { "type": "text", "id": "names", "label": "Caption / names" },
         { "type": "richtext", "id": "body", "label": "Body" },
         { "type": "checkbox", "id": "tint", "label": "Warm tint background", "default": false }
       ]
@@ -288,7 +303,7 @@
       "type": "product",
       "name": "Product shot",
       "settings": [
-        { "type": "paragraph", "content": "Shared across every corporate page." },
+        { "type": "paragraph", "content": "Shared defaults — each entry can override via its Product fields." },
         { "type": "image_picker", "id": "image", "label": "Product image" },
         { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Take it home" },
         { "type": "text", "id": "title", "label": "Title" },
