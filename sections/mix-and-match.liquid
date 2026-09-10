@@ -348,7 +348,8 @@
     text-align: center;
     transform: rotate(var(--stamp-rot, -8deg));
   }
-  /* Plain seal: drop the world-colour fill, keep the round badge + initials */
+  /* Plain seal: drop the world-colour fill, keep the round badge outline + text */
+  .mm--seal-plain .mm-card__family,
   .mm--seal-plain .mm-card__world { background: var(--color-bg-card); }
   /* When the world has an uploaded stamp image, show it as-is (no circle/accent) */
   .mm-card__world--img {
