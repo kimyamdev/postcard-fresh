@@ -82,6 +82,7 @@
         "bundle_label": "Mix & Match",
         "color_scheme": "scheme-1",
         "card_gradient": false,
+        "plain_seal": true,
         "padding_top": 48,
         "padding_bottom": 48
       }
