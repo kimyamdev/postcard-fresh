@@ -1,0 +1,132 @@
+{% comment %}theme-check-disable ImgWidthAndHeight{% endcomment %}
+{% comment %}
+  Per-variant PDP gallery. Companion of 'pdp-gallery'.
+
+  Selecting a colour (any variant) swaps the whole gallery — thumbnails + main stage —
+  to that variant's own set of photos AND videos. Media is attached directly to each
+  variant via the variant metafield `custom.gallery` (list of file references:
+  images + videos, in order). Keyed by variant ID, so there's no label-matching.
+
+  If a variant has no Gallery set, it falls back to the product's own media.
+
+  Accepts:
+  - product:     {Object} Product
+  - world_color: {String} Accent hex (optional)
+  - stamp_text:  {String} Corner postmark text (optional)
+
+  Usage:
+  {% render 'pdp-colour-gallery', product: product, world_color: world_color, stamp_text: stamp_text %}
+{% endcomment %}
+
+{%- liquid
+  assign world = product.metafields.postcard.world.value
+  if world
+    assign world_color_default = world.accent_color.value
+  endif
+  assign world_color = world_color | default: world_color_default | default: '#E8C36A'
+  assign mf_stamp = product.metafields.pdp.gallery_stamp.value
+  assign stamp_text = mf_stamp | default: stamp_text | default: 'POSTCARD<br>SG'
+
+  assign current = product.selected_or_first_available_variant
+
+  # Server-rendered fallback (first paint / no-JS): first media of the current variant,
+  # or the product's first media if the variant has no gallery.
+  assign init_list = current.metafields.custom.gallery.value
+  assign init_src = ''
+  assign init_alt = product.title
+  if init_list and init_list.size > 0
+    assign fm = init_list.first
+    assign init_src = fm.preview_image | image_url: width: 1400
+    assign init_alt = fm.alt | default: product.title
+  elsif product.media.size > 0
+    assign fm = product.media.first
+    assign init_src = fm.preview_image | image_url: width: 1400
+    assign init_alt = fm.alt | default: product.title
+  endif
+-%}
+
+{%- style -%}
+  .pc-pdp-gallery [x-cloak] { display: none !important; }
+  .pc-pdp-gallery__thumb-play {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 16px; text-shadow: 0 1px 3px rgba(0,0,0,.5); pointer-events: none;
+  }
+  .pc-pdp-gallery__main video.pc-pdp-gallery__img { background: #000; object-fit: contain; }
+{%- endstyle -%}
+
+<div class="pc-pdp-gallery" x-data='{
+  currentVariant: "{{ current.id }}",
+  currentIndex: 0,
+  fallback: [
+    {%- assign fb_first = true -%}
+    {%- for m in product.media limit: 15 -%}
+      {%- if m.sources -%}
+        {%- assign vsrc = "" -%}{%- for s in m.sources -%}{%- if s.format == "mp4" -%}{%- assign vsrc = s.url -%}{%- endif -%}{%- endfor -%}
+        {%- unless fb_first -%},{%- endunless -%}{ type: "video", src: {{ vsrc | json | escape }}, poster: {{ m.preview_image | image_url: width: 1400 | json | escape }}, thumb: {{ m.preview_image | image_url: width: 200 | json | escape }}, alt: {{ m.alt | default: product.title | json | escape }} }{%- assign fb_first = false -%}
+      {%- else -%}
+        {%- unless fb_first -%},{%- endunless -%}{ type: "image", src: {{ m.preview_image | image_url: width: 1400 | json | escape }}, thumb: {{ m.preview_image | image_url: width: 200 | json | escape }}, alt: {{ m.alt | default: product.title | json | escape }} }{%- assign fb_first = false -%}
+      {%- endif -%}
+    {%- endfor -%}
+  ],
+  variantMedia: {
+    {%- assign vm_first = true -%}
+    {%- for v in product.variants -%}
+      {%- assign g = v.metafields.custom.gallery.value -%}
+      {%- if g and g.size > 0 -%}
+        {%- unless vm_first -%},{%- endunless -%}"{{ v.id }}": [
+          {%- assign m_first = true -%}
+          {%- for m in g -%}
+            {%- if m.sources -%}
+              {%- assign vsrc = "" -%}{%- for s in m.sources -%}{%- if s.format == "mp4" -%}{%- assign vsrc = s.url -%}{%- endif -%}{%- endfor -%}
+              {%- unless m_first -%},{%- endunless -%}{ type: "video", src: {{ vsrc | json | escape }}, poster: {{ m.preview_image | image_url: width: 1400 | json | escape }}, thumb: {{ m.preview_image | image_url: width: 200 | json | escape }}, alt: {{ m.alt | default: product.title | json | escape }} }{%- assign m_first = false -%}
+            {%- else -%}
+              {%- unless m_first -%},{%- endunless -%}{ type: "image", src: {{ m.preview_image | image_url: width: 1400 | json | escape }}, thumb: {{ m.preview_image | image_url: width: 200 | json | escape }}, alt: {{ m.alt | default: product.title | json | escape }} }{%- assign m_first = false -%}
+            {%- endif -%}
+          {%- endfor -%}
+        ]{%- assign vm_first = false -%}
+      {%- endif -%}
+    {%- endfor -%}
+  },
+  get items() { var m = this.variantMedia[this.currentVariant]; return (m && m.length) ? m : this.fallback; },
+  cur() { return this.items[this.currentIndex] || {}; },
+  syncVariant(id) { this.currentVariant = String(id); this.currentIndex = 0; }
+}'
+@variant-change.window="syncVariant($event.detail.variantId)">
+  <div class="pc-pdp-gallery__layout">
+    <div class="pc-pdp-gallery__thumbs">
+      <template x-for="(m, i) in items" :key="m.thumb + i">
+        <button type="button"
+          class="ph ph--world pc-pdp-gallery__thumb pc-pdp-gallery__thumb--btn"
+          style="--world-color: {{ world_color }}; position: relative;"
+          @click.prevent="currentIndex = i"
+          :class="{ 'pc-pdp-gallery__thumb--active': currentIndex === i }"
+          :aria-current="currentIndex === i ? 'true' : 'false'"
+          :aria-label="'View media ' + (i + 1)">
+          <img :src="m.thumb" alt="" class="pc-pdp-gallery__thumb-img">
+          <span class="pc-pdp-gallery__thumb-play" x-show="m.type === 'video'" aria-hidden="true">&#9658;</span>
+        </button>
+      </template>
+    </div>
+    <div class="ph ph--world pc-pdp-gallery__main" style="--world-color: {{ world_color }};">
+      <img
+        x-show="cur().type !== 'video'"
+        :src="cur().src"
+        :alt="cur().alt"
+        src="{{ init_src }}"
+        alt="{{ init_alt | escape }}"
+        class="pc-pdp-gallery__img">
+      <video
+        x-show="cur().type === 'video'"
+        x-cloak
+        :src="cur().src"
+        :poster="cur().poster"
+        class="pc-pdp-gallery__img"
+        controls
+        playsinline
+        preload="metadata"></video>
+      <div class="pc-pdp-gallery__pm-overlay" x-show="currentIndex === 0 && cur().type !== 'video'" x-transition.opacity>
+        <span class="postmark pc-pdp-gallery__pm"><div>{{ stamp_text }}</div></span>
+      </div>
+    </div>
+  </div>
+</div>

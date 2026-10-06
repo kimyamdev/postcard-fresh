@@ -1,0 +1,116 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "postcard-pdp-default",
+      "blocks": {
+        "ribbon": {
+          "type": "ribbon",
+          "settings": {
+            "subline_override": ""
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+            "word_limit": 500
+          }
+        },
+        "rating": {
+          "type": "rating",
+          "settings": {}
+        },
+        "colour_swatches": {
+          "type": "colour_swatches",
+          "settings": {}
+        },
+        "purchase_options": {
+          "type": "purchase_options",
+          "settings": {
+            "label": "Purchase options",
+            "once_label": "One-time purchase",
+            "subscribe_label": "Subscribe & save",
+            "cadence_note": "Skip, swap, or cancel anytime.",
+            "about_label": "About subscriptions",
+            "about_body": ""
+          }
+        },
+        "qty_and_cta": {
+          "type": "qty_and_cta",
+          "settings": {
+            "cta_text": "Add to bag",
+            "sold_out_text": "Sold out"
+          }
+        },
+        "stock_indicator": {
+          "type": "stock_indicator",
+          "settings": {
+            "text": "• In stock · Ships in 1-2 days"
+          }
+        },
+        "trust_circles": {
+          "type": "trust_circles",
+          "settings": {
+            "label_1": "Made in SG",
+            "label_2": "Refillable",
+            "label_3": "Cruelty-free",
+            "label_4": "Vegan",
+            "always_show_refillable": false
+          }
+        }
+      },
+      "block_order": [
+        "ribbon",
+        "title",
+        "description",
+        "rating",
+        "colour_swatches",
+        "purchase_options",
+        "qty_and_cta",
+        "stock_indicator",
+        "trust_circles"
+      ],
+      "settings": {
+        "stamp_text_fallback": "{{ product.metafields.postcard.world.value.family.value }}",
+        "bg_alpha": 10,
+        "use_colour_gallery": true
+      }
+    },
+    "pairs_with": {
+      "type": "postcard-pdp-pairs-with",
+      "settings": {
+        "auto_mode": "world_then_type_family",
+        "limit": 3,
+        "type_source": "",
+        "hide_if_empty": true,
+        "title": "Other things worth packing."
+      }
+    },
+    "reviews": {
+      "type": "postcard-pdp-reviews-section",
+      "settings": {
+        "label": "Dispatches · Field notes from the pit",
+        "heading": "Mail from our pen-pals.",
+        "bg_color": "#fdecea",
+        "world_tint_alpha": 10
+      }
+    }
+  },
+  "order": [
+    "main",
+    "pairs_with",
+    "reviews"
+  ]
+}

@@ -123,6 +123,69 @@
     </div>
   {%- endif -%}
 
+{%- when 'colour_swatches' -%}
+  {%- if product.has_only_default_variant -%}
+    <input type="hidden" name="id" value="{{ current.id }}" {{ block.shopify_attributes }}>
+  {%- else -%}
+    {%- liquid
+      assign colour_opt_index = 0
+      for option in product.options_with_values
+        assign onm = option.name | downcase
+        if onm == 'colour' or onm == 'color'
+          assign colour_opt_index = forloop.index0
+        endif
+      endfor
+      assign colour_option = product.options_with_values[colour_opt_index]
+    -%}
+    {%- style -%}
+      .pc-pdp-buy__swatches { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+      .pc-pdp-buy__swatch { width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(0,0,0,.15); cursor: pointer; padding: 0; background-size: cover; background-position: center; background-color: #eee; transition: box-shadow .15s ease; }
+      .pc-pdp-buy__swatch--active { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--world-color, #333); border-color: transparent; }
+    {%- endstyle -%}
+    <input type="hidden" name="id" :value="variantId" value="{{ current.id }}" {{ block.shopify_attributes }}>
+    <div class="pc-pdp-buy__option">
+      <div class="eyebrow pc-pdp-buy__option-label">
+        {{ colour_option.name }}: <span x-text="selectedOptions[{{ colour_opt_index }}]">{{ colour_option.selected_value }}</span>
+      </div>
+      <div class="pc-pdp-buy__swatches">
+        {%- for value in colour_option.values -%}
+          {%- assign value_js = value | replace: '\', '\\' | replace: "'", "\'" -%}
+          {%- assign vlower = value | downcase -%}
+          {%- assign sw_img = '' -%}
+          {%- assign sw_color = '' -%}
+          {%- for v in product.variants -%}
+            {%- assign vv = v.options[colour_opt_index] | downcase -%}
+            {%- if vv == vlower -%}
+              {%- assign vc = v.metafields.custom.swatch_color.value -%}
+              {%- if vc != blank -%}
+                {%- assign sw_color = vc -%}
+              {%- else -%}
+                {%- for m in v.metafields.custom.gallery.value -%}
+                  {%- if forloop.first -%}
+                    {%- assign sw_img = m.preview_image | image_url: width: 100 -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- if sw_img == '' and v.featured_image -%}
+                  {%- assign sw_img = v.featured_image | image_url: width: 100 -%}
+                {%- endif -%}
+              {%- endif -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+          <button type="button"
+            class="pc-pdp-buy__swatch"
+            title="{{ value | escape }}"
+            aria-label="Colour: {{ value | escape }}"
+            @click="selectedOptions[{{ colour_opt_index }}] = '{{ value_js }}'; pickOption({{ colour_opt_index }})"
+            :class="{ 'pc-pdp-buy__swatch--active': selectedOptions[{{ colour_opt_index }}] === '{{ value_js }}' }"
+            x-show="valueAvailable({{ colour_opt_index }}, '{{ value_js }}')"
+            style="--world-color: {{ world_color }};{% if sw_color != blank %} background-color: {{ sw_color }};{% elsif sw_img != blank %} background-image: url({{ sw_img }});{% endif %}">
+          </button>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
 {%- when 'purchase_options' -%}
   {%- liquid
     assign first_group = product.selling_plan_groups.first

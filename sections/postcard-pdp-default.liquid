@@ -53,7 +53,20 @@
 
   <section class="pc-pdp-main">
     <div class="container pc-pdp-main__inner">
-      {% render 'pdp-gallery', product: product, world_color: world_color, stamp_text: stamp_text %}
+      {%- liquid
+        assign has_variant_gallery = false
+        for v in product.variants
+          if v.metafields.custom.gallery.value.size > 0
+            assign has_variant_gallery = true
+            break
+          endif
+        endfor
+      -%}
+      {%- if section.settings.use_colour_gallery and has_variant_gallery -%}
+        {% render 'pdp-colour-gallery', product: product, world_color: world_color, stamp_text: stamp_text %}
+      {%- else -%}
+        {% render 'pdp-gallery', product: product, world_color: world_color, stamp_text: stamp_text %}
+      {%- endif -%}
 
       <aside class="pc-pdp-buy" x-data='{
         variantId: "{{ current.id }}",
@@ -107,7 +120,8 @@
   "settings": [
     { "type": "paragraph", "content": "Pulls everything possible from the product + linked World metaobject. Use product.metafields.custom.ribbon_subline to override the eyebrow per-product (defaults to product.type); product.metafields.custom.stamp_text to override the corner stamp text; product.metafields.custom.ingredients and product.metafields.custom.benefits (richtext) for the collapsible sections." },
     { "type": "text", "id": "stamp_text_fallback", "label": "Stamp text (fallback)", "default": "POSTCARD<br>· SG ·" },
-    { "type": "range", "id": "bg_alpha", "label": "World tint background (%)", "min": 0, "max": 30, "step": 2, "default": 10, "unit": "%", "info": "Applies the linked world's accent color as a subtle tint across the whole product page (gallery, buy block, pairs-with, reviews). 0 disables. Has no effect when no world is linked to the product." }
+    { "type": "range", "id": "bg_alpha", "label": "World tint background (%)", "min": 0, "max": 30, "step": 2, "default": 10, "unit": "%", "info": "Applies the linked world's accent color as a subtle tint across the whole product page (gallery, buy block, pairs-with, reviews). 0 disables. Has no effect when no world is linked to the product." },
+    { "type": "checkbox", "id": "use_colour_gallery", "label": "Per-colour gallery", "default": false, "info": "Selecting a colour swaps the gallery to that colour's own photos/videos. Requires the product's Colour option values to match the labels in the 'Colour media sets' metaobject (Settings → Custom data), and each colour variant to have a featured image. Falls back to the normal gallery if no sets are configured." }
   ],
   "blocks": [
     { "type": "ribbon", "name": "Eyebrow ribbon", "limit": 1, "settings": [
@@ -144,6 +158,9 @@
       { "type": "text", "id": "label", "label": "Label", "default": "Size", "info": "Leave as \"Size\" to auto-use the product's first option name (e.g. \"Scent\", \"Color\"). Override here to force a custom label." },
       { "type": "text", "id": "demo_sizes", "label": "Demo sizes (CSV, single-variant fallback)", "default": "100ml,30ml,Refill" },
       { "type": "number", "id": "demo_active_index", "label": "Active demo size (1-based)", "default": 1 }
+    ] },
+    { "type": "colour_swatches", "name": "Colour swatches", "limit": 1, "settings": [
+      { "type": "paragraph", "content": "Shows the Colour option as circular swatches (image of each colour's first gallery photo). Use on the per-colour gallery template instead of the Size variants block." }
     ] },
     { "type": "purchase_options", "name": "Purchase options", "limit": 1, "settings": [
       { "type": "text", "id": "label", "label": "Label", "default": "Purchase options" },
