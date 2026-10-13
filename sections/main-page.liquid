@@ -62,15 +62,24 @@
   .pc-page-rte p, .pc-page-rte li { font-family: var(--font-display); }
   .pc-page-rte strong { font-weight: 700; }
 
-  /* Reading refinements for hotel welcome pages: tighter measure + calmer rhythm.
+  /* Reading refinements (all page templates): tighter measure + calmer rhythm.
      Monospace body reads harder over long lines, so cap the line length and give
      paragraphs, headings and dividers a bit more breathing room. */
-  .shopify-section:has(.pc-welcome-banner) .pc-page-rte { max-width: 40rem; line-height: 1.8; }
-  .shopify-section:has(.pc-welcome-banner) .pc-page-rte > p { margin: 0 0 1.15em; }
-  .shopify-section:has(.pc-welcome-banner) .pc-page-rte > p:last-child { margin-bottom: 0; }
-  .shopify-section:has(.pc-welcome-banner) .pc-page-rte h3 { margin: 2.4em 0 0.5em; line-height: 1.45; letter-spacing: 0.03em; }
-  .shopify-section:has(.pc-welcome-banner) .pc-page-rte hr { margin: 2.4em 0; border: 0; border-top: 1px solid var(--color-line); }
-  .shopify-section:has(.pc-welcome-banner) .pc-page-rte a { text-underline-offset: 0.18em; }
+  .pc-page-rte { max-width: 40rem; line-height: 1.8; }
+  .pc-page-rte > p { margin: 0 0 1.15em; }
+  .pc-page-rte > p:last-child { margin-bottom: 0; }
+  .pc-page-rte h3 { margin: 2.4em 0 0.5em; line-height: 1.45; letter-spacing: 0.03em; }
+  .pc-page-rte hr { margin: 2.4em 0; border: 0; border-top: 1px solid var(--color-line); }
+  .pc-page-rte a { text-underline-offset: 0.18em; }
+
+  /* Bilingual pages: gently mute translated (Chinese) lines so the eye can tell
+     the original from the translation. Only affects elements tagged lang="zh". */
+  .pc-page-rte [lang="zh"] { opacity: 0.6; }
+
+  /* Amenity ingredient lists: product name as a quiet subhead; INCI list smaller,
+     muted and left-aligned for scanning. Only affects the pc-amenity-* classes. */
+  .pc-page-rte .pc-amenity-name { margin: 1.6em 0 0.2em; }
+  .pc-page-rte .pc-amenity-inci { margin: 0; font-size: 14px; line-height: 1.7; opacity: 0.72; text-align: left; }
   @media screen and (min-width: 750px) {
     .pc-page { padding-left: 48px; padding-right: 48px; }
   }
