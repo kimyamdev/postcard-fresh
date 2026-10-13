@@ -7,6 +7,9 @@
   endif
   assign use_custom_font = section.settings.use_custom_title_font
   assign title_font = section.settings.title_font
+
+  # Slim welcome banner: per-page text via metafield, falling back to the section setting.
+  assign banner_text = page.metafields.custom.welcome_banner.value | default: section.settings.banner_text
 -%}
 {{ 'section-main-page.css' | asset_url | stylesheet_tag }}
 
@@ -25,6 +28,19 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  .pc-welcome-banner {
+    width: 100%;
+    background: {{ section.settings.banner_bg_color }};
+    color: {{ section.settings.banner_text_color }};
+    text-align: center;
+    padding: 10px 24px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+  }
+  .pc-welcome-banner__inner { max-width: 1100px; margin: 0 auto; }
 
   .pc-page { display: block; padding-left: 24px; padding-right: 24px; }
   .pc-page__grid { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: stretch; }
@@ -95,6 +111,12 @@
   }
 {%- endstyle -%}
 
+{%- if banner_text != blank -%}
+  <div class="pc-welcome-banner{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+    <div class="pc-welcome-banner__inner">{{ banner_text }}</div>
+  </div>
+{%- endif -%}
+
 <div class="{% unless has_media %}page-width page-width--narrow {% endunless %}section-{{ section.id }}-padding pc-page{% if has_media %} pc-page--has-media{% endif %}">
   <div class="pc-page__grid">
     <div class="pc-page__copy">
@@ -138,6 +160,10 @@
   "tag": "section",
   "class": "section",
   "settings": [
+    { "type": "header", "content": "Welcome banner (top)" },
+    { "type": "text", "id": "banner_text", "label": "Banner text", "info": "Slim bar at the very top. Per-page override: set the page's \"Welcome banner\" metafield. Leave both empty for no banner." },
+    { "type": "color", "id": "banner_bg_color", "label": "Banner background", "default": "#E8C36A" },
+    { "type": "color", "id": "banner_text_color", "label": "Banner text", "default": "#21201F" },
     { "type": "header", "content": "Header" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "info": "Small caps line above the title (optional)" },
     { "type": "text", "id": "title_override", "label": "Title (override)", "info": "When set, replaces the admin page title for display only (does not change SEO or URL)." },
