@@ -9,10 +9,6 @@
  */
 {
   "sections": {
-    "coconut_promo": {
-      "type": "postcard-coconut-promo",
-      "settings": {}
-    },
     "hero": {
       "type": "postcard-hero",
       "blocks": {
@@ -34,7 +30,8 @@
             "link": "shopify://products/diffuser-oil-moon-bloom",
             "eyebrow": "",
             "tag": "",
-            "legend": "MOON BLOOM DIFFUSER OIL"
+            "legend": "MOON BLOOM DIFFUSER OIL",
+            "stamp_1": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Moon_Bloom.png"
           }
         },
         "slide_ycG9DU": {
@@ -125,7 +122,7 @@
         "slide_dNEmwg": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/tennis_-_deodorant.png",
+            "image": "shopify://shop_images/deo_spray_nox_premier_padel.png",
             "link": "shopify://products/icy-peaks-cooling-deodorant-spray",
             "eyebrow": "",
             "tag": "",
@@ -136,7 +133,7 @@
         "slide_MrQF3G": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/IMG-2037.png",
+            "image": "shopify://shop_images/veja_coconut_deo_spray_gym.png",
             "link": "shopify://products/coconut-beach-deodorant-spray",
             "eyebrow": "",
             "tag": "",
@@ -208,6 +205,23 @@
         "secondary_cta_url": "shopify://collections/bestsellers-postcard"
       }
     },
+    "coconut_promo": {
+      "type": "postcard-coconut-promo",
+      "settings": {
+        "eyebrow": "Summer offer · Coconut Beach",
+        "badge_text": "Save $16.90",
+        "title": "The Summer Yellow pouch, yours for $10",
+        "body": "<p>Add $50 or more from the Coconut Beach world and the Summer Yellow Travel Pouch is yours for just $10 — normally $26.90. It's applied automatically at checkout.</p>",
+        "image": "shopify://shop_images/ChatGPT_Image_Jul_1_2026_02_30_43_PM.png",
+        "cutout_flip_ms": 360,
+        "cta_text": "Shop Coconut Beach",
+        "cta_url": "",
+        "fine_print": "Ends 31 Aug 2026. One discounted pouch per order, while stocks last.",
+        "bg_color": "#fce9e4",
+        "accent_color": "#e9a5a7",
+        "end_date": "2026-08-31"
+      }
+    },
     "worlds_quick": {
       "type": "postcard-worlds-quick",
       "settings": {
@@ -247,7 +261,7 @@
           "type": "format",
           "settings": {
             "product": "",
-            "label_override": "Anywhere Fragrance",
+            "label_override": "Deodorant Spray",
             "link": ""
           }
         },
@@ -263,7 +277,7 @@
           "type": "format",
           "settings": {
             "product": "",
-            "label_override": "Deodorant Spray",
+            "label_override": "Deodorant Stick",
             "link": ""
           }
         },
@@ -271,7 +285,7 @@
           "type": "format",
           "settings": {
             "product": "",
-            "label_override": "Reed Diffuser",
+            "label_override": "Hand Cream",
             "link": ""
           }
         }
@@ -283,7 +297,7 @@
         "f4"
       ],
       "settings": {
-        "world_handle": "hotel-lobby",
+        "world_handle": "coconut-beach",
         "bg_alpha": 8,
         "media_opacity": 100,
         "stamp_size": 55,
@@ -295,7 +309,7 @@
         "light_badges_mode": "auto",
         "eyebrow": "World deep-dive · This month",
         "family_line_override": "",
-        "body": "<p>Polished. Refined. Endlessly elegant. Hotel Lobby opens with the brightness of bergamot and orange blossom, then settles into Earl Grey tea, soft vanilla and a brushed apricot warmth — like the moment you push through a revolving door into somewhere that smells looked-after.</p>",
+        "body": "",
         "cta_text": "",
         "cta_url": ""
       }
@@ -381,10 +395,16 @@
         "cta_text": "Read More →",
         "cta_url": ""
       }
+    },
+    "christmas_banner": {
+      "type": "postcard-christmas-banner",
+      "disabled": true,
+      "settings": {}
     }
   },
   "order": [
     "hero",
+    "christmas_banner",
     "coconut_promo",
     "worlds_quick",
     "bestsellers",

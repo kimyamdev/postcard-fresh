@@ -1,0 +1,116 @@
+{%- comment -%}
+  Postcard Christmas banner — a festive promo band for the homepage (or any page).
+  Toggle on/off with the show/hide eye in the theme editor. Defaults to drive into
+  the Christmas gift world (/pages/christmas); all copy, colours and link editable.
+{%- endcomment -%}
+
+{%- liquid
+  assign bg = section.settings.bg_color | default: '#33503F'
+  assign title_color = section.settings.title_color | default: '#212020'
+  assign text_color = section.settings.text_color | default: '#F2EEDD'
+  assign accent = section.settings.accent_color | default: '#E8C36A'
+-%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} { position: relative; }
+  .pc-xmasban-{{ section.id }} {
+    position: relative; overflow: hidden;
+    background: {{ bg }}; color: {{ text_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    text-align: center;
+  }
+  .pc-xmasban-{{ section.id }} .pc-xmasban__inner { position: relative; z-index: 3; }
+  .pc-xmasban-{{ section.id }} .pc-xmasban__eyebrow {
+    font-family: var(--font-display); letter-spacing: 0.2em; text-transform: uppercase;
+    font-size: 12px; color: {{ accent }}; margin-bottom: 12px;
+  }
+  .pc-xmasban-{{ section.id }} .pc-xmasban__title {
+    font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 0.02em;
+    font-size: clamp(30px, 5.5vw, 56px); line-height: 1; margin: 0 0 14px; color: {{ title_color }};
+  }
+  .pc-xmasban-{{ section.id }} .pc-xmasban__body {
+    max-width: 36rem; margin: 0 auto 24px; font-family: var(--font-display);
+    line-height: 1.7; font-size: 16px; opacity: 0.95;
+  }
+  .pc-xmasban-{{ section.id }} .pc-xmasban__cta {
+    display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
+    font-family: var(--font-display); letter-spacing: 0.1em; text-transform: uppercase; font-size: 13px;
+    color: #15241b; background: {{ accent }}; padding: 14px 28px; border-radius: 999px;
+    box-shadow: 0 5px 0 color-mix(in srgb, {{ accent }} 55%, #000);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .pc-xmasban-{{ section.id }} .pc-xmasban__cta:hover { transform: translateY(2px); box-shadow: 0 3px 0 color-mix(in srgb, {{ accent }} 55%, #000); }
+  .pc-xmasban-{{ section.id }} .pc-xmasban__garland {
+    height: 3px; width: 120px; margin: 0 auto 20px;
+    background: repeating-linear-gradient(90deg, {{ accent }} 0 10px, {{ title_color }} 10px 20px, {{ text_color }} 20px 30px);
+    border-radius: 3px; opacity: 0.85;
+  }
+  .pc-xmasban-{{ section.id }} .pc-xmasban__snow { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+  .pc-xmasban-{{ section.id }} .pc-xmasban__flake { position: absolute; top: -12px; color: #fff; opacity: 0.8; will-change: transform; }
+  @keyframes pc-xmasban-fall-{{ section.id }} { to { transform: translateY(120%) translateX(var(--drift, 16px)); } }
+  @media (prefers-reduced-motion: reduce) {
+    .pc-xmasban-{{ section.id }} .pc-xmasban__flake { display: none; }
+  }
+{%- endstyle -%}
+
+<div class="pc-xmasban-{{ section.id }}">
+  {%- if section.settings.show_snow -%}<div class="pc-xmasban__snow" data-snow-layer aria-hidden="true"></div>{%- endif -%}
+  <div class="pc-xmasban__inner container">
+    {%- if section.settings.show_garland -%}<div class="pc-xmasban__garland" aria-hidden="true"></div>{%- endif -%}
+    {%- if section.settings.eyebrow != blank -%}<div class="pc-xmasban__eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
+    {%- if section.settings.title != blank -%}<h2 class="pc-xmasban__title">{{ section.settings.title }}</h2>{%- endif -%}
+    {%- if section.settings.body != blank -%}<p class="pc-xmasban__body">{{ section.settings.body }}</p>{%- endif -%}
+    {%- if section.settings.cta_text != blank -%}
+      <a class="pc-xmasban__cta" href="{{ section.settings.cta_link | default: '/pages/christmas' }}">{{ section.settings.cta_text }} &rarr;</a>
+    {%- endif -%}
+  </div>
+</div>
+
+{%- if section.settings.show_snow -%}
+<script>
+  (function () {
+    var root = document.querySelector('.pc-xmasban-{{ section.id }}');
+    if (!root || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var layer = root.querySelector('[data-snow-layer]');
+    if (!layer) return;
+    var chars = ['❄', '❅', '·'];
+    for (var i = 0; i < 22; i++) {
+      var f = document.createElement('span');
+      f.className = 'pc-xmasban__flake';
+      f.textContent = chars[i % chars.length];
+      f.style.left = ((i * 41) % 100) + '%';
+      f.style.fontSize = (6 + ((i * 5) % 12)) + 'px';
+      f.style.setProperty('--drift', ((((i % 5) - 2) * 14)) + 'px');
+      f.style.animation = 'pc-xmasban-fall-{{ section.id }} ' + (7 + ((i * 7) % 8)) + 's linear ' + (-((i * 9) % 10)) + 's infinite';
+      layer.appendChild(f);
+    }
+  })();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Christmas banner",
+  "tag": "section",
+  "settings": [
+    { "type": "paragraph", "content": "A festive promo band. Use the show/hide eye to switch it on and off seasonally. Defaults to link into the Christmas gift world." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "New this season" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Step into Postcard Christmas." },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "A whole little world of gifts, wrapped in scent. Open the door and find something unforgettable for everyone on your list." },
+    { "type": "text", "id": "cta_text", "label": "Button text", "default": "Enter the gift world" },
+    { "type": "url", "id": "cta_link", "label": "Button link", "info": "Defaults to /pages/christmas if left empty." },
+    { "type": "checkbox", "id": "show_snow", "label": "Snow", "default": true },
+    { "type": "checkbox", "id": "show_garland", "label": "Garland accent line", "default": true },
+    { "type": "header", "content": "Colours" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#33503F" },
+    { "type": "color", "id": "title_color", "label": "Title", "default": "#212020" },
+    { "type": "color", "id": "text_color", "label": "Body text", "default": "#F2EEDD" },
+    { "type": "color", "id": "accent_color", "label": "Accent / button", "default": "#E8C36A" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 24, "max": 160, "step": 4, "unit": "px", "default": 72 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 24, "max": 160, "step": 4, "unit": "px", "default": 72 }
+  ],
+  "presets": [ { "name": "Christmas banner" } ]
+}
+{% endschema %}
