@@ -19,7 +19,9 @@
   /* ---- Door overlay ---- */
   .pc-xmas-door {
     position: fixed; inset: 0; z-index: 9990;
-    display: flex; align-items: center; justify-content: center;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: clamp(20px, 4vh, 40px);
+    background: {{ pine }};
     background:
       radial-gradient(120% 90% at 50% 10%, color-mix(in srgb, {{ pine }} 70%, #0d1a12) 0%, {{ pine }} 48%, #15241b 100%);
     color: #fff5e1;
@@ -49,13 +51,15 @@
 
   /* The door itself (two leaves) */
   .pc-xmas-door__frame {
-    position: relative; width: min(74vw, 300px); aspect-ratio: 3 / 4.4;
+    position: relative; width: min(58vw, 216px); aspect-ratio: 3 / 4.4;
+    flex-shrink: 0;
     transform-style: preserve-3d;
     filter: drop-shadow(0 24px 40px rgba(0,0,0,0.45));
   }
   .pc-xmas-door__leaf {
     position: absolute; top: 0; bottom: 0; width: 50%;
-    background:
+    background-color: {{ red }};
+    background-image:
       linear-gradient(180deg, color-mix(in srgb, {{ red }} 86%, #000) 0%, {{ red }} 50%, color-mix(in srgb, {{ red }} 80%, #000) 100%);
     border: 2px solid {{ gold }};
     transition: transform 1.15s cubic-bezier(0.7, 0, 0.2, 1);
