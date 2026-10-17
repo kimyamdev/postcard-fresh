@@ -40,6 +40,12 @@
   .pc-rib-{{ section.id }} .pc-rib-dots { position: absolute; bottom: 10px; left: 0; right: 0; display: flex; gap: 6px; justify-content: center; z-index: 3; }
   .pc-rib-{{ section.id }} .pc-rib-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(33,32,32,0.22); transition: background 0.2s ease; }
   .pc-rib-{{ section.id }} .pc-rib-dot.is-active { background: color-mix(in srgb, var(--accent, {{ gold }}) 90%, #000); }
+  .pc-rib-{{ section.id }} .pc-rib-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 4; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.85); color: #212020; display: flex; align-items: center; justify-content: center; font-size: 22px; line-height: 1; cursor: pointer; opacity: 0; transition: opacity 0.15s ease; box-shadow: 0 1px 5px rgba(0,0,0,0.22); user-select: none; }
+  .pc-rib-{{ section.id }} .pc-rib-arrow:hover { background: #fff; }
+  .pc-rib-{{ section.id }} .pc-rib-card:hover .pc-rib-arrow { opacity: 1; }
+  .pc-rib-{{ section.id }} .pc-rib-arrow--prev { left: 10px; }
+  .pc-rib-{{ section.id }} .pc-rib-arrow--next { right: 10px; }
+  @media (hover: none) { .pc-rib-{{ section.id }} .pc-rib-arrow { opacity: 0.9; } }
   .pc-rib-{{ section.id }} .pc-rib-card__ph { font-family: var(--font-headline); font-size: clamp(40px, 7vw, 72px); color: color-mix(in srgb, var(--accent, {{ gold }}) 70%, #000); opacity: 0.5; }
   .pc-rib-{{ section.id }} .pc-rib-card__num {
     position: absolute; top: 12px; left: 12px; z-index: 2;
@@ -99,6 +105,11 @@
             if block.settings.image_5 != blank
               assign slide_count = slide_count | plus: 1
             endif
+            # A slideshow (2+ images) fills the frame; a single stamp keeps its fit.
+            assign slide_fit = fit_class
+            if slide_count > 1
+              assign slide_fit = 'is-cover'
+            endif
           -%}
           <div class="pc-rib-card__media">
             {%- if block.settings.number != blank -%}<span class="pc-rib-card__num">{{ block.settings.number }}</span>{%- endif -%}
@@ -115,13 +126,15 @@
                   {%- endcase -%}
                   {%- if im != blank -%}
                     <div class="pc-rib-slide{% unless active_set %} is-active{% endunless %}" data-rib-slide>
-                      {{ im | image_url: width: 1000 | image_tag: loading: 'lazy', class: fit_class, alt: block.settings.title }}
+                      {{ im | image_url: width: 1000 | image_tag: loading: 'lazy', class: slide_fit, alt: block.settings.title }}
                     </div>
                     {%- assign active_set = true -%}
                   {%- endif -%}
                 {%- endfor -%}
               </div>
               {%- if slide_count > 1 -%}
+                <span class="pc-rib-arrow pc-rib-arrow--prev" data-rib-prev role="button" aria-label="Previous image">&lsaquo;</span>
+                <span class="pc-rib-arrow pc-rib-arrow--next" data-rib-next role="button" aria-label="Next image">&rsaquo;</span>
                 <div class="pc-rib-dots" data-rib-dots aria-hidden="true">
                   {%- for d in (1..slide_count) -%}<span class="pc-rib-dot{% if forloop.first %} is-active{% endif %}"></span>{%- endfor -%}
                 </div>
@@ -164,7 +177,19 @@
       }
       function start() { if (reduce) return; stop(); timer = setInterval(function () { show(i + 1); }, 3500); }
       function stop() { if (timer) { clearInterval(timer); timer = null; } }
-      if (card) { card.addEventListener('mouseenter', stop); card.addEventListener('mouseleave', start); }
+      var manual = false;
+      function step(dir, e) {
+        if (e) { e.preventDefault(); e.stopPropagation(); }
+        manual = true; stop(); show(i + dir);
+      }
+      if (card) {
+        var prev = card.querySelector('[data-rib-prev]');
+        var next = card.querySelector('[data-rib-next]');
+        if (prev) prev.addEventListener('click', function (e) { step(-1, e); });
+        if (next) next.addEventListener('click', function (e) { step(1, e); });
+        card.addEventListener('mouseenter', stop);
+        card.addEventListener('mouseleave', function () { if (!manual) start(); });
+      }
       start();
     });
   })();
