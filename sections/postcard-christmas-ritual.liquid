@@ -37,7 +37,7 @@
   .pc-rib-{{ section.id }} .pc-rib__pillar-l { font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 0.04em; font-size: 14px; margin: 8px 0 4px; color: {{ ink }}; }
   .pc-rib-{{ section.id }} .pc-rib__pillar-t { font-family: var(--font-display); font-size: 12.5px; line-height: 1.5; color: {{ ink }}; opacity: 0.78; }
 
-  .pc-rib-{{ section.id }} .pc-rib__grid { display: grid; grid-template-columns: 1fr; gap: clamp(24px, 3.4vw, 40px); perspective: 1600px; }
+  .pc-rib-{{ section.id }} .pc-rib__grid { display: grid; grid-template-columns: 1fr; gap: clamp(32px, 4vw, 52px); perspective: 1600px; }
   @media (min-width: 750px) { .pc-rib-{{ section.id }} .pc-rib__grid { grid-template-columns: repeat(2, 1fr); } }
 
   .pc-rib-{{ section.id }} .pc-rib-card {
@@ -48,18 +48,21 @@
     --edge: color-mix(in srgb, var(--accent, {{ gold }}) 42%, #1a1512);
     box-shadow:
       3px 3px 0 var(--edge), 6px 6px 0 var(--edge), 9px 9px 0 var(--edge),
-      12px 12px 0 var(--edge), 15px 15px 0 var(--edge),
-      18px 22px 30px rgba(0,0,0,0.22);
+      12px 12px 0 var(--edge), 15px 15px 0 var(--edge), 18px 18px 0 var(--edge),
+      21px 21px 0 var(--edge), 24px 24px 0 var(--edge), 27px 27px 0 var(--edge),
+      30px 30px 0 var(--edge),
+      34px 42px 44px rgba(0,0,0,0.26);
     transform-style: preserve-3d;
     transition: transform 0.28s cubic-bezier(0.2,0.7,0.2,1), box-shadow 0.28s ease;
     will-change: transform;
   }
   .pc-rib-{{ section.id }} .pc-rib-card:hover {
-    transform: translate(-3px, -6px) rotateY(-3deg) rotateX(2deg);
+    transform: translate(-4px, -8px) rotateY(-3deg) rotateX(2deg);
     box-shadow:
       4px 4px 0 var(--edge), 8px 8px 0 var(--edge), 12px 12px 0 var(--edge),
-      16px 16px 0 var(--edge), 20px 20px 0 var(--edge),
-      24px 30px 40px rgba(0,0,0,0.28);
+      16px 16px 0 var(--edge), 20px 20px 0 var(--edge), 24px 24px 0 var(--edge),
+      28px 28px 0 var(--edge), 32px 32px 0 var(--edge), 36px 36px 0 var(--edge),
+      40px 48px 54px rgba(0,0,0,0.32);
   }
   @media (prefers-reduced-motion: reduce) { .pc-rib-{{ section.id }} .pc-rib-card { transition: none; } .pc-rib-{{ section.id }} .pc-rib-card:hover { transform: none; } }
   .pc-rib-{{ section.id }} .pc-rib-card__media {
