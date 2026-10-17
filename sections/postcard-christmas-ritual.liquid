@@ -7,11 +7,23 @@
 {%- liquid
   assign gold = section.settings.color_gold | default: '#E8C36A'
   assign ink = section.settings.color_ink | default: '#212020'
+  assign band_color = section.settings.band_color | default: '#33503F'
 -%}
 
 {%- style -%}
-  .pc-rib-{{ section.id }} { padding: clamp(40px, 7vw, 88px) 0;{% if section.settings.bg_warm %} background: var(--color-bg-warm);{% endif %} }
-  .pc-rib-{{ section.id }} .pc-rib__head { text-align: center; max-width: 44rem; margin: 0 auto clamp(28px, 5vw, 52px); }
+  .pc-rib-{{ section.id }} .pc-rib__band { padding: clamp(40px, 6vw, 80px) 0; }
+  .pc-rib-{{ section.id }} .pc-rib__band.is-dark { background: {{ band_color }}; }
+  .pc-rib-{{ section.id }} .pc-rib__body { padding: clamp(40px, 6vw, 72px) 0;{% if section.settings.bg_warm %} background: var(--color-bg-warm);{% endif %} }
+  .pc-rib-{{ section.id }} .pc-rib__head { text-align: center; max-width: 44rem; margin: 0 auto; }
+  /* Dark pine band: light text */
+  .pc-rib-{{ section.id }} .pc-rib__band.is-dark .pc-rib__eyebrow { color: {{ gold }}; }
+  .pc-rib-{{ section.id }} .pc-rib__band.is-dark .pc-rib__title { color: #fff5e1; }
+  .pc-rib-{{ section.id }} .pc-rib__band.is-dark .pc-rib__tagline { color: {{ gold }}; }
+  .pc-rib-{{ section.id }} .pc-rib__band.is-dark .pc-rib__intro { color: #fff5e1; }
+  .pc-rib-{{ section.id }} .pc-rib__band.is-dark .pc-rib__pillar { background: rgba(255,255,255,0.06); border-color: rgba(255,245,225,0.22); }
+  .pc-rib-{{ section.id }} .pc-rib__band.is-dark .pc-rib__pillar-ic { color: {{ gold }}; }
+  .pc-rib-{{ section.id }} .pc-rib__band.is-dark .pc-rib__pillar-l { color: #fff5e1; }
+  .pc-rib-{{ section.id }} .pc-rib__band.is-dark .pc-rib__pillar-t { color: #fff5e1; opacity: 0.82; }
   .pc-rib-{{ section.id }} .pc-rib__eyebrow { font-family: var(--font-display); letter-spacing: 0.2em; text-transform: uppercase; font-size: 12px; color: color-mix(in srgb, {{ gold }} 80%, #000); margin-bottom: 12px; }
   .pc-rib-{{ section.id }} .pc-rib__title { font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 0.02em; font-size: clamp(40px, 8vw, 86px); line-height: 0.9; color: {{ ink }}; margin: 0 0 10px; }
   .pc-rib-{{ section.id }} .pc-rib__tagline { font-family: var(--font-script); color: color-mix(in srgb, {{ gold }} 85%, #000); font-size: clamp(24px, 4.2vw, 38px); line-height: 1.05; margin-bottom: 14px; }
@@ -74,7 +86,8 @@
 {%- endstyle -%}
 
 <section class="pc-rib-{{ section.id }}">
-  <div class="container">
+  <div class="pc-rib__band{% if section.settings.band_on %} is-dark{% endif %}">
+    <div class="container">
     <div class="pc-rib__head">
       {%- if section.settings.eyebrow != blank -%}<div class="pc-rib__eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
       {%- if section.settings.title != blank -%}<h2 class="pc-rib__title">{{ section.settings.title }}</h2>{%- endif -%}
@@ -110,7 +123,11 @@
         </div>
       {%- endif -%}
     </div>
+    </div>
+  </div>
 
+  <div class="pc-rib__body">
+    <div class="container">
     <div class="pc-rib__grid">
       {%- for block in section.blocks -%}
         {%- liquid
@@ -192,6 +209,7 @@
         <a class="pc-rib__btn" href="{{ section.settings.foot_cta_link | default: '#' }}">{{ section.settings.foot_cta_text }} &rarr;</a>
       </div>
     {%- endif -%}
+    </div>
   </div>
 </section>
 
@@ -238,7 +256,10 @@
     { "type": "text", "id": "title", "label": "Title", "default": "A little world to get lost in" },
     { "type": "text", "id": "tagline", "label": "Script tagline" },
     { "type": "richtext", "id": "intro", "label": "Intro", "default": "<p>More than a box of beautiful things, each Ritual in a Box is an invitation to experience one of our scent worlds beyond fragrance. Inside, you'll find a curated collection of POSTCARD essentials, thoughtfully chosen objects, a playlist and a little ritual to bring it all together.</p><p>Six different worlds, each with its own way of taking you somewhere else. Made for gifting, discovering and finding a little time for yourself.</p>" },
-    { "type": "checkbox", "id": "bg_warm", "label": "Warm background", "default": false },
+    { "type": "checkbox", "id": "bg_warm", "label": "Warm background (cards area)", "default": false },
+    { "type": "header", "content": "Feature band" },
+    { "type": "checkbox", "id": "band_on", "label": "Dark pine band behind the intro", "default": true },
+    { "type": "color", "id": "band_color", "label": "Band colour", "default": "#33503F" },
     { "type": "header", "content": "What makes it special (pillars)" },
     { "type": "checkbox", "id": "show_pillars", "label": "Show pillars", "default": true },
     { "type": "text", "id": "pillar_1_label", "label": "Pillar 1 label", "default": "A fragrance" },
