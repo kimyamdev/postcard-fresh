@@ -10,60 +10,60 @@
 -%}
 
 {%- style -%}
-  .pc-ritual-{{ section.id }} { padding: clamp(40px, 7vw, 88px) 0;{% if section.settings.bg_warm %} background: var(--color-bg-warm);{% endif %} }
-  .pc-ritual-{{ section.id }} .pc-ritual__head { text-align: center; max-width: 44rem; margin: 0 auto clamp(28px, 5vw, 52px); }
-  .pc-ritual-{{ section.id }} .pc-ritual__eyebrow { font-family: var(--font-display); letter-spacing: 0.2em; text-transform: uppercase; font-size: 12px; color: color-mix(in srgb, {{ gold }} 80%, #000); margin-bottom: 12px; }
-  .pc-ritual-{{ section.id }} .pc-ritual__title { font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 0.02em; font-size: clamp(30px, 6vw, 60px); line-height: 0.95; color: {{ ink }}; margin: 0 0 10px; }
-  .pc-ritual-{{ section.id }} .pc-ritual__tagline { font-family: var(--font-script); color: color-mix(in srgb, {{ gold }} 85%, #000); font-size: clamp(22px, 4vw, 34px); line-height: 1.05; margin-bottom: 14px; }
-  .pc-ritual-{{ section.id }} .pc-ritual__intro { font-family: var(--font-display); line-height: 1.75; color: {{ ink }}; }
-  .pc-ritual-{{ section.id }} .pc-ritual__intro p { margin: 0 0 0.8em; }
+  .pc-rib-{{ section.id }} { padding: clamp(40px, 7vw, 88px) 0;{% if section.settings.bg_warm %} background: var(--color-bg-warm);{% endif %} }
+  .pc-rib-{{ section.id }} .pc-rib__head { text-align: center; max-width: 44rem; margin: 0 auto clamp(28px, 5vw, 52px); }
+  .pc-rib-{{ section.id }} .pc-rib__eyebrow { font-family: var(--font-display); letter-spacing: 0.2em; text-transform: uppercase; font-size: 12px; color: color-mix(in srgb, {{ gold }} 80%, #000); margin-bottom: 12px; }
+  .pc-rib-{{ section.id }} .pc-rib__title { font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 0.02em; font-size: clamp(30px, 6vw, 60px); line-height: 0.95; color: {{ ink }}; margin: 0 0 10px; }
+  .pc-rib-{{ section.id }} .pc-rib__tagline { font-family: var(--font-script); color: color-mix(in srgb, {{ gold }} 85%, #000); font-size: clamp(22px, 4vw, 34px); line-height: 1.05; margin-bottom: 14px; }
+  .pc-rib-{{ section.id }} .pc-rib__intro { font-family: var(--font-display); line-height: 1.75; color: {{ ink }}; }
+  .pc-rib-{{ section.id }} .pc-rib__intro p { margin: 0 0 0.8em; }
 
-  .pc-ritual-{{ section.id }} .pc-ritual__grid { display: grid; grid-template-columns: 1fr; gap: clamp(16px, 2.5vw, 28px); }
-  @media (min-width: 750px) { .pc-ritual-{{ section.id }} .pc-ritual__grid { grid-template-columns: repeat(2, 1fr); } }
+  .pc-rib-{{ section.id }} .pc-rib__grid { display: grid; grid-template-columns: 1fr; gap: clamp(16px, 2.5vw, 28px); }
+  @media (min-width: 750px) { .pc-rib-{{ section.id }} .pc-rib__grid { grid-template-columns: repeat(2, 1fr); } }
 
-  .pc-ritual-{{ section.id }} .pc-ritual-card {
+  .pc-rib-{{ section.id }} .pc-rib-card {
     display: flex; flex-direction: column; text-decoration: none; color: {{ ink }};
     background: var(--color-bg-card, #fffdf4); border: 1.5px solid var(--color-line);
     border-radius: 3px; overflow: hidden; transition: transform 0.15s ease, box-shadow 0.15s ease;
   }
-  .pc-ritual-{{ section.id }} .pc-ritual-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-stamp); }
-  .pc-ritual-{{ section.id }} .pc-ritual-card__media {
+  .pc-rib-{{ section.id }} .pc-rib-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-stamp); }
+  .pc-rib-{{ section.id }} .pc-rib-card__media {
     position: relative; aspect-ratio: 16 / 10; display: flex; align-items: center; justify-content: center;
     background: radial-gradient(120% 120% at 30% 20%, color-mix(in srgb, var(--accent, {{ gold }}) 55%, #fff) 0%, color-mix(in srgb, var(--accent, {{ gold }}) 22%, #fff) 70%, #fff 100%);
   }
-  .pc-ritual-{{ section.id }} .pc-ritual-card__media img { width: 100%; height: 100%; display: block; }
-  .pc-ritual-{{ section.id }} .pc-ritual-card__media img.is-contain { object-fit: contain; padding: 10%; }
-  .pc-ritual-{{ section.id }} .pc-ritual-card__media img.is-cover { object-fit: cover; }
-  .pc-ritual-{{ section.id }} .pc-ritual-card__ph { font-family: var(--font-headline); font-size: clamp(40px, 7vw, 72px); color: color-mix(in srgb, var(--accent, {{ gold }}) 70%, #000); opacity: 0.5; }
-  .pc-ritual-{{ section.id }} .pc-ritual-card__num {
+  .pc-rib-{{ section.id }} .pc-rib-card__media img { width: 100%; height: 100%; display: block; }
+  .pc-rib-{{ section.id }} .pc-rib-card__media img.is-contain { object-fit: contain; padding: 10%; }
+  .pc-rib-{{ section.id }} .pc-rib-card__media img.is-cover { object-fit: cover; }
+  .pc-rib-{{ section.id }} .pc-rib-card__ph { font-family: var(--font-headline); font-size: clamp(40px, 7vw, 72px); color: color-mix(in srgb, var(--accent, {{ gold }}) 70%, #000); opacity: 0.5; }
+  .pc-rib-{{ section.id }} .pc-rib-card__num {
     position: absolute; top: 12px; left: 12px; z-index: 2;
     font-family: var(--font-headline); font-size: 14px; letter-spacing: 0.08em;
     background: {{ ink }}; color: #fff; padding: 3px 9px; border-radius: 2px;
   }
-  .pc-ritual-{{ section.id }} .pc-ritual-card__body { padding: clamp(18px, 2.4vw, 26px); display: flex; flex-direction: column; }
-  .pc-ritual-{{ section.id }} .pc-ritual-card__name { font-family: var(--font-headline); text-transform: uppercase; font-size: clamp(20px, 2.6vw, 26px); line-height: 1; margin: 0; }
-  .pc-ritual-{{ section.id }} .pc-ritual-card__tag { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.12em; font-size: 11px; color: color-mix(in srgb, var(--accent, {{ gold }}) 70%, #000); margin: 8px 0 12px; }
-  .pc-ritual-{{ section.id }} .pc-ritual-card__desc { font-family: var(--font-display); font-size: 14.5px; line-height: 1.7; color: {{ ink }}; }
-  .pc-ritual-{{ section.id }} .pc-ritual-card__desc p { margin: 0 0 0.7em; }
-  .pc-ritual-{{ section.id }} .pc-ritual-card__desc p:last-child { margin-bottom: 0; }
-  .pc-ritual-{{ section.id }} .pc-ritual-card__cta { margin-top: 14px; font-family: var(--font-display); letter-spacing: 0.08em; text-transform: uppercase; font-size: 12px; color: {{ ink }}; }
-  .pc-ritual-{{ section.id }} .pc-ritual-card:hover .pc-ritual-card__cta { text-decoration: underline; text-underline-offset: 0.2em; }
+  .pc-rib-{{ section.id }} .pc-rib-card__body { padding: clamp(18px, 2.4vw, 26px); display: flex; flex-direction: column; }
+  .pc-rib-{{ section.id }} .pc-rib-card__name { font-family: var(--font-headline); text-transform: uppercase; font-size: clamp(20px, 2.6vw, 26px); line-height: 1; margin: 0; }
+  .pc-rib-{{ section.id }} .pc-rib-card__tag { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.12em; font-size: 11px; color: color-mix(in srgb, var(--accent, {{ gold }}) 70%, #000); margin: 8px 0 12px; }
+  .pc-rib-{{ section.id }} .pc-rib-card__desc { font-family: var(--font-display); font-size: 14.5px; line-height: 1.7; color: {{ ink }}; }
+  .pc-rib-{{ section.id }} .pc-rib-card__desc p { margin: 0 0 0.7em; }
+  .pc-rib-{{ section.id }} .pc-rib-card__desc p:last-child { margin-bottom: 0; }
+  .pc-rib-{{ section.id }} .pc-rib-card__cta { margin-top: 14px; font-family: var(--font-display); letter-spacing: 0.08em; text-transform: uppercase; font-size: 12px; color: {{ ink }}; }
+  .pc-rib-{{ section.id }} .pc-rib-card:hover .pc-rib-card__cta { text-decoration: underline; text-underline-offset: 0.2em; }
 
-  .pc-ritual-{{ section.id }} .pc-ritual__foot { text-align: center; margin-top: clamp(28px, 4vw, 44px); }
-  .pc-ritual-{{ section.id }} .pc-ritual__btn { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-display); letter-spacing: 0.1em; text-transform: uppercase; font-size: 13px; color: #15241b; background: {{ gold }}; padding: 14px 28px; border-radius: 999px; text-decoration: none; box-shadow: 0 5px 0 color-mix(in srgb, {{ gold }} 55%, #000); }
-  .pc-ritual-{{ section.id }} .pc-ritual__btn:hover { transform: translateY(2px); box-shadow: 0 3px 0 color-mix(in srgb, {{ gold }} 55%, #000); }
+  .pc-rib-{{ section.id }} .pc-rib__foot { text-align: center; margin-top: clamp(28px, 4vw, 44px); }
+  .pc-rib-{{ section.id }} .pc-rib__btn { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-display); letter-spacing: 0.1em; text-transform: uppercase; font-size: 13px; color: #15241b; background: {{ gold }}; padding: 14px 28px; border-radius: 999px; text-decoration: none; box-shadow: 0 5px 0 color-mix(in srgb, {{ gold }} 55%, #000); }
+  .pc-rib-{{ section.id }} .pc-rib__btn:hover { transform: translateY(2px); box-shadow: 0 3px 0 color-mix(in srgb, {{ gold }} 55%, #000); }
 {%- endstyle -%}
 
-<section class="pc-ritual-{{ section.id }}">
+<section class="pc-rib-{{ section.id }}">
   <div class="container">
-    <div class="pc-ritual__head">
-      {%- if section.settings.eyebrow != blank -%}<div class="pc-ritual__eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
-      {%- if section.settings.title != blank -%}<h2 class="pc-ritual__title">{{ section.settings.title }}</h2>{%- endif -%}
-      {%- if section.settings.tagline != blank -%}<div class="pc-ritual__tagline">{{ section.settings.tagline }}</div>{%- endif -%}
-      {%- if section.settings.intro != blank -%}<div class="pc-ritual__intro rte">{{ section.settings.intro }}</div>{%- endif -%}
+    <div class="pc-rib__head">
+      {%- if section.settings.eyebrow != blank -%}<div class="pc-rib__eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
+      {%- if section.settings.title != blank -%}<h2 class="pc-rib__title">{{ section.settings.title }}</h2>{%- endif -%}
+      {%- if section.settings.tagline != blank -%}<div class="pc-rib__tagline">{{ section.settings.tagline }}</div>{%- endif -%}
+      {%- if section.settings.intro != blank -%}<div class="pc-rib__intro rte">{{ section.settings.intro }}</div>{%- endif -%}
     </div>
 
-    <div class="pc-ritual__grid">
+    <div class="pc-rib__grid">
       {%- for block in section.blocks -%}
         {%- liquid
           assign fit_class = 'is-contain'
@@ -75,28 +75,28 @@
             assign has_link = true
           endif
         -%}
-        <a class="pc-ritual-card"{% if has_link %} href="{{ block.settings.link }}"{% endif %} style="--accent: {{ block.settings.color | default: gold }};" {{ block.shopify_attributes }}>
-          <div class="pc-ritual-card__media">
-            {%- if block.settings.number != blank -%}<span class="pc-ritual-card__num">{{ block.settings.number }}</span>{%- endif -%}
+        <a class="pc-rib-card"{% if has_link %} href="{{ block.settings.link }}"{% endif %} style="--accent: {{ block.settings.color | default: gold }};" {{ block.shopify_attributes }}>
+          <div class="pc-rib-card__media">
+            {%- if block.settings.number != blank -%}<span class="pc-rib-card__num">{{ block.settings.number }}</span>{%- endif -%}
             {%- if block.settings.image != blank -%}
               {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', class: fit_class, alt: block.settings.title }}
             {%- else -%}
-              <span class="pc-ritual-card__ph" aria-hidden="true">{{ block.settings.title | slice: 0, 2 | upcase }}</span>
+              <span class="pc-rib-card__ph" aria-hidden="true">{{ block.settings.title | slice: 0, 2 | upcase }}</span>
             {%- endif -%}
           </div>
-          <div class="pc-ritual-card__body">
-            {%- if block.settings.title != blank -%}<h3 class="pc-ritual-card__name">{{ block.settings.title }}</h3>{%- endif -%}
-            {%- if block.settings.tagline != blank -%}<div class="pc-ritual-card__tag">{{ block.settings.tagline }}</div>{%- endif -%}
-            {%- if block.settings.description != blank -%}<div class="pc-ritual-card__desc rte">{{ block.settings.description }}</div>{%- endif -%}
-            {%- if has_link -%}<span class="pc-ritual-card__cta">{{ block.settings.cta_text | default: 'Explore this box' }} &rarr;</span>{%- endif -%}
+          <div class="pc-rib-card__body">
+            {%- if block.settings.title != blank -%}<h3 class="pc-rib-card__name">{{ block.settings.title }}</h3>{%- endif -%}
+            {%- if block.settings.tagline != blank -%}<div class="pc-rib-card__tag">{{ block.settings.tagline }}</div>{%- endif -%}
+            {%- if block.settings.description != blank -%}<div class="pc-rib-card__desc rte">{{ block.settings.description }}</div>{%- endif -%}
+            {%- if has_link -%}<span class="pc-rib-card__cta">{{ block.settings.cta_text | default: 'Explore this box' }} &rarr;</span>{%- endif -%}
           </div>
         </a>
       {%- endfor -%}
     </div>
 
     {%- if section.settings.foot_cta_text != blank -%}
-      <div class="pc-ritual__foot">
-        <a class="pc-ritual__btn" href="{{ section.settings.foot_cta_link | default: '#' }}">{{ section.settings.foot_cta_text }} &rarr;</a>
+      <div class="pc-rib__foot">
+        <a class="pc-rib__btn" href="{{ section.settings.foot_cta_link | default: '#' }}">{{ section.settings.foot_cta_text }} &rarr;</a>
       </div>
     {%- endif -%}
   </div>
