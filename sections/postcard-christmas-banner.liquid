@@ -23,7 +23,11 @@
   .pc-xmasban-{{ section.id }} .pc-xmasban__inner { position: relative; z-index: 3; }
   .pc-xmasban-{{ section.id }} .pc-xmasban__eyebrow {
     font-family: var(--font-display); letter-spacing: 0.2em; text-transform: uppercase;
-    font-size: 12px; color: {{ accent }}; margin-bottom: 12px;
+    font-size: 12px; color: {{ accent }}; margin-bottom: 10px;
+  }
+  .pc-xmasban-{{ section.id }} .pc-xmasban__script {
+    font-family: var(--font-script); color: {{ accent }};
+    font-size: clamp(22px, 4vw, 34px); line-height: 1.05; margin-bottom: 6px;
   }
   .pc-xmasban-{{ section.id }} .pc-xmasban__title {
     font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 0.02em;
@@ -59,6 +63,7 @@
   <div class="pc-xmasban__inner container">
     {%- if section.settings.show_garland -%}<div class="pc-xmasban__garland" aria-hidden="true"></div>{%- endif -%}
     {%- if section.settings.eyebrow != blank -%}<div class="pc-xmasban__eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
+    {%- if section.settings.script != blank -%}<div class="pc-xmasban__script">{{ section.settings.script }}</div>{%- endif -%}
     {%- if section.settings.title != blank -%}<h2 class="pc-xmasban__title">{{ section.settings.title }}</h2>{%- endif -%}
     {%- if section.settings.body != blank -%}<p class="pc-xmasban__body">{{ section.settings.body }}</p>{%- endif -%}
     {%- if section.settings.cta_text != blank -%}
@@ -99,6 +104,7 @@
   "settings": [
     { "type": "paragraph", "content": "A festive promo band. Use the show/hide eye to switch it on and off seasonally. Defaults to link into the Christmas gift world." },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "New this season" },
+    { "type": "text", "id": "script", "label": "Script line", "default": "Season’s greetings" },
     { "type": "text", "id": "title", "label": "Title", "default": "Step into Postcard Christmas." },
     { "type": "textarea", "id": "body", "label": "Body", "default": "A whole little world of gifts, wrapped in scent. Open the door and find something unforgettable for everyone on your list." },
     { "type": "text", "id": "cta_text", "label": "Button text", "default": "Enter the gift world" },
@@ -107,7 +113,7 @@
     { "type": "checkbox", "id": "show_garland", "label": "Garland accent line", "default": true },
     { "type": "header", "content": "Colours" },
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#33503F" },
-    { "type": "color", "id": "title_color", "label": "Title", "default": "#212020" },
+    { "type": "color", "id": "title_color", "label": "Title", "default": "#FFF5E1" },
     { "type": "color", "id": "text_color", "label": "Body text", "default": "#F2EEDD" },
     { "type": "color", "id": "accent_color", "label": "Accent / button", "default": "#E8C36A" },
     { "type": "header", "content": "Spacing" },
