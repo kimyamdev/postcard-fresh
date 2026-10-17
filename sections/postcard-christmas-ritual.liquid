@@ -37,31 +37,20 @@
   .pc-rib-{{ section.id }} .pc-rib__pillar-l { font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 0.04em; font-size: 14px; margin: 8px 0 4px; color: {{ ink }}; }
   .pc-rib-{{ section.id }} .pc-rib__pillar-t { font-family: var(--font-display); font-size: 12.5px; line-height: 1.5; color: {{ ink }}; opacity: 0.78; }
 
-  .pc-rib-{{ section.id }} .pc-rib__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(16px, 1.8vw, 24px); perspective: 1400px; }
-  @media (min-width: 600px) { .pc-rib-{{ section.id }} .pc-rib__grid { grid-template-columns: repeat(3, 1fr); } }
-  @media (min-width: 990px) { .pc-rib-{{ section.id }} .pc-rib__grid { grid-template-columns: repeat(6, 1fr); } }
+  .pc-rib-{{ section.id }} .pc-rib__grid { display: grid; grid-template-columns: 1fr; gap: clamp(18px, 2.4vw, 32px); }
+  @media (min-width: 600px) { .pc-rib-{{ section.id }} .pc-rib__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 990px) { .pc-rib-{{ section.id }} .pc-rib__grid { grid-template-columns: repeat(3, 1fr); } }
 
   .pc-rib-{{ section.id }} .pc-rib-card {
     position: relative;
     display: flex; flex-direction: column; text-decoration: none; color: {{ ink }};
-    background: var(--color-bg-card, #fffdf4); border: 1px solid var(--color-line);
-    border-radius: 2px; overflow: hidden;
-    --edge: color-mix(in srgb, var(--accent, {{ gold }}) 42%, #1a1512);
-    box-shadow:
-      2px 2px 0 var(--edge), 4px 4px 0 var(--edge), 6px 6px 0 var(--edge),
-      8px 8px 0 var(--edge), 10px 10px 0 var(--edge),
-      13px 16px 20px rgba(0,0,0,0.2);
-    transform-style: preserve-3d;
-    transition: transform 0.28s cubic-bezier(0.2,0.7,0.2,1), box-shadow 0.28s ease;
-    will-change: transform;
+    background: var(--color-bg-card, #fffdf4);
+    border: 1px solid var(--color-line); border-top: 3px solid var(--accent, {{ gold }});
+    border-radius: 3px; overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.09);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-  .pc-rib-{{ section.id }} .pc-rib-card:hover {
-    transform: translate(-2px, -5px) rotateY(-3deg) rotateX(2deg);
-    box-shadow:
-      3px 3px 0 var(--edge), 6px 6px 0 var(--edge), 9px 9px 0 var(--edge),
-      12px 12px 0 var(--edge), 14px 14px 0 var(--edge),
-      18px 22px 28px rgba(0,0,0,0.26);
-  }
+  .pc-rib-{{ section.id }} .pc-rib-card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(0,0,0,0.15); }
   @media (prefers-reduced-motion: reduce) { .pc-rib-{{ section.id }} .pc-rib-card { transition: none; } .pc-rib-{{ section.id }} .pc-rib-card:hover { transform: none; } }
   .pc-rib-{{ section.id }} .pc-rib-card__media {
     position: relative; aspect-ratio: 1 / 1; overflow: hidden; display: flex; align-items: center; justify-content: center;
@@ -88,10 +77,10 @@
     font-family: var(--font-headline); font-size: 11px; letter-spacing: 0.06em;
     background: {{ ink }}; color: #fff; padding: 2px 6px; border-radius: 2px;
   }
-  .pc-rib-{{ section.id }} .pc-rib-card__body { padding: 12px 8px 14px; text-align: center; display: flex; flex-direction: column; box-shadow: inset 0 1px 0 var(--color-line-soft, rgba(33,32,32,0.08)); }
-  .pc-rib-{{ section.id }} .pc-rib-card__name { font-family: var(--font-headline); text-transform: uppercase; font-size: clamp(14px, 1.3vw, 18px); line-height: 1.02; margin: 0; }
-  .pc-rib-{{ section.id }} .pc-rib-card__kind { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.14em; font-size: 9px; color: color-mix(in srgb, var(--accent, {{ gold }}) 72%, #000); margin-top: 3px; }
-  .pc-rib-{{ section.id }} .pc-rib-card__tag { font-family: var(--font-display); font-size: 11px; line-height: 1.3; color: {{ ink }}; opacity: 0.72; margin: 6px 0 0; }
+  .pc-rib-{{ section.id }} .pc-rib-card__body { padding: 16px 16px 18px; text-align: center; display: flex; flex-direction: column; }
+  .pc-rib-{{ section.id }} .pc-rib-card__name { font-family: var(--font-headline); text-transform: uppercase; font-size: clamp(19px, 2vw, 25px); line-height: 1.02; margin: 0; }
+  .pc-rib-{{ section.id }} .pc-rib-card__kind { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.16em; font-size: 10px; color: color-mix(in srgb, var(--accent, {{ gold }}) 72%, #000); margin-top: 4px; }
+  .pc-rib-{{ section.id }} .pc-rib-card__tag { font-family: var(--font-display); font-size: 13px; line-height: 1.4; color: {{ ink }}; opacity: 0.74; margin: 8px 0 0; }
   .pc-rib-{{ section.id }} .pc-rib-card__desc { font-family: var(--font-display); font-size: 14.5px; line-height: 1.7; color: {{ ink }}; }
   .pc-rib-{{ section.id }} .pc-rib-card__desc p { margin: 0 0 0.7em; }
   .pc-rib-{{ section.id }} .pc-rib-card__desc p:last-child { margin-bottom: 0; }
