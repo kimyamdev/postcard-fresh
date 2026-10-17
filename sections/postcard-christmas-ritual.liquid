@@ -37,15 +37,31 @@
   .pc-rib-{{ section.id }} .pc-rib__pillar-l { font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 0.04em; font-size: 14px; margin: 8px 0 4px; color: {{ ink }}; }
   .pc-rib-{{ section.id }} .pc-rib__pillar-t { font-family: var(--font-display); font-size: 12.5px; line-height: 1.5; color: {{ ink }}; opacity: 0.78; }
 
-  .pc-rib-{{ section.id }} .pc-rib__grid { display: grid; grid-template-columns: 1fr; gap: clamp(16px, 2.5vw, 28px); }
+  .pc-rib-{{ section.id }} .pc-rib__grid { display: grid; grid-template-columns: 1fr; gap: clamp(24px, 3.4vw, 40px); perspective: 1600px; }
   @media (min-width: 750px) { .pc-rib-{{ section.id }} .pc-rib__grid { grid-template-columns: repeat(2, 1fr); } }
 
   .pc-rib-{{ section.id }} .pc-rib-card {
+    position: relative;
     display: flex; flex-direction: column; text-decoration: none; color: {{ ink }};
-    background: var(--color-bg-card, #fffdf4); border: 1.5px solid var(--color-line);
-    border-radius: 3px; overflow: hidden; transition: transform 0.15s ease, box-shadow 0.15s ease;
+    background: var(--color-bg-card, #fffdf4); border: 1px solid var(--color-line);
+    border-radius: 2px; overflow: hidden;
+    --edge: color-mix(in srgb, var(--accent, {{ gold }}) 42%, #1a1512);
+    box-shadow:
+      3px 3px 0 var(--edge), 6px 6px 0 var(--edge), 9px 9px 0 var(--edge),
+      12px 12px 0 var(--edge), 15px 15px 0 var(--edge),
+      18px 22px 30px rgba(0,0,0,0.22);
+    transform-style: preserve-3d;
+    transition: transform 0.28s cubic-bezier(0.2,0.7,0.2,1), box-shadow 0.28s ease;
+    will-change: transform;
   }
-  .pc-rib-{{ section.id }} .pc-rib-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-stamp); }
+  .pc-rib-{{ section.id }} .pc-rib-card:hover {
+    transform: translate(-3px, -6px) rotateY(-3deg) rotateX(2deg);
+    box-shadow:
+      4px 4px 0 var(--edge), 8px 8px 0 var(--edge), 12px 12px 0 var(--edge),
+      16px 16px 0 var(--edge), 20px 20px 0 var(--edge),
+      24px 30px 40px rgba(0,0,0,0.28);
+  }
+  @media (prefers-reduced-motion: reduce) { .pc-rib-{{ section.id }} .pc-rib-card { transition: none; } .pc-rib-{{ section.id }} .pc-rib-card:hover { transform: none; } }
   .pc-rib-{{ section.id }} .pc-rib-card__media {
     position: relative; aspect-ratio: 16 / 10; overflow: hidden; display: flex; align-items: center; justify-content: center;
     background: radial-gradient(120% 120% at 30% 20%, color-mix(in srgb, var(--accent, {{ gold }}) 55%, #fff) 0%, color-mix(in srgb, var(--accent, {{ gold }}) 22%, #fff) 70%, #fff 100%);
@@ -71,7 +87,7 @@
     font-family: var(--font-headline); font-size: 14px; letter-spacing: 0.08em;
     background: {{ ink }}; color: #fff; padding: 3px 9px; border-radius: 2px;
   }
-  .pc-rib-{{ section.id }} .pc-rib-card__body { padding: clamp(18px, 2.4vw, 26px); display: flex; flex-direction: column; }
+  .pc-rib-{{ section.id }} .pc-rib-card__body { padding: clamp(18px, 2.4vw, 26px); display: flex; flex-direction: column; box-shadow: inset 0 1px 0 var(--color-line-soft, rgba(33,32,32,0.08)); }
   .pc-rib-{{ section.id }} .pc-rib-card__name { font-family: var(--font-headline); text-transform: uppercase; font-size: clamp(20px, 2.6vw, 26px); line-height: 1; margin: 0; }
   .pc-rib-{{ section.id }} .pc-rib-card__tag { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.12em; font-size: 11px; color: color-mix(in srgb, var(--accent, {{ gold }}) 70%, #000); margin: 8px 0 12px; }
   .pc-rib-{{ section.id }} .pc-rib-card__desc { font-family: var(--font-display); font-size: 14.5px; line-height: 1.7; color: {{ ink }}; }
