@@ -1,0 +1,78 @@
+{
+  "sections": {
+    "main": {
+      "type": "postcard-christmas",
+      "settings": {
+        "world_name": "Postcard Christmas",
+        "door_eyebrow": "Postcard presents",
+        "door_script": "Season’s greetings",
+        "door_cta": "Open the door",
+        "door_hint": "Knock, knock — your gift world awaits",
+        "door_mode": "every",
+        "show_snow": true,
+        "hero_eyebrow": "Welcome to",
+        "hero_script": "the gift",
+        "hero_intro": "<p>A whole little world of presents, wrapped in scent. Step inside and find something unforgettable for everyone on your list.</p>",
+        "featured_collection": "christmas-gifting",
+        "featured_eyebrow": "Under the tree",
+        "featured_heading": "Most-wrapped this season",
+        "featured_count": 8,
+        "rooms_eyebrow": "Pick a door",
+        "rooms_heading": "Gifts for every kind of them",
+        "closing_eyebrow": "Bigger than a stocking?",
+        "closing_title": "Gift the whole team.",
+        "closing_body": "Bespoke festive hampers for hotels, weddings and bossy bosses. From 20 units up.",
+        "closing_cta": "Talk to corporate",
+        "closing_link": "/pages/corporate",
+        "color_pine": "#33503F",
+        "color_red": "#A8403A",
+        "color_gold": "#E8C36A"
+      },
+      "blocks": {
+        "room_him": {
+          "type": "room",
+          "settings": { "eyebrow": "For", "title": "Him", "subtitle": "Easy wins he’ll actually use", "stamp": "HIM", "link": "/collections/gifts-for-him", "color": "#33503F" }
+        },
+        "room_bestie": {
+          "type": "room",
+          "settings": { "eyebrow": "For", "title": "the Bestie", "subtitle": "For your person", "stamp": "BFF", "link": "/collections/gifts-for-bestie", "color": "#A8403A" }
+        },
+        "room_host": {
+          "type": "room",
+          "settings": { "eyebrow": "For", "title": "the Host", "subtitle": "Never arrive empty-handed", "stamp": "HOST", "link": "/collections/gifts-for-the-host", "color": "#B07A4E" }
+        },
+        "room_coworker": {
+          "type": "room",
+          "settings": { "eyebrow": "For", "title": "the Co-worker", "subtitle": "Secret Santa, sorted", "stamp": "WORK", "link": "/collections/gifts-for-the-co-worker", "color": "#5C6688" }
+        },
+        "room_scent": {
+          "type": "room",
+          "settings": { "eyebrow": "For", "title": "the Scent Lover", "subtitle": "For the discerning nose", "stamp": "NOSE", "link": "/collections/gifts-for-the-scent-aficionado", "color": "#8A6CA8" }
+        },
+        "room_travel": {
+          "type": "room",
+          "settings": { "eyebrow": "For", "title": "the Traveller", "subtitle": "Takes scent on the road", "stamp": "TRIP", "link": "/collections/gifts-for-travel", "color": "#9CC4D6" }
+        },
+        "room_planet": {
+          "type": "room",
+          "settings": { "eyebrow": "For", "title": "Captain Planet", "subtitle": "Refillable, thoughtful", "stamp": "ECO", "link": "/collections/gifts-for-captain-planet", "color": "#6E7F58" }
+        },
+        "room_gym": {
+          "type": "room",
+          "settings": { "eyebrow": "For", "title": "the Gym Bunny", "subtitle": "Post-workout rituals", "stamp": "GYM", "link": "/collections/gifts-for-the-gym-bro-bunny", "color": "#D89A3C" }
+        }
+      },
+      "block_order": [
+        "room_him",
+        "room_bestie",
+        "room_host",
+        "room_coworker",
+        "room_scent",
+        "room_travel",
+        "room_planet",
+        "room_gym"
+      ]
+    }
+  },
+  "order": ["main"]
+}

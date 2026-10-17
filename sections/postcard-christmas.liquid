@@ -1,0 +1,384 @@
+{%- comment -%}
+  Postcard Christmas — a festive gift "world" you step into through a door.
+  Cinematic full-screen door opens to reveal: hero, featured gifts (from a
+  collection), gift "rooms" (persona collections as stamp cards), and a closing band.
+  On-brand refined palette + subtle snow. Vanilla JS, reduced-motion aware.
+{%- endcomment -%}
+
+{%- liquid
+  assign pine = section.settings.color_pine | default: '#33503F'
+  assign red = section.settings.color_red | default: '#A8403A'
+  assign gold = section.settings.color_gold | default: '#E8C36A'
+  assign featured = section.settings.featured_collection
+  assign world_name = section.settings.world_name | default: 'Postcard Christmas'
+-%}
+
+{%- style -%}
+  .pc-xmas { position: relative; overflow: hidden; background: var(--color-bg); }
+
+  /* ---- Door overlay ---- */
+  .pc-xmas-door {
+    position: fixed; inset: 0; z-index: 9990;
+    display: flex; align-items: center; justify-content: center;
+    background:
+      radial-gradient(120% 90% at 50% 10%, color-mix(in srgb, {{ pine }} 70%, #0d1a12) 0%, {{ pine }} 48%, #15241b 100%);
+    color: #fff5e1;
+    overflow: hidden;
+    transition: opacity 0.9s ease 0.35s, visibility 0s linear 1.25s;
+    perspective: 1600px;
+  }
+  .pc-xmas-door.is-open { opacity: 0; visibility: hidden; pointer-events: none; }
+  body.pc-xmas-locked { overflow: hidden; }
+
+  .pc-xmas-door__inner {
+    position: relative; z-index: 3; text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 22px;
+    padding: 24px; max-width: 560px;
+    transition: opacity 0.5s ease;
+  }
+  .pc-xmas-door.is-open .pc-xmas-door__inner { opacity: 0; }
+  .pc-xmas-door__eyebrow {
+    font-family: var(--font-display); letter-spacing: 0.22em; text-transform: uppercase;
+    font-size: 12px; opacity: 0.85;
+  }
+  .pc-xmas-door__script { font-family: var(--font-script); color: {{ gold }}; font-size: clamp(28px, 6vw, 46px); line-height: 1; }
+  .pc-xmas-door__title {
+    font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 0.03em;
+    font-size: clamp(34px, 8vw, 74px); line-height: 0.95; margin: 0; color: #fff5e1;
+  }
+
+  /* The door itself (two leaves) */
+  .pc-xmas-door__frame {
+    position: relative; width: min(74vw, 300px); aspect-ratio: 3 / 4.4;
+    transform-style: preserve-3d;
+    filter: drop-shadow(0 24px 40px rgba(0,0,0,0.45));
+  }
+  .pc-xmas-door__leaf {
+    position: absolute; top: 0; bottom: 0; width: 50%;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, {{ red }} 86%, #000) 0%, {{ red }} 50%, color-mix(in srgb, {{ red }} 80%, #000) 100%);
+    border: 2px solid {{ gold }};
+    transition: transform 1.15s cubic-bezier(0.7, 0, 0.2, 1);
+    transform-origin: left center;
+    backface-visibility: hidden;
+  }
+  .pc-xmas-door__leaf::before {
+    content: ''; position: absolute; inset: 12px;
+    border: 1.5px solid color-mix(in srgb, {{ gold }} 70%, transparent);
+  }
+  .pc-xmas-door__leaf::after {
+    content: ''; position: absolute; left: 18px; right: 18px; top: 18px; height: 40%;
+    border: 1.5px solid color-mix(in srgb, {{ gold }} 55%, transparent);
+  }
+  .pc-xmas-door__leaf--left { left: 0; transform-origin: left center; }
+  .pc-xmas-door__leaf--right { right: 0; transform-origin: right center; }
+  .pc-xmas-door.is-open .pc-xmas-door__leaf--left { transform: rotateY(-108deg); }
+  .pc-xmas-door.is-open .pc-xmas-door__leaf--right { transform: rotateY(108deg); }
+
+  /* Wreath + knocker in the centre */
+  .pc-xmas-door__wreath {
+    position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); z-index: 4;
+    width: 92px; height: 92px; border-radius: 50%;
+    border: 7px solid color-mix(in srgb, {{ pine }} 75%, #0a140d);
+    box-shadow: inset 0 0 0 3px color-mix(in srgb, {{ gold }} 50%, transparent);
+    transition: opacity 0.4s ease;
+  }
+  .pc-xmas-door__wreath::after {
+    content: ''; position: absolute; left: 50%; top: 100%; transform: translateX(-50%);
+    width: 16px; height: 10px; border-radius: 0 0 8px 8px;
+    background: {{ red }}; box-shadow: 0 -2px 0 {{ gold }};
+  }
+  .pc-xmas-door__knock {
+    position: absolute; left: 50%; top: 58%; transform: translate(-50%, -50%); z-index: 5;
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 4px solid {{ gold }}; background: transparent;
+  }
+  .pc-xmas-door.is-open .pc-xmas-door__wreath,
+  .pc-xmas-door.is-open .pc-xmas-door__knock { opacity: 0; }
+
+  .pc-xmas-door__cta {
+    display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+    font-family: var(--font-display); letter-spacing: 0.12em; text-transform: uppercase; font-size: 13px;
+    color: #15241b; background: {{ gold }}; border: 0; padding: 14px 26px; border-radius: 999px;
+    box-shadow: 0 6px 0 color-mix(in srgb, {{ gold }} 55%, #000);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .pc-xmas-door__cta:hover { transform: translateY(2px); box-shadow: 0 4px 0 color-mix(in srgb, {{ gold }} 55%, #000); }
+  .pc-xmas-door__hint { font-family: var(--font-display); font-size: 12px; opacity: 0.7; letter-spacing: 0.08em; }
+  .pc-xmas-door__skip {
+    position: absolute; bottom: 20px; right: 22px; z-index: 6;
+    background: none; border: 0; color: #fff5e1; opacity: 0.6; cursor: pointer;
+    font-family: var(--font-display); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .pc-xmas-door__skip:hover { opacity: 1; }
+
+  /* knock nudge animation to invite interaction */
+  @keyframes pc-xmas-knocknudge { 0%,92%,100% { transform: translate(-50%,-50%) rotate(0); } 94% { transform: translate(-50%,-52%) rotate(-6deg); } 97% { transform: translate(-50%,-50%) rotate(5deg); } }
+  .pc-xmas-door:not(.is-open) .pc-xmas-door__knock { animation: pc-xmas-knocknudge 3.2s ease-in-out infinite; }
+
+  /* ---- Snow ---- */
+  .pc-xmas-snow { position: absolute; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }
+  .pc-xmas-flake { position: absolute; top: -12px; color: #fff; opacity: 0.85; will-change: transform; }
+  @keyframes pc-xmas-fall { to { transform: translateY(115vh) translateX(var(--drift, 20px)); } }
+
+  /* ---- Revealed world ---- */
+  .pc-xmas-hero { padding: clamp(56px, 10vw, 110px) 0 clamp(28px, 5vw, 56px); text-align: center; position: relative; }
+  .pc-xmas-hero__eyebrow { font-family: var(--font-display); letter-spacing: 0.2em; text-transform: uppercase; font-size: 12px; color: {{ pine }}; margin-bottom: 14px; }
+  .pc-xmas-hero__script { font-family: var(--font-script); color: {{ red }}; font-size: clamp(26px, 5vw, 40px); line-height: 1; }
+  .pc-xmas-hero__title { font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 0.02em; font-size: clamp(40px, 9vw, 96px); line-height: 0.92; margin: 6px 0 18px; color: var(--color-ink); }
+  .pc-xmas-hero__intro { max-width: 40rem; margin: 0 auto; font-family: var(--font-display); line-height: 1.75; color: var(--color-ink); }
+  .pc-xmas-hero__cta { margin-top: 26px; }
+  .pc-xmas-garland { height: 3px; width: 120px; margin: 22px auto 0; background: repeating-linear-gradient(90deg, {{ pine }} 0 10px, {{ red }} 10px 20px, {{ gold }} 20px 30px); border-radius: 3px; }
+
+  .pc-xmas-section { padding: clamp(36px, 6vw, 72px) 0; }
+  .pc-xmas-section__head { text-align: center; margin-bottom: clamp(24px, 4vw, 44px); }
+  .pc-xmas-section__eyebrow { font-family: var(--font-display); letter-spacing: 0.18em; text-transform: uppercase; font-size: 12px; color: {{ red }}; margin-bottom: 10px; }
+  .pc-xmas-section__title { font-family: var(--font-headline); text-transform: uppercase; font-size: clamp(28px, 5vw, 48px); line-height: 1; color: var(--color-ink); margin: 0; }
+
+  .pc-xmas-gifts__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(12px, 2vw, 22px); }
+  @media (min-width: 750px) { .pc-xmas-gifts__grid { grid-template-columns: repeat(4, 1fr); } }
+  .pc-xmas-gifts__cta { text-align: center; margin-top: 32px; }
+
+  /* Rooms */
+  .pc-xmas-rooms__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(12px, 2vw, 20px); }
+  @media (min-width: 750px) { .pc-xmas-rooms__grid { grid-template-columns: repeat(4, 1fr); } }
+  .pc-xmas-room {
+    position: relative; display: flex; flex-direction: column; justify-content: flex-end;
+    aspect-ratio: 3 / 4; padding: 18px; color: #fff5e1; text-decoration: none;
+    border: 2px solid var(--color-ink); border-radius: 2px; overflow: hidden;
+    box-shadow: var(--shadow-stamp); transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .pc-xmas-room:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-stamp-lg); }
+  .pc-xmas-room::before {
+    content: ''; position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(170deg, color-mix(in srgb, var(--room, {{ pine }}) 88%, #000) 0%, var(--room, {{ pine }}) 60%, color-mix(in srgb, var(--room, {{ pine }}) 78%, #000) 100%);
+  }
+  .pc-xmas-room__door { position: absolute; top: 12px; left: 12px; right: 12px; bottom: 44px; z-index: 1; border: 1.5px solid color-mix(in srgb, {{ gold }} 55%, transparent); border-bottom: none; }
+  .pc-xmas-room__knob { position: absolute; right: 22px; top: 48%; width: 8px; height: 8px; border-radius: 50%; background: {{ gold }}; z-index: 2; }
+  .pc-xmas-room__pm { position: absolute; top: 12px; right: 12px; z-index: 2; }
+  .pc-xmas-room__eyebrow { position: relative; z-index: 2; font-family: var(--font-display); letter-spacing: 0.14em; text-transform: uppercase; font-size: 10px; opacity: 0.85; }
+  .pc-xmas-room__title { position: relative; z-index: 2; font-family: var(--font-headline); text-transform: uppercase; font-size: clamp(18px, 2.4vw, 24px); line-height: 1; margin-top: 4px; }
+  .pc-xmas-room__sub { position: relative; z-index: 2; font-family: var(--font-display); font-size: 12px; opacity: 0.88; margin-top: 6px; }
+
+  /* Closing band */
+  .pc-xmas-closing { background: {{ pine }}; color: #fff5e1; padding: clamp(40px, 6vw, 72px) 0; text-align: center; position: relative; overflow: hidden; }
+  .pc-xmas-closing__eyebrow { font-family: var(--font-display); letter-spacing: 0.2em; text-transform: uppercase; font-size: 12px; color: {{ gold }}; margin-bottom: 10px; }
+  .pc-xmas-closing__title { font-family: var(--font-headline); text-transform: uppercase; font-size: clamp(28px, 5vw, 52px); line-height: 1; margin: 0 0 14px; }
+  .pc-xmas-closing__body { max-width: 34rem; margin: 0 auto 24px; font-family: var(--font-display); line-height: 1.7; opacity: 0.92; }
+  .pc-xmas-btn-gold { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-display); letter-spacing: 0.1em; text-transform: uppercase; font-size: 13px; color: #15241b; background: {{ gold }}; padding: 14px 26px; border-radius: 999px; text-decoration: none; box-shadow: 0 5px 0 color-mix(in srgb, {{ gold }} 55%, #000); }
+  .pc-xmas-btn-gold:hover { transform: translateY(2px); box-shadow: 0 3px 0 color-mix(in srgb, {{ gold }} 55%, #000); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pc-xmas-door { transition: opacity 0.4s ease; }
+    .pc-xmas-door__leaf { transition: none; }
+    .pc-xmas-door.is-open .pc-xmas-door__leaf--left,
+    .pc-xmas-door.is-open .pc-xmas-door__leaf--right { transform: none; }
+    .pc-xmas-door:not(.is-open) .pc-xmas-door__knock { animation: none; }
+    .pc-xmas-flake { display: none; }
+  }
+{%- endstyle -%}
+
+<div class="pc-xmas" data-door-mode="{{ section.settings.door_mode }}" data-snow="{{ section.settings.show_snow }}">
+
+  {%- comment -%} ---------- DOOR OVERLAY ---------- {%- endcomment -%}
+  <div class="pc-xmas-door" id="pcXmasDoor-{{ section.id }}" role="dialog" aria-label="Enter {{ world_name | escape }}">
+    {%- if section.settings.show_snow -%}<div class="pc-xmas-snow" data-snow-layer aria-hidden="true"></div>{%- endif -%}
+    <button type="button" class="pc-xmas-door__skip" data-xmas-open>Skip &rarr;</button>
+
+    <div class="pc-xmas-door__frame" data-xmas-open>
+      <div class="pc-xmas-door__leaf pc-xmas-door__leaf--left"></div>
+      <div class="pc-xmas-door__leaf pc-xmas-door__leaf--right"></div>
+      <div class="pc-xmas-door__wreath" aria-hidden="true"></div>
+      <div class="pc-xmas-door__knock" aria-hidden="true"></div>
+    </div>
+
+    <div class="pc-xmas-door__inner">
+      <div class="pc-xmas-door__eyebrow">{{ section.settings.door_eyebrow | default: 'Postcard presents' }}</div>
+      <div class="pc-xmas-door__script">{{ section.settings.door_script | default: 'Season’s greetings' }}</div>
+      <h1 class="pc-xmas-door__title">{{ world_name }}</h1>
+      <button type="button" class="pc-xmas-door__cta" data-xmas-open>{{ section.settings.door_cta | default: 'Open the door' }}</button>
+      <div class="pc-xmas-door__hint">{{ section.settings.door_hint | default: 'Knock, knock — your gift world awaits' }}</div>
+    </div>
+  </div>
+
+  {%- comment -%} ---------- REVEALED WORLD ---------- {%- endcomment -%}
+  <section class="pc-xmas-hero">
+    <div class="container">
+      <div class="pc-xmas-hero__eyebrow">{{ section.settings.hero_eyebrow | default: 'Welcome to the' }}</div>
+      <div class="pc-xmas-hero__script">{{ section.settings.hero_script | default: 'the gift' }}</div>
+      <h2 class="pc-xmas-hero__title">{{ world_name }}</h2>
+      <div class="pc-xmas-hero__intro rte">{{ section.settings.hero_intro }}</div>
+      <div class="pc-xmas-garland" aria-hidden="true"></div>
+      {%- if section.settings.hero_cta_text != blank -%}
+        <div class="pc-xmas-hero__cta"><a class="pc-xmas-btn-gold" href="{{ section.settings.hero_cta_link | default: '#' }}">{{ section.settings.hero_cta_text }}</a></div>
+      {%- endif -%}
+    </div>
+  </section>
+
+  {%- if featured != blank and featured.products.size > 0 -%}
+    <section class="pc-xmas-section">
+      <div class="container">
+        <div class="pc-xmas-section__head">
+          <div class="pc-xmas-section__eyebrow">{{ section.settings.featured_eyebrow | default: 'Under the tree' }}</div>
+          <h2 class="pc-xmas-section__title">{{ section.settings.featured_heading | default: 'Most-wrapped this season' }}</h2>
+        </div>
+        <div class="pc-xmas-gifts__grid">
+          {%- for product in featured.products limit: section.settings.featured_count -%}
+            {% render 'product-card', product: product, badge: 'GIFT' %}
+          {%- endfor -%}
+        </div>
+        <div class="pc-xmas-gifts__cta">
+          <a class="pc-xmas-btn-gold" href="{{ featured.url }}">Shop all Christmas gifts &rarr;</a>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- if section.blocks.size > 0 -%}
+    <section class="pc-xmas-section" style="background: var(--color-bg-warm);">
+      <div class="container">
+        <div class="pc-xmas-section__head">
+          <div class="pc-xmas-section__eyebrow">{{ section.settings.rooms_eyebrow | default: 'Pick a door' }}</div>
+          <h2 class="pc-xmas-section__title">{{ section.settings.rooms_heading | default: 'Gifts for every kind of them' }}</h2>
+        </div>
+        <div class="pc-xmas-rooms__grid">
+          {%- for block in section.blocks -%}
+            <a class="pc-xmas-room" href="{{ block.settings.link | default: '#' }}" style="--room: {{ block.settings.color | default: pine }};" {{ block.shopify_attributes }}>
+              <span class="pc-xmas-room__door" aria-hidden="true"></span>
+              <span class="pc-xmas-room__knob" aria-hidden="true"></span>
+              {%- if block.settings.stamp != blank -%}<span class="postmark pc-xmas-room__pm"><div>{{ block.settings.stamp }}</div></span>{%- endif -%}
+              <div class="pc-xmas-room__eyebrow">{{ block.settings.eyebrow | default: 'For' }}</div>
+              <div class="pc-xmas-room__title">{{ block.settings.title }}</div>
+              {%- if block.settings.subtitle != blank -%}<div class="pc-xmas-room__sub">{{ block.settings.subtitle }}</div>{%- endif -%}
+            </a>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  <section class="pc-xmas-closing">
+    {%- if section.settings.show_snow -%}<div class="pc-xmas-snow" data-snow-layer aria-hidden="true"></div>{%- endif -%}
+    <div class="container" style="position: relative; z-index: 3;">
+      <div class="pc-xmas-closing__eyebrow">{{ section.settings.closing_eyebrow | default: 'Bigger than a stocking?' }}</div>
+      <h2 class="pc-xmas-closing__title">{{ section.settings.closing_title | default: 'Gift the whole team.' }}</h2>
+      <p class="pc-xmas-closing__body">{{ section.settings.closing_body | default: 'Bespoke festive hampers for hotels, weddings and bossy bosses. From 20 units up.' }}</p>
+      <a class="pc-xmas-btn-gold" href="{{ section.settings.closing_link | default: '/pages/corporate' }}">{{ section.settings.closing_cta | default: 'Talk to corporate' }} &rarr;</a>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  (function () {
+    var root = document.getElementById('pcXmasDoor-{{ section.id }}');
+    if (!root) return;
+    var wrap = root.closest('.pc-xmas');
+    var mode = wrap ? wrap.getAttribute('data-door-mode') : 'every';
+    var KEY = 'pcXmasDoorOpened';
+
+    function openDoor() {
+      if (root.classList.contains('is-open')) return;
+      root.classList.add('is-open');
+      document.body.classList.remove('pc-xmas-locked');
+      try { if (mode === 'session') sessionStorage.setItem(KEY, '1'); } catch (e) {}
+    }
+
+    // Already-opened this session → skip straight into the world.
+    var skip = false;
+    try { skip = (mode === 'session' && sessionStorage.getItem(KEY) === '1'); } catch (e) {}
+    if (skip) {
+      root.style.transition = 'none';
+      root.classList.add('is-open');
+    } else {
+      document.body.classList.add('pc-xmas-locked');
+    }
+
+    root.querySelectorAll('[data-xmas-open]').forEach(function (el) {
+      el.addEventListener('click', function (e) { e.preventDefault(); openDoor(); });
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') openDoor(); });
+
+    // Snow
+    if (wrap && wrap.getAttribute('data-snow') === 'true' &&
+        !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      var chars = ['❄', '❅', '❆', '·'];
+      wrap.querySelectorAll('[data-snow-layer]').forEach(function (layer) {
+        var n = 36;
+        for (var i = 0; i < n; i++) {
+          var f = document.createElement('span');
+          f.className = 'pc-xmas-flake';
+          f.textContent = chars[i % chars.length];
+          var size = 6 + Math.round((i * 7) % 14);
+          var left = (i * 37) % 100;
+          var dur = 7 + ((i * 13) % 9);
+          var delay = -((i * 11) % 12);
+          var drift = (((i % 5) - 2) * 18) + 'px';
+          f.style.left = left + '%';
+          f.style.fontSize = size + 'px';
+          f.style.setProperty('--drift', drift);
+          f.style.animation = 'pc-xmas-fall ' + dur + 's linear ' + delay + 's infinite';
+          layer.appendChild(f);
+        }
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Postcard Christmas",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "The door" },
+    { "type": "text", "id": "world_name", "label": "World name", "default": "Postcard Christmas" },
+    { "type": "text", "id": "door_eyebrow", "label": "Door eyebrow", "default": "Postcard presents" },
+    { "type": "text", "id": "door_script", "label": "Door script line", "default": "Season’s greetings" },
+    { "type": "text", "id": "door_cta", "label": "Door button", "default": "Open the door" },
+    { "type": "text", "id": "door_hint", "label": "Door hint", "default": "Knock, knock — your gift world awaits" },
+    { "type": "select", "id": "door_mode", "label": "Show door", "options": [ { "value": "every", "label": "Every visit" }, { "value": "session", "label": "Once per session" } ], "default": "every" },
+    { "type": "checkbox", "id": "show_snow", "label": "Snow", "default": true },
+    { "type": "header", "content": "Hero" },
+    { "type": "text", "id": "hero_eyebrow", "label": "Eyebrow", "default": "Welcome to the" },
+    { "type": "text", "id": "hero_script", "label": "Script line", "default": "the gift" },
+    { "type": "richtext", "id": "hero_intro", "label": "Intro", "default": "<p>A whole little world of presents, wrapped in scent. Step inside and find something unforgettable for everyone on your list.</p>" },
+    { "type": "text", "id": "hero_cta_text", "label": "Hero button text" },
+    { "type": "url", "id": "hero_cta_link", "label": "Hero button link" },
+    { "type": "header", "content": "Featured gifts" },
+    { "type": "collection", "id": "featured_collection", "label": "Collection" },
+    { "type": "text", "id": "featured_eyebrow", "label": "Eyebrow", "default": "Under the tree" },
+    { "type": "text", "id": "featured_heading", "label": "Heading", "default": "Most-wrapped this season" },
+    { "type": "range", "id": "featured_count", "label": "How many", "min": 4, "max": 16, "step": 2, "default": 8 },
+    { "type": "header", "content": "Rooms (gift collections)" },
+    { "type": "text", "id": "rooms_eyebrow", "label": "Eyebrow", "default": "Pick a door" },
+    { "type": "text", "id": "rooms_heading", "label": "Heading", "default": "Gifts for every kind of them" },
+    { "type": "header", "content": "Closing band" },
+    { "type": "text", "id": "closing_eyebrow", "label": "Eyebrow", "default": "Bigger than a stocking?" },
+    { "type": "text", "id": "closing_title", "label": "Title", "default": "Gift the whole team." },
+    { "type": "textarea", "id": "closing_body", "label": "Body", "default": "Bespoke festive hampers for hotels, weddings and bossy bosses. From 20 units up." },
+    { "type": "text", "id": "closing_cta", "label": "Button", "default": "Talk to corporate" },
+    { "type": "url", "id": "closing_link", "label": "Button link" },
+    { "type": "header", "content": "Festive colours" },
+    { "type": "color", "id": "color_pine", "label": "Pine", "default": "#33503F" },
+    { "type": "color", "id": "color_red", "label": "Warm red", "default": "#A8403A" },
+    { "type": "color", "id": "color_gold", "label": "Gold", "default": "#E8C36A" }
+  ],
+  "blocks": [
+    {
+      "type": "room",
+      "name": "Room (gift collection)",
+      "settings": [
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "For" },
+        { "type": "text", "id": "title", "label": "Title", "default": "the Bestie" },
+        { "type": "text", "id": "subtitle", "label": "Subtitle" },
+        { "type": "text", "id": "stamp", "label": "Stamp text (optional)" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "color", "id": "color", "label": "Colour", "default": "#33503F" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Postcard Christmas", "blocks": [ { "type": "room" }, { "type": "room" }, { "type": "room" }, { "type": "room" } ] }
+  ]
+}
+{% endschema %}
