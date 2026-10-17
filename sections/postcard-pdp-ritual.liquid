@@ -1,0 +1,156 @@
+{%- comment -%}theme-check-disable ImgWidthAndHeight{%- endcomment -%}
+{%- comment -%}
+  Ritual in a Box PDP. Selecting a scent world swaps the stamp, tagline, price,
+  description and "What's inside". Per-world content lives in blocks (editable).
+  Add-to-cart uses the standard pc-pdp-buy__form so the cart drawer handles it.
+{%- endcomment -%}
+
+{%- liquid
+  assign current = product.selected_or_first_available_variant
+  assign gold = section.settings.color_gold | default: '#E8C36A'
+  assign ink = section.settings.color_ink | default: '#212020'
+-%}
+
+{%- style -%}
+  .pc-ribpdp-{{ section.id }} { padding: 0 0 clamp(40px, 6vw, 72px); color: {{ ink }}; }
+  .pc-ribpdp-{{ section.id }} [x-cloak] { display: none !important; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__top { display: grid; grid-template-columns: 1fr; gap: clamp(20px, 3vw, 44px); align-items: start; }
+  @media (min-width: 900px) { .pc-ribpdp-{{ section.id }} .pc-ribpdp__top { grid-template-columns: minmax(0, 52%) minmax(0, 48%); } }
+
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__media { position: relative; aspect-ratio: 4 / 5; display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--color-line); border-radius: 3px; overflow: hidden; background: radial-gradient(120% 120% at 30% 20%, color-mix(in srgb, var(--accent, {{ gold }}) 50%, #fff) 0%, color-mix(in srgb, var(--accent, {{ gold }}) 20%, #fff) 70%, #fff 100%); }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__media img { width: 72%; height: 72%; object-fit: contain; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__worldtag { position: absolute; bottom: 14px; left: 0; right: 0; text-align: center; font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 0.04em; font-size: clamp(22px, 3vw, 34px); color: {{ ink }}; }
+
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__buy { display: flex; flex-direction: column; }
+  @media (min-width: 900px) { .pc-ribpdp-{{ section.id }} .pc-ribpdp__buy { position: sticky; top: 100px; } }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__eyebrow { font-family: var(--font-display); letter-spacing: 0.2em; text-transform: uppercase; font-size: 12px; color: color-mix(in srgb, {{ gold }} 80%, #000); margin-bottom: 10px; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__title { font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 0.02em; font-size: clamp(34px, 5vw, 56px); line-height: 0.95; margin: 0 0 6px; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__tagline { font-family: var(--font-script); font-size: clamp(20px, 3vw, 28px); color: color-mix(in srgb, var(--accent, {{ gold }}) 72%, #000); line-height: 1.05; margin-bottom: 14px; min-height: 1.1em; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__price { font-family: var(--font-display); font-size: 20px; margin-bottom: 20px; }
+
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__label { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.14em; font-size: 11px; opacity: 0.7; margin-bottom: 10px; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__swatches { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__swatch { width: 54px; height: 54px; border-radius: 6px; border: 1.5px solid var(--color-line); padding: 4px; cursor: pointer; background: color-mix(in srgb, var(--sw, {{ gold }}) 20%, #fff); display: flex; align-items: center; justify-content: center; transition: box-shadow 0.12s ease, transform 0.12s ease; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__swatch img { width: 100%; height: 100%; object-fit: contain; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__swatch.is-active { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--sw, {{ ink }}); border-color: transparent; transform: translateY(-1px); }
+
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__add { width: 100%; font-family: var(--font-display); letter-spacing: 0.08em; text-transform: uppercase; font-size: 14px; color: #fff; background: {{ ink }}; border: 0; padding: 16px 22px; border-radius: 999px; cursor: pointer; transition: opacity 0.12s ease; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__add:hover { opacity: 0.9; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__add[disabled] { opacity: 0.4; cursor: not-allowed; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__note { font-family: var(--font-display); font-size: 13px; line-height: 1.6; opacity: 0.8; margin-top: 16px; }
+
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__detail { max-width: 44rem; margin: clamp(36px, 5vw, 64px) auto 0; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__detail-h { font-family: var(--font-headline); text-transform: uppercase; font-size: clamp(22px, 3vw, 30px); margin: 0 0 14px; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__desc { font-family: var(--font-display); line-height: 1.75; font-size: 16px; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__desc p { margin: 0 0 0.9em; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__inside { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--color-line); }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__inside-h { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.14em; font-size: 12px; margin: 0 0 14px; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__inside ul { list-style: none; margin: 0; padding: 0; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__inside li { font-family: var(--font-display); font-size: 15px; line-height: 1.5; padding: 9px 0 9px 26px; border-bottom: 1px dashed var(--color-line-soft); position: relative; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__inside li::before { content: '✦'; position: absolute; left: 2px; color: color-mix(in srgb, {{ gold }} 85%, #000); font-size: 12px; top: 10px; }
+{%- endstyle -%}
+
+<section class="pc-ribpdp-{{ section.id }}"
+  x-data='{
+    world: {{ current.option1 | json }},
+    worlds: {
+      {%- for block in section.blocks -%}
+        {{ block.settings.title | json }}: { stamp: {{ block.settings.image | image_url: width: 900 | json }}, accent: {{ block.settings.accent | default: gold | json }}, tagline: {{ block.settings.tagline | json }} }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    },
+    variants: {
+      {%- for v in product.variants -%}
+        {{ v.option1 | json }}: { id: {{ v.id }}, price: {{ v.price | money | json }}, available: {{ v.available }} }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    },
+    sel() { return this.variants[this.world] || {}; },
+    cur() { return this.worlds[this.world] || {}; }
+  }'>
+  <div class="pc-breadcrumb"><div class="container pc-breadcrumb__inner">Home / <span class="pc-breadcrumb__current">{{ product.title }}</span></div></div>
+
+  <div class="container">
+    <div class="pc-ribpdp__top">
+      <div class="pc-ribpdp__media" :style="'--accent:' + cur().accent">
+        <img :src="cur().stamp" :alt="world + ' stamp'">
+        <div class="pc-ribpdp__worldtag" x-text="world"></div>
+      </div>
+
+      <div class="pc-ribpdp__buy">
+        <div class="pc-ribpdp__eyebrow">{{ section.settings.eyebrow | default: 'Ritual in a Box' }}</div>
+        <h1 class="pc-ribpdp__title">{{ product.title }}</h1>
+        <div class="pc-ribpdp__tagline" :style="'--accent:' + cur().accent" x-text="cur().tagline"></div>
+        <div class="pc-ribpdp__price" x-text="sel().price">{{ current.price | money }}</div>
+
+        <div class="pc-ribpdp__label">Scent world: <span x-text="world"></span></div>
+        <div class="pc-ribpdp__swatches">
+          {%- for block in section.blocks -%}
+            <button type="button" class="pc-ribpdp__swatch"
+              :class="{ 'is-active': world === {{ block.settings.title | json }} }"
+              style="--sw: {{ block.settings.accent | default: gold }};"
+              @click="world = {{ block.settings.title | json }}"
+              aria-label="{{ block.settings.title | escape }}">
+              {%- if block.settings.image != blank -%}{{ block.settings.image | image_url: width: 120 | image_tag: loading: 'lazy', alt: block.settings.title }}{%- endif -%}
+            </button>
+          {%- endfor -%}
+        </div>
+
+        <form class="pc-pdp-buy__form" action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="form_type" value="product">
+          <input type="hidden" name="utf8" value="&#x2713;">
+          <input type="hidden" name="id" :value="sel().id" value="{{ current.id }}">
+          <button type="submit" class="pc-ribpdp__add" :disabled="sel().available === false">
+            <span x-text="sel().available === false ? 'Sold out' : 'Add to bag · ' + sel().price">Add to bag</span>
+          </button>
+        </form>
+
+        {%- if section.settings.note != blank -%}<div class="pc-ribpdp__note">{{ section.settings.note }}</div>{%- endif -%}
+      </div>
+    </div>
+
+    <div class="pc-ribpdp__detail">
+      {%- for block in section.blocks -%}
+        <div x-show="world === {{ block.settings.title | json }}" x-cloak {{ block.shopify_attributes }}>
+          <h2 class="pc-ribpdp__detail-h">The {{ block.settings.title }} box</h2>
+          {%- if block.settings.description != blank -%}<div class="pc-ribpdp__desc rte">{{ block.settings.description }}</div>{%- endif -%}
+          {%- if block.settings.whats_inside != blank -%}
+            <div class="pc-ribpdp__inside">
+              <div class="pc-ribpdp__inside-h">{{ section.settings.inside_heading | default: 'What’s inside' }}</div>
+              {{ block.settings.whats_inside }}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Ritual PDP",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Ritual in a Box" },
+    { "type": "text", "id": "inside_heading", "label": "What's inside heading", "default": "What’s inside" },
+    { "type": "richtext", "id": "note", "label": "Buy note (under add to cart)", "default": "<p>Every box is designed around its scent world — not a standard assortment. Made for gifting, discovering and a little time for yourself.</p>" },
+    { "type": "header", "content": "Colours" },
+    { "type": "color", "id": "color_gold", "label": "Accent / gold", "default": "#E8C36A" },
+    { "type": "color", "id": "color_ink", "label": "Ink", "default": "#212020" }
+  ],
+  "blocks": [
+    {
+      "type": "world_box",
+      "name": "Scent world",
+      "settings": [
+        { "type": "paragraph", "content": "World name must match the product's Scent world option value exactly." },
+        { "type": "text", "id": "title", "label": "World name", "default": "Hotel Lobby" },
+        { "type": "text", "id": "tagline", "label": "Tagline", "default": "A little everyday luxury" },
+        { "type": "richtext", "id": "description", "label": "Description" },
+        { "type": "richtext", "id": "whats_inside", "label": "What's inside (bullet list)" },
+        { "type": "image_picker", "id": "image", "label": "Stamp / image" },
+        { "type": "color", "id": "accent", "label": "Accent colour", "default": "#E8C36A" }
+      ]
+    }
+  ],
+  "presets": [ { "name": "Ritual PDP", "blocks": [ { "type": "world_box" }, { "type": "world_box" }, { "type": "world_box" }, { "type": "world_box" }, { "type": "world_box" }, { "type": "world_box" } ] } ]
+}
+{% endschema %}
