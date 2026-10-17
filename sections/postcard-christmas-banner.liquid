@@ -48,7 +48,7 @@
   }
   .pc-xmasban-{{ section.id }} .pc-xmasban__snow { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
   .pc-xmasban-{{ section.id }} .pc-xmasban__flake { position: absolute; top: -12px; color: #fff; opacity: 0.8; will-change: transform; }
-  @keyframes pc-xmasban-fall-{{ section.id }} { to { transform: translateY(120%) translateX(var(--drift, 16px)); } }
+  @keyframes pc-xmasban-fall-{{ section.id }} { to { transform: translateY(var(--fall, 420px)) translateX(var(--drift, 16px)); } }
   @media (prefers-reduced-motion: reduce) {
     .pc-xmasban-{{ section.id }} .pc-xmasban__flake { display: none; }
   }
@@ -74,6 +74,9 @@
     if (!root || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var layer = root.querySelector('[data-snow-layer]');
     if (!layer) return;
+    function setFall() { layer.style.setProperty('--fall', (root.offsetHeight + 24) + 'px'); }
+    setFall();
+    window.addEventListener('resize', setFall);
     var chars = ['❄', '❅', '·'];
     for (var i = 0; i < 22; i++) {
       var f = document.createElement('span');
