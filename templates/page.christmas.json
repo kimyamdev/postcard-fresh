@@ -22,24 +22,15 @@
         "hero_eyebrow": "Welcome to",
         "hero_script": "the gift",
         "hero_intro": "<p>A whole little world of presents, wrapped in scent. Step inside and find something unforgettable for everyone on your list.</p>",
-        "color_pine": "#33503F",
-        "color_red": "#A8403A",
-        "color_gold": "#E8C36A"
+        "hero_cta_text": "",
+        "hero_cta_link": "",
+        "color_pine": "#33503f",
+        "color_red": "#a8403a",
+        "color_gold": "#e8c36a"
       }
     },
     "ritual": {
       "type": "postcard-christmas-ritual",
-      "settings": {
-        "eyebrow": "Ritual in a Box",
-        "title": "A little world to get lost in",
-        "tagline": "",
-        "intro": "<p>More than a box of beautiful things, each Ritual in a Box is an invitation to experience one of our scent worlds beyond fragrance. Inside, you'll find a curated collection of POSTCARD essentials, thoughtfully chosen objects, a playlist and a little ritual to bring it all together.</p><p>Six different worlds, each with its own way of taking you somewhere else. Made for gifting, discovering and finding a little time for yourself.</p>",
-        "bg_warm": false,
-        "foot_cta_text": "Shop Ritual in a Box",
-        "foot_cta_link": "/products/ritual-in-a-box",
-        "color_gold": "#E8C36A",
-        "color_ink": "#212020"
-      },
       "blocks": {
         "w1": {
           "type": "world_box",
@@ -49,8 +40,9 @@
             "tagline": "A little everyday luxury",
             "description": "<p>Bring the feeling of a beautiful hotel stay into your everyday routine. This box pairs our Hotel Lobby fragrance with miniature body wash and shampoo in refillable aluminium bottles, a curated playlist and a simple ritual inspired by the pleasure of checking in somewhere special.</p><p>A little luxury, wherever you are.</p>",
             "image": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Hotel_Lobby.png",
+            "image_2": "shopify://shop_images/DSC09638.jpg",
             "image_fit": "contain",
-            "color": "#D1292F",
+            "color": "#d1292f",
             "link": "/products/ritual-in-a-box?variant=67714781774050",
             "cta_text": "Explore this box"
           }
@@ -92,7 +84,7 @@
             "description": "<p>A little escape inspired by the calm of the outdoors. Inside, you'll find our refreshing Woodland Retreat fragrance, a miniature body wash, two Lavender Yuzu Hojicha cold brew tea sachets, a feel-good playlist and a ritual that takes you from a refreshing shower to a leisurely walk outside.</p><p>Made for clearing your head, finding your pace and enjoying a little breathing room.</p>",
             "image": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Woodland_Retreat_e6f4b29d-5e77-49da-92f5-5434f992df77.png",
             "image_fit": "contain",
-            "color": "#2E8A5F",
+            "color": "#2e8a5f",
             "link": "/products/ritual-in-a-box?variant=67714782265570",
             "cta_text": "Explore this box"
           }
@@ -106,7 +98,7 @@
             "description": "<p>Turn an ordinary shower into a moment to look forward to. Inspired by the quiet warmth of a bath house, this box includes our woody, tea-infused Bath House fragrance, miniature body wash and shampoo in refillable aluminium bottles, a calming playlist and a ritual centred around warm water, slow breaths and letting the day wash away.</p><p>A little spa moment, without leaving home.</p>",
             "image": "shopify://shop_images/Postcard_Stamp_Illustrations_RGB_Bathhouse.png",
             "image_fit": "contain",
-            "color": "#B07A4E",
+            "color": "#b07a4e",
             "link": "/products/ritual-in-a-box?variant=67714782298338",
             "cta_text": "Explore this box"
           }
@@ -120,13 +112,32 @@
             "description": "<p>For anyone who loves getting lost in a good book. Inside, you'll find our Library Nest fragrance inspired by the scent of paper, ink and soft woods, a set of magnetic bookmarks, Uji Sencha green tea, a specially curated reading list, a reflective playlist and a ritual made for uninterrupted reading.</p><p>Everything you need to settle in, turn a page and forget about the time for a while.</p>",
             "image": "shopify://shop_images/Library_Nest_Stamp_padded.png",
             "image_fit": "contain",
-            "color": "#7A2E33",
+            "color": "#7a2e33",
             "link": "/products/ritual-in-a-box?variant=67714782331106",
             "cta_text": "Explore this box"
           }
         }
       },
-      "block_order": ["w1", "w2", "w3", "w4", "w5", "w6"]
+      "block_order": [
+        "w1",
+        "w2",
+        "w3",
+        "w4",
+        "w5",
+        "w6"
+      ],
+      "settings": {
+        "eyebrow": "The gift of the season",
+        "title": "Ritual in a Box",
+        "tagline": "A little world to get lost in.",
+        "intro": "<p><strong>More than a fragrance gift set.</strong> Each Ritual in a Box is a whole scent world to unwrap — a fragrance, thoughtfully chosen objects, a playlist and a little ritual, brought together in one box.</p><p>Six worlds, six ways to take yourself somewhere else. Made for gifting, discovering and a little time for yourself.</p>",
+        "bg_warm": false,
+        "foot_cta_text": "Shop Ritual in a Box",
+        "foot_cta_link": "/products/ritual-in-a-box",
+        "color_gold": "#e8c36a",
+        "color_ink": "#212020",
+        "show_pillars": true
+      }
     },
     "gifts": {
       "type": "postcard-christmas-gifts",
@@ -137,31 +148,120 @@
         "featured_count": 8,
         "show_cta": true,
         "cta_text": "Shop all Christmas gifts",
-        "color_red": "#A8403A",
-        "color_gold": "#E8C36A"
+        "color_red": "#a8403a",
+        "color_gold": "#e8c36a"
       }
     },
     "rooms": {
       "type": "postcard-christmas-rooms",
+      "blocks": {
+        "room_him": {
+          "type": "room",
+          "settings": {
+            "eyebrow": "For",
+            "title": "Him",
+            "subtitle": "Easy wins he’ll actually use",
+            "stamp": "HIM",
+            "link": "/collections/gifts-for-him",
+            "color": "#33503f"
+          }
+        },
+        "room_bestie": {
+          "type": "room",
+          "settings": {
+            "eyebrow": "For",
+            "title": "the Bestie",
+            "subtitle": "For your person",
+            "stamp": "BFF",
+            "link": "/collections/gifts-for-bestie",
+            "color": "#a8403a"
+          }
+        },
+        "room_host": {
+          "type": "room",
+          "settings": {
+            "eyebrow": "For",
+            "title": "the Host",
+            "subtitle": "Never arrive empty-handed",
+            "stamp": "HOST",
+            "link": "/collections/gifts-for-the-host",
+            "color": "#b07a4e"
+          }
+        },
+        "room_coworker": {
+          "type": "room",
+          "settings": {
+            "eyebrow": "For",
+            "title": "the Co-worker",
+            "subtitle": "Secret Santa, sorted",
+            "stamp": "WORK",
+            "link": "/collections/gifts-for-the-co-worker",
+            "color": "#5c6688"
+          }
+        },
+        "room_scent": {
+          "type": "room",
+          "settings": {
+            "eyebrow": "For",
+            "title": "the Scent Lover",
+            "subtitle": "For the discerning nose",
+            "stamp": "NOSE",
+            "link": "/collections/gifts-for-the-scent-aficionado",
+            "color": "#8a6ca8"
+          }
+        },
+        "room_travel": {
+          "type": "room",
+          "settings": {
+            "eyebrow": "For",
+            "title": "the Traveller",
+            "subtitle": "Takes scent on the road",
+            "stamp": "TRIP",
+            "link": "/collections/gifts-for-travel",
+            "color": "#9cc4d6"
+          }
+        },
+        "room_planet": {
+          "type": "room",
+          "settings": {
+            "eyebrow": "For",
+            "title": "Captain Planet",
+            "subtitle": "Refillable, thoughtful",
+            "stamp": "ECO",
+            "link": "/collections/gifts-for-captain-planet",
+            "color": "#6e7f58"
+          }
+        },
+        "room_gym": {
+          "type": "room",
+          "settings": {
+            "eyebrow": "For",
+            "title": "the Gym Bunny",
+            "subtitle": "Post-workout rituals",
+            "stamp": "GYM",
+            "link": "/collections/gifts-for-the-gym-bro-bunny",
+            "color": "#d89a3c"
+          }
+        }
+      },
+      "block_order": [
+        "room_him",
+        "room_bestie",
+        "room_host",
+        "room_coworker",
+        "room_scent",
+        "room_travel",
+        "room_planet",
+        "room_gym"
+      ],
       "settings": {
         "eyebrow": "Pick a door",
         "heading": "Gifts for every kind of them",
         "bg_warm": true,
-        "color_pine": "#33503F",
-        "color_red": "#A8403A",
-        "color_gold": "#E8C36A"
-      },
-      "blocks": {
-        "room_him": { "type": "room", "settings": { "eyebrow": "For", "title": "Him", "subtitle": "Easy wins he’ll actually use", "stamp": "HIM", "link": "/collections/gifts-for-him", "color": "#33503F" } },
-        "room_bestie": { "type": "room", "settings": { "eyebrow": "For", "title": "the Bestie", "subtitle": "For your person", "stamp": "BFF", "link": "/collections/gifts-for-bestie", "color": "#A8403A" } },
-        "room_host": { "type": "room", "settings": { "eyebrow": "For", "title": "the Host", "subtitle": "Never arrive empty-handed", "stamp": "HOST", "link": "/collections/gifts-for-the-host", "color": "#B07A4E" } },
-        "room_coworker": { "type": "room", "settings": { "eyebrow": "For", "title": "the Co-worker", "subtitle": "Secret Santa, sorted", "stamp": "WORK", "link": "/collections/gifts-for-the-co-worker", "color": "#5C6688" } },
-        "room_scent": { "type": "room", "settings": { "eyebrow": "For", "title": "the Scent Lover", "subtitle": "For the discerning nose", "stamp": "NOSE", "link": "/collections/gifts-for-the-scent-aficionado", "color": "#8A6CA8" } },
-        "room_travel": { "type": "room", "settings": { "eyebrow": "For", "title": "the Traveller", "subtitle": "Takes scent on the road", "stamp": "TRIP", "link": "/collections/gifts-for-travel", "color": "#9CC4D6" } },
-        "room_planet": { "type": "room", "settings": { "eyebrow": "For", "title": "Captain Planet", "subtitle": "Refillable, thoughtful", "stamp": "ECO", "link": "/collections/gifts-for-captain-planet", "color": "#6E7F58" } },
-        "room_gym": { "type": "room", "settings": { "eyebrow": "For", "title": "the Gym Bunny", "subtitle": "Post-workout rituals", "stamp": "GYM", "link": "/collections/gifts-for-the-gym-bro-bunny", "color": "#D89A3C" } }
-      },
-      "block_order": ["room_him", "room_bestie", "room_host", "room_coworker", "room_scent", "room_travel", "room_planet", "room_gym"]
+        "color_pine": "#33503f",
+        "color_red": "#a8403a",
+        "color_gold": "#e8c36a"
+      }
     },
     "closing": {
       "type": "postcard-christmas-closing",
@@ -172,10 +272,16 @@
         "cta_text": "Talk to corporate",
         "link": "/pages/corporate",
         "show_snow": true,
-        "color_pine": "#33503F",
-        "color_gold": "#E8C36A"
+        "color_pine": "#33503f",
+        "color_gold": "#e8c36a"
       }
     }
   },
-  "order": ["intro", "ritual", "gifts", "rooms", "closing"]
+  "order": [
+    "intro",
+    "ritual",
+    "gifts",
+    "rooms",
+    "closing"
+  ]
 }
