@@ -1,0 +1,87 @@
+{%- comment -%}
+  Postcard Christmas — Rooms. Gift collections as little stamp-door cards (blocks).
+{%- endcomment -%}
+
+{%- liquid
+  assign pine = section.settings.color_pine | default: '#33503F'
+  assign red = section.settings.color_red | default: '#A8403A'
+  assign gold = section.settings.color_gold | default: '#E8C36A'
+-%}
+
+{%- style -%}
+  .pc-xmas-sec-{{ section.id }} { padding: clamp(36px, 6vw, 72px) 0;{% if section.settings.bg_warm %} background: var(--color-bg-warm);{% endif %} }
+  .pc-xmas-sec-{{ section.id }} .pc-xmas-section__head { text-align: center; margin-bottom: clamp(24px, 4vw, 44px); }
+  .pc-xmas-sec-{{ section.id }} .pc-xmas-section__eyebrow { font-family: var(--font-display); letter-spacing: 0.18em; text-transform: uppercase; font-size: 12px; color: {{ red }}; margin-bottom: 10px; }
+  .pc-xmas-sec-{{ section.id }} .pc-xmas-section__title { font-family: var(--font-headline); text-transform: uppercase; font-size: clamp(28px, 5vw, 48px); line-height: 1; color: var(--color-ink); margin: 0; }
+  .pc-xmas-sec-{{ section.id }} .pc-xmas-rooms__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(12px, 2vw, 20px); }
+  @media (min-width: 750px) { .pc-xmas-sec-{{ section.id }} .pc-xmas-rooms__grid { grid-template-columns: repeat(4, 1fr); } }
+  .pc-xmas-sec-{{ section.id }} .pc-xmas-room {
+    position: relative; display: flex; flex-direction: column; justify-content: flex-end;
+    aspect-ratio: 3 / 4; padding: 18px; color: #fff5e1; text-decoration: none;
+    border: 2px solid var(--color-ink); border-radius: 2px; overflow: hidden;
+    box-shadow: var(--shadow-stamp); transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .pc-xmas-sec-{{ section.id }} .pc-xmas-room:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-stamp-lg); }
+  .pc-xmas-sec-{{ section.id }} .pc-xmas-room::before {
+    content: ''; position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(170deg, color-mix(in srgb, var(--room, {{ pine }}) 88%, #000) 0%, var(--room, {{ pine }}) 60%, color-mix(in srgb, var(--room, {{ pine }}) 78%, #000) 100%);
+  }
+  .pc-xmas-sec-{{ section.id }} .pc-xmas-room__door { position: absolute; top: 12px; left: 12px; right: 12px; bottom: 44px; z-index: 1; border: 1.5px solid color-mix(in srgb, {{ gold }} 55%, transparent); border-bottom: none; }
+  .pc-xmas-sec-{{ section.id }} .pc-xmas-room__knob { position: absolute; right: 22px; top: 48%; width: 8px; height: 8px; border-radius: 50%; background: {{ gold }}; z-index: 2; }
+  .pc-xmas-sec-{{ section.id }} .pc-xmas-room__pm { position: absolute; top: 12px; right: 12px; z-index: 2; }
+  .pc-xmas-sec-{{ section.id }} .pc-xmas-room__eyebrow { position: relative; z-index: 2; font-family: var(--font-display); letter-spacing: 0.14em; text-transform: uppercase; font-size: 10px; opacity: 0.85; }
+  .pc-xmas-sec-{{ section.id }} .pc-xmas-room__title { position: relative; z-index: 2; font-family: var(--font-headline); text-transform: uppercase; font-size: clamp(18px, 2.4vw, 24px); line-height: 1; margin-top: 4px; }
+  .pc-xmas-sec-{{ section.id }} .pc-xmas-room__sub { position: relative; z-index: 2; font-family: var(--font-display); font-size: 12px; opacity: 0.88; margin-top: 6px; }
+{%- endstyle -%}
+
+<section class="pc-xmas-sec-{{ section.id }}">
+  <div class="container">
+    <div class="pc-xmas-section__head">
+      {%- if section.settings.eyebrow != blank -%}<div class="pc-xmas-section__eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 class="pc-xmas-section__title">{{ section.settings.heading }}</h2>{%- endif -%}
+    </div>
+    <div class="pc-xmas-rooms__grid">
+      {%- for block in section.blocks -%}
+        <a class="pc-xmas-room" href="{{ block.settings.link | default: '#' }}" style="--room: {{ block.settings.color | default: pine }};" {{ block.shopify_attributes }}>
+          <span class="pc-xmas-room__door" aria-hidden="true"></span>
+          <span class="pc-xmas-room__knob" aria-hidden="true"></span>
+          {%- if block.settings.stamp != blank -%}<span class="postmark pc-xmas-room__pm"><div>{{ block.settings.stamp }}</div></span>{%- endif -%}
+          <div class="pc-xmas-room__eyebrow">{{ block.settings.eyebrow | default: 'For' }}</div>
+          <div class="pc-xmas-room__title">{{ block.settings.title }}</div>
+          {%- if block.settings.subtitle != blank -%}<div class="pc-xmas-room__sub">{{ block.settings.subtitle }}</div>{%- endif -%}
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Christmas · Rooms",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Pick a door" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Gifts for every kind of them" },
+    { "type": "checkbox", "id": "bg_warm", "label": "Warm background", "default": true },
+    { "type": "header", "content": "Festive colours" },
+    { "type": "color", "id": "color_pine", "label": "Pine (default room)", "default": "#33503F" },
+    { "type": "color", "id": "color_red", "label": "Warm red", "default": "#A8403A" },
+    { "type": "color", "id": "color_gold", "label": "Gold", "default": "#E8C36A" }
+  ],
+  "blocks": [
+    {
+      "type": "room",
+      "name": "Room (gift collection)",
+      "settings": [
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "For" },
+        { "type": "text", "id": "title", "label": "Title", "default": "the Bestie" },
+        { "type": "text", "id": "subtitle", "label": "Subtitle" },
+        { "type": "text", "id": "stamp", "label": "Stamp text (optional)" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "color", "id": "color", "label": "Colour", "default": "#33503F" }
+      ]
+    }
+  ],
+  "presets": [ { "name": "Christmas · Rooms", "blocks": [ { "type": "room" }, { "type": "room" }, { "type": "room" }, { "type": "room" } ] } ]
+}
+{% endschema %}
