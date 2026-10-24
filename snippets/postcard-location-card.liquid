@@ -1,78 +1,62 @@
 {%- comment -%}
-  Renders one stockist / pop-up metaobject entry as a Postcard-style card.
+  Renders one stockist / pop-up card from explicit params (fed by theme-editor
+  block settings in sections/postcard-locations.liquid).
   Params:
-    loc        — the metaobject entry (stockist or popup)
-    show_dates — true to render the pop-up date range badge
-    flip       — true to put the image on the right (desktop), for alternating rhythm
-    is_past    — true to dim the card (past pop-ups)
-  Fields read: name, image, description, address, map_url, opening_hours,
-  products_available (rich_text), and for pop-ups start_date / end_date.
+    name          — location / event name (string)
+    image         — image object (image_picker) or blank
+    dates         — formatted date range string (pop-ups only; blank to hide)
+    address       — plain text, newlines become <br>
+    map_url       — directions link (optional)
+    hours         — plain text, newlines become <br>
+    description   — plain text, newlines become <br>
+    products_html — rich-text HTML (already rendered) for "Available here"
+    is_past       — true to dim the card
+    flip          — true to put the image on the right (desktop)
 {%- endcomment -%}
-{%- liquid
-  assign loc_name = loc.name.value
-  assign loc_img = loc.image.value
-  assign loc_desc = loc.description.value
-  assign loc_addr = loc.address.value
-  assign loc_map = loc.map_url.value
-  assign loc_hours = loc.opening_hours.value
-  assign loc_products = loc.products_available.value
-  assign loc_start = loc.start_date.value
-  assign loc_end = loc.end_date.value
--%}
 <article class="pc-loc-card{% if flip %} pc-loc-card--flip{% endif %}{% if is_past %} pc-loc-card--past{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
   <div class="pc-loc-card__media">
-    {%- if loc_img != blank -%}
-      {%- assign loc_alt = loc_img.alt | default: loc_name | escape -%}
-      {{ loc_img | image_url: width: 1200 | image_tag: alt: loc_alt, loading: 'lazy', widths: '400,700,1000,1200', sizes: '(min-width: 800px) 50vw, 100vw' }}
+    {%- if image != blank -%}
+      {%- assign loc_alt = image.alt | default: name | escape -%}
+      {{ image | image_url: width: 1200 | image_tag: alt: loc_alt, loading: 'lazy', widths: '400,700,1000,1200', sizes: '(min-width: 800px) 50vw, 100vw' }}
     {%- else -%}
-      <span class="pc-loc-card__placeholder">{{ loc_name | escape }}</span>
+      <span class="pc-loc-card__placeholder">{{ name | escape }}</span>
     {%- endif -%}
   </div>
 
   <div class="pc-loc-card__body">
-    {%- if show_dates and loc_start != blank -%}
-      {%- assign start_month = loc_start | date: '%b' -%}
-      {%- assign end_month = loc_end | date: '%b' -%}
-      <div class="pc-loc-card__dates">
-        {%- if loc_end == blank -%}
-          {{ loc_start | date: '%-d %b %Y' }}
-        {%- elsif start_month == end_month -%}
-          {{ loc_start | date: '%-d' }}–{{ loc_end | date: '%-d %b %Y' }}
-        {%- else -%}
-          {{ loc_start | date: '%-d %b' }} – {{ loc_end | date: '%-d %b %Y' }}
-        {%- endif -%}
-      </div>
+    {%- if dates != blank -%}
+      <div class="pc-loc-card__dates">{{ dates }}</div>
     {%- endif -%}
 
-    <h2 class="h-display pc-loc-card__name">{{ loc_name | escape }}</h2>
+    <h2 class="h-display pc-loc-card__name">{{ name | escape }}</h2>
 
-    {%- if loc_addr != blank -%}
+    {%- if address != blank -%}
       <div class="pc-loc-card__row">
         <span class="pc-loc-card__label">Where</span>
         <div class="pc-loc-card__text">
-          {{ loc_addr | newline_to_br }}
-          {%- if loc_map != blank -%}
-            <a class="pc-loc-card__maplink" href="{{ loc_map }}" target="_blank" rel="noopener">Get directions →</a>
+          {{ address | newline_to_br }}
+          {%- if map_url != blank -%}
+            <a class="pc-loc-card__maplink" href="{{ map_url }}" target="_blank" rel="noopener">Get directions →</a>
           {%- endif -%}
         </div>
       </div>
     {%- endif -%}
 
-    {%- if loc_hours != blank -%}
+    {%- if hours != blank -%}
       <div class="pc-loc-card__row">
         <span class="pc-loc-card__label">Hours</span>
-        <div class="pc-loc-card__text">{{ loc_hours | newline_to_br }}</div>
+        <div class="pc-loc-card__text">{{ hours | newline_to_br }}</div>
       </div>
     {%- endif -%}
 
-    {%- if loc_desc != blank -%}
-      <p class="pc-loc-card__desc">{{ loc_desc | newline_to_br }}</p>
+    {%- if description != blank -%}
+      <p class="pc-loc-card__desc">{{ description | newline_to_br }}</p>
     {%- endif -%}
 
-    {%- if loc_products != blank -%}
+    {%- if products_html != blank -%}
       <div class="pc-loc-card__products">
         <span class="pc-loc-card__label">Available here</span>
-        <div class="pc-loc-card__text rte">{% render 'corporate-rich-text', rt: loc_products %}</div>
+        <div class="pc-loc-card__text rte">{{ products_html }}</div>
       </div>
     {%- endif -%}
   </div>

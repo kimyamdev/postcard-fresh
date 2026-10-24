@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "name": "t:sections.footer.name",
   "type": "footer",
@@ -221,6 +212,20 @@
           "settings": {
             "text": "· Vegan-where-possible ·"
           }
+        },
+        "disc_stockists": {
+          "type": "link",
+          "settings": {
+            "text": "Stockists",
+            "url": "/pages/stockists"
+          }
+        },
+        "disc_popups": {
+          "type": "link",
+          "settings": {
+            "text": "Pop-ups",
+            "url": "/pages/pop-ups"
+          }
         }
       },
       "block_order": [
@@ -238,6 +243,8 @@
         "disc_l2",
         "disc_l3",
         "disc_l4",
+        "disc_stockists",
+        "disc_popups",
         "disc_l5",
         "disc_l6",
         "disc_l7",

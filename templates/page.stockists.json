@@ -2,13 +2,96 @@
   "sections": {
     "main": {
       "type": "postcard-locations",
+      "blocks": {
+        "s1": {
+          "type": "stockist",
+          "settings": {
+            "name": "The Green Collective (Funan)",
+            "address": "109 North Bridge Rd #02-18\nFunan Mall (facing Fort Canning Park)\nSingapore 179097",
+            "opening_hours": "Open daily, 10am – 10pm",
+            "products": "<p>Face mists, clay masks, solid shampoos &amp; conditioners, dry shampoo, facial oils &amp; serums, eco accessories, Head to Toe Magic Powder Wash, Axiology Beauty, balms and more.</p>"
+          }
+        },
+        "s2": {
+          "type": "stockist",
+          "settings": {
+            "name": "Sunday Bedding (City Hall)",
+            "address": "252 North Bridge Rd\nRaffles City #03-39\nSingapore 179103",
+            "opening_hours": "Open daily, 11am – 9pm",
+            "products": "<p>Solid shampoos, powder washes and more.</p>"
+          }
+        },
+        "s3": {
+          "type": "stockist",
+          "settings": {
+            "name": "White Tree Cafe & Hair Salon (Boat Quay)",
+            "address": "24A Circular Rd, 2nd Floor\nSingapore 049379",
+            "opening_hours": "Open daily, 10am – 8pm",
+            "products": "<p>Solid shampoos, powder washes and more.</p>"
+          }
+        },
+        "s4": {
+          "type": "stockist",
+          "settings": {
+            "name": "NTUC Finest (Sengkang Grand Mall)",
+            "address": "70 Compassvale Bow #B1-14\nSengkang Grand Mall\nSingapore 544692",
+            "opening_hours": "8am – 11pm daily",
+            "products": "<p>Solid shampoos &amp; conditioners, Mozzie Spray, natural crystal deodorant, sisal soap pouch, bamboo soap dish, Head to Toe Magic Powder Wash, bamboo combs, Laboratoires de Biarritz mum &amp; baby skincare.</p>"
+          }
+        },
+        "s5": {
+          "type": "stockist",
+          "settings": {
+            "name": "NTUC Finest (The Woodleigh Mall)",
+            "address": "11 Bidadari Park Drive #B1-32/33\nThe Woodleigh Mall\nSingapore 367803",
+            "opening_hours": "24 hours daily",
+            "products": "<p>Solid shampoos &amp; conditioners, Mozzie Spray, natural crystal deodorant, sisal soap pouch, bamboo soap dish, Head to Toe Magic Powder Wash, bamboo combs, Laboratoires de Biarritz mum &amp; baby skincare.</p>"
+          }
+        },
+        "s6": {
+          "type": "stockist",
+          "settings": {
+            "name": "NTUC Finest (Dairy Farm Residence)",
+            "address": "4 Dairy Farm Lane\nDairy Farm Residence\nSingapore",
+            "opening_hours": "Opening soon",
+            "description": "Coming soon — watch this space."
+          }
+        },
+        "s7": {
+          "type": "stockist",
+          "settings": {
+            "name": "The WYLD Shop (Katong)",
+            "address": "412 Joo Chiat Rd\nSingapore 427637",
+            "opening_hours": "Sun & Mon 12pm – 5pm\nTue–Thu & Sat 10am – 6pm\nFri 10am – 6.30pm",
+            "products": "<p>Solid shampoos &amp; conditioners, face mists, lip balms, facial oils &amp; serums, hair serum, Rose Quartz facial roller, organic facial bars, shea butter body bars, Aleppo soap, eco accessories, hand sanitiser, Mozzie Spray, Head to Toe Magic Powder Wash, clay masks, sunscreen, baby care, Axiology Beauty.</p>"
+          }
+        },
+        "s8": {
+          "type": "stockist",
+          "settings": {
+            "name": "GiftGood (online)",
+            "address": "Online only",
+            "products": "<p><a href=\"https://shopgiftgood.com/\" target=\"_blank\" rel=\"noopener\">Shop Postcard at GiftGood →</a></p>"
+          }
+        },
+        "s9": {
+          "type": "stockist",
+          "settings": {
+            "name": "Stacked Store (online)",
+            "address": "Online only",
+            "products": "<p><a href=\"https://stackedhomes.com/store/\" target=\"_blank\" rel=\"noopener\">Shop Postcard at Stacked →</a></p>"
+          }
+        }
+      },
+      "block_order": ["s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9"],
       "settings": {
-        "source": "stockist",
         "accent_color": "#FFB233",
         "eyebrow": "Find us in the wild",
         "title": "Our stockists",
         "lede": "Postcard is stocked at a handful of carefully chosen spots. Drop by to browse, sniff, and take a little ritual home.",
-        "empty_text": "We're lining up our first stockists — check back soon."
+        "empty_text": "We're lining up our first stockists — check back soon.",
+        "footer_note_label": "Stock Postcard",
+        "footer_note": "<p>Have a shop and want to stock Postcard? Email <a href=\"mailto:contact@oasisbeautykitchen.com\">contact@oasisbeautykitchen.com</a>.</p><p><strong>For professionals:</strong> OASIS is also the exclusive Singapore distributor of Laboratoires de Biarritz, Lauralep Aleppo Soaps, Radian Design Berlin and Axiology Beauty.</p>"
       }
     }
   },

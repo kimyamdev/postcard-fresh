@@ -2,8 +2,34 @@
   "sections": {
     "main": {
       "type": "postcard-locations",
+      "blocks": {
+        "p1": {
+          "type": "popup",
+          "settings": {
+            "name": "Design Orchard Pop-up",
+            "start_date": "2026-11-01",
+            "end_date": "2026-11-30",
+            "address": "250 Orchard Rd\nDesign Orchard, Singapore 238905",
+            "map_url": "https://maps.google.com/?q=Design+Orchard+Singapore",
+            "opening_hours": "Daily, 11am – 8pm",
+            "description": "Catch our full range plus pop-up-only bundles on Orchard Road all November.",
+            "products": "<p>The full Postcard range, including <a href=\"https://www.wearepostcard.com/products/aleppo-soap\">Aleppo soap</a>.</p>"
+          }
+        },
+        "p2": {
+          "type": "popup",
+          "settings": {
+            "name": "Boutique Fairs Singapore",
+            "start_date": "2026-09-05",
+            "end_date": "2026-09-08",
+            "address": "F1 Pit Building\n1 Republic Blvd, Singapore 038975",
+            "opening_hours": "11am – 8pm",
+            "description": "Thanks to everyone who visited us at Boutique Fairs!"
+          }
+        }
+      },
+      "block_order": ["p1", "p2"],
       "settings": {
-        "source": "popup",
         "accent_color": "#FFB233",
         "eyebrow": "Catch us out and about",
         "title": "Pop-ups",

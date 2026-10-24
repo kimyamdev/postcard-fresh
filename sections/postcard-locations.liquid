@@ -1,23 +1,14 @@
 {%- comment -%}
-  Postcard Locations — renders a list of Stockist or Pop-up metaobject entries
-  as branded cards. One section, two uses (set via the Source setting):
-    • Stockists: all entries, sorted by Sort order (rank).
-    • Pop-ups: current/upcoming first (sorted by start date), then a
-      "Past pop-ups" section for entries whose end date has passed.
-  Add/edit entries in admin → Content → Metaobjects → Stockist / Pop-up.
+  Postcard Locations — Stockists / Pop-ups, managed as theme-editor BLOCKS.
+  Add a "Stockist" or "Pop-up" block, fill in its parts, drag to reorder.
+    • Stockist blocks render in block order.
+    • Pop-up blocks split into current/upcoming and a "Past pop-ups" section,
+      driven by the End date (YYYY-MM-DD). Past = end date before today.
+  Products available is an inline rich-text field — hyperlink names to PDPs.
 {%- endcomment -%}
 
 {%- liquid
-  assign source = section.settings.source | default: 'stockist'
   assign now_s = 'now' | date: '%s' | plus: 0
-
-  # The sort filter returns nil when sorting by a date field, so pop-ups iterate
-  # the raw values array directly (natural / admin order) and bucket by end date.
-  if source == 'popup'
-    assign raw = metaobjects.popup.values
-  else
-    assign entries = metaobjects.stockist.values | sort: 'rank'
-  endif
 -%}
 
 {%- style -%}
@@ -30,6 +21,9 @@
   .pc-loc__divider::before, .pc-loc__divider::after { content: ""; flex: 1; height: 1.5px; background: var(--color-line); }
   .pc-loc__divider-label { font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 0.04em; font-size: clamp(20px, 4vw, 28px); }
   .pc-loc__empty { max-width: 1040px; margin: 0 auto; padding: 0 24px 48px; font-family: var(--font-display); opacity: 0.7; text-align: center; }
+  .pc-loc__note { max-width: 760px; margin: 0 auto; padding: 8px 24px 64px; font-family: var(--font-display); font-size: 15px; line-height: 1.7; text-align: center; opacity: 0.85; }
+  .pc-loc__note a { color: inherit; }
+  .pc-loc__note-label { font-family: var(--font-display); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.6; margin-bottom: 8px; }
 
   /* ---------- CARD ---------- */
   .pc-loc-card { background: var(--color-bg-card); border: 2px solid var(--color-ink); border-radius: var(--radius-soft);
@@ -63,6 +57,113 @@
   }
 {%- endstyle -%}
 
+{%- comment -%} ---- Stockist blocks (block order) ---- {%- endcomment -%}
+{%- assign stockist_count = 0 -%}
+{%- capture stockist_cards -%}
+  {%- assign si = 0 -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type != 'stockist' -%}{%- continue -%}{%- endif -%}
+    {%- assign m = si | modulo: 2 -%}
+    {%- assign flip_b = false -%}
+    {%- if m == 1 -%}{%- assign flip_b = true -%}{%- endif -%}
+    {% render 'postcard-location-card',
+        name: block.settings.name, image: block.settings.image, dates: '',
+        address: block.settings.address, map_url: block.settings.map_url,
+        hours: block.settings.opening_hours, description: block.settings.description,
+        products_html: block.settings.products, flip: flip_b %}
+    {%- assign si = si | plus: 1 -%}
+    {%- assign stockist_count = stockist_count | plus: 1 -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- comment -%} ---- Pop-up blocks: current vs past ---- {%- endcomment -%}
+{%- assign current_count = 0 -%}
+{%- assign past_count = 0 -%}
+{%- assign popup_total = 0 -%}
+
+{%- capture current_cards -%}
+  {%- assign ci = 0 -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type != 'popup' -%}{%- continue -%}{%- endif -%}
+    {%- assign popup_total = popup_total | plus: 1 -%}
+    {%- assign sd = block.settings.start_date -%}
+    {%- assign ed = block.settings.end_date -%}
+    {%- assign end_basis = ed | default: sd -%}
+    {%- assign is_current = true -%}
+    {%- if end_basis != blank -%}
+      {%- assign end_s = end_basis | date: '%s' | plus: 86400 -%}
+      {%- if end_s < now_s -%}{%- assign is_current = false -%}{%- endif -%}
+    {%- endif -%}
+    {%- if is_current -%}
+      {%- assign dstr = '' -%}
+      {%- if block.settings.display_dates != blank -%}
+        {%- assign dstr = block.settings.display_dates -%}
+      {%- elsif sd != blank -%}
+        {%- assign sm = sd | date: '%b' -%}
+        {%- assign em = ed | date: '%b' -%}
+        {%- if ed == blank -%}
+          {%- assign dstr = sd | date: '%-d %b %Y' -%}
+        {%- elsif sm == em -%}
+          {%- assign d_end = ed | date: '%-d %b %Y' -%}
+          {%- assign dstr = sd | date: '%-d' | append: '–' | append: d_end -%}
+        {%- else -%}
+          {%- assign d_end = ed | date: '%-d %b %Y' -%}
+          {%- assign dstr = sd | date: '%-d %b' | append: ' – ' | append: d_end -%}
+        {%- endif -%}
+      {%- endif -%}
+      {%- assign m = ci | modulo: 2 -%}
+      {%- assign flip_b = false -%}
+      {%- if m == 1 -%}{%- assign flip_b = true -%}{%- endif -%}
+      {% render 'postcard-location-card',
+          name: block.settings.name, image: block.settings.image, dates: dstr,
+          address: block.settings.address, map_url: block.settings.map_url,
+          hours: block.settings.opening_hours, description: block.settings.description,
+          products_html: block.settings.products, flip: flip_b %}
+      {%- assign ci = ci | plus: 1 -%}
+      {%- assign current_count = current_count | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- capture past_cards -%}
+  {%- assign pj = 0 -%}
+  {%- for block in section.blocks reversed -%}
+    {%- if block.type != 'popup' -%}{%- continue -%}{%- endif -%}
+    {%- assign sd = block.settings.start_date -%}
+    {%- assign ed = block.settings.end_date -%}
+    {%- assign end_basis = ed | default: sd -%}
+    {%- if end_basis == blank -%}{%- continue -%}{%- endif -%}
+    {%- assign end_s = end_basis | date: '%s' | plus: 86400 -%}
+    {%- if end_s >= now_s -%}{%- continue -%}{%- endif -%}
+    {%- assign dstr = '' -%}
+    {%- if block.settings.display_dates != blank -%}
+      {%- assign dstr = block.settings.display_dates -%}
+    {%- elsif sd != blank -%}
+      {%- assign sm = sd | date: '%b' -%}
+      {%- assign em = ed | date: '%b' -%}
+      {%- if ed == blank -%}
+        {%- assign dstr = sd | date: '%-d %b %Y' -%}
+      {%- elsif sm == em -%}
+        {%- assign d_end = ed | date: '%-d %b %Y' -%}
+        {%- assign dstr = sd | date: '%-d' | append: '–' | append: d_end -%}
+      {%- else -%}
+        {%- assign d_end = ed | date: '%-d %b %Y' -%}
+        {%- assign dstr = sd | date: '%-d %b' | append: ' – ' | append: d_end -%}
+      {%- endif -%}
+    {%- endif -%}
+    {%- assign m = pj | modulo: 2 -%}
+    {%- assign flip_b = false -%}
+    {%- if m == 1 -%}{%- assign flip_b = true -%}{%- endif -%}
+    {% render 'postcard-location-card',
+        name: block.settings.name, image: block.settings.image, dates: dstr,
+        address: block.settings.address, map_url: block.settings.map_url,
+        hours: block.settings.opening_hours, description: block.settings.description,
+        products_html: block.settings.products, is_past: true, flip: flip_b %}
+    {%- assign pj = pj | plus: 1 -%}
+    {%- assign past_count = past_count | plus: 1 -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
 <div class="pc-loc">
   {%- if section.settings.title != blank or section.settings.eyebrow != blank or section.settings.lede != blank -%}
     <section class="pc-loc__hero">
@@ -72,68 +173,31 @@
     </section>
   {%- endif -%}
 
-  {%- if source == 'popup' -%}
-    {%- comment -%} Split into current/upcoming vs past by end date (inclusive of the end day) {%- endcomment -%}
-    {%- assign current_count = 0 -%}
-    {%- assign past_count = 0 -%}
-    {%- capture current_cards -%}
-      {%- assign i = 0 -%}
-      {%- for p in raw -%}
-        {%- assign end_s = p.end_date.value | default: p.start_date.value | date: '%s' | plus: 86400 -%}
-        {%- if end_s >= now_s -%}
-          {%- assign m_i = i | modulo: 2 -%}
-          {%- assign flip_b = false -%}
-          {%- if m_i == 1 -%}{%- assign flip_b = true -%}{%- endif -%}
-          {% render 'postcard-location-card', loc: p, show_dates: true, flip: flip_b %}
-          {%- assign i = i | plus: 1 -%}
-          {%- assign current_count = current_count | plus: 1 -%}
-        {%- endif -%}
-      {%- endfor -%}
-    {%- endcapture -%}
-    {%- capture past_cards -%}
-      {%- assign j = 0 -%}
-      {%- for p in raw reversed -%}
-        {%- assign end_s = p.end_date.value | default: p.start_date.value | date: '%s' | plus: 86400 -%}
-        {%- if end_s < now_s -%}
-          {%- assign m_j = j | modulo: 2 -%}
-          {%- assign flip_b = false -%}
-          {%- if m_j == 1 -%}{%- assign flip_b = true -%}{%- endif -%}
-          {% render 'postcard-location-card', loc: p, show_dates: true, flip: flip_b, is_past: true %}
-          {%- assign j = j | plus: 1 -%}
-          {%- assign past_count = past_count | plus: 1 -%}
-        {%- endif -%}
-      {%- endfor -%}
-    {%- endcapture -%}
+  {%- if stockist_count > 0 -%}
+    <div class="pc-loc__list">{{ stockist_cards }}</div>
+  {%- endif -%}
 
+  {%- if popup_total > 0 -%}
     {%- if current_count > 0 -%}
       <div class="pc-loc__list">{{ current_cards }}</div>
-    {%- else -%}
+    {%- elsif stockist_count == 0 -%}
       <p class="pc-loc__empty">{{ section.settings.empty_text }}</p>
     {%- endif -%}
-
     {%- if past_count > 0 -%}
       <div class="pc-loc__divider"><span class="pc-loc__divider-label">{{ section.settings.past_label }}</span></div>
       <div class="pc-loc__list">{{ past_cards }}</div>
     {%- endif -%}
+  {%- endif -%}
 
-  {%- else -%}
-    {%- assign stockist_count = 0 -%}
-    {%- capture stockist_cards -%}
-      {%- assign i = 0 -%}
-      {%- for s in entries -%}
-        {%- assign m_s = i | modulo: 2 -%}
-        {%- assign flip_b = false -%}
-        {%- if m_s == 1 -%}{%- assign flip_b = true -%}{%- endif -%}
-        {% render 'postcard-location-card', loc: s, show_dates: false, flip: flip_b %}
-        {%- assign i = i | plus: 1 -%}
-        {%- assign stockist_count = stockist_count | plus: 1 -%}
-      {%- endfor -%}
-    {%- endcapture -%}
-    {%- if stockist_count > 0 -%}
-      <div class="pc-loc__list">{{ stockist_cards }}</div>
-    {%- else -%}
-      <p class="pc-loc__empty">{{ section.settings.empty_text }}</p>
-    {%- endif -%}
+  {%- if stockist_count == 0 and popup_total == 0 -%}
+    <p class="pc-loc__empty">{{ section.settings.empty_text }}</p>
+  {%- endif -%}
+
+  {%- if section.settings.footer_note != blank -%}
+    <div class="pc-loc__note">
+      {%- if section.settings.footer_note_label != blank -%}<div class="pc-loc__note-label">{{ section.settings.footer_note_label }}</div>{%- endif -%}
+      <div class="rte">{{ section.settings.footer_note }}</div>
+    </div>
   {%- endif -%}
 </div>
 
@@ -142,13 +206,8 @@
   "name": "Locations list",
   "tag": "section",
   "class": "section",
+  "max_blocks": 50,
   "settings": [
-    { "type": "select", "id": "source", "label": "Show", "default": "stockist",
-      "options": [
-        { "value": "stockist", "label": "Stockists" },
-        { "value": "popup", "label": "Pop-ups" }
-      ],
-      "info": "Stockists = all entries by sort order. Pop-ups = current/upcoming first, then Past pop-ups." },
     { "type": "color", "id": "accent_color", "label": "Accent colour", "default": "#FFB233", "info": "Used for the pop-up date badge." },
     { "type": "header", "content": "Intro" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
@@ -156,8 +215,44 @@
     { "type": "textarea", "id": "lede", "label": "Intro text" },
     { "type": "header", "content": "Labels" },
     { "type": "text", "id": "past_label", "label": "Past pop-ups heading", "default": "Past pop-ups" },
-    { "type": "text", "id": "empty_text", "label": "Empty state text", "default": "Nothing to show here just yet — check back soon." }
+    { "type": "text", "id": "empty_text", "label": "Empty state text", "default": "Nothing to show here just yet — check back soon." },
+    { "type": "header", "content": "Footer note (optional)" },
+    { "type": "text", "id": "footer_note_label", "label": "Note label" },
+    { "type": "richtext", "id": "footer_note", "label": "Note" }
   ],
-  "presets": [{ "name": "Locations list" }]
+  "blocks": [
+    {
+      "type": "stockist",
+      "name": "Stockist",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Location name" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "textarea", "id": "address", "label": "Address", "info": "One line per line break." },
+        { "type": "url", "id": "map_url", "label": "Map / directions link" },
+        { "type": "textarea", "id": "opening_hours", "label": "Opening hours" },
+        { "type": "textarea", "id": "description", "label": "Description" },
+        { "type": "richtext", "id": "products", "label": "Products available", "info": "Type names and hyperlink them to product pages." }
+      ]
+    },
+    {
+      "type": "popup",
+      "name": "Pop-up",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Location / event name" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "start_date", "label": "Start date", "info": "Format: YYYY-MM-DD (e.g. 2026-11-01)." },
+        { "type": "text", "id": "end_date", "label": "End date", "info": "Format: YYYY-MM-DD. After this, the pop-up moves to Past pop-ups." },
+        { "type": "text", "id": "display_dates", "label": "Date label override", "info": "Optional. Overrides the auto-formatted date range shown on the badge." },
+        { "type": "textarea", "id": "address", "label": "Address", "info": "One line per line break." },
+        { "type": "url", "id": "map_url", "label": "Map / directions link" },
+        { "type": "textarea", "id": "opening_hours", "label": "Opening hours" },
+        { "type": "textarea", "id": "description", "label": "Description" },
+        { "type": "richtext", "id": "products", "label": "Products available", "info": "Type names and hyperlink them to product pages." }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Locations list", "blocks": [ { "type": "stockist" } ] }
+  ]
 }
 {% endschema %}
