@@ -47,7 +47,7 @@
   assign world_collection = collections[world_collection_handle]
 
   if selected_count < limit_count and auto_mode != 'off' and world_collection.id
-    if auto_mode == 'world_type' or auto_mode == 'world_then_type'
+    if auto_mode contains 'world' and auto_mode contains 'type'
       if current_type != blank
         for p in world_collection.products
           if selected_count >= limit_count
@@ -68,7 +68,7 @@
       endif
     endif
 
-    if auto_mode == 'world' or auto_mode == 'world_type' or auto_mode == 'world_then_type'
+    if auto_mode contains 'world'
       for p in world_collection.products
         if selected_count >= limit_count
           break
