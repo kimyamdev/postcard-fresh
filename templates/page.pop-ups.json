@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "main": {
+      "type": "postcard-locations",
+      "settings": {
+        "source": "popup",
+        "accent_color": "#FFB233",
+        "eyebrow": "Catch us out and about",
+        "title": "Pop-ups",
+        "lede": "We take Postcard on the road. Here's where to find us next — and where we've been.",
+        "past_label": "Past pop-ups",
+        "empty_text": "No pop-ups on the calendar right now — check back soon."
+      }
+    }
+  },
+  "order": ["main"]
+}

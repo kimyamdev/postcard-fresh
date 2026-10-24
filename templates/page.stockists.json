@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main": {
+      "type": "postcard-locations",
+      "settings": {
+        "source": "stockist",
+        "accent_color": "#FFB233",
+        "eyebrow": "Find us in the wild",
+        "title": "Our stockists",
+        "lede": "Postcard is stocked at a handful of carefully chosen spots. Drop by to browse, sniff, and take a little ritual home.",
+        "empty_text": "We're lining up our first stockists — check back soon."
+      }
+    }
+  },
+  "order": ["main"]
+}
