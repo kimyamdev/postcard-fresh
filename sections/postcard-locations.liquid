@@ -31,6 +31,13 @@
     box-shadow: var(--shadow-stamp); overflow: hidden; background: var(--color-bg-warm); z-index: 0; }
   .pc-loc__map .leaflet-container { font-family: var(--font-display); }
   .pc-loc__map a { color: var(--color-ink); }
+  .pc-pin { background: none !important; border: 0 !important; }
+  .pc-pin svg { display: block; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.25)); }
+  .pc-loc__legend { max-width: 1040px; margin: 12px auto 0; padding: 0 24px; list-style: none;
+    display: flex; flex-wrap: wrap; gap: 8px 22px; font-family: var(--font-display); font-size: 14px; }
+  .pc-loc__legend li { display: flex; align-items: center; gap: 8px; }
+  .pc-loc__legend-dot { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--color-ink);
+    display: inline-block; flex: 0 0 auto; }
 
   /* ---------- CARD ---------- */
   .pc-loc-card { scroll-margin-top: 90px; }
@@ -172,7 +179,10 @@
   {%- endfor -%}
 {%- endcapture -%}
 
-{%- comment -%} ---- Map markers: any stockist/pop-up block with coordinates ---- {%- endcomment -%}
+{%- comment -%} ---- Map markers: any stockist/pop-up block with coordinates, plus our own location ---- {%- endcomment -%}
+{%- assign has_stockist_pin = false -%}
+{%- assign has_popup_pin = false -%}
+{%- assign has_own_pin = false -%}
 {%- capture markers_json -%}
   [
   {%- assign first_m = true -%}
@@ -186,8 +196,23 @@
     {%- assign lng = parts[1] | strip | times: 1.0 -%}
     {%- unless first_m -%},{%- endunless -%}
     {%- assign first_m = false -%}
-    {"name": {{ block.settings.name | default: '' | json }}, "lat": {{ lat }}, "lng": {{ lng }}, "anchor": "loc-{{ block.id }}"}
+    {%- if block.type == 'popup' -%}{%- assign has_popup_pin = true -%}{%- else -%}{%- assign has_stockist_pin = true -%}{%- endif -%}
+    {"name": {{ block.settings.name | default: '' | json }}, "lat": {{ lat }}, "lng": {{ lng }}, "anchor": "loc-{{ block.id }}", "type": {{ block.type | json }}}
   {%- endfor -%}
+  {%- if section.settings.show_own_location -%}
+    {%- assign oc = section.settings.own_coords | default: '' | strip -%}
+    {%- if oc != blank -%}
+      {%- assign op = oc | split: ',' -%}
+      {%- if op.size >= 2 -%}
+        {%- assign olat = op[0] | strip | times: 1.0 -%}
+        {%- assign olng = op[1] | strip | times: 1.0 -%}
+        {%- unless first_m -%},{%- endunless -%}
+        {%- assign first_m = false -%}
+        {%- assign has_own_pin = true -%}
+        {"name": {{ section.settings.own_name | default: 'Our studio' | json }}, "lat": {{ olat }}, "lng": {{ olng }}, "anchor": "", "type": "own"}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
   ]
 {%- endcapture -%}
 {%- assign has_markers = false -%}
@@ -211,11 +236,38 @@
     <div class="pc-loc__mapwrap">
       <div id="pc-loc-map-{{ section.id }}" class="pc-loc__map" style="height: {{ section.settings.map_height | default: 420 }}px;"></div>
     </div>
+    {%- if section.settings.show_legend -%}
+      <ul class="pc-loc__legend">
+        {%- if has_stockist_pin -%}
+          <li><span class="pc-loc__legend-dot" style="background: {{ section.settings.stockist_pin_color | default: '#FFB233' }};"></span>{{ section.settings.legend_stockist_label | default: 'Stockist' }}</li>
+        {%- endif -%}
+        {%- if has_popup_pin -%}
+          <li><span class="pc-loc__legend-dot" style="background: {{ section.settings.popup_pin_color | default: '#E86A5C' }};"></span>{{ section.settings.legend_popup_label | default: 'Pop-up' }}</li>
+        {%- endif -%}
+        {%- if has_own_pin -%}
+          <li><span class="pc-loc__legend-dot" style="background: {{ section.settings.own_pin_color | default: '#2E7D6B' }};"></span>{{ section.settings.legend_own_label | default: 'Our studio' }}</li>
+        {%- endif -%}
+      </ul>
+    {%- endif -%}
     <script>
       (function () {
         var data = {{ markers_json }};
         var el = document.getElementById('pc-loc-map-{{ section.id }}');
         if (!el || !data.length) return;
+        var cfg = {
+          stockist: '{{ section.settings.stockist_pin_color | default: "#FFB233" }}',
+          popup: '{{ section.settings.popup_pin_color | default: "#E86A5C" }}',
+          own: '{{ section.settings.own_pin_color | default: "#2E7D6B" }}'
+        };
+        function pin(color) {
+          return L.divIcon({
+            className: 'pc-pin',
+            html: '<svg width="26" height="38" viewBox="0 0 26 38" xmlns="http://www.w3.org/2000/svg"><path d="M13 0C5.8 0 0 5.8 0 13c0 9 13 25 13 25s13-16 13-25C26 5.8 20.2 0 13 0z" fill="' + color + '" stroke="#1a1a1a" stroke-width="2"/><circle cx="13" cy="13" r="4.5" fill="#fff"/></svg>',
+            iconSize: [26, 38],
+            iconAnchor: [13, 38],
+            popupAnchor: [0, -34]
+          });
+        }
         function init() {
           if (!window.L) { return setTimeout(init, 100); }
           var map = L.map(el, { scrollWheelZoom: false });
@@ -225,7 +277,7 @@
           }).addTo(map);
           var group = [];
           data.forEach(function (m) {
-            var mk = L.marker([m.lat, m.lng]).addTo(map);
+            var mk = L.marker([m.lat, m.lng], { icon: pin(cfg[m.type] || cfg.stockist) }).addTo(map);
             var html = '<strong>' + m.name + '</strong>';
             if (m.anchor) { html += '<br><a href="#' + m.anchor + '">View details &rarr;</a>'; }
             mk.bindPopup(html);
@@ -282,6 +334,18 @@
     { "type": "header", "content": "Map", "info": "Shows a Singapore map with a pin for every block that has Map coordinates filled in." },
     { "type": "checkbox", "id": "show_map", "label": "Show map", "default": true },
     { "type": "range", "id": "map_height", "label": "Map height", "min": 240, "max": 640, "step": 20, "unit": "px", "default": 420 },
+    { "type": "paragraph", "content": "Pin colours" },
+    { "type": "color", "id": "stockist_pin_color", "label": "Stockist pin", "default": "#FFB233" },
+    { "type": "color", "id": "popup_pin_color", "label": "Pop-up pin", "default": "#E86A5C" },
+    { "type": "color", "id": "own_pin_color", "label": "Our location pin", "default": "#2E7D6B" },
+    { "type": "checkbox", "id": "show_legend", "label": "Show legend", "default": true, "info": "Only lists the pin types actually on the map." },
+    { "type": "text", "id": "legend_stockist_label", "label": "Legend: stockist label", "default": "Stockist" },
+    { "type": "text", "id": "legend_popup_label", "label": "Legend: pop-up label", "default": "Pop-up" },
+    { "type": "text", "id": "legend_own_label", "label": "Legend: our-location label", "default": "Our studio" },
+    { "type": "header", "content": "Our location on the map" },
+    { "type": "checkbox", "id": "show_own_location", "label": "Show our location", "default": true },
+    { "type": "text", "id": "own_name", "label": "Our location name", "default": "OASIS / Postcard" },
+    { "type": "text", "id": "own_coords", "label": "Our location coordinates", "info": "latitude, longitude — same format as the blocks. Leave blank for no pin." },
     { "type": "header", "content": "Labels" },
     { "type": "text", "id": "past_label", "label": "Past pop-ups heading", "default": "Past pop-ups" },
     { "type": "text", "id": "empty_text", "label": "Empty state text", "default": "Nothing to show here just yet — check back soon." },
