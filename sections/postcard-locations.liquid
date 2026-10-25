@@ -277,15 +277,35 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           }).addTo(map);
           var group = [];
+          var coloc = {};
           data.forEach(function (m) {
             var mk = L.marker([m.lat, m.lng], { icon: pin(cfg[m.type] || cfg.stockist) }).addTo(map);
             var html = '<strong>' + m.name + '</strong>';
             if (m.anchor) { html += '<br><a href="#' + m.anchor + '">View details &rarr;</a>'; }
             mk.bindPopup(html);
+            mk._olatlng = L.latLng(m.lat, m.lng);
+            var key = m.lat.toFixed(5) + ',' + m.lng.toFixed(5);
+            (coloc[key] = coloc[key] || []).push(mk);
             group.push(mk);
           });
           if (group.length === 1) { map.setView(group[0].getLatLng(), 15); }
           else { map.fitBounds(L.featureGroup(group).getBounds().pad(0.15)); }
+          // Fan out pins that share the exact same spot so each stays visible.
+          function spreadColocated() {
+            Object.keys(coloc).forEach(function (key) {
+              var g = coloc[key];
+              if (g.length < 2) return;
+              var base = map.latLngToLayerPoint(g[0]._olatlng);
+              var r = 13;
+              g.forEach(function (mk, i) {
+                var ang = (2 * Math.PI * i / g.length) - Math.PI / 2;
+                var pt = L.point(base.x + r * Math.cos(ang), base.y + r * Math.sin(ang));
+                mk.setLatLng(map.layerPointToLatLng(pt));
+              });
+            });
+          }
+          spreadColocated();
+          map.on('zoomend', spreadColocated);
         }
         if (document.readyState === 'complete') { init(); }
         else { window.addEventListener('load', init); }
