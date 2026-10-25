@@ -1,0 +1,255 @@
+{%- comment -%}
+  Amenities / Hospitality partnerships page — pitch + showcase for putting
+  Postcard products in hotel/gym/spa bathrooms. Block-based (edit in the theme
+  editor): add Segment (who it's for), Benefit (how it works), and Partner
+  (showcase) blocks. Immersive hero + group headings are section settings.
+  The enquiry form is a separate reused section (postcard-corp-form).
+{%- endcomment -%}
+
+{%- liquid
+  assign has_segment = false
+  assign has_benefit = false
+  assign has_partner = false
+  for b in section.blocks
+    case b.type
+      when 'segment'
+        assign has_segment = true
+      when 'benefit'
+        assign has_benefit = true
+      when 'partner'
+        assign has_partner = true
+    endcase
+  endfor
+  assign hero_image = section.settings.hero_image
+-%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} { --accent: {{ section.settings.accent_color }}; }
+  .pc-amen { color: var(--color-ink); background: var(--color-bg); }
+  .pc-amen a { color: inherit; }
+  .pc-amen__intro { max-width: 640px; margin: 0 auto 36px; text-align: center; }
+  .pc-amen__intro .eyebrow { margin-bottom: 10px; }
+  .pc-amen__intro p { font-family: var(--font-display); font-size: 16px; line-height: 1.7; margin: 12px 0 0; }
+  .pc-amen__h { font-family: var(--font-headline); font-weight: 400; text-transform: uppercase; letter-spacing: 0.02em; font-size: clamp(28px, 6vw, 48px); line-height: 1; margin: 0; }
+
+  /* HERO */
+  .pc-amen-hero { position: relative; min-height: 74vh; display: flex; flex-direction: column; justify-content: flex-end;
+    background: var(--accent); color: #fff; overflow: hidden; }
+  .pc-amen-hero__media { position: absolute; inset: 0; z-index: 0; }
+  .pc-amen-hero__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pc-amen-hero::after { content: ""; position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(180deg, rgba(33,32,32,0.28) 0%, rgba(33,32,32,0.05) 38%, rgba(33,32,32,0.72) 100%); }
+  .pc-amen-hero__inner { position: relative; z-index: 2; max-width: 820px; margin: 0 auto; width: 100%; padding: 48px 24px 56px; text-align: center; }
+  .pc-amen-hero__eyebrow { font-family: var(--font-display); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.9; margin-bottom: 14px; }
+  .pc-amen-hero__title { margin: 0; font-family: var(--font-headline); font-weight: 400; text-transform: uppercase; letter-spacing: 0.02em; font-size: clamp(40px, 9vw, 84px); line-height: 0.95; }
+  .pc-amen-hero__body { margin: 16px auto 24px; max-width: 560px; font-family: var(--font-display); font-size: 16px; line-height: 1.7; }
+  .pc-amen-hero__cta { display: inline-block; font-family: var(--font-headline); font-size: 18px; letter-spacing: 0.04em; text-transform: uppercase;
+    background: var(--accent); color: var(--color-ink); padding: 14px 30px; border: 2px solid var(--color-ink); border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-stamp); text-decoration: none; transition: transform 0.08s ease, box-shadow 0.08s ease; }
+  .pc-amen-hero__cta:hover { transform: translate(-2px,-2px); box-shadow: var(--shadow-stamp-lg); }
+
+  /* SEGMENTS */
+  .pc-amen-seg__grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+  .pc-amen-seg-card { background: var(--color-bg-card); border: 2px solid var(--color-ink); border-radius: var(--radius-soft); box-shadow: var(--shadow-stamp); overflow: hidden; }
+  .pc-amen-seg-card__media { aspect-ratio: 4/3; background: var(--color-bg-warm); border-bottom: 2px solid var(--color-ink); }
+  .pc-amen-seg-card__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pc-amen-seg-card__placeholder { width: 100%; height: 100%; display: grid; place-items: center; font-family: var(--font-headline); text-transform: uppercase; font-size: 22px; opacity: 0.5; }
+  .pc-amen-seg-card__body { padding: 22px 22px 24px; }
+  .pc-amen-seg-card__h { margin: 0 0 8px; font-family: var(--font-headline); font-weight: 400; text-transform: uppercase; letter-spacing: 0.02em; font-size: 24px; }
+  .pc-amen-seg-card__p { margin: 0; font-family: var(--font-display); font-size: 15px; line-height: 1.65; }
+  @media (min-width: 760px) { .pc-amen-seg__grid { grid-template-columns: repeat(3, 1fr); } }
+
+  /* BENEFITS / HOW */
+  .pc-amen--tint { background: var(--color-bg-warm); }
+  .pc-amen-ben__grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+  .pc-amen-ben-card { background: var(--color-bg-card); border: 1.5px solid var(--color-ink); border-radius: var(--radius-soft); padding: 24px 22px; }
+  .pc-amen-ben-card__pm { display: inline-block; margin-bottom: 12px; font-family: var(--font-display); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 12px; border: 1.5px solid var(--color-ink); border-radius: var(--radius-pill); background: var(--accent); }
+  .pc-amen-ben-card__h { margin: 0 0 8px; font-family: var(--font-headline); font-weight: 400; text-transform: uppercase; letter-spacing: 0.02em; font-size: 22px; }
+  .pc-amen-ben-card__p { margin: 0; font-family: var(--font-display); font-size: 15px; line-height: 1.65; }
+  @media (min-width: 760px) { .pc-amen-ben__grid { grid-template-columns: repeat(3, 1fr); } }
+
+  /* PARTNERS */
+  .pc-amen-prt__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; align-items: stretch; }
+  .pc-amen-prt-card { display: flex; align-items: center; justify-content: center; text-align: center; gap: 10px; min-height: 96px; padding: 18px;
+    background: var(--color-bg-card); border: 1.5px solid var(--color-line); border-radius: var(--radius-soft); }
+  .pc-amen-prt-card img { max-width: 100%; max-height: 64px; object-fit: contain; display: block; filter: grayscale(1); opacity: 0.85; }
+  .pc-amen-prt-card__name { font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 0.02em; font-size: 18px; line-height: 1.1; }
+  @media (min-width: 640px) { .pc-amen-prt__grid { grid-template-columns: repeat(4, 1fr); } }
+{%- endstyle -%}
+
+<div class="pc-amen">
+  {%- comment -%} ---------- HERO ---------- {%- endcomment -%}
+  <section class="pc-amen-hero">
+    {%- if hero_image != blank -%}
+      <div class="pc-amen-hero__media">
+        {{ hero_image | image_url: width: 2000 | image_tag: alt: section.settings.hero_title | default: 'Postcard amenities', loading: 'eager', widths: '600,900,1200,1600,2000', sizes: '100vw' }}
+      </div>
+    {%- endif -%}
+    <div class="pc-amen-hero__inner">
+      {%- if section.settings.hero_eyebrow != blank -%}<div class="pc-amen-hero__eyebrow">{{ section.settings.hero_eyebrow }}</div>{%- endif -%}
+      {%- if section.settings.hero_title != blank -%}<h1 class="pc-amen-hero__title" style="color: {{ section.settings.hero_title_color }}">{{ section.settings.hero_title }}</h1>{%- endif -%}
+      {%- if section.settings.hero_body != blank -%}<p class="pc-amen-hero__body">{{ section.settings.hero_body }}</p>{%- endif -%}
+      {%- if section.settings.hero_cta_text != blank -%}
+        <a class="pc-amen-hero__cta" href="{{ section.settings.hero_cta_url | default: '#enquiry' }}">{{ section.settings.hero_cta_text }}</a>
+      {%- endif -%}
+    </div>
+  </section>
+
+  {%- comment -%} ---------- SEGMENTS: who it's for ---------- {%- endcomment -%}
+  {%- if has_segment -%}
+    <section class="section">
+      <div class="container">
+        <div class="pc-amen__intro{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+          {%- if section.settings.segments_eyebrow != blank -%}<div class="eyebrow">{{ section.settings.segments_eyebrow }}</div>{%- endif -%}
+          {%- if section.settings.segments_title != blank -%}<h2 class="pc-amen__h">{{ section.settings.segments_title }}</h2>{%- endif -%}
+          {%- if section.settings.segments_intro != blank -%}<p>{{ section.settings.segments_intro }}</p>{%- endif -%}
+        </div>
+        <div class="pc-amen-seg__grid">
+          {%- for b in section.blocks -%}
+            {%- if b.type != 'segment' -%}{%- continue -%}{%- endif -%}
+            <article class="pc-amen-seg-card{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" {{ b.shopify_attributes }}>
+              <div class="pc-amen-seg-card__media">
+                {%- if b.settings.image != blank -%}
+                  {{ b.settings.image | image_url: width: 800 | image_tag: alt: b.settings.title | default: 'Segment', loading: 'lazy', widths: '400,600,800' }}
+                {%- else -%}
+                  <span class="pc-amen-seg-card__placeholder">{{ b.settings.title | default: 'Segment' | escape }}</span>
+                {%- endif -%}
+              </div>
+              <div class="pc-amen-seg-card__body">
+                {%- if b.settings.title != blank -%}<h3 class="pc-amen-seg-card__h">{{ b.settings.title }}</h3>{%- endif -%}
+                {%- if b.settings.body != blank -%}<p class="pc-amen-seg-card__p">{{ b.settings.body }}</p>{%- endif -%}
+              </div>
+            </article>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ---------- BENEFITS: how it works ---------- {%- endcomment -%}
+  {%- if has_benefit -%}
+    <section class="section pc-amen--tint">
+      <div class="container">
+        <div class="pc-amen__intro{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+          {%- if section.settings.how_eyebrow != blank -%}<div class="eyebrow">{{ section.settings.how_eyebrow }}</div>{%- endif -%}
+          {%- if section.settings.how_title != blank -%}<h2 class="pc-amen__h">{{ section.settings.how_title }}</h2>{%- endif -%}
+          {%- if section.settings.how_intro != blank -%}<p>{{ section.settings.how_intro }}</p>{%- endif -%}
+        </div>
+        <div class="pc-amen-ben__grid">
+          {%- for b in section.blocks -%}
+            {%- if b.type != 'benefit' -%}{%- continue -%}{%- endif -%}
+            <div class="pc-amen-ben-card{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" {{ b.shopify_attributes }}>
+              {%- if b.settings.label != blank -%}<span class="pc-amen-ben-card__pm">{{ b.settings.label }}</span>{%- endif -%}
+              {%- if b.settings.title != blank -%}<h3 class="pc-amen-ben-card__h">{{ b.settings.title }}</h3>{%- endif -%}
+              {%- if b.settings.body != blank -%}<p class="pc-amen-ben-card__p">{{ b.settings.body }}</p>{%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ---------- PARTNERS: showcase ---------- {%- endcomment -%}
+  {%- if has_partner -%}
+    <section class="section">
+      <div class="container">
+        <div class="pc-amen__intro{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+          {%- if section.settings.partners_eyebrow != blank -%}<div class="eyebrow">{{ section.settings.partners_eyebrow }}</div>{%- endif -%}
+          {%- if section.settings.partners_title != blank -%}<h2 class="pc-amen__h">{{ section.settings.partners_title }}</h2>{%- endif -%}
+          {%- if section.settings.partners_intro != blank -%}<p>{{ section.settings.partners_intro }}</p>{%- endif -%}
+        </div>
+        <div class="pc-amen-prt__grid">
+          {%- for b in section.blocks -%}
+            {%- if b.type != 'partner' -%}{%- continue -%}{%- endif -%}
+            {%- capture prt_inner -%}
+              {%- if b.settings.logo != blank -%}
+                {{ b.settings.logo | image_url: width: 400 | image_tag: alt: b.settings.name | default: 'Partner', loading: 'lazy', widths: '200,400' }}
+              {%- else -%}
+                <span class="pc-amen-prt-card__name">{{ b.settings.name }}</span>
+              {%- endif -%}
+            {%- endcapture -%}
+            {%- if b.settings.url != blank -%}
+              <a class="pc-amen-prt-card" href="{{ b.settings.url }}" target="_blank" rel="noopener" {{ b.shopify_attributes }}>{{ prt_inner }}</a>
+            {%- else -%}
+              <div class="pc-amen-prt-card" {{ b.shopify_attributes }}>{{ prt_inner }}</div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Amenities",
+  "tag": "section",
+  "max_blocks": 30,
+  "settings": [
+    { "type": "color", "id": "accent_color", "label": "Accent colour", "default": "#FFB233" },
+    { "type": "header", "content": "Hero" },
+    { "type": "image_picker", "id": "hero_image", "label": "Hero image (full-bleed)" },
+    { "type": "text", "id": "hero_eyebrow", "label": "Eyebrow", "default": "Hospitality partnerships" },
+    { "type": "text", "id": "hero_title", "label": "Title", "default": "Postcard, in your bathrooms." },
+    { "type": "color", "id": "hero_title_color", "label": "Title colour", "default": "#FFFFFF" },
+    { "type": "textarea", "id": "hero_body", "label": "Body", "default": "Give your guests a little ritual to remember — refillable, natural care made in Singapore, in your rooms, gyms and spas." },
+    { "type": "text", "id": "hero_cta_text", "label": "Button text", "default": "Become a partner →" },
+    { "type": "url", "id": "hero_cta_url", "label": "Button link", "info": "Defaults to the #enquiry form below." },
+    { "type": "header", "content": "Who it's for" },
+    { "type": "text", "id": "segments_eyebrow", "label": "Eyebrow", "default": "Who it's for" },
+    { "type": "text", "id": "segments_title", "label": "Title", "default": "Made for places people unwind." },
+    { "type": "textarea", "id": "segments_intro", "label": "Intro" },
+    { "type": "header", "content": "How it works" },
+    { "type": "text", "id": "how_eyebrow", "label": "Eyebrow", "default": "How it works" },
+    { "type": "text", "id": "how_title", "label": "Title", "default": "Simple to set up, lovely to use." },
+    { "type": "textarea", "id": "how_intro", "label": "Intro" },
+    { "type": "header", "content": "Partners" },
+    { "type": "text", "id": "partners_eyebrow", "label": "Eyebrow", "default": "In good company" },
+    { "type": "text", "id": "partners_title", "label": "Title", "default": "Trusted by." },
+    { "type": "textarea", "id": "partners_intro", "label": "Intro" }
+  ],
+  "blocks": [
+    {
+      "type": "segment",
+      "name": "Segment (who it's for)",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Hotels" },
+        { "type": "textarea", "id": "body", "label": "Body", "default": "In-room amenities and refill stations that feel like a gift, not a giveaway." }
+      ]
+    },
+    {
+      "type": "benefit",
+      "name": "Benefit / step",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Badge", "default": "01" },
+        { "type": "text", "id": "title", "label": "Title", "default": "We supply & restock." },
+        { "type": "textarea", "id": "body", "label": "Body", "default": "Refillable formats delivered on a schedule that suits you — no fuss, no waste." }
+      ]
+    },
+    {
+      "type": "partner",
+      "name": "Partner (showcase)",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Partner name", "info": "Shown if no logo is set." },
+        { "type": "image_picker", "id": "logo", "label": "Logo" },
+        { "type": "url", "id": "url", "label": "Link (optional)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Amenities",
+      "blocks": [
+        { "type": "segment", "settings": { "title": "Hotels" } },
+        { "type": "segment", "settings": { "title": "Gyms" } },
+        { "type": "segment", "settings": { "title": "Spas" } },
+        { "type": "benefit", "settings": { "label": "01" } },
+        { "type": "benefit", "settings": { "label": "02" } },
+        { "type": "benefit", "settings": { "label": "03" } },
+        { "type": "partner" }
+      ]
+    }
+  ]
+}
+{% endschema %}

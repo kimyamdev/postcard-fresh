@@ -226,6 +226,13 @@
             "text": "Pop-ups",
             "url": "/pages/pop-ups"
           }
+        },
+        "disc_amenities": {
+          "type": "link",
+          "settings": {
+            "text": "Amenities",
+            "url": "/pages/amenities"
+          }
         }
       },
       "block_order": [
@@ -246,6 +253,7 @@
         "disc_stockists",
         "disc_popups",
         "disc_l5",
+        "disc_amenities",
         "disc_l6",
         "disc_l7",
         "help_col",

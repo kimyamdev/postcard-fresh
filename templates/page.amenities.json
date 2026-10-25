@@ -1,0 +1,94 @@
+{
+  "sections": {
+    "amenities": {
+      "type": "postcard-amenities",
+      "blocks": {
+        "seg_hotels": {
+          "type": "segment",
+          "settings": {
+            "title": "Hotels & resorts",
+            "body": "In-room amenities and refill stations that feel like a gift, not a giveaway — from boutique stays to resorts."
+          }
+        },
+        "seg_gyms": {
+          "type": "segment",
+          "settings": {
+            "title": "Gyms & studios",
+            "body": "Shower-ready washes and deodorants your members will actually reach for — and ask where to buy."
+          }
+        },
+        "seg_spas": {
+          "type": "segment",
+          "settings": {
+            "title": "Spas & wellness",
+            "body": "Treatment-room rituals and retail that carry the calm home long after the session ends."
+          }
+        },
+        "ben_1": {
+          "type": "benefit",
+          "settings": {
+            "label": "01",
+            "title": "We supply & restock.",
+            "body": "Refillable formats delivered on a schedule that suits you — minimal packaging, minimal waste."
+          }
+        },
+        "ben_2": {
+          "type": "benefit",
+          "settings": {
+            "label": "02",
+            "title": "Make it yours.",
+            "body": "Bespoke wrap, custom scents and co-branding for a signature touch that's unmistakably you."
+          }
+        },
+        "ben_3": {
+          "type": "benefit",
+          "settings": {
+            "label": "03",
+            "title": "Guests discover more.",
+            "body": "QR-linked ingredient pages and easy reorder turn a lovely amenity into a new customer."
+          }
+        },
+        "prt_rws": {
+          "type": "partner",
+          "settings": {
+            "name": "Resorts World Sentosa"
+          }
+        }
+      },
+      "block_order": ["seg_hotels", "seg_gyms", "seg_spas", "ben_1", "ben_2", "ben_3", "prt_rws"],
+      "settings": {
+        "accent_color": "#FFB233",
+        "hero_image": "shopify://shop_images/spa_mbs.png",
+        "hero_eyebrow": "Hospitality partnerships",
+        "hero_title": "Postcard, in your bathrooms.",
+        "hero_title_color": "#FFFFFF",
+        "hero_body": "Give your guests a little ritual to remember — refillable, natural care made in Singapore, in your rooms, gyms and spas.",
+        "hero_cta_text": "Become a partner →",
+        "hero_cta_url": "#enquiry",
+        "segments_eyebrow": "Who it's for",
+        "segments_title": "Made for places people unwind.",
+        "segments_intro": "Wherever your guests shower, soak or reset — we make the amenity they'll remember.",
+        "how_eyebrow": "How it works",
+        "how_title": "Simple to set up, lovely to use.",
+        "how_intro": "",
+        "partners_eyebrow": "In good company",
+        "partners_title": "Trusted by.",
+        "partners_intro": "A few of the places you'll already find us — with more joining all the time."
+      }
+    },
+    "enquiry": {
+      "type": "postcard-corp-form",
+      "settings": {
+        "anchor_id": "enquiry",
+        "eyebrow": "Become a partner",
+        "title": "Let's get Postcard into your space.",
+        "subtitle": "Tell us about your property — we reply within 2 working days.",
+        "contact_tag": "amenities",
+        "subject": "Amenities enquiry — Postcard site",
+        "topics": "Hotel / resort,Gym / studio,Spa / wellness,Other",
+        "submit_text": "Send enquiry →"
+      }
+    }
+  },
+  "order": ["amenities", "enquiry"]
+}
