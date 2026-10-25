@@ -12,8 +12,9 @@
     products_html — rich-text HTML (already rendered) for "Available here"
     is_past       — true to dim the card
     flip          — true to put the image on the right (desktop)
+    anchor        — block id used as the card's #anchor (map pins link to it)
 {%- endcomment -%}
-<article class="pc-loc-card{% if flip %} pc-loc-card--flip{% endif %}{% if is_past %} pc-loc-card--past{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+<article {% if anchor != blank %}id="loc-{{ anchor }}" {% endif %}class="pc-loc-card{% if flip %} pc-loc-card--flip{% endif %}{% if is_past %} pc-loc-card--past{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
   <div class="pc-loc-card__media">
     {%- if image != blank -%}
       {%- assign loc_alt = image.alt | default: name | escape -%}

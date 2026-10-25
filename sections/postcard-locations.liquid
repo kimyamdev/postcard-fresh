@@ -25,7 +25,15 @@
   .pc-loc__note a { color: inherit; }
   .pc-loc__note-label { font-family: var(--font-display); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.6; margin-bottom: 8px; }
 
+  /* ---------- MAP ---------- */
+  .pc-loc__mapwrap { max-width: 1040px; margin: 8px auto 0; padding: 20px 24px 0; }
+  .pc-loc__map { width: 100%; border: 2px solid var(--color-ink); border-radius: var(--radius-soft);
+    box-shadow: var(--shadow-stamp); overflow: hidden; background: var(--color-bg-warm); z-index: 0; }
+  .pc-loc__map .leaflet-container { font-family: var(--font-display); }
+  .pc-loc__map a { color: var(--color-ink); }
+
   /* ---------- CARD ---------- */
+  .pc-loc-card { scroll-margin-top: 90px; }
   .pc-loc-card { background: var(--color-bg-card); border: 2px solid var(--color-ink); border-radius: var(--radius-soft);
     box-shadow: var(--shadow-stamp); overflow: hidden; display: grid; grid-template-columns: 1fr; }
   .pc-loc-card__media { position: relative; aspect-ratio: 4/3; background: var(--color-bg-warm); border-bottom: 2px solid var(--color-ink); }
@@ -70,7 +78,7 @@
         name: block.settings.name, image: block.settings.image, dates: '',
         address: block.settings.address, map_url: block.settings.map_url,
         hours: block.settings.opening_hours, description: block.settings.description,
-        products_html: block.settings.products, flip: flip_b %}
+        products_html: block.settings.products, flip: flip_b, anchor: block.id %}
     {%- assign si = si | plus: 1 -%}
     {%- assign stockist_count = stockist_count | plus: 1 -%}
   {%- endfor -%}
@@ -118,7 +126,7 @@
           name: block.settings.name, image: block.settings.image, dates: dstr,
           address: block.settings.address, map_url: block.settings.map_url,
           hours: block.settings.opening_hours, description: block.settings.description,
-          products_html: block.settings.products, flip: flip_b %}
+          products_html: block.settings.products, flip: flip_b, anchor: block.id %}
       {%- assign ci = ci | plus: 1 -%}
       {%- assign current_count = current_count | plus: 1 -%}
     {%- endif -%}
@@ -158,11 +166,37 @@
         name: block.settings.name, image: block.settings.image, dates: dstr,
         address: block.settings.address, map_url: block.settings.map_url,
         hours: block.settings.opening_hours, description: block.settings.description,
-        products_html: block.settings.products, is_past: true, flip: flip_b %}
+        products_html: block.settings.products, is_past: true, flip: flip_b, anchor: block.id %}
     {%- assign pj = pj | plus: 1 -%}
     {%- assign past_count = past_count | plus: 1 -%}
   {%- endfor -%}
 {%- endcapture -%}
+
+{%- comment -%} ---- Map markers: any stockist/pop-up block with coordinates ---- {%- endcomment -%}
+{%- capture markers_json -%}
+  [
+  {%- assign first_m = true -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type != 'stockist' and block.type != 'popup' -%}{%- continue -%}{%- endif -%}
+    {%- assign c = block.settings.coords | default: '' | strip -%}
+    {%- if c == blank -%}{%- continue -%}{%- endif -%}
+    {%- assign parts = c | split: ',' -%}
+    {%- if parts.size < 2 -%}{%- continue -%}{%- endif -%}
+    {%- assign lat = parts[0] | strip | times: 1.0 -%}
+    {%- assign lng = parts[1] | strip | times: 1.0 -%}
+    {%- unless first_m -%},{%- endunless -%}
+    {%- assign first_m = false -%}
+    {"name": {{ block.settings.name | default: '' | json }}, "lat": {{ lat }}, "lng": {{ lng }}, "anchor": "loc-{{ block.id }}"}
+  {%- endfor -%}
+  ]
+{%- endcapture -%}
+{%- assign has_markers = false -%}
+{%- if section.settings.show_map and markers_json contains '{' -%}{%- assign has_markers = true -%}{%- endif -%}
+
+{%- if has_markers -%}
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+{%- endif -%}
 
 <div class="pc-loc">
   {%- if section.settings.title != blank or section.settings.eyebrow != blank or section.settings.lede != blank -%}
@@ -171,6 +205,39 @@
       {%- if section.settings.title != blank -%}<h1 class="h-display">{{ section.settings.title }}</h1>{%- endif -%}
       {%- if section.settings.lede != blank -%}<p class="pc-loc__lede">{{ section.settings.lede }}</p>{%- endif -%}
     </section>
+  {%- endif -%}
+
+  {%- if has_markers -%}
+    <div class="pc-loc__mapwrap">
+      <div id="pc-loc-map-{{ section.id }}" class="pc-loc__map" style="height: {{ section.settings.map_height | default: 420 }}px;"></div>
+    </div>
+    <script>
+      (function () {
+        var data = {{ markers_json }};
+        var el = document.getElementById('pc-loc-map-{{ section.id }}');
+        if (!el || !data.length) return;
+        function init() {
+          if (!window.L) { return setTimeout(init, 100); }
+          var map = L.map(el, { scrollWheelZoom: false });
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          }).addTo(map);
+          var group = [];
+          data.forEach(function (m) {
+            var mk = L.marker([m.lat, m.lng]).addTo(map);
+            var html = '<strong>' + m.name + '</strong>';
+            if (m.anchor) { html += '<br><a href="#' + m.anchor + '">View details &rarr;</a>'; }
+            mk.bindPopup(html);
+            group.push(mk);
+          });
+          if (group.length === 1) { map.setView(group[0].getLatLng(), 15); }
+          else { map.fitBounds(L.featureGroup(group).getBounds().pad(0.15)); }
+        }
+        if (document.readyState === 'complete') { init(); }
+        else { window.addEventListener('load', init); }
+      })();
+    </script>
   {%- endif -%}
 
   {%- if stockist_count > 0 -%}
@@ -212,6 +279,9 @@
     { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
     { "type": "text", "id": "title", "label": "Title" },
     { "type": "textarea", "id": "lede", "label": "Intro text" },
+    { "type": "header", "content": "Map", "info": "Shows a Singapore map with a pin for every block that has Map coordinates filled in." },
+    { "type": "checkbox", "id": "show_map", "label": "Show map", "default": true },
+    { "type": "range", "id": "map_height", "label": "Map height", "min": 240, "max": 640, "step": 20, "unit": "px", "default": 420 },
     { "type": "header", "content": "Labels" },
     { "type": "text", "id": "past_label", "label": "Past pop-ups heading", "default": "Past pop-ups" },
     { "type": "text", "id": "empty_text", "label": "Empty state text", "default": "Nothing to show here just yet — check back soon." },
@@ -227,6 +297,7 @@
         { "type": "text", "id": "name", "label": "Location name" },
         { "type": "image_picker", "id": "image", "label": "Image" },
         { "type": "textarea", "id": "address", "label": "Address", "info": "One line per line break." },
+        { "type": "text", "id": "coords", "label": "Map coordinates", "info": "Pin location as latitude, longitude — e.g. 1.2896, 103.8501. In Google Maps, right-click the spot and click the numbers at the top to copy. Leave blank for no pin." },
         { "type": "url", "id": "map_url", "label": "Map / directions link" },
         { "type": "textarea", "id": "opening_hours", "label": "Opening hours" },
         { "type": "textarea", "id": "description", "label": "Description" },
@@ -243,6 +314,7 @@
         { "type": "text", "id": "end_date", "label": "End date", "info": "Format: YYYY-MM-DD. After this, the pop-up moves to Past pop-ups." },
         { "type": "text", "id": "display_dates", "label": "Date label override", "info": "Optional. Overrides the auto-formatted date range shown on the badge." },
         { "type": "textarea", "id": "address", "label": "Address", "info": "One line per line break." },
+        { "type": "text", "id": "coords", "label": "Map coordinates", "info": "Pin location as latitude, longitude — e.g. 1.2896, 103.8501. In Google Maps, right-click the spot and click the numbers at the top to copy. Leave blank for no pin." },
         { "type": "url", "id": "map_url", "label": "Map / directions link" },
         { "type": "textarea", "id": "opening_hours", "label": "Opening hours" },
         { "type": "textarea", "id": "description", "label": "Description" },
