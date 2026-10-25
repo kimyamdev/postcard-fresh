@@ -31,8 +31,9 @@
     box-shadow: var(--shadow-stamp); overflow: hidden; background: var(--color-bg-warm); z-index: 0; }
   .pc-loc__map .leaflet-container { font-family: var(--font-display); }
   .pc-loc__map a { color: var(--color-ink); }
-  .pc-pin { background: none !important; border: 0 !important; }
-  .pc-pin svg { display: block; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.25)); }
+  .pc-pin { background: none !important; border: 0 !important; overflow: visible; }
+  .pc-pin svg { display: block; overflow: visible; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.25)); }
+  .leaflet-marker-icon.pc-pin { overflow: visible; }
   .pc-loc__legend { max-width: 1040px; margin: 12px auto 0; padding: 0 24px; list-style: none;
     display: flex; flex-wrap: wrap; gap: 8px 22px; font-family: var(--font-display); font-size: 14px; }
   .pc-loc__legend li { display: flex; align-items: center; gap: 8px; }
@@ -262,10 +263,10 @@
         function pin(color) {
           return L.divIcon({
             className: 'pc-pin',
-            html: '<svg width="26" height="38" viewBox="0 0 26 38" xmlns="http://www.w3.org/2000/svg"><path d="M13 0C5.8 0 0 5.8 0 13c0 9 13 25 13 25s13-16 13-25C26 5.8 20.2 0 13 0z" fill="' + color + '" stroke="#1a1a1a" stroke-width="2"/><circle cx="13" cy="13" r="4.5" fill="#fff"/></svg>',
-            iconSize: [26, 38],
+            html: '<svg width="26" height="40" viewBox="0 0 26 40" xmlns="http://www.w3.org/2000/svg" style="overflow:visible"><path d="M13 0C5.8 0 0 5.8 0 13c0 9 13 25 13 25s13-16 13-25C26 5.8 20.2 0 13 0z" fill="' + color + '" stroke="#1a1a1a" stroke-width="2"/><circle cx="13" cy="13" r="4.5" fill="#fff"/></svg>',
+            iconSize: [26, 40],
             iconAnchor: [13, 38],
-            popupAnchor: [0, -34]
+            popupAnchor: [0, -36]
           });
         }
         function init() {
