@@ -305,7 +305,7 @@
               var base = map.latLngToLayerPoint(g[0]._olatlng);
               var r = 13;
               g.forEach(function (mk, i) {
-                var ang = (2 * Math.PI * i / g.length);
+                var ang = (2 * Math.PI * i / g.length) - Math.PI / 2;
                 var pt = L.point(base.x + r * Math.cos(ang), base.y + r * Math.sin(ang));
                 mk.setLatLng(map.layerPointToLatLng(pt));
               });
