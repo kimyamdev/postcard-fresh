@@ -48,14 +48,40 @@
             "body": "QR-linked ingredient pages and easy reorder turn a lovely amenity into a new customer."
           }
         },
-        "prt_rws": {
-          "type": "partner",
+        "show_ora": {
+          "type": "showcase",
           "settings": {
-            "name": "Resorts World Sentosa"
+            "tag": "In-room amenities",
+            "name": "Hotel Ora, RWS",
+            "body": "Refillable Postcard amenities in the rooms at Hotel Ora, Resorts World Sentosa."
+          }
+        },
+        "show_icebath": {
+          "type": "showcase",
+          "settings": {
+            "tag": "Shower amenities",
+            "name": "The Ice Bath Club",
+            "body": "Icy Peaks and other selected worlds stocked in the showers — a bracing reset to match the plunge."
+          }
+        },
+        "show_carpenter": {
+          "type": "showcase",
+          "settings": {
+            "tag": "Custom scent",
+            "name": "21 Carpenter",
+            "body": "A bespoke signature scent created for 21 Carpenter, bringing the hotel's character to life through fragrance."
+          }
+        },
+        "show_warehouse": {
+          "type": "showcase",
+          "settings": {
+            "tag": "Guest amenities",
+            "name": "The Warehouse Hotel",
+            "body": "Postcard amenities for guests at The Warehouse Hotel, a heritage stay on the Singapore River."
           }
         }
       },
-      "block_order": ["seg_hotels", "seg_gyms", "seg_spas", "ben_1", "ben_2", "ben_3", "prt_rws"],
+      "block_order": ["seg_hotels", "seg_gyms", "seg_spas", "ben_1", "ben_2", "ben_3", "show_ora", "show_icebath", "show_carpenter", "show_warehouse"],
       "settings": {
         "accent_color": "#FFB233",
         "hero_image": "shopify://shop_images/spa_mbs.png",
@@ -72,8 +98,8 @@
         "how_title": "Simple to set up, lovely to use.",
         "how_intro": "",
         "partners_eyebrow": "In good company",
-        "partners_title": "Trusted by.",
-        "partners_intro": "A few of the places you'll already find us — with more joining all the time."
+        "partners_title": "Partnerships we're proud of.",
+        "partners_intro": "A few of the places you'll already find Postcard — with more joining all the time."
       }
     },
     "enquiry": {

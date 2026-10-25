@@ -10,6 +10,7 @@
   assign has_segment = false
   assign has_benefit = false
   assign has_partner = false
+  assign has_showcase = false
   for b in section.blocks
     case b.type
       when 'segment'
@@ -18,6 +19,8 @@
         assign has_benefit = true
       when 'partner'
         assign has_partner = true
+      when 'showcase'
+        assign has_showcase = true
     endcase
   endfor
   assign hero_image = section.settings.hero_image
@@ -67,6 +70,19 @@
   .pc-amen-ben-card__h { margin: 0 0 8px; font-family: var(--font-headline); font-weight: 400; text-transform: uppercase; letter-spacing: 0.02em; font-size: 22px; }
   .pc-amen-ben-card__p { margin: 0; font-family: var(--font-display); font-size: 15px; line-height: 1.65; }
   @media (min-width: 760px) { .pc-amen-ben__grid { grid-template-columns: repeat(3, 1fr); } }
+
+  /* FEATURED PARTNERSHIPS (showcase cards) */
+  .pc-amen-show__grid { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 40px; }
+  .pc-amen-show-card { background: var(--color-bg-card); border: 2px solid var(--color-ink); border-radius: var(--radius-soft); box-shadow: var(--shadow-stamp); overflow: hidden; display: flex; flex-direction: column; }
+  .pc-amen-show-card__media { aspect-ratio: 16/10; background: var(--color-bg-warm); border-bottom: 2px solid var(--color-ink); }
+  .pc-amen-show-card__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pc-amen-show-card__placeholder { width: 100%; height: 100%; display: grid; place-items: center; text-align: center; padding: 16px; font-family: var(--font-headline); text-transform: uppercase; font-size: 22px; line-height: 1.1; opacity: 0.5; }
+  .pc-amen-show-card__body { padding: 22px 24px 24px; }
+  .pc-amen-show-card__tag { display: inline-block; margin-bottom: 10px; font-family: var(--font-display); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 12px; background: var(--accent); border: 1.5px solid var(--color-ink); border-radius: var(--radius-pill); }
+  .pc-amen-show-card__h { margin: 0 0 8px; font-family: var(--font-headline); font-weight: 400; text-transform: uppercase; letter-spacing: 0.02em; font-size: 26px; line-height: 1; }
+  .pc-amen-show-card__p { margin: 0; font-family: var(--font-display); font-size: 15px; line-height: 1.65; }
+  .pc-amen-show-card__link { display: inline-block; margin-top: 14px; font-family: var(--font-display); font-size: 13px; letter-spacing: 0.04em; text-decoration: underline; text-underline-offset: 3px; }
+  @media (min-width: 760px) { .pc-amen-show__grid { grid-template-columns: repeat(2, 1fr); } }
 
   /* PARTNERS */
   .pc-amen-prt__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; align-items: stretch; }
@@ -149,8 +165,8 @@
     </section>
   {%- endif -%}
 
-  {%- comment -%} ---------- PARTNERS: showcase ---------- {%- endcomment -%}
-  {%- if has_partner -%}
+  {%- comment -%} ---------- PARTNERS: featured cards + logo chips ---------- {%- endcomment -%}
+  {%- if has_showcase or has_partner -%}
     <section class="section">
       <div class="container">
         <div class="pc-amen__intro{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
@@ -158,23 +174,51 @@
           {%- if section.settings.partners_title != blank -%}<h2 class="pc-amen__h">{{ section.settings.partners_title }}</h2>{%- endif -%}
           {%- if section.settings.partners_intro != blank -%}<p>{{ section.settings.partners_intro }}</p>{%- endif -%}
         </div>
-        <div class="pc-amen-prt__grid">
-          {%- for b in section.blocks -%}
-            {%- if b.type != 'partner' -%}{%- continue -%}{%- endif -%}
-            {%- capture prt_inner -%}
-              {%- if b.settings.logo != blank -%}
-                {{ b.settings.logo | image_url: width: 400 | image_tag: alt: b.settings.name | default: 'Partner', loading: 'lazy', widths: '200,400' }}
+
+        {%- if has_showcase -%}
+          <div class="pc-amen-show__grid">
+            {%- for b in section.blocks -%}
+              {%- if b.type != 'showcase' -%}{%- continue -%}{%- endif -%}
+              <article class="pc-amen-show-card{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" {{ b.shopify_attributes }}>
+                <div class="pc-amen-show-card__media">
+                  {%- if b.settings.image != blank -%}
+                    {{ b.settings.image | image_url: width: 1000 | image_tag: alt: b.settings.name | default: 'Partnership', loading: 'lazy', widths: '400,700,1000' }}
+                  {%- else -%}
+                    <span class="pc-amen-show-card__placeholder">{{ b.settings.name | default: 'Partner' | escape }}</span>
+                  {%- endif -%}
+                </div>
+                <div class="pc-amen-show-card__body">
+                  {%- if b.settings.tag != blank -%}<span class="pc-amen-show-card__tag">{{ b.settings.tag }}</span>{%- endif -%}
+                  {%- if b.settings.name != blank -%}<h3 class="pc-amen-show-card__h">{{ b.settings.name }}</h3>{%- endif -%}
+                  {%- if b.settings.body != blank -%}<p class="pc-amen-show-card__p">{{ b.settings.body }}</p>{%- endif -%}
+                  {%- if b.settings.url != blank and b.settings.link_text != blank -%}
+                    <a class="pc-amen-show-card__link" href="{{ b.settings.url }}">{{ b.settings.link_text }}</a>
+                  {%- endif -%}
+                </div>
+              </article>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- if has_partner -%}
+          <div class="pc-amen-prt__grid">
+            {%- for b in section.blocks -%}
+              {%- if b.type != 'partner' -%}{%- continue -%}{%- endif -%}
+              {%- capture prt_inner -%}
+                {%- if b.settings.logo != blank -%}
+                  {{ b.settings.logo | image_url: width: 400 | image_tag: alt: b.settings.name | default: 'Partner', loading: 'lazy', widths: '200,400' }}
+                {%- else -%}
+                  <span class="pc-amen-prt-card__name">{{ b.settings.name }}</span>
+                {%- endif -%}
+              {%- endcapture -%}
+              {%- if b.settings.url != blank -%}
+                <a class="pc-amen-prt-card" href="{{ b.settings.url }}" target="_blank" rel="noopener" {{ b.shopify_attributes }}>{{ prt_inner }}</a>
               {%- else -%}
-                <span class="pc-amen-prt-card__name">{{ b.settings.name }}</span>
+                <div class="pc-amen-prt-card" {{ b.shopify_attributes }}>{{ prt_inner }}</div>
               {%- endif -%}
-            {%- endcapture -%}
-            {%- if b.settings.url != blank -%}
-              <a class="pc-amen-prt-card" href="{{ b.settings.url }}" target="_blank" rel="noopener" {{ b.shopify_attributes }}>{{ prt_inner }}</a>
-            {%- else -%}
-              <div class="pc-amen-prt-card" {{ b.shopify_attributes }}>{{ prt_inner }}</div>
-            {%- endif -%}
-          {%- endfor -%}
-        </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
       </div>
     </section>
   {%- endif -%}
@@ -228,8 +272,20 @@
       ]
     },
     {
+      "type": "showcase",
+      "name": "Featured partnership",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Photo" },
+        { "type": "text", "id": "tag", "label": "Tag", "info": "Short label, e.g. In-room amenities, Custom scent." },
+        { "type": "text", "id": "name", "label": "Partner name" },
+        { "type": "textarea", "id": "body", "label": "Description" },
+        { "type": "url", "id": "url", "label": "Link (optional)" },
+        { "type": "text", "id": "link_text", "label": "Link text", "info": "Shown only if a link is set." }
+      ]
+    },
+    {
       "type": "partner",
-      "name": "Partner (showcase)",
+      "name": "Partner logo chip",
       "settings": [
         { "type": "text", "id": "name", "label": "Partner name", "info": "Shown if no logo is set." },
         { "type": "image_picker", "id": "logo", "label": "Logo" },
