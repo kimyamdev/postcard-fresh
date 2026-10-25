@@ -72,12 +72,16 @@
   }
 {%- endstyle -%}
 
-{%- comment -%} ---- Stockist blocks (block order) ---- {%- endcomment -%}
+{%- comment -%} ---- Stockist + Our-location blocks (block order) ---- {%- endcomment -%}
 {%- assign stockist_count = 0 -%}
 {%- capture stockist_cards -%}
   {%- assign si = 0 -%}
   {%- for block in section.blocks -%}
-    {%- if block.type != 'stockist' -%}{%- continue -%}{%- endif -%}
+    {%- if block.type == 'ourlocation' -%}
+      {%- unless block.settings.list_card -%}{%- continue -%}{%- endunless -%}
+    {%- elsif block.type != 'stockist' -%}
+      {%- continue -%}
+    {%- endif -%}
     {%- assign m = si | modulo: 2 -%}
     {%- assign flip_b = false -%}
     {%- if m == 1 -%}{%- assign flip_b = true -%}{%- endif -%}
@@ -187,32 +191,28 @@
   [
   {%- assign first_m = true -%}
   {%- for block in section.blocks -%}
-    {%- if block.type != 'stockist' and block.type != 'popup' -%}{%- continue -%}{%- endif -%}
+    {%- if block.type != 'stockist' and block.type != 'popup' and block.type != 'ourlocation' -%}{%- continue -%}{%- endif -%}
     {%- assign c = block.settings.coords | default: '' | strip -%}
     {%- if c == blank -%}{%- continue -%}{%- endif -%}
     {%- assign parts = c | split: ',' -%}
     {%- if parts.size < 2 -%}{%- continue -%}{%- endif -%}
     {%- assign lat = parts[0] | strip | times: 1.0 -%}
     {%- assign lng = parts[1] | strip | times: 1.0 -%}
+    {%- assign mtype = block.type -%}
+    {%- assign manchor = 'loc-' | append: block.id -%}
+    {%- if block.type == 'popup' -%}
+      {%- assign has_popup_pin = true -%}
+    {%- elsif block.type == 'ourlocation' -%}
+      {%- assign mtype = 'own' -%}
+      {%- assign has_own_pin = true -%}
+      {%- unless block.settings.list_card -%}{%- assign manchor = '' -%}{%- endunless -%}
+    {%- else -%}
+      {%- assign has_stockist_pin = true -%}
+    {%- endif -%}
     {%- unless first_m -%},{%- endunless -%}
     {%- assign first_m = false -%}
-    {%- if block.type == 'popup' -%}{%- assign has_popup_pin = true -%}{%- else -%}{%- assign has_stockist_pin = true -%}{%- endif -%}
-    {"name": {{ block.settings.name | default: '' | json }}, "lat": {{ lat }}, "lng": {{ lng }}, "anchor": "loc-{{ block.id }}", "type": {{ block.type | json }}}
+    {"name": {{ block.settings.name | default: '' | json }}, "lat": {{ lat }}, "lng": {{ lng }}, "anchor": {{ manchor | json }}, "type": {{ mtype | json }}}
   {%- endfor -%}
-  {%- if section.settings.show_own_location -%}
-    {%- assign oc = section.settings.own_coords | default: '' | strip -%}
-    {%- if oc != blank -%}
-      {%- assign op = oc | split: ',' -%}
-      {%- if op.size >= 2 -%}
-        {%- assign olat = op[0] | strip | times: 1.0 -%}
-        {%- assign olng = op[1] | strip | times: 1.0 -%}
-        {%- unless first_m -%},{%- endunless -%}
-        {%- assign first_m = false -%}
-        {%- assign has_own_pin = true -%}
-        {"name": {{ section.settings.own_name | default: 'Our studio' | json }}, "lat": {{ olat }}, "lng": {{ olng }}, "anchor": "", "type": "own"}
-      {%- endif -%}
-    {%- endif -%}
-  {%- endif -%}
   ]
 {%- endcapture -%}
 {%- assign has_markers = false -%}
@@ -341,11 +341,7 @@
     { "type": "checkbox", "id": "show_legend", "label": "Show legend", "default": true, "info": "Only lists the pin types actually on the map." },
     { "type": "text", "id": "legend_stockist_label", "label": "Legend: stockist label", "default": "Stockist" },
     { "type": "text", "id": "legend_popup_label", "label": "Legend: pop-up label", "default": "Pop-up" },
-    { "type": "text", "id": "legend_own_label", "label": "Legend: our-location label", "default": "Our studio" },
-    { "type": "header", "content": "Our location on the map" },
-    { "type": "checkbox", "id": "show_own_location", "label": "Show our location", "default": true },
-    { "type": "text", "id": "own_name", "label": "Our location name", "default": "OASIS / Postcard" },
-    { "type": "text", "id": "own_coords", "label": "Our location coordinates", "info": "latitude, longitude — same format as the blocks. Leave blank for no pin." },
+    { "type": "text", "id": "legend_own_label", "label": "Legend: our-location label", "default": "Our locations" },
     { "type": "header", "content": "Labels" },
     { "type": "text", "id": "past_label", "label": "Past pop-ups heading", "default": "Past pop-ups" },
     { "type": "text", "id": "empty_text", "label": "Empty state text", "default": "Nothing to show here just yet — check back soon." },
@@ -359,6 +355,22 @@
       "name": "Stockist",
       "settings": [
         { "type": "text", "id": "name", "label": "Location name" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "textarea", "id": "address", "label": "Address", "info": "One line per line break." },
+        { "type": "text", "id": "coords", "label": "Map coordinates", "info": "Pin location as latitude, longitude — e.g. 1.2896, 103.8501. In Google Maps, right-click the spot and click the numbers at the top to copy. Leave blank for no pin." },
+        { "type": "url", "id": "map_url", "label": "Map / directions link" },
+        { "type": "textarea", "id": "opening_hours", "label": "Opening hours" },
+        { "type": "textarea", "id": "description", "label": "Description" },
+        { "type": "richtext", "id": "products", "label": "Products available", "info": "Type names and hyperlink them to product pages." }
+      ]
+    },
+    {
+      "type": "ourlocation",
+      "name": "Our location",
+      "settings": [
+        { "type": "paragraph", "content": "One of your own locations — shown with the \"our location\" pin colour and grouped under that legend entry." },
+        { "type": "text", "id": "name", "label": "Location name" },
+        { "type": "checkbox", "id": "list_card", "label": "Show as a card in the list", "default": true, "info": "Turn off for a map pin only — e.g. a warehouse or studio not open to the public." },
         { "type": "image_picker", "id": "image", "label": "Image" },
         { "type": "textarea", "id": "address", "label": "Address", "info": "One line per line break." },
         { "type": "text", "id": "coords", "label": "Map coordinates", "info": "Pin location as latitude, longitude — e.g. 1.2896, 103.8501. In Google Maps, right-click the spot and click the numbers at the top to copy. Leave blank for no pin." },
