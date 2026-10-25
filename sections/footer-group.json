@@ -216,8 +216,8 @@
         "disc_stockists": {
           "type": "link",
           "settings": {
-            "text": "Stockists",
-            "url": "/pages/stockists"
+            "text": "Where to find Postcard products",
+            "url": "/pages/where-to-find-postcard-products"
           }
         },
         "disc_popups": {
