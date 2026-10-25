@@ -34,6 +34,10 @@
   .pc-pin { background: none !important; border: 0 !important; overflow: visible; }
   .pc-pin svg { display: block; overflow: visible; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.25)); }
   .leaflet-marker-icon.pc-pin { overflow: visible; }
+  .leaflet-tooltip.pc-tip { background: var(--color-bg-card); color: var(--color-ink); border: 1.5px solid var(--color-ink);
+    border-radius: var(--radius-pill); box-shadow: 0 1px 3px rgba(0,0,0,0.2); font-family: var(--font-display);
+    font-size: 12px; font-weight: 600; letter-spacing: 0.01em; padding: 3px 9px; white-space: nowrap; }
+  .leaflet-tooltip.pc-tip::before { display: none; }
   .pc-loc__legend { max-width: 1040px; margin: 12px auto 0; padding: 0 24px; list-style: none;
     display: flex; flex-wrap: wrap; gap: 8px 22px; font-family: var(--font-display); font-size: 14px; }
   .pc-loc__legend li { display: flex; align-items: center; gap: 8px; }
@@ -266,9 +270,11 @@
             html: '<svg width="26" height="40" viewBox="0 0 26 40" xmlns="http://www.w3.org/2000/svg" style="overflow:visible"><path d="M13 0C5.8 0 0 5.8 0 13c0 9 13 25 13 25s13-16 13-25C26 5.8 20.2 0 13 0z" fill="' + color + '" stroke="#1a1a1a" stroke-width="2"/><circle cx="13" cy="13" r="4.5" fill="#fff"/></svg>',
             iconSize: [26, 40],
             iconAnchor: [13, 38],
-            popupAnchor: [0, -36]
+            popupAnchor: [0, -36],
+            tooltipAnchor: [8, -24]
           });
         }
+        var showLabels = {% if section.settings.show_labels == false %}false{% else %}true{% endif %};
         function init() {
           if (!window.L) { return setTimeout(init, 100); }
           var map = L.map(el, { scrollWheelZoom: false });
@@ -283,6 +289,7 @@
             var html = '<strong>' + m.name + '</strong>';
             if (m.anchor) { html += '<br><a href="#' + m.anchor + '">View details &rarr;</a>'; }
             mk.bindPopup(html);
+            if (showLabels && m.name) { mk.bindTooltip(m.name, { permanent: true, direction: 'right', className: 'pc-tip', opacity: 1 }); }
             mk._olatlng = L.latLng(m.lat, m.lng);
             var key = m.lat.toFixed(5) + ',' + m.lng.toFixed(5);
             (coloc[key] = coloc[key] || []).push(mk);
@@ -355,6 +362,7 @@
     { "type": "header", "content": "Map", "info": "Shows a Singapore map with a pin for every block that has Map coordinates filled in." },
     { "type": "checkbox", "id": "show_map", "label": "Show map", "default": true },
     { "type": "range", "id": "map_height", "label": "Map height", "min": 240, "max": 640, "step": 20, "unit": "px", "default": 420 },
+    { "type": "checkbox", "id": "show_labels", "label": "Show name label next to each pin", "default": true, "info": "Turn off if labels get crowded; names still show on click." },
     { "type": "paragraph", "content": "Pin colours" },
     { "type": "color", "id": "stockist_pin_color", "label": "Stockist pin", "default": "#FFB233" },
     { "type": "color", "id": "popup_pin_color", "label": "Pop-up pin", "default": "#E86A5C" },
