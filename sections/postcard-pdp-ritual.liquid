@@ -1,7 +1,9 @@
 {%- comment -%}theme-check-disable ImgWidthAndHeight{%- endcomment -%}
 {%- comment -%}
-  Ritual in a Box PDP. Selecting a scent world swaps the stamp, tagline, price,
-  description and "What's inside". Per-world content lives in blocks (editable).
+  Ritual in a Box PDP. Each product IS one scent world (one product per world).
+  The blocks below are a shared library of worlds; the product picks its world
+  via the metafield custom.ritual_world (matched by name to a block), and the
+  page renders that one world's stamp, tagline, description and "What's inside".
   Add-to-cart uses the standard pc-pdp-buy__form so the cart drawer handles it.
 {%- endcomment -%}
 
@@ -17,9 +19,14 @@
   .pc-ribpdp-{{ section.id }} .pc-ribpdp__top { display: grid; grid-template-columns: 1fr; gap: clamp(20px, 3vw, 44px); align-items: start; }
   @media (min-width: 900px) { .pc-ribpdp-{{ section.id }} .pc-ribpdp__top { grid-template-columns: minmax(0, 52%) minmax(0, 48%); } }
 
-  .pc-ribpdp-{{ section.id }} .pc-ribpdp__media { position: relative; aspect-ratio: 4 / 5; display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--color-line); border-radius: 3px; overflow: hidden; background: radial-gradient(120% 120% at 30% 20%, color-mix(in srgb, var(--accent, {{ gold }}) 50%, #fff) 0%, color-mix(in srgb, var(--accent, {{ gold }}) 20%, #fff) 70%, #fff 100%); }
-  .pc-ribpdp-{{ section.id }} .pc-ribpdp__media img { width: 72%; height: 72%; object-fit: contain; }
-  .pc-ribpdp-{{ section.id }} .pc-ribpdp__worldtag { position: absolute; bottom: 14px; left: 0; right: 0; text-align: center; font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 0.04em; font-size: clamp(22px, 3vw, 34px); color: {{ ink }}; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__main { position: relative; aspect-ratio: 4 / 5; border: 1.5px solid var(--color-line); border-radius: 3px; overflow: hidden; background: radial-gradient(120% 120% at 30% 20%, color-mix(in srgb, var(--accent, {{ gold }}) 50%, #fff) 0%, color-mix(in srgb, var(--accent, {{ gold }}) 20%, #fff) 70%, #fff 100%); }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__main-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__stamp { position: absolute; top: 12px; left: 12px; width: clamp(54px, 7vw, 76px); z-index: 2; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.18)); }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__stamp img { width: 100%; height: auto; display: block; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__thumbs { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__thumb { width: 62px; height: 78px; border: 1.5px solid var(--color-line); border-radius: 3px; overflow: hidden; padding: 0; cursor: pointer; background: #fff; transition: box-shadow 0.12s ease; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pc-ribpdp-{{ section.id }} .pc-ribpdp__thumb.is-active { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--accent, {{ ink }}); border-color: transparent; }
 
   .pc-ribpdp-{{ section.id }} .pc-ribpdp__buy { display: flex; flex-direction: column; }
   @media (min-width: 900px) { .pc-ribpdp-{{ section.id }} .pc-ribpdp__buy { position: sticky; top: 100px; } }
@@ -50,56 +57,66 @@
   .pc-ribpdp-{{ section.id }} .pc-ribpdp__inside li::before { content: '✦'; position: absolute; left: 2px; color: color-mix(in srgb, {{ gold }} 85%, #000); font-size: 12px; top: 10px; }
 {%- endstyle -%}
 
-<section class="pc-ribpdp-{{ section.id }}"
-  x-data='{
-    world: {{ current.option1 | json }},
-    worlds: {
-      {%- for block in section.blocks -%}
-        {{ block.settings.title | json }}: { stamp: {{ block.settings.image | image_url: width: 900 | json }}, accent: {{ block.settings.accent | default: gold | json }}, tagline: {{ block.settings.tagline | json }} }{%- unless forloop.last -%},{%- endunless -%}
-      {%- endfor -%}
-    },
-    variants: {
-      {%- for v in product.variants -%}
-        {{ v.option1 | json }}: { id: {{ v.id }}, price: {{ v.price | money | json }}, available: {{ v.available }} }{%- unless forloop.last -%},{%- endunless -%}
-      {%- endfor -%}
-    },
-    sel() { return this.variants[this.world] || {}; },
-    cur() { return this.worlds[this.world] || {}; }
-  }'>
+{%- liquid
+  comment
+    Single-world box: each product IS one scent world. The world is chosen per
+    product via the metafield custom.ritual_world, matched (by name) to one of
+    the section's world blocks. Falls back to the first block if unset/unmatched.
+  endcomment
+  assign ritual_world = product.metafields.custom.ritual_world.value
+  assign world_block = blank
+  for block in section.blocks
+    if block.settings.title == ritual_world
+      assign world_block = block
+      break
+    endif
+  endfor
+  unless world_block
+    assign world_block = section.blocks.first
+  endunless
+  assign accent = world_block.settings.accent | default: gold
+-%}
+
+<section class="pc-ribpdp-{{ section.id }}">
   <div class="pc-breadcrumb"><div class="container pc-breadcrumb__inner">Home / <span class="pc-breadcrumb__current">{{ product.title }}</span></div></div>
 
   <div class="container">
     <div class="pc-ribpdp__top">
-      <div class="pc-ribpdp__media" :style="'--accent:' + cur().accent">
-        <img :src="cur().stamp" :alt="world + ' stamp'">
-        <div class="pc-ribpdp__worldtag" x-text="world"></div>
+      <div class="pc-ribpdp__gallery" id="ribGallery-{{ section.id }}">
+        <div class="pc-ribpdp__main" style="--accent: {{ accent }};">
+          {%- if world_block.settings.image != blank -%}
+            <div class="pc-ribpdp__stamp" aria-hidden="true">{{ world_block.settings.image | image_url: width: 220 | image_tag: loading: 'eager', alt: '' }}</div>
+          {%- endif -%}
+          {%- if product.images.size > 0 -%}
+            <img class="pc-ribpdp__main-img" data-rib-main
+              src="{{ product.images.first | image_url: width: 1000 }}"
+              alt="{{ product.images.first.alt | default: product.title | escape }}" loading="eager">
+          {%- endif -%}
+        </div>
+        {%- if product.images.size > 1 -%}
+          <div class="pc-ribpdp__thumbs">
+            {%- for image in product.images -%}
+              <button type="button" class="pc-ribpdp__thumb{% if forloop.first %} is-active{% endif %}" data-rib-thumb
+                data-full="{{ image | image_url: width: 1000 }}" aria-label="View image {{ forloop.index }} of {{ product.images.size }}">
+                {{ image | image_url: width: 160 | image_tag: loading: 'lazy', alt: '' }}
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
       </div>
 
       <div class="pc-ribpdp__buy">
         <div class="pc-ribpdp__eyebrow">{{ section.settings.eyebrow | default: 'Ritual in a Box' }}</div>
         <h1 class="pc-ribpdp__title">{{ product.title }}</h1>
-        <div class="pc-ribpdp__tagline" :style="'--accent:' + cur().accent" x-text="cur().tagline"></div>
-        <div class="pc-ribpdp__price" x-text="sel().price">{{ current.price | money }}</div>
-
-        <div class="pc-ribpdp__label">Scent world: <span x-text="world"></span></div>
-        <div class="pc-ribpdp__swatches">
-          {%- for block in section.blocks -%}
-            <button type="button" class="pc-ribpdp__swatch"
-              :class="{ 'is-active': world === {{ block.settings.title | json }} }"
-              style="--sw: {{ block.settings.accent | default: gold }};"
-              @click="world = {{ block.settings.title | json }}"
-              aria-label="{{ block.settings.title | escape }}">
-              {%- if block.settings.image != blank -%}{{ block.settings.image | image_url: width: 120 | image_tag: loading: 'lazy', alt: block.settings.title }}{%- endif -%}
-            </button>
-          {%- endfor -%}
-        </div>
+        {%- if world_block.settings.tagline != blank -%}<div class="pc-ribpdp__tagline" style="--accent: {{ accent }};">{{ world_block.settings.tagline }}</div>{%- endif -%}
+        <div class="pc-ribpdp__price">{{ current.price | money }}</div>
 
         <form class="pc-pdp-buy__form" action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
           <input type="hidden" name="form_type" value="product">
           <input type="hidden" name="utf8" value="&#x2713;">
-          <input type="hidden" name="id" :value="sel().id" value="{{ current.id }}">
-          <button type="submit" class="pc-ribpdp__add" :disabled="sel().available === false">
-            <span x-text="sel().available === false ? 'Sold out' : 'Add to bag · ' + sel().price">Add to bag</span>
+          <input type="hidden" name="id" value="{{ current.id }}">
+          <button type="submit" class="pc-ribpdp__add"{% unless current.available %} disabled{% endunless %}>
+            {%- if current.available -%}Add to bag &middot; {{ current.price | money }}{%- else -%}Sold out{%- endif -%}
           </button>
         </form>
 
@@ -107,22 +124,37 @@
       </div>
     </div>
 
-    <div class="pc-ribpdp__detail">
-      {%- for block in section.blocks -%}
-        <div x-show="world === {{ block.settings.title | json }}" x-cloak {{ block.shopify_attributes }}>
-          <h2 class="pc-ribpdp__detail-h">The {{ block.settings.title }} box</h2>
-          {%- if block.settings.description != blank -%}<div class="pc-ribpdp__desc rte">{{ block.settings.description }}</div>{%- endif -%}
-          {%- if block.settings.whats_inside != blank -%}
-            <div class="pc-ribpdp__inside">
-              <div class="pc-ribpdp__inside-h">{{ section.settings.inside_heading | default: 'What’s inside' }}</div>
-              {{ block.settings.whats_inside }}
-            </div>
-          {%- endif -%}
+    <div class="pc-ribpdp__detail" {{ world_block.shopify_attributes }}>
+      {%- if world_block.settings.description != blank -%}
+        <h2 class="pc-ribpdp__detail-h">The {{ world_block.settings.title }} box</h2>
+        <div class="pc-ribpdp__desc rte">{{ world_block.settings.description }}</div>
+      {%- endif -%}
+      {%- if world_block.settings.whats_inside != blank -%}
+        <div class="pc-ribpdp__inside">
+          <div class="pc-ribpdp__inside-h">{{ section.settings.inside_heading | default: 'What’s inside' }}</div>
+          {{ world_block.settings.whats_inside }}
         </div>
-      {%- endfor -%}
+      {%- endif -%}
     </div>
   </div>
 </section>
+
+<script>
+  (function () {
+    var g = document.getElementById('ribGallery-{{ section.id }}');
+    if (!g) return;
+    var main = g.querySelector('[data-rib-main]');
+    var thumbs = g.querySelectorAll('[data-rib-thumb]');
+    thumbs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        var full = t.getAttribute('data-full');
+        if (full && main) main.src = full;
+        thumbs.forEach(function (x) { x.classList.remove('is-active'); });
+        t.classList.add('is-active');
+      });
+    });
+  })();
+</script>
 
 {% schema %}
 {
@@ -141,7 +173,7 @@
       "type": "world_box",
       "name": "Scent world",
       "settings": [
-        { "type": "paragraph", "content": "World name must match the product's Scent world option value exactly." },
+        { "type": "paragraph", "content": "World name must match a product's custom.ritual_world metafield exactly (e.g. Woodland Retreat). Each box product shows the one world whose name matches its metafield." },
         { "type": "text", "id": "title", "label": "World name", "default": "Hotel Lobby" },
         { "type": "text", "id": "tagline", "label": "Tagline", "default": "A little everyday luxury" },
         { "type": "richtext", "id": "description", "label": "Description" },
