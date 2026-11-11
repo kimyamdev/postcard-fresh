@@ -135,7 +135,26 @@
   .pc-xmas-btn-gold { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-display); letter-spacing: 0.1em; text-transform: uppercase; font-size: 13px; color: #15241b; background: {{ gold }}; padding: 14px 26px; border-radius: 999px; text-decoration: none; box-shadow: 0 5px 0 color-mix(in srgb, {{ gold }} 55%, #000); }
   .pc-xmas-btn-gold:hover { transform: translateY(2px); box-shadow: 0 3px 0 color-mix(in srgb, {{ gold }} 55%, #000); }
 
+  /* Music toggle */
+  .pc-xmas-music {
+    position: fixed; z-index: 9999; right: 18px; bottom: 18px;
+    width: 46px; height: 46px; border-radius: 999px; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: #15241b; background: {{ gold }}; border: 1.5px solid color-mix(in srgb, {{ gold }} 55%, #000);
+    box-shadow: 0 4px 0 color-mix(in srgb, {{ gold }} 55%, #000);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .pc-xmas-music:hover { transform: translateY(2px); box-shadow: 0 2px 0 color-mix(in srgb, {{ gold }} 55%, #000); }
+  .pc-xmas-music__icon svg { width: 22px; height: 22px; display: block; }
+  /* Default (paused): show the "off" cross, hide the "on" wave */
+  .pc-xmas-music__on { opacity: 0; }
+  .pc-xmas-music[aria-pressed="true"] .pc-xmas-music__off { opacity: 0; }
+  .pc-xmas-music[aria-pressed="true"] .pc-xmas-music__on { opacity: 1; }
+  .pc-xmas-music[aria-pressed="true"] { animation: pc-xmas-musicpulse 2.4s ease-in-out infinite; }
+  @keyframes pc-xmas-musicpulse { 0%, 100% { box-shadow: 0 4px 0 color-mix(in srgb, {{ gold }} 55%, #000); } 50% { box-shadow: 0 4px 0 color-mix(in srgb, {{ gold }} 55%, #000), 0 0 0 5px color-mix(in srgb, {{ gold }} 28%, transparent); } }
+
   @media (prefers-reduced-motion: reduce) {
+    .pc-xmas-music[aria-pressed="true"] { animation: none; }
     .pc-xmas-door { transition: opacity 0.4s ease; }
     .pc-xmas-door__leaf { transition: none; }
     .pc-xmas-door.is-open .pc-xmas-door__leaf--left,
@@ -187,6 +206,21 @@
     </div>
   </section>
 
+  {%- if section.settings.music_url != blank -%}
+    <audio id="pcXmasAudio-{{ section.id }}" src="{{ section.settings.music_url }}" loop preload="none"></audio>
+    <button type="button" class="pc-xmas-music" id="pcXmasMusic-{{ section.id }}"
+      aria-pressed="false" aria-label="{{ section.settings.music_label | default: 'Play music' | escape }}"
+      title="{{ section.settings.music_label | default: 'Play music' | escape }}">
+      <span class="pc-xmas-music__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path class="pc-xmas-music__spk" d="M4 9v6h4l5 4V5L8 9H4z"/>
+          <path class="pc-xmas-music__off" d="M17 9l4 4m0-4l-4 4"/>
+          <path class="pc-xmas-music__on" d="M16 8.5a4 4 0 0 1 0 7"/>
+        </svg>
+      </span>
+    </button>
+  {%- endif -%}
+
 </div>
 
 <script>
@@ -217,6 +251,27 @@
       el.addEventListener('click', function (e) { e.preventDefault(); openDoor(); });
     });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') openDoor(); });
+
+    // Music toggle — silent until the visitor taps the button.
+    var music = document.getElementById('pcXmasMusic-{{ section.id }}');
+    var audio = document.getElementById('pcXmasAudio-{{ section.id }}');
+    if (music && audio) {
+      var playLabel = music.getAttribute('aria-label') || 'Play music';
+      music.addEventListener('click', function () {
+        if (audio.paused) {
+          audio.play().then(function () {
+            music.setAttribute('aria-pressed', 'true');
+            music.setAttribute('aria-label', 'Pause music');
+            music.setAttribute('title', 'Pause music');
+          }).catch(function () {});
+        } else {
+          audio.pause();
+          music.setAttribute('aria-pressed', 'false');
+          music.setAttribute('aria-label', playLabel);
+          music.setAttribute('title', playLabel);
+        }
+      });
+    }
 
     if (wrap && wrap.getAttribute('data-snow') === 'true' &&
         !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -256,6 +311,10 @@
     { "type": "richtext", "id": "hero_intro", "label": "Intro", "default": "<p>A whole little world of presents, wrapped in scent. Step inside and find something unforgettable for everyone on your list.</p>" },
     { "type": "text", "id": "hero_cta_text", "label": "Hero button text" },
     { "type": "url", "id": "hero_cta_link", "label": "Hero button link" },
+    { "type": "header", "content": "Music" },
+    { "type": "paragraph", "content": "Upload an MP3 under Settings → Files, copy its URL, and paste it below. A speaker button appears in the corner; music stays silent until a visitor taps it." },
+    { "type": "url", "id": "music_url", "label": "Music file (MP3 URL)" },
+    { "type": "text", "id": "music_label", "label": "Button label", "default": "Play music" },
     { "type": "header", "content": "Festive colours" },
     { "type": "color", "id": "color_pine", "label": "Pine", "default": "#33503F" },
     { "type": "color", "id": "color_red", "label": "Warm red", "default": "#A8403A" },
